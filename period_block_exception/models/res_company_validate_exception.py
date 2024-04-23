@@ -8,6 +8,8 @@ VALIDATE_EXCEPTION_YEAR_START_DATETIME = datetime(year=2024, month=1, day=1)
 
 class ResCompanyValidateException(models.Model):
 
+    _inherit = "res.company"
+    
     def _validate_fiscalyear_lock(self, values):
         """ Overrides _validate_fiscalyear_lock to add year exception to PISA and PASA companies
             for 2022-2023
