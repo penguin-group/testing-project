@@ -17,11 +17,14 @@ class ResCompanyValidateException(models.Model):
 
             company_id = self.env.company.id
 
+            # This expression check if the company is a valid company to make the exception and
+            # if the year is the correct
             valid_exception = (
                 company_id in VALIDATE_EXCEPTION_COMPANY_IDS and \
                 values['fiscalyear_lock_date'].year in VALIDATE_EXCEPTION_YEARS
             )
 
+            # If is VALIDATE_EXCEPTION_COMPANY_IDS only need to check register with date greater than 2024-01-01
             if company_id in VALIDATE_EXCEPTION_COMPANY_IDS:
                 draft_entries = self.env['account.move'].search([
                     ('company_id', 'in', self.ids),
