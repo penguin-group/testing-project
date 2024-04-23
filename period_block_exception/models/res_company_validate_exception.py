@@ -4,7 +4,7 @@ from odoo.exceptions import RedirectWarning
 
 VALIDATE_EXCEPTION_COMPANY_IDS = (1, 2)
 VALIDATE_EXCEPTION_YEARS = (2022, 2023)
-VALIDATE_EXCEPTION_YEAR_START_DATETIME = datetime(year=2023, month=1, day=1)
+VALIDATE_EXCEPTION_YEAR_START_DATETIME = datetime(year=2024, month=1, day=1)
 
 class ResCompanyValidateException(models.Model):
 
@@ -19,7 +19,7 @@ class ResCompanyValidateException(models.Model):
 
             valid_exception = (
                 company_id in VALIDATE_EXCEPTION_COMPANY_IDS and \
-                values['fiscalyear_lock_date'].year <= VALIDATE_EXCEPTION_YEARS
+                values['fiscalyear_lock_date'].year in VALIDATE_EXCEPTION_YEARS
             )
 
             if company_id in VALIDATE_EXCEPTION_COMPANY_IDS:
