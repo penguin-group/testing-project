@@ -1,0 +1,1 @@
+from . import res_company_validate_exception
