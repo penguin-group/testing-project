@@ -90,12 +90,17 @@ class CustomAccountReportsXlsx(models.Model):
         level_3_col1_total_style = workbook.add_format({'font_name': 'Calibri', 'bold': True, 'font_size': 12, 'font_color': '#666666', 'indent': 1})
         level_3_style = workbook.add_format({'font_name': 'Calibri', 'font_size': 12, 'font_color': '#666666'})
 
+        level_1_style_float = workbook.add_format({'font_name': 'Calibri', 'bold': True, 'font_size': 13, 'bottom': 1, 'font_color': '#666666', 'num_format': '$#,##0.00'})
+        level_2_style_float = workbook.add_format({'font_name': 'Calibri', 'bold': True, 'font_size': 12, 'font_color': '#666666', 'num_format': '$#,##0.00'})
+        level_3_style_float = workbook.add_format({'font_name': 'Calibri', 'font_size': 12, 'font_color': '#666666', 'num_format': '$#,##0.00'})
+
         #Set the first column width to 50
         sheet.set_column(0, 0, 50)
 
         y_offset = 5
         x_offset = 1 # 5 To live space for the header
         print_mode_self = self.with_context(no_format=True, print_mode=True, prefetch_fields=False)
+        #pylint: disable=protected-access
         print_options = print_mode_self._get_options(previous_options=options)
         lines = self._filter_out_folded_children(print_mode_self._get_lines(print_options))
 
@@ -130,6 +135,7 @@ class CustomAccountReportsXlsx(models.Model):
 
         # Add lines.
         # pylint: disable=consider-using-enumerate
+        style_float = None
         for y in range(0, len(lines)):
             level = lines[y].get('level')
             if lines[y].get('caret_options'):
@@ -140,12 +146,15 @@ class CustomAccountReportsXlsx(models.Model):
                 style = level_0_style
                 col1_style = style
             elif level == 1:
+                style_float = level_1_style_float
                 style = level_1_style
                 col1_style = style
             elif level == 2:
+                style_float = level_2_style_float
                 style = level_2_style
                 col1_style = 'total' in lines[y].get('class', '').split(' ') and level_2_col1_total_style or level_2_col1_style
             elif level == 3:
+                style_float = level_3_style_float
                 style = level_3_style
                 col1_style = 'total' in lines[y].get('class', '').split(' ') and level_3_col1_total_style or level_3_col1_style
             else:
@@ -168,7 +177,10 @@ class CustomAccountReportsXlsx(models.Model):
                 if cell_type == 'date':
                     sheet.write_datetime(y + y_offset, x + lines[y].get('colspan', 1) - 1, cell_value, date_default_style)
                 else:
-                    sheet.write(y + y_offset, x + lines[y].get('colspan', 1) - 1, cell_value, style)
+                    if isinstance(cell_value, float) and style_float is not None:
+                        sheet.write(y + y_offset, x + lines[y].get('colspan', 1) - 1, cell_value, style_float)
+                    else:
+                        sheet.write(y + y_offset, x + lines[y].get('colspan', 1) - 1, cell_value, style)
 
         # Add at the finel to avoid overwriting the data and know the final y_offset
         self._add_company_header(

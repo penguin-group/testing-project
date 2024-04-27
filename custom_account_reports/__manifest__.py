@@ -19,14 +19,17 @@
     # Categories can be used to filter modules in modules listing
     # Check https://github.com/odoo/odoo/blob/16.0/odoo/addons/base/data/ir_module_category_data.xml
     # for the full list
-    'category': 'Account',
+    'category': 'Accounting',
     'version': '2024.4.27.1',
 
     # any module necessary for this one to work correctly
     'depends': ['base', 'account_reports'],
 
     # always loaded
-    'data': [],
+    'data': [
+        'views/show_primary_color_field.xml',
+        'views/custom_account_reports_pdf.xml',
+    ],
     # only loaded in demonstration mode
     'demo': [],
 }
