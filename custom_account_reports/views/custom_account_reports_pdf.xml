@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <template id="custom_account_report_pdf" inherit_id="account_reports.main_template">
+        <xpath expr="//div[@class='o_account_reports_header print_only']" position="replace">
+
+            <div
+                class="o_account_reports_header print_only"
+                t-att-style="'%s' % report.get_company_styles()"
+            >
+                <div>
+                    <br />
+                    <t t-set="company_logo" t-value="report.get_company_logo()" />
+                    <img t-if="company_logo" t-att-src="'%s' % company_logo" width="200px" />
+                    <br />
+                    <br />
+                    <h2>
+                        <strong>
+                            <t t-if="report.filter_show_draft and options['all_entries']">[Draft]</t>
+                            <t t-out="report_title" />
+                        </strong>
+                    </h2>
+                </div>
+                <div class="row">
+                    <div class="col-8">
+                        <t t-if="not options.get('multi_company')">
+                            <br />
+                            <t t-out="report_company_name" />
+                        </t>
+                        <t t-else="">
+                            <br />Companies: <t t-set="company_value">All</t>
+                            <t
+                                t-foreach="options['multi_company']" t-as="c">
+                                <t t-set="company_value" t-value="''" />
+                                <t t-out="c.get('name')" />
+                            </t>
+                            <t
+                                t-out="company_value" />
+                        </t>
+                        <address class="mb-0" t-field="env.company.partner_id"
+                            t-options='{"widget": "contact", "fields": ["address"], "no_marker": True}' />
+                        <t t-if="env.company.vat"> VAT: <t t-out="env.company.vat" />
+                        </t>
+                    </div>
+                    <div class="col-4">
+                        <!-- <t t-call="account_reports.filter_info_template" /> -->
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>
