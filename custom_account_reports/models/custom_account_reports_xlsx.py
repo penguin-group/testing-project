@@ -76,23 +76,23 @@ class CustomAccountReportsXlsx(models.Model):
             'bg_color': '#282748'
         })
 
-        date_default_col1_style = workbook.add_format({'font_name': 'Calibri', 'font_size': 12, 'font_color': '#666666', 'indent': 2, 'num_format': 'yyyy-mm-dd'})
-        date_default_style = workbook.add_format({'font_name': 'Calibri', 'font_size': 12, 'font_color': '#666666', 'num_format': 'yyyy-mm-dd'})
-        default_col1_style = workbook.add_format({'font_name': 'Calibri', 'font_size': 12, 'font_color': '#666666', 'indent': 2})
-        default_style = workbook.add_format({'font_name': 'Calibri', 'font_size': 12, 'font_color': '#666666'})
+        date_default_col1_style = workbook.add_format({'font_name': 'Calibri', 'font_size': 12, 'font_color': '#000000', 'indent': 2, 'num_format': 'yyyy-mm-dd'})
+        date_default_style = workbook.add_format({'font_name': 'Calibri', 'font_size': 12, 'font_color': '#000000', 'num_format': 'yyyy-mm-dd'})
+        default_col1_style = workbook.add_format({'font_name': 'Calibri', 'font_size': 12, 'font_color': '#000000', 'indent': 2})
+        default_style = workbook.add_format({'font_name': 'Calibri', 'font_size': 12, 'font_color': '#000000'})
         title_style = workbook.add_format({'font_name': 'Calibri', 'bold': True, 'bottom': 2})
-        level_0_style = workbook.add_format({'font_name': 'Calibri', 'bold': True, 'font_size': 13, 'bottom': 6, 'font_color': '#666666'})
-        level_1_style = workbook.add_format({'font_name': 'Calibri', 'bold': True, 'font_size': 13, 'bottom': 1, 'font_color': '#666666'})
-        level_2_col1_style = workbook.add_format({'font_name': 'Calibri', 'bold': True, 'font_size': 12, 'font_color': '#666666', 'indent': 1})
-        level_2_col1_total_style = workbook.add_format({'font_name': 'Calibri', 'bold': True, 'font_size': 12, 'font_color': '#666666'})
-        level_2_style = workbook.add_format({'font_name': 'Calibri', 'bold': True, 'font_size': 12, 'font_color': '#666666'})
-        level_3_col1_style = workbook.add_format({'font_name': 'Calibri', 'font_size': 12, 'font_color': '#666666', 'indent': 2})
-        level_3_col1_total_style = workbook.add_format({'font_name': 'Calibri', 'bold': True, 'font_size': 12, 'font_color': '#666666', 'indent': 1})
-        level_3_style = workbook.add_format({'font_name': 'Calibri', 'font_size': 12, 'font_color': '#666666'})
+        level_0_style = workbook.add_format({'font_name': 'Calibri', 'bold': True, 'font_size': 13, 'bottom': 6, 'font_color': '#000000'})
+        level_1_style = workbook.add_format({'font_name': 'Calibri', 'bold': True, 'font_size': 13, 'bottom': 1, 'font_color': '#000000'})
+        level_2_col1_style = workbook.add_format({'font_name': 'Calibri', 'bold': True, 'font_size': 12, 'font_color': '#000000', 'indent': 1})
+        level_2_col1_total_style = workbook.add_format({'font_name': 'Calibri', 'bold': True, 'font_size': 12, 'font_color': '#000000'})
+        level_2_style = workbook.add_format({'font_name': 'Calibri', 'bold': True, 'font_size': 12, 'font_color': '#000000'})
+        level_3_col1_style = workbook.add_format({'font_name': 'Calibri', 'font_size': 12, 'font_color': '#000000', 'indent': 2})
+        level_3_col1_total_style = workbook.add_format({'font_name': 'Calibri', 'bold': True, 'font_size': 12, 'font_color': '#000000', 'indent': 1})
+        level_3_style = workbook.add_format({'font_name': 'Calibri', 'font_size': 12, 'font_color': '#000000'})
 
-        level_1_style_float = workbook.add_format({'font_name': 'Calibri', 'bold': True, 'font_size': 13, 'bottom': 1, 'font_color': '#666666', 'num_format': '$#,##0.00'})
-        level_2_style_float = workbook.add_format({'font_name': 'Calibri', 'bold': True, 'font_size': 12, 'font_color': '#666666', 'num_format': '$#,##0.00'})
-        level_3_style_float = workbook.add_format({'font_name': 'Calibri', 'font_size': 12, 'font_color': '#666666', 'num_format': '$#,##0.00'})
+        level_1_style_float = workbook.add_format({'font_name': 'Calibri', 'bold': True, 'font_size': 13, 'bottom': 1, 'font_color': '#000000', 'num_format': '#,##0'})
+        level_2_style_float = workbook.add_format({'font_name': 'Calibri', 'bold': True, 'font_size': 12, 'font_color': '#000000', 'num_format': '#,##0'})
+        level_3_style_float = workbook.add_format({'font_name': 'Calibri', 'font_size': 12, 'font_color': '#000000', 'num_format': '#,##0'})
 
         #Set the first column width to 50
         sheet.set_column(0, 0, 50)
@@ -178,6 +178,9 @@ class CustomAccountReportsXlsx(models.Model):
                     sheet.write_datetime(y + y_offset, x + lines[y].get('colspan', 1) - 1, cell_value, date_default_style)
                 else:
                     if isinstance(cell_value, float) and style_float is not None:
+                        
+                        
+
                         sheet.write(y + y_offset, x + lines[y].get('colspan', 1) - 1, cell_value, style_float)
                     else:
                         sheet.write(y + y_offset, x + lines[y].get('colspan', 1) - 1, cell_value, style)

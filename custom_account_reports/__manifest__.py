@@ -29,6 +29,7 @@
     'data': [
         'views/show_primary_color_field.xml',
         'views/custom_account_reports_pdf.xml',
+        'views/custom_account_reports_line_pdf.xml',
     ],
     # only loaded in demonstration mode
     'demo': [],
