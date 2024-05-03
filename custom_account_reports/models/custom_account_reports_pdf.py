@@ -25,9 +25,6 @@ class CustomAccountReportsXlsx(models.Model):
         """ Get the company primary color
         """
 
-        if self.env.company.id not in (PISA_COMPANY_ID, PASA_COMPANY_ID):
-            return 'gray'
-
         return self.env.company.primary_color
 
     def get_company_styles(self):
