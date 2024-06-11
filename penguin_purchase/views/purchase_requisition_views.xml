@@ -6,15 +6,76 @@
             <field name="model">purchase.requisition</field>
             <field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_form"/>
             <field name="arch" type="xml">
-                
-                <xpath expr="//notebook" position="before">
-                    <!-- Add your fields or attributes here -->
+
+                <xpath expr="//group" position="after">
+
+                    <notebook id="chatter">
+                        <page string="Changelog">
+                            <field name="message_ids" readonly="1"/>
+                        </page>
+                    </notebook>
+
                     <notebook>
                         <page string="Cost Center">
                             <field name="analytic_account_ids"/>
                         </page>
                     </notebook>
+
+
                 </xpath>
+
+                <xpath expr="//notebook[3]" position="after">
+                    <notebook>
+                        <page string="Proposals" name="Vendors"  attrs="{'invisible': [('is_quantity_copy', '=', 'none')]}">
+                            <field name="partner_ids" nolabel="1">
+                                <tree editable="bottom">
+                                    <field name="partner_id"/>
+                                    <field name="invitation_state" readonly="1"/>
+                                    <field name="purchase_order_id" readonly="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                    <separator string="Selection"/>
+                    <field name="selection_notes" class="oe-bordered-editor"/>
+                    <group string="Signatures">
+
+                    </group>
+                    <group string="Additional Approvals">
+
+                    </group>
+                </xpath>
+
+                <xpath expr="//separator" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='description']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+                <xpath expr="//page[@name='products']" position="attributes">
+                    <attribute name="string">Scope</attribute>
+                </xpath>
+
+                <xpath expr="//div[@class='oe_chatter']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
+            </field>
+        </record>
+
+
+        <record id="purchase_requisition_form_batch_vendor_invitation_inherited" model="ir.ui.view">
+            <field name="name">purchase.requisition.form.batch.vendor.invitation.inherited</field>
+            <field name="model">purchase.requisition</field>
+            <field name="inherit_id" ref="ak_tender_batch_invitation.purchase_requisition_form_batch_vendor_invitation"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//page[@name='Vendors']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+
             </field>
         </record>
     </data>
