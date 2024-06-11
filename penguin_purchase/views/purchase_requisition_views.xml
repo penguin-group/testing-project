@@ -17,7 +17,9 @@
 
                     <notebook>
                         <page string="Cost Center">
-                            <field name="analytic_account_ids"/>
+                            <!-- <field name="analytic_account_ids"/> -->
+                            <field name="cost_center_id"/>
+                            <field name="percentage"/> 
                         </page>
                     </notebook>
 
