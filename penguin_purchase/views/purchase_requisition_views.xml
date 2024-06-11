@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <record id="view_purchase_requisition_form_inherited" model="ir.ui.view">
+            <field name="name">view.purchase.requisition.form.inherited</field>
+            <field name="model">purchase.requisition</field>
+            <field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_form"/>
+            <field name="arch" type="xml">
+                
+                <xpath expr="//notebook" position="before">
+                    <!-- Add your fields or attributes here -->
+                    <notebook>
+                        <page string="Cost Center">
+                            <field name="analytic_account_ids"/>
+                        </page>
+                    </notebook>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
