@@ -47,11 +47,11 @@
                         <field name="signature1" widget="signature" string="Head Engineering"/>
                         <field name="signature2" widget="signature" string="Project Manager"/>
                         <field name="signature3" widget="signature" string="Head of Procurement"/>
+                        <field name="process_followed"/>
                     </group>
                     <group string="Additional Approvals">
                         <field name="signature4" widget="signature" string="CEngO"/>
                         <field name="signature5" widget="signature" string="CEO"/>
-
                     </group>
                 </xpath>
 

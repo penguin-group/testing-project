@@ -13,3 +13,5 @@ class PurchaseRequisition(models.Model):
     signature3 = fields.Binary(string="Signature 3", required=False, ) #firma Head of Procurement
     signature4 = fields.Binary(string="Signature 4", required=False, ) #firma adicional de aprob
     signature5 = fields.Binary(string="Signature 5", required=False, ) #firma adicional de aprob
+
+    process_followed = fields.Boolean(string="Process was followed", required=False, )
