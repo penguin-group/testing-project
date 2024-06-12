@@ -17,9 +17,12 @@
 
                     <notebook>
                         <page string="Cost Center">
-                            <!-- <field name="analytic_account_ids"/> -->
-                            <field name="cost_center_id"/>
-                            <field name="percentage"/> 
+                            <field name="cost_center_ids">
+                                <tree editable="bottom">
+                                    <field name="cost_center_id"/>
+                                    <field name="percentage"/>
+                                </tree>
+                            </field>
                         </page>
                     </notebook>
 
@@ -38,12 +41,16 @@
                             </field>
                         </page>
                     </notebook>
-                    <separator string="Selection"/>
+                    <separator string="Proposal Selection"/>
                     <field name="selection_notes" class="oe-bordered-editor"/>
                     <group string="Signatures">
-
+                        <field name="signature1" widget="signature" string="Head Engineering"/>
+                        <field name="signature2" widget="signature" string="Project Manager"/>
+                        <field name="signature3" widget="signature" string="Head of Procurement"/>
                     </group>
                     <group string="Additional Approvals">
+                        <field name="signature4" widget="signature" string="CEngO"/>
+                        <field name="signature5" widget="signature" string="CEO"/>
 
                     </group>
                 </xpath>
