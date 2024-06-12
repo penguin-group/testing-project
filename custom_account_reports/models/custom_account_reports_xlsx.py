@@ -16,8 +16,22 @@ class CustomAccountReportsXlsx(models.Model):
         """ Get the date of the report
         """
 
-        date_str = options.get('date', {}).get('date_to')
-        date = datetime.strptime(date_str, '%Y-%m-%d')
+        column_groups = options.get('column_groups', {})
+        date_str = None
+
+        for key, value in column_groups.items():
+            forced_options = value.get('forced_options', {})
+            date_options = forced_options.get('date', {})
+            date_str = date_options.get('date_to')
+            if date_str:
+                break
+        
+        if not date_str:
+            return "Date not provided" 
+        try:
+            date = datetime.strptime(date_str, '%Y-%m-%d')
+        except ValueError as e:
+            raise ValueError(f"Error parsing date: {date_str}.Except format 'YYYY-MM-DD'.Original error: {e}")
 
         return date.strftime('As of %B')
 
@@ -51,7 +65,7 @@ class CustomAccountReportsXlsx(models.Model):
     def export_to_xlsx(self, options, response=None):
         """ Overrides xlsx report to add custom values
         """
-
+        
         def write_with_colspan(sheet, x, y, value, colspan, style):
             if colspan == 1:
                 sheet.write(y, x, value, style)
