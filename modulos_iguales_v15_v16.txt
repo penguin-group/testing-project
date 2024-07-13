@@ -1,0 +1,10 @@
+Esta es una lista de los módulos que actualmente no tienen ninguna diferencia entre las versiones 15.0 y 16.0, es importante mantenerlos de esta forma para que las correcciones de errores se apliquen en ambas versiones
+
+Módulos RRHH:
+rrhh_* reportes_ministerio_trabajo_py/ ips_rei_hr_payslip/
+
+Módulos Contabilidad:
+interfaces_tipo_cambio_compra_venta* resolucion_90* reporte_compraventa* interfaces_rubrica standard_ruc* account_move_number interfaces_timbrado proveedores_timbrado
+
+Módulos base
+standard_ruc* universal_api_rest/ interfaces_tools/

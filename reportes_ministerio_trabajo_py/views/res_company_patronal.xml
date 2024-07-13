@@ -1,0 +1,75 @@
+<odoo>
+    <data>
+
+        <record id="res_company_patronal_tree_view" model="ir.ui.view">
+            <field name="name">res_company_patronal_tree_view</field>
+            <field name="model">res.company.patronal</field>
+            <field name="arch" type="xml">
+                <tree string="Patronales">
+                    <field name="name"/>
+                    <field name="number"/>
+                    <field name="patronal_tipo"/>
+                    <field name="company_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="res_company_patronal_form_view" model="ir.ui.view">
+            <field name="name">res_company_patronal_form_view</field>
+            <field name="model">res.company.patronal</field>
+            <field name="arch" type="xml">
+                <form string="Patronal">
+                    <sheet>
+<!--                        <div name="button_box" class="oe_button_box">-->
+<!--                            <button class="oe_stat_button" name="action_view_contracts"-->
+<!--                                    type="object" icon="fa-suitcase" help="Contratos asociados a este patronal">-->
+<!--                                <div class="o_field_widget o_stat_info">-->
+<!--                                    <span class="o_stat_value">-->
+<!--                                        <field name="contratos_count" widget="statinfo" nolabel="1" class="mr4"/>-->
+<!--                                    </span>-->
+<!--                                    <span class="o_stat_text">Contratos asociados</span>-->
+<!--                                </div>-->
+<!--                            </button>-->
+<!--                        </div>-->
+                        <group>
+                            <field name="id" invisible="True"/>
+                            <field name="name"/>
+                            <field name="actividad"/>
+                            <field name="number"/>
+                            <field name="patronal_tipo" attrs="{'readonly':[('id','!=',False)]}"/>
+                            <field name="company_id" required="True"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="res_company_patronal_search_view" model="ir.ui.view">
+            <field name="name">res_company_patronal_search_view</field>
+            <field name="model">res.company.patronal</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" filter_domain="['|', ('name', 'ilike', self), ('number', 'ilike', self)]"/>
+                    <field name="company_id" filter_domain="[('company_id.name', 'ilike', self)]"/>
+                    <filter name="group_by_type" string="Tipo" context="{'group_by': 'patronal_tipo'}"/>
+                    <filter name="group_by_company" string="Compañía" context="{'group_by': 'company_id'}"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="res_company_patronal_action_window" model="ir.actions.act_window">
+            <field name="name">Patronales</field>
+            <field name="res_model">res.company.patronal</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">Cree la primera Patronal
+                </p>
+            </field>
+        </record>
+
+        <menuitem id="res_company_patronal_menuitem" name="Patronales"
+                  parent="base.menu_users"
+                  action="res_company_patronal_action_window" sequence="1004"/>
+
+    </data>
+</odoo>

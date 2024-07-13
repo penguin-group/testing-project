@@ -1,0 +1,45 @@
+<odoo>
+    <data>
+
+        <template id="rrhh_payroll.multi_nomina">
+            <t t-call="web.basic_layout">
+                <t t-name="rrhh_payroll.report_nomina_run">
+                    <t t-foreach="docs.slip_ids.sorted(key=lambda payslip:(payslip.employee_id.apellido.upper() or payslip.id))" t-as="payslip">
+                        <div class="page">
+                            <t t-foreach="range(0,2)" t-as="c">
+                                <t t-call="rrhh_payroll.template_nomina">
+                                    <t t-set="o" t-value="payslip"/>
+                                </t>
+                            </t>
+                        </div>
+                        .
+                        <p style="page-break-before:always;"/>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <record model="ir.actions.report" id="rrhh_payroll.recibo_run">
+            <field name="report_name">rrhh_payroll.multi_nomina</field>
+            <field name="name">Recibos</field>
+            <field name="model">hr.payslip.run</field>
+            <field name="paperformat_id" ref="rrhh_payroll.papel_recibos"/>
+            <field name="report_type">qweb-pdf</field>
+            <field name="binding_model_id" ref="hr_payroll.model_hr_payslip_run"/>
+            <field name="binding_type">report</field>
+
+        </record>
+
+        <record id="rrhh_payroll.hr_payslip_run_report_xlsx" model="ir.actions.report">
+            <field name="name">Lineas de Recibos de nóminas</field>
+            <field name="model">hr.payslip.run</field>
+            <field name="report_type">xlsx</field>
+            <field name="report_name">rrhh_payroll.hr_payslip_run_report_xlsx_t</field>
+            <field name="report_file">rrhh_payroll.hr_payslip_run_report_xlsx_t</field>
+            <field name="print_report_name">'Lineas de Recibos de nóminas - %s' % (object.name)</field>
+            <field name="binding_model_id" ref="hr_payroll.model_hr_payslip_run"/>
+            <field name="binding_type">report</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,112 @@
+<odoo>
+    <data>
+
+        <template id="rrhh_personalizado.vacaciones_recibo" inherit_id="rrhh_payroll.notificacion_vacacion_recibo_template_t">
+            
+            <xpath expr="//div[@id='recibo']" position="replace">
+                <table style="width:100%;">
+                        <tr style="text-align:center;">
+                            <td style="border:1px solid white;" colspan="3">Recibo de vacaciones</td>
+                        </tr>
+                        <tr style="text-align:center;">
+                            <td style="border:1px solid white;" colspan="3">Empleador:
+                                <strong t-esc="doc.company_id.name"/>
+                            </td>
+                        </tr>
+                        <tr style="text-align:center;">
+                            <td style="border:1px solid white;" colspan="3">Patronal:
+                                <strong t-esc="doc.contract_id.company_id.nro_patronal"/>
+                            </td>
+                        </tr>
+                        <tr style="text-align:center;">
+                            <td style="border-top-style:1px solid white;border-bottom-style:1px solid black;"
+                                colspan="3">Empleado:
+                                <strong t-esc="doc.employee_id.name"/>
+                            </td>
+                        </tr>
+                        <tr style="text-align:center;">
+                            <td>
+                                <strong>CONCEPTO</strong>
+                            </td>
+                            <td>
+                                <strong>HABERES</strong>
+                            </td>
+                            <td>
+                                <strong>DESCUENTO</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Vacaciones anuales remuneradas correspondientes
+                                <br/>
+                                al periodo
+                                <strong t-field="doc.fecha_inicio_vacaciones"
+                                        t-field-options="{'format': 'DD-MM-YYYY'}"/>
+                                al
+                                <strong t-field="doc.fecha_fin_vacaciones" t-field-options="{'format': 'DD-MM-YYYY'}"/>
+                            </td>
+                            <td style="text-align:right;">
+                                <strong t-esc="'{0:,}'.format(int(sum(doc.payslip_id.line_ids.filtered(lambda x:x.code == 'GROSS').mapped('total')))).replace(',', '.')"/>
+                            </td>
+                            <td style="text-align:right;">
+                                0
+                            </td>
+                        </tr>
+                        <t t-if="True or doc.payslip_id.contract_id.patronal_ips_id or doc.payslip_id.contract_id.patronal_ips_id">
+                            <tr>
+                                <td>
+                                    <t t-esc="doc.payslip_id.line_ids.filtered(lambda x:x.category_id.code == 'DED').filtered(lambda x:x.total != 0).name"/>
+                                </td>
+                                <td style="text-align:right;">
+                                    0
+                                </td>
+                                <td style="text-align:right;">
+                                    -
+                                    <strong t-esc="'{0:,}'.format(int(sum(doc.payslip_id.line_ids.filtered(lambda x:x.category_id.code == 'DED').mapped('total')))).replace(',', '.')"/>
+                                </td>
+                            </tr>
+                        </t>
+                        <tr>
+                            <td colspan="2" style="border:1px solid white;">
+                                TOTAL A PERCIBIR
+                            </td>
+                            <td style="border:1px solid white;text-align:right">
+                                <strong t-esc="'{0:,}'.format(int(sum(doc.payslip_id.line_ids.filtered(lambda x:x.code == 'NET').mapped('total')))).replace(',', '.')"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">Son Guaranies:
+                                <strong t-esc="doc.numero_a_letras(sum(doc.payslip_id.line_ids.filtered(lambda x:x.code == 'NET').mapped('total'))).upper()"/>
+                            </td>
+                        </tr>
+                        
+                    </table>
+                    <table style="text-align:center;width:100%;margin-top:100px;border:1px solid white;">
+                        <tr>
+                            <td style="border:1px solid white;">
+                                ---------------------------------<br/>Firma del Empleador
+                                <br/>
+                                <strong t-esc="doc.company_id.name"/>
+                                <br/>
+                                <strong>C.I.N°
+                                    <t t-esc="doc.company_id.vat"/>
+                                </strong>
+                            </td>
+
+                            <td style="border:1px solid white;">
+                                ---------------------------------<br/>Firma del Empleado
+                                <br/>
+                                <strong t-esc="doc.employee_id.name"/>
+                                <br/>
+                                <strong>C.I.N°
+                                    <t t-esc="doc.employee_id.identification_id"/>
+                                </strong>
+                            </td>
+                        </tr>
+                    </table>
+            </xpath>
+        </template>    
+            
+            
+
+    </data>
+</odoo>

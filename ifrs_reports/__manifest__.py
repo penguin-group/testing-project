@@ -1,0 +1,35 @@
+# -*- coding: utf-8 -*-
+{
+    'name': "Reportes contables IFRS",
+
+    'summary': """
+        Reportes contables IFRS""",
+
+    'description': """
+        Reportes contables IFRS
+    """,
+
+    'author': "Interfaces S.A.",
+    'website': "https://www.interfaces.com.py",
+
+    # Categories can be used to filter modules in modules listing
+    # Check https://github.com/odoo/odoo/blob/16.0/odoo/addons/base/data/ir_module_category_data.xml
+    # for the full list
+    'category': 'Account',
+    'version': '2023.11.15.1',
+
+    # any module necessary for this one to work correctly
+    'depends': ['base', 'moneda_secundaria', 'account_reports'],
+
+    # always loaded
+    'data': [
+        # 'security/ir.model.access.csv',
+        'data/cash_flow_report.xml',
+        'views/views.xml',
+        'views/templates.xml',
+    ],
+    # only loaded in demonstration mode
+    'demo': [
+        'demo/demo.xml',
+    ],
+}

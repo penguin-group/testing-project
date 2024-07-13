@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data >
+        <!-- costeo_importaciones.wizard.costeo form view -->
+        <record id="costeo_importaciones.wizard_costeo_view_form" model="ir.ui.view">
+            <field name="name"></field>
+            <field name="model">costeo_importaciones.wizard.costeo</field>
+            <field name="arch" type="xml">
+                <form >
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="purchase_id" required="True" readonly="True"/>
+                                <field name="picking_ids" invisible="True"/>
+                                <field name="picking_id" domain="[('id','in',picking_ids)]" widget="selection" required="True"/>
+                            </group>
+                            
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button string="Generar reporte" type="object" name="button_confirmar" class="oe_highlight"/>
+                        <button string="Cancelar" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

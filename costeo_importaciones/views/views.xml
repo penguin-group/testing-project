@@ -1,0 +1,6 @@
+<odoo>
+  <data>
+    <report id="costeo_importaciones.reporte_costeo_xlsx_action" model="costeo_importaciones.wizard.costeo" string="Costeo de importaciones" report_type="xlsx" name="costeo_importaciones.reporte_costeo" file="Costeo de importacion" attachment_use="False" />
+
+  </data>
+</odoo>

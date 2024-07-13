@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data >
+        <!-- secondary.currency.adjustment form view -->
+        <record id="adjustment_form" model="ir.ui.view">
+            <field name="name">secondary.currency.adjustment.view.form</field>
+            <field name="model">secondary.currency.adjustment</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="state" widget="statusbar"/>
+                        <button string="Calcular" type="object" name="button_calcular" class="oe_highlight" attrs="{'invisible':['|',('state','!=','draft'),('state','=',False)]}"/>
+                        <button string="Publicar asiento" type="object" name="button_create_move" attrs="{'invisible':['|',('state','!=','draft'),('state','=',False)]}"/>
+                        <button string="Cancelar" type="object" name="button_cancel" attrs="{'invisible':[('state','!=','posted')]}"/>
+                        <button string="Cambiar a borrador" type="object" name="button_draft" attrs="{'invisible':[('state','=','draft')]}"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="currency_id" readonly="True"/>
+                                <field name="secondary_currency_id" readonly="True"/>
+                                <field name="fecha" attrs="{'readonly':[('state','!=','draft')],'required':True}"/>
+                                <field name="fecha_anulacion"  attrs="{'readonly':[('state','!=','draft')]}"/>
+                                <field name="rate"  attrs="{'readonly':[('state','!=','draft')],'required':True}"/>
+                            </group>
+                            <group>
+                                <field name="reference" attrs="{'readonly':[('state','!=','draft')]}"/>
+                                <field name="journal_id" attrs="{'readonly':[('state','!=','draft')],'required':True}"/>
+                                <field name="expense_account_id" attrs="{'readonly':[('state','!=','draft')],'required':True}"/>
+                                <field name="income_account_id" attrs="{'readonly':[('state','!=','draft')],'required':True}"/>
+                                <field name="move_id" readonly="True"/>
+                                <field name="reverse_move_id" readonly="True"/>
+                                <field name="company_id" attrs="{'readonly':True}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Lineas">
+                                <field name="line_ids" attrs="{'readonly':[('state','!=','draft')]}">
+                                    <tree create="0">
+                                        <field name="account_id"/>
+                                        <field name="currency_id" invisible="True"/>
+                                        <field name="secondary_currency_id" invisible="True"/>
+                                        <field name="operation_balance" readonly="True" />
+                                        <field name="operation_balance_ms" readonly="True"/>
+                                        <field name="current_rate_balance" readonly="True"/>
+                                        <field name="difference"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <!-- secondary.currency.adjustment tree view -->
+        <record id="secondary_currency_adjustment_view_tree" model="ir.ui.view">
+            <field name="name">secondary.currency.adjustment.view.tree</field>
+            <field name="model">secondary.currency.adjustment</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="reference"/>
+                    <field name="fecha"/>
+                    <field name="fecha_anulacion"/>
+                    <field name="rate"/>
+                    <field name="move_id"/>
+                    <field name="reverse_move_id"/>
+                    <field name="state"/>
+                    <field name="company_id"/>
+                    <field name="create_uid" optional="hide"/>
+                    <field name="write_uid" optional="hide"/>
+
+                </tree>
+            </field>
+        </record>
+
+        <!-- secondary.currency.adjustment action window -->
+        <record id="secondary_currency_adjustment_action" model="ir.actions.act_window">
+            <field name="name">Ganancias/pérdidas de moneda secundaria sin realizar</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">secondary.currency.adjustment</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- This Menu Item must have a parent and an action -->
+        <menuitem id="menu_secondary_adjustment" name="Ganancias/pérdidas de moneda secundaria sin realizar" parent="account.account_reports_management_menu" action="secondary_currency_adjustment_action" sequence="100"/>
+    </data>
+</odoo>
