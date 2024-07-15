@@ -16,7 +16,7 @@
     # Check https://github.com/odoo/odoo/blob/12.0/odoo/addons/base/data/ir_module_category_data.xml
     # for the full list
     'category': 'Account',
-    'version': '2023.09.08.2',
+    'version': '17.0.1.0',
 
     # any module necessary for this one to work correctly
     'depends': ['base', 'account', 'interfaces_timbrado', 'autorizacion_timbrado', 'interfaces_tools'],

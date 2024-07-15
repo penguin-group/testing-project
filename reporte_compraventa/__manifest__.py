@@ -18,7 +18,7 @@
     # Check https://github.com/odoo/odoo/blob/master/odoo/addons/base/module/module_data.xml
     # for the full list
     'category': 'Account',
-    'version': '2024.1.23.1',
+    'version': '17.0.1.0',
 
     # any module necessary for this one to work correctly
     'depends': ['base', 'interfaces_timbrado', 'report_xlsx'],

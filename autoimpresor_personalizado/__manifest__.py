@@ -26,7 +26,7 @@
     # Check https://github.com/odoo/odoo/blob/16.0/odoo/addons/base/data/ir_module_category_data.xml
     # for the full list
     'category': 'Uncategorized',
-    'version': '2023.10.11.01',
+    'version': '17.0.1.0',
 
     # any module necessary for this one to work correctly
     'depends':['base','account', 'factura_autoimpresor', 'proveedores_timbrado'],

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
         <record id="hr_attendance_form_inherit" model="ir.ui.view">
@@ -6,26 +6,16 @@
             <field name="model">hr.attendance</field>
             <field name="inherit_id" ref="hr_attendance.hr_attendance_view_form"/>
             <field name="arch" type="xml">
-
                 <xpath expr="//field[@name='day_period']" position="replace">
                     <field name="force_day_period_check"/>
-                    <field name="day_period" attrs="{'invisible':[('force_day_period_check','=',True)]}"/>
-                    <field name="force_day_period" attrs="{
-                        'invisible':[('force_day_period_check','=',False)],
-                        'required':[('force_day_period_check','=',True)]
-                    }"/>
+                    <field invisible="force_day_period_check == True" name="day_period"/>
+                    <field invisible="force_day_period_check == False" name="force_day_period" required="force_day_period_check == True"/>
                 </xpath>
-
                 <xpath expr="//field[@name='resource_calendar_id']" position="replace">
                     <field name="force_resource_calendar_id_check"/>
-                    <field name="resource_calendar_id" attrs="{'invisible':[('force_resource_calendar_id_check','=',True)]}"/>
-                    <field name="force_resource_calendar_id" attrs="{
-                        'invisible':[('force_resource_calendar_id_check','=',False)],
-                        'required':[('force_resource_calendar_id_check','=',True)]
-                    }"/>
-                </xpath>
-
-            </field>
+                    <field invisible="force_resource_calendar_id_check == True" name="resource_calendar_id"/>
+                    <field invisible="force_resource_calendar_id_check == False" name="force_resource_calendar_id" required="force_resource_calendar_id_check == True"/>
+                </xpath></field>
         </record>
     </data>
 </odoo>

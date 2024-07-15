@@ -17,7 +17,7 @@
     # Check https://github.com/odoo/odoo/blob/11.0/odoo/addons/base/module/module_data.xml
     # for the full list
     'category': 'Human Resources/Payroll',
-    'version': '20240516.2',
+    'version': '17.0.1.0',
     'external_dependencies': {
         'python': [
             'xlsxwriter',

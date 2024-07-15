@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
         <record id="view_purchase_requisition_form_inherited" model="ir.ui.view">
@@ -6,74 +6,61 @@
             <field name="model">purchase.requisition</field>
             <field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_form"/>
             <field name="arch" type="xml">
-
                 <xpath expr="//group" position="after">
-
                     <notebook id="chatter">
                         <page string="Changelog">
                             <field name="message_ids" readonly="1"/>
                         </page>
                     </notebook>
-
                     <notebook>
                         <page string="Cost Center">
-                            <field name="cost_center_ids">
-                                <tree editable="bottom">
+                            <field name="cost_center_ids"><tree editable="bottom">
                                     <field name="name"/>
-                                    <field name="analytic_distribution" widget="analytic_distribution"
-                                           groups="analytic.group_analytic_accounting"/>
-                                </tree>
-                            </field>
+                                    <field groups="analytic.group_analytic_accounting" name="analytic_distribution" widget="analytic_distribution"/>
+                                </tree></field>
                         </page>
                     </notebook>
-
-
                 </xpath>
-
                 <xpath expr="//notebook[3]" position="after">
                     <notebook>
-                        <page string="Proposals" name="Vendors"  attrs="{'invisible': [('is_quantity_copy', '=', 'none')]}">
+                        <page invisible="is_quantity_copy == 'none'" name="Vendors" string="Proposals">
                             <field name="partner_ids" nolabel="1">
                                 <tree editable="bottom">
                                     <field name="partner_id"/>
                                     <field name="invitation_state" readonly="1"/>
                                     <field name="purchase_order_id" readonly="1"/>
-                                </tree>
-                            </field>
+                                </tree></field>
                         </page>
                     </notebook>
                     <separator string="Proposal Selection"/>
-                    <field name="selection_notes" class="oe-bordered-editor"/>
+                    <field class="oe-bordered-editor" name="selection_notes"/>
                     <group string="Signatures">
-                        <field name="signature1" widget="signature" string="Head Engineering"/>
-                        <field name="signature2" widget="signature" string="Project Manager"/>
-                        <field name="signature3" widget="signature" string="Head of Procurement"/>
+                        <field name="signature1" string="Head Engineering" widget="signature"/>
+                        <field name="signature2" string="Project Manager" widget="signature"/>
+                        <field name="signature3" string="Head of Procurement" widget="signature"/>
                         <field name="process_followed" readonly="1"/>
                         <field name="number_of_signatories" readonly="1"/>
                     </group>
                     <group string="Additional Approvals">
-                        <field name="signature4" widget="signature" string="CEngO"/>
-                        <field name="signature5" widget="signature" string="CEO"/>
+                        <field name="signature4" string="CEngO" widget="signature"/>
+                        <field name="signature5" string="CEO" widget="signature"/>
                     </group>
                 </xpath>
-
                 <xpath expr="//field[@name='line_ids']/tree/field[@name='product_uom_id']" position="after">
                     <field name="product_classification"/>
                     <field name="document_ids" widget="many2many_binary"/>
                 </xpath>
-        <!--Atributos Ocultos-->
+                <!--Atributos Ocultos-->
                 <xpath expr="//separator" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
-
                 <xpath expr="//field[@name='description']" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
-
                 <xpath expr="//div[@class='oe_chatter']" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
-        <!--
+                <!--
                 <xpath expr="//field[@name='type_id']" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
@@ -81,27 +68,20 @@
                 <xpath expr="//field[@name='date_end']" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </xpath>
-        <!-- Cambio de nombre de atributos-->
+                <!-- Cambio de nombre de atributos-->
                 <xpath expr="//page[@name='products']" position="attributes">
-                    <attribute name="string">Scope</attribute>
-                </xpath>
-
-            </field>
+                    <attribute name="string">
+                        Scope</attribute>
+                </xpath></field>
         </record>
-
-
         <record id="purchase_requisition_form_batch_vendor_invitation_inherited" model="ir.ui.view">
             <field name="name">purchase.requisition.form.batch.vendor.invitation.inherited</field>
             <field name="model">purchase.requisition</field>
             <field name="inherit_id" ref="ak_tender_batch_invitation.purchase_requisition_form_batch_vendor_invitation"/>
             <field name="arch" type="xml">
-
                 <xpath expr="//page[@name='Vendors']" position="attributes">
                     <attribute name="invisible">1</attribute>
-                </xpath>
-
-            </field>
+                </xpath></field>
         </record>
-
     </data>
 </odoo>

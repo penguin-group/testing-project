@@ -1,35 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <odoo>
-  <data>
+    <data>
         <record id="account_move_inherit_facturas_proveedor" model="ir.ui.view">
-			<field name="name">account.move.inherit.facturas.proveedor</field>
-			<field name="model">account.move</field>
-			<field name="inherit_id" ref="proveedores_timbrado.view_id_Account_move_i1" />
-			<field name="arch" type="xml">
-
-				<!-- Campo requrido para timbrado proveedor de account move-->
-				<xpath expr="//field[@name='timbrado_id']" position="attributes">
-                        <attribute name="attrs">{'required':[('move_type','in',['in_invoice'])]}</attribute>				
-                </xpath>
-			</field>
-		</record>
+            <field name="name">account.move.inherit.facturas.proveedor</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="proveedores_timbrado.view_id_Account_move_i1"/>
+            <field name="arch" type="xml">
+                <!-- Campo requrido para timbrado proveedor de account move-->
+                <xpath expr="//field[@name='timbrado_id']" position="attributes">
+                    <attribute name="required">move_type in ['in_invoice']</attribute>
+                </xpath></field>
+        </record>
         <record id="account_move_inherit_facturas_partner" model="ir.ui.view">
-			<field name="name">account.move.inherit.facturas.partner</field>
-			<field name="model">account.move</field>
-			<field name="inherit_id" ref="account.view_move_form" />
-			<field name="arch" type="xml">
-
-				<!-- Campo requrido para timbrado proveedor de account move-->
-				<xpath expr="//field[@name='partner_id']" position="attributes">
-                        <attribute name="attrs">{'required':[('move_type','in',['in_invoice'])]}</attribute>				
+            <field name="name">account.move.inherit.facturas.partner</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <!-- Campo requrido para timbrado proveedor de account move-->
+                <xpath expr="//field[@name='partner_id']" position="attributes">
+                    <attribute name="required">move_type in ['in_invoice']</attribute>
                 </xpath>
                 <xpath expr="//field[@name='invoice_date']" position="attributes">
-                        <attribute name="attrs">{'required':[('move_type','in',['in_invoice'])]}</attribute>				
-                </xpath>
-               
-			</field>
-		</record>
-       
-  </data>
+                    <attribute name="required">move_type in ['in_invoice']</attribute>
+                </xpath></field>
+        </record>
+    </data>
 </odoo>

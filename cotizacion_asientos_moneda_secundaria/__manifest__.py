@@ -16,7 +16,7 @@
     # Check https://github.com/odoo/odoo/blob/16.0/odoo/addons/base/data/ir_module_category_data.xml
     # for the full list
     'category': 'Account',
-    'version': '0.1',
+    'version': '17.0.1.0',
 
     # any module necessary for this one to work correctly
     'depends': ['base','interfaces_tipo_cambio_compra_venta','moneda_secundaria','purchase_stock'],

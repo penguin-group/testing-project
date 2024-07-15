@@ -6,14 +6,14 @@
             <field name="inherit_id" ref="account.view_account_journal_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//notebook" position="inside">
-                    <page string="Timbrado" attrs="{'invisible':[('type','!=','sale')]}">
+                    <page string="Timbrado" invisible="type != 'sale'">
                         <field name="timbrados_ids" context="{ 'default_journal_id':id }"/>
                     </page>
 
                 </xpath>
                 <xpath expr="//page[@name='advanced_settings']/group" position="inside">
                     <group string="Impresión de facturas" groups="account.group_account_manager"
-                           attrs="{'invisible':[('type','!=','sale')]}">
+                           invisible="type != 'sale'">
                         <field name="max_lineas"/>
                     </group>
                 </xpath>
