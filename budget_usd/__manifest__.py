@@ -19,7 +19,7 @@
     'version': '17.0.1.0',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','moneda_secundaria'],
+    'depends': ['base','moneda_secundaria', 'account_budget'],
 
     # always loaded
     'data': [
