@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <odoo>
-    <template id="custom_account_report_pdf" inherit_id="account_reports.main_template">
-        <xpath expr="//div[@class='o_account_reports_header print_only']" position="replace">
+    <template id="custom_account_report_pdf" inherit_id="account_reports.pdf_export_main">
+        <xpath expr="//body/div/header" position="replace">
 
-            <div
-                class="o_account_reports_header print_only"
-                t-att-style="'%s' % report.get_company_styles()"
-            >
+            <header>
                 <div>
                     <br />
                     <t t-set="company_logo" t-value="report.get_company_logo()" />
@@ -46,7 +43,8 @@
                         <!-- <t t-call="account_reports.filter_info_template" /> -->
                     </div>
                 </div>
-            </div>
+            </header>
+
         </xpath>
     </template>
 </odoo>
