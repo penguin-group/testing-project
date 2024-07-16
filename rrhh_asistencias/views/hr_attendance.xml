@@ -102,8 +102,8 @@
         <record id="hr_attendance.menu_hr_attendance_view_attendances" model="ir.ui.menu">
             <field name="parent_id" ref="rrhh_asistencias.menu_asistencias_padre"/>
         </record>
-        <record id="hr_attendance.menu_hr_attendance_attendances_overview" model="ir.ui.menu">
+        <!-- <record id="hr_attendance.menu_hr_attendance_root" model="ir.ui.menu">
             <field name="parent_id" ref="rrhh_asistencias.menu_asistencias_padre"/>
-        </record>
+        </record> -->
     </data>
 </odoo>

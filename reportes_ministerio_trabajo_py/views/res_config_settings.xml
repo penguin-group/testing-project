@@ -11,7 +11,8 @@
                 <xpath expr="//block[@id='hr_payroll_settings']" position="after">
 
                     <block title="Estructuras Salariales de Localizaciones Paraguay">
-                        <setting string="Configuraciones de las Estructuras Salariales utilizadas por las Localizaciones Paraguay">
+                        <setting string="Configuraciones de las Estructuras Salariales utilizadas por las Localizaciones Paraguay" 
+                            id="reportes_ministerio_trabajo_py_default_structures_config">
                             <div class="content-group">
                                     <div class="row mt16 ms-2">
                                         <label for="payroll_structure_default_vacacion" class="col-md-6 p-0 m-0 o_light_label"/>
