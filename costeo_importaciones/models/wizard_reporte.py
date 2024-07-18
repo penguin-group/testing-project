@@ -140,13 +140,13 @@ class ReporteCosteo(models.AbstractModel):
         total_local=0
         total_usd=0
         for p in picking_id.move_ids:
-            total_picking=total_picking+(p.price_unit*p.quantity_done)
+            total_picking=total_picking+(p.price_unit*p.quantity)
         total_local=total_local+total_picking
         if sec_currency_id:
-            total_usd=total_usd+(total_picking/tipo_cambio_picking)
+            total_usd=total_usd + ((total_picking/tipo_cambio_picking) if tipo_cambio_picking else 0)
         rightAndWrite(total_picking,numerico)
         if sec_currency_id:
-            rightAndWrite(total_picking/tipo_cambio_picking,numerico_float)
+            rightAndWrite((total_picking/tipo_cambio_picking) if tipo_cambio_picking else 0,numerico_float)
             rightAndWrite(tipo_cambio_picking,numerico_float)
         for l in landed.cost_lines:
             if sec_currency_id:
@@ -186,26 +186,26 @@ class ReporteCosteo(models.AbstractModel):
            
         for i in picking_id.move_ids:
             breakAndWrite(i.product_id.display_name)
-            rightAndWrite(i.quantity_done,numerico)
+            rightAndWrite(i.quantity,numerico)
             rightAndWrite(i.price_unit,numerico)
-            rightAndWrite(i.price_unit * i.quantity_done,numerico)
+            rightAndWrite(i.price_unit * i.quantity,numerico)
             costos_adicionales=sum(landed.valuation_adjustment_lines.filtered(lambda x:x.product_id==i.product_id).mapped('additional_landed_cost'))
-            rightAndWrite(costos_adicionales/i.quantity_done,numerico_float)
+            rightAndWrite(costos_adicionales/i.quantity,numerico_float)
             rightAndWrite(costos_adicionales,numerico_float)
-            costo_final=i.price_unit +(costos_adicionales/i.quantity_done)
+            costo_final=i.price_unit +(costos_adicionales/i.quantity)
             rightAndWrite(costo_final,numerico_float)
-            rightAndWrite(costo_final*i.quantity_done,numerico_float)
+            rightAndWrite(costo_final*i.quantity,numerico_float)
             addRight()
             if sec_currency_id:
                 rightAndWrite(i.price_unit/tipo_cambio_picking,numerico_float)
-                rightAndWrite((i.price_unit * i.quantity_done)/tipo_cambio_picking,numerico_float)
+                rightAndWrite((i.price_unit * i.quantity)/tipo_cambio_picking,numerico_float)
                 costos_adicionales=0
                 for j in landed:
                     c=sum(j.valuation_adjustment_lines.filtered(lambda x:x.product_id==i.product_id).mapped('additional_landed_cost'))/ j.account_move_id.line_ids[0].tipo_cambio
                     costos_adicionales=costos_adicionales+c
-                rightAndWrite((costos_adicionales/i.quantity_done),numerico_float)
+                rightAndWrite((costos_adicionales/i.quantity),numerico_float)
                 rightAndWrite(costos_adicionales,numerico_float)
-                costo_final=(i.price_unit/tipo_cambio_picking) +((costos_adicionales/i.quantity_done))
+                costo_final=(i.price_unit/tipo_cambio_picking) +((costos_adicionales/i.quantity))
                 rightAndWrite(costo_final,numerico_float)
-                rightAndWrite((costo_final*i.quantity_done),numerico_float)
+                rightAndWrite((costo_final*i.quantity),numerico_float)
                 
