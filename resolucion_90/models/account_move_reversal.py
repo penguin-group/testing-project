@@ -6,8 +6,8 @@ from odoo.exceptions import UserError
 class AccountMoveReversal(models.TransientModel):
     _inherit = 'account.move.reversal'
 
-    def reverse_moves(self):
-        result = super(AccountMoveReversal, self).reverse_moves()
+    def reverse_moves(self, is_modify=False):
+        result = super(AccountMoveReversal, self).reverse_moves(is_modify)
         account_move = self.env[result.get('res_model')].browse(result.get('res_id'))
         name = ', '.join(self.move_ids.mapped('name'))
         if self.move_type in ['in_invoice']:
@@ -20,3 +20,4 @@ class AccountMoveReversal(models.TransientModel):
             'res90_timbrado_comprobante_asociado': ', '.join(move.res90_nro_timbrado or "" for move in self.move_ids),
         })
         return result
+        
