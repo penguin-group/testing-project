@@ -1,0 +1,160 @@
+.o_account_reports_summary_edit {
+    display: none !important;
+}
+.caret {
+    display: none !important;
+}
+.o_account_reports_body_print {
+    background-color: white !important;
+    color: #4f4b81 !important;   /* este color es para los titulos de las columnas, para el caso de Consolidated Report solo es para Total*/
+    font-size: 12px !important;
+    .o_account_reports_header {
+        padding: 10px;
+        background-color: white;
+        font-size: 14px !important;
+        font-family: "inter-medium";
+    }
+
+    .o_account_report_name_ellipsis_partner_ledger {
+        min-width: 160px !important;
+        max-width: 160px !important;
+    }
+
+    .o_account_reports_page {
+        color: black !important;
+    }
+
+    .o_account_reports_table {
+        font-size: 12px !important;
+        > tbody > tr {
+            /* fix thead overlapping http://github.com/wkhtmltopdf/wkhtmltopdf/issues/1524 */
+            page-break-inside: avoid;
+            /* Fix extra space in pdf: by overriding the original size of row, the extra space problem is gone */
+            line-height: normal !important;
+            > td {
+                vertical-align: middle;
+                word-break: break-word;
+            }
+        }
+    }
+
+    .o_account_reports_level1 {
+        font-size: 14px !important;
+        border-bottom: 2px solid #7863AD; /* {$o-gray-400} esto que esta comentado era el color que tenia originalmente*/
+        color: #4f4b81 !important;
+        font-weight: bold !important;
+    }
+
+
+    .o_account_reports_level2 {
+        border-bottom: 1px solid #{$o-gray-300};
+        font-weight: bold !important;
+        color: blue($color: blue) !important;
+    }
+
+    @for $i from 3 through 13 {
+        .o_account_reports_level#{$i} {
+            font-size: 12px !important;   /* se hace mas pequeño que el level 1*/
+            font-family: "inter-medium";
+            border-bottom: 0.5px solid #{$o-gray-200};
+            font-weight: normal !important;
+            .number{
+                color: #4f4b81;
+            }
+        }
+    }
+
+    .o_account_reports_domain_total, .total {
+        .text-muted {
+            color: #4f4b81 !important;
+        }
+    }
+
+    .o_account_reports_page.o_account_trial_balance_report .o_account_reports_table {
+
+        .o_account_reports_header_hierarchy {
+
+            tr:first-child th:not(:first-child) {
+                border: 1px solid lightgrey;
+            }
+
+            .o_account_report_column_header{
+                padding-top: 8px;
+                padding-bottom: 8px;
+            }
+        }
+        .o_foldable_total {
+            font-weight: bold !important;
+        }
+    }
+
+    .number{
+        font-weight: normal !important;
+        color: #4f4b81 !important;
+    }
+    .total td {
+        font-weight: bold !important;
+    }
+
+    .total .number {  /* Asumiendo que los números usan la clase 'number' */
+        color: #4f4b81 !important;  /* Cambia a gris oscuro */
+    }
+
+}
+a {
+    color: inherit !important;
+}
+.print_only {
+    display: block !important;
+    &.row {
+        display: flex !important;
+    }
+}
+[name="summary"] {
+    display: none;
+}
+.no_print {
+    display: none !important;
+}
+
+.o_account_reports_page {
+    td.o_foldable_total {
+        font-weight: normal;
+    }
+
+    .o_account_report_line {
+        font-size: 12px !important;
+    }
+
+    .o_account_report_line_ellipsis, .o_account_report_name_ellipsis{
+        position: relative;
+        span {
+            position: absolute;
+        }
+        span.js_account_report_line_footnote {
+            /* fix footnote alignment in rtl direction */
+            position: relative;
+        }
+        > span[class="account_report_line_name"],
+        > span[class="o_account_report_column_value"],
+        span[class^="o_account_reports_domain_line_"] {
+            white-space: normal;
+            overflow: visible;
+            text-overflow: initial;
+            position: relative;
+        }
+    }
+
+    .number{
+        font-weight: 700;
+    }
+    .account_report_line_name {
+        color: #4f4b81 !important;
+        font-weight: 700;
+    }
+
+}
+
+.o_account_reports_body_print .o_account_reports_table tr.total .number {
+    color: #4f4b81 !important;
+}

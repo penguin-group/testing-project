@@ -1,11 +1,16 @@
 # pylint: disable=missing-module-docstring,no-name-in-module
-
+import logging
 import io
 from datetime import datetime
+from odoo.tools import base64_to_image
+from PIL import Image
+from urllib.request import urlopen
+
 
 import xlsxwriter
 from odoo import models
 
+_logger = logging.getLogger(__name__)
 class CustomAccountReportsXlsx(models.Model):
     """ Inherit account.reports to make a custom format for the reports
     """
@@ -15,25 +20,29 @@ class CustomAccountReportsXlsx(models.Model):
     def _get_report_date(self, options):
         """ Get the date of the report
         """
+        print(f"Options: {options}")
 
         column_groups = options.get('column_groups', {})
-        date_str = None
+        date_from_str = None
+        date_to_str = None
 
         for key, value in column_groups.items():
             forced_options = value.get('forced_options', {})
             date_options = forced_options.get('date', {})
-            date_str = date_options.get('date_to')
-            if date_str:
+            date_from_str = date_options.get('date_from')
+            date_to_str = date_options.get('date_to')
+            if date_from_str and date_to_str:
                 break
         
-        if not date_str:
+        if not date_from_str and not date_to_str:
             return "Date not provided" 
         try:
-            date = datetime.strptime(date_str, '%Y-%m-%d')
+            date_from = datetime.strptime(date_from_str, '%Y-%m-%d')
+            date_to = datetime.strptime(date_to_str, '%Y-%m-%d')
         except ValueError as e:
-            raise ValueError(f"Error parsing date: {date_str}.Except format 'YYYY-MM-DD'.Original error: {e}")
+            raise ValueError(f"Error parsing dates: {date_from_str} or date_to {date_to_str}.Except format 'YYYY-MM-DD'.Original error: {e}")
 
-        return date.strftime('As of %B')
+        return f"Period from {date_from.strftime('%B/%d/%Y')} - {date_to.strftime('%B/%d/%Y')}"
 
     def _fill_header(self, sheet, row, col_end, stlye):
         for index in range (1, col_end):
