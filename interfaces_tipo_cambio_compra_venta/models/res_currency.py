@@ -106,7 +106,8 @@ class ResCurrency(models.Model):
         # interfaces_tipo_cambio_compra_venta/models/res_currency.py
         if not self.ids:
             return {}
-        self.env['res.currency.rate'].flush(['rate_tipo_cambio_comprador', 'currency_id', 'company_id', 'name'])
+        #self.env['res.currency.rate'].flush(['rate_tipo_cambio_comprador', 'currency_id', 'company_id', 'name'])
+        #self.env.invalidate_all()
         query = """SELECT c.id,
                           COALESCE((SELECT r.rate_tipo_cambio_comprador FROM res_currency_rate r
                                   WHERE r.currency_id = c.id AND r.name <= %s
