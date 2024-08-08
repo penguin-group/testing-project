@@ -77,29 +77,12 @@ class AccountMove(models.Model):
 
         return result
 
-    if True and release.major_version in ['16.0']:
-
-        @api.model
-        def create(self, vals):
-            result = super(AccountMove, self).create(vals)
-            for this in result:
-                if (this.sale_order_count or this.purchase_order_count) and this.state in ['draft'] and this.line_ids and this.move_type in ['out_invoice',
-                                                                                                                                             'in_invoice']:
-                    this._onchange_currency()
-                    this.line_ids._compute_currency_rate()
-            return result
-
-        # def action_post(self):
-        #     for this in self:
-        #         this._onchange_currency()
-        #     return super().action_post()
-
-    if release.major_version in ['15.0']:
-
-        @api.onchange('invoice_line_ids')
-        def _onchange_invoice_line_ids(self):
-            # interfaces_tipo_cambio_compra_venta/models/account_move.py
-            result = super(AccountMove, self)._onchange_invoice_line_ids()
-            for move in self:
-                move._onchange_currency()
-            return result
+    @api.model
+    def create(self, vals):
+        result = super(AccountMove, self).create(vals)
+        for this in result:
+            if (this.sale_order_count or this.purchase_order_count) and this.state in ['draft'] and this.line_ids and this.move_type in ['out_invoice',
+                                                                                                                                            'in_invoice']:
+                this._onchange_currency()
+                this.line_ids._compute_currency_rate()
+        return result

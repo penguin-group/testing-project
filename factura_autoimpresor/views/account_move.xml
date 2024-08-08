@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
         <!-- model.name inherit form view -->
@@ -12,20 +12,21 @@
                     <div>
                         <field name="nro_nota_remision"/>
                     </div>
-                    <label for="nro_factura_relacionada" attrs="{'invisible':[('move_type','not in',['out_refund','in_refund'])]}"/>
+                    <label for="nro_factura_relacionada" invisible="move_type not in ['out_refund', 'in_refund']"/>
                     <div>
-                        <field name="nro_factura_relacionada" attrs="{'invisible':[('move_type','not in',['out_refund','in_refund'])]}"/>
+                        <field invisible="move_type not in ['out_refund', 'in_refund']" name="nro_factura_relacionada"/>
                     </div>
                 </xpath>
                 <xpath expr="//label[@for='ref']" position="attributes">
-                    <attribute name="string">Numero de Factura</attribute>
+                    <attribute name="string">
+                        Numero de Factura</attribute>
                 </xpath>
                 <xpath expr="//field[@name='ref']" position="attributes">
-                    <attribute name="string">Numero de Factura</attribute>
-                    <attribute name="placeholder">Ej: 001-001-0000001</attribute>
-                </xpath>
-            </field>
+                    <attribute name="string">
+                        Numero de Factura</attribute>
+                    <attribute name="placeholder">
+                        Ej: 001-001-0000001</attribute>
+                </xpath></field>
         </record>
-
     </data>
 </odoo>

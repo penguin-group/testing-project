@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<odoo>
-    <template id="custom_account_report_line_pdf_black" inherit_id="account_reports.line_template">
-        <xpath expr="//span[hasclass('account_report_line_name')]" position="attributes">
-            <attribute name="style">color: black;</attribute>
-        </xpath>
-    </template>
-</odoo>

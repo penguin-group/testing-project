@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="view_id_Account_move_i1" model="ir.ui.view">
         <field name="name">account.move.inherit.view.form</field>
@@ -6,11 +7,9 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='timbrado_proveedor']" position="replace">
                 <!-- Add your fields here -->
-                <field name="timbrado_id" domain="[('partner_id','=',partner_id)]" attrs="{'invisible':[('move_type','not in',['in_invoice','in_refund'])],'readonly':[('state','not in',['draft'])]}"
-                       context="{'default_partner_id':partner_id}"/>
-                <field name="fecha_inicio" attrs="{'invisible':[('timbrado_id','=',False)]}"/>
-                <field name="fecha_vencimiento" attrs="{'invisible':[('timbrado_id','=',False)]}"/>
-            </xpath>
-        </field>
+                <field context="{'default_partner_id':partner_id}" domain="[('partner_id','=',partner_id)]" invisible="move_type not in ['in_invoice', 'in_refund']" name="timbrado_id" readonly="state not in ['draft']"/>
+                <field invisible="timbrado_id == False" name="fecha_inicio"/>
+                <field invisible="timbrado_id == False" name="fecha_vencimiento"/>
+            </xpath></field>
     </record>
 </odoo>

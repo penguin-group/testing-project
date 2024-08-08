@@ -17,7 +17,7 @@ Generar archivo TXT para pago de salarios ITAU desde el Lote de Salarios
     # Check https://github.com/odoo/odoo/blob/16.0/odoo/addons/base/data/ir_module_category_data.xml
     # for the full list
     'category': 'Human Resources/Payroll',
-    'version': '2023.12.15.1',
+    'version': '17.0.1.0',
 
     # any module necessary for this one to work correctly
     'depends': ['base', 'rrhh_payroll'],

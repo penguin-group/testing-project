@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
         <record id="calendario_feriado_form_inherit" model="ir.ui.view">
@@ -9,11 +9,10 @@
                 <xpath expr="//field[@name='name']/.." position="after">
                     <group string="Factor">
                         <field name="custom_factor"/>
-                        <field name="factor_horas_extra_100" attrs="{'invisible':[('custom_factor','=',False)]}"/>
-                        <field name="factor_horas_nocturnas" attrs="{'invisible':[('custom_factor','=',False)]}"/>
+                        <field invisible="custom_factor == False" name="factor_horas_extra_100"/>
+                        <field invisible="custom_factor == False" name="factor_horas_nocturnas"/>
                     </group>
-                </xpath>
-            </field>
+                </xpath></field>
         </record>
     </data>
 </odoo>

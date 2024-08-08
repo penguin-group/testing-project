@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
         <record id="view_hr_payslip_tree_view" model="ir.ui.view">
@@ -7,12 +7,13 @@
             <field name="inherit_id" ref="hr_payroll.view_hr_payslip_tree"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='net_wage']" position="attributes">
-                    <attribute name="sum">Total</attribute>
+                    <attribute name="sum">
+                        Total</attribute>
                 </xpath>
                 <xpath expr="//field[@name='basic_wage']" position="attributes">
-                    <attribute name="sum">Total</attribute>
-                </xpath>
-            </field>
+                    <attribute name="sum">
+                        Total</attribute>
+                </xpath></field>
         </record>
         <record id="view_hr_payslip_form" model="ir.ui.view">
             <field name="name">view_hr_payslip_form</field>
@@ -20,18 +21,13 @@
             <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//header" position="inside">
-                    <button
-                            string="Obtener días trabajados"
-                            name="reset_worked_days"
-                            type="object"
-                            attrs="{'invisible': [('state', 'not in', ['draft','verify'])]}"
-                            class="oe_highlight"
-                            help="Recalcular las líneas de días trabajados y otras entradas desde las marcaciones y ausencias"
-                    />
+                    <button class="oe_highlight" help="Recalcular las líneas de días trabajados y otras entradas desde las marcaciones y ausencias" invisible="state not in ['draft', 'verify']" name="reset_worked_days" string="Obtener días trabajados" type="object"/>
                 </xpath>
                 <xpath expr="//notebook/page/field[@name='worked_days_line_ids']/tree" position="attributes">
-                    <attribute name="create">1</attribute>
-                    <attribute name="delete">1</attribute>
+                    <attribute name="create">
+                        1</attribute>
+                    <attribute name="delete">
+                        1</attribute>
                 </xpath>
                 <xpath expr="//notebook/page/field/tree/field[@name='work_entry_type_id']" position="attributes">
                     <attribute name="readonly">False</attribute>
@@ -43,11 +39,8 @@
                     <attribute name="readonly">False</attribute>
                 </xpath>
                 <xpath expr="//page[@name='account_info']/group/group/field[@name='name']/.." position="inside">
-                    <field name="structure_type_tag" invisible="True"/>
-                </xpath>
-
-            </field>
+                    <field invisible="True" name="structure_type_tag"/>
+                </xpath></field>
         </record>
-
     </data>
 </odoo>

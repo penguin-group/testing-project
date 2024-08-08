@@ -10,12 +10,12 @@
 
                 <xpath expr="//field[@name='installed_version']" position="after">
                     <field name="module_real_installed_version_outdated" invisible="True"/>
-                    <field name="real_installed_version" readonly="True" attrs="{'invisible':[('module_real_installed_version_outdated','=',False)]}"/>
+                    <field name="real_installed_version" readonly="True" invisible="module_real_installed_version_outdated == False"/>
                 </xpath>
 
                 <xpath expr="//sheet" position="inside">
                     <field name="module_real_installed_version_outdated" invisible="True"/>
-                    <div class="alert alert-warning" role="alert" attrs="{'invisible': [('module_real_installed_version_outdated','=',False)]}">
+                    <div class="alert alert-warning" role="alert" invisible="module_real_installed_version_outdated == False">
                         <span>La última versión instalada no coincide con la versión disponible actualmente, debe de actualizar el módulo</span>
                     </div>
                 </xpath>

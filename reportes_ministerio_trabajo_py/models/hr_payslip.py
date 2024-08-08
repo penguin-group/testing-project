@@ -30,13 +30,6 @@ class HrPayslip(models.Model):
         for this in self:
             this.computed_daily_wage = this.contract_id.get_computed_daily_wage(this.date_to)
 
-    @api.onchange('contract_id')
-    def set_default_struct_id(self):
-        struct_id = False
-        if self.contract_id and self.contract_id.structure_id:
-            struct_id = self.contract_id.structure_id
-        self.struct_id = struct_id
-
     def get_dia_laboral(self, date):
         # reportes_ministerio_trabajo_py/models/hr_payslip.py
         return 1

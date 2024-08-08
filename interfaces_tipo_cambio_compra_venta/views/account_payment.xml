@@ -7,15 +7,9 @@
             <field name="inherit_id" ref="account.view_account_payment_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='amount']/.." position="after">
-                    <field name="currency_rate" attrs="{
-                    'readonly':['|',('freeze_currency_rate','=',False),('state','not in',['draft'])],
-                    'required':True,
-                    }" force_save="True"/>
-                    <field name="freeze_currency_rate" attrs="{
-                    'invisible':[('state','not in',['draft'])],
-                    }"/>
-                </xpath>
-            </field>
+                    <field force_save="True" name="currency_rate" readonly="freeze_currency_rate == False or state not in ['draft']" required="True"/>
+                    <field invisible="state not in ['draft']" name="freeze_currency_rate"/>
+                </xpath></field>
         </record>
     </data>
 </odoo>

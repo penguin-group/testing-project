@@ -1,52 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <odoo>
-    <template id="custom_account_report_pdf" inherit_id="account_reports.main_template">
-        <xpath expr="//div[@class='o_account_reports_header print_only']" position="replace">
+    <template id="custom_account_report_pdf" inherit_id="account_reports.pdf_export_main">
 
-            <div
-                class="o_account_reports_header print_only"
-                t-att-style="'%s' % report.get_company_styles()"
-            >
-                <div>
-                    <br />
-                    <t t-set="company_logo" t-value="report.get_company_logo()" />
-                    <img t-if="company_logo" t-att-src="'%s' % company_logo" width="200px" />
-                    <br />
-                    <br />
-                    <h2>
-                        <strong>
-                            <t t-if="report.filter_show_draft and options['all_entries']">[Draft]</t>
-                            <t t-out="report_title" />
-                        </strong>
-                    </h2>
-                </div>
-                <div class="row">
-                    <div class="col-8">
-                        <t t-if="not options.get('multi_company')">
-                            <br />
-                            <t t-out="report_company_name" />
-                        </t>
-                        <t t-else="">
-                            <br />Companies: <t t-set="company_value">All</t>
-                            <t
-                                t-foreach="options['multi_company']" t-as="c">
-                                <t t-set="company_value" t-value="''" />
-                                <t t-out="c.get('name')" />
+        <xpath expr="//head" position="inside">
+            <t t-call-assets="custom_account_reports.custom_assets_pdf_export" t-js="False"/>
+        </xpath>
+
+        <xpath expr="//body/div" position="attributes">
+            <attribute name="t-att-class">'o_content_pisa ' + options['css_custom_class']</attribute>
+        </xpath>
+
+        <xpath expr="//body/div/header" position="replace">
+
+            <header>
+                <div class="o_account_reports_header print_only">
+                    <div class="row align-items-center justify-content-between">
+                        <div class="col-8">
+                            <div>
+                                <h1>
+                                    <strong>
+                                        <t t-out="report_title"/>
+                                    </strong>
+                                </h1>
+                            </div>
+                            <t t-if="options.get('consolidation_journals', False)">
+                                <h3>
+                                    <t t-out="' - '.join([d['name'].replace('Consolidated Accounting', '') for d in options['consolidation_journals']])" />
+                                </h3>
                             </t>
-                            <t
-                                t-out="company_value" />
-                        </t>
-                        <address class="mb-0" t-field="env.company.partner_id"
-                            t-options='{"widget": "contact", "fields": ["address"], "no_marker": True}' />
-                        <t t-if="env.company.vat"> VAT: <t t-out="env.company.vat" />
-                        </t>
+                            <div>
+                                <!--Period-->
+                                <t t-if="options.get('display_dates', False)">
+                                    <div>
+                                        <strong>Period: </strong> <t t-out="options['display_dates']"/>
+                                    </div>
+                                </t>
+                                <!--Currency-->
+                                <t t-if="options.get('currency', False)">
+                                    <div>
+                                        <strong>Currency: </strong> <t t-out="options['currency']"/>
+                                    </div> <br/>
+                                </t>
+
+                            </div>
+                        </div>
+                        <div class="col-3" >
+                            <img t-attf-src="/logo.png?company=1" style="float: right; max-height: 70px;"/>
+                        </div>
                     </div>
-                    <div class="col-4">
-                        <!-- <t t-call="account_reports.filter_info_template" /> -->
+                    <div class="row">
+                        <div class="pisa-comp-info">
+                            <t t-set="company_names" t-value="[company['name'] for company in options['companies']]"/>
+                            <div class="row">
+                                <div class="col-10" t-out="', '.join(company_names)"/>
+                            </div>
+                            <!-- <address class="mb-0" t-field="env.company.partner_id" t-options='{"widget": "contact", "fields": ["address"], "no_marker": True}'/> -->
+                            <t t-if="env.company.vat">
+                                RUC: <t t-out="env.company.vat"/>
+                            </t>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </header>
+
         </xpath>
     </template>
 </odoo>

@@ -22,35 +22,31 @@
                 <form>
                     <header>
                         <button name="descargar_pdf" type="object" string="Descargar PDF"
-                            class="oe_highlight" attrs="{'invisible':[('state','!=','draft')]}" />
+                            class="oe_highlight" invisible="state != 'draft'"/>
                         <!-- <button name="reset_formulario" type="object" string="Reset PDF"
-                            class="oe_highlight" attrs="{'invisible':[('state','!=','printed')]}"/> -->
+                            class="oe_highlight" invisible="state != 'printed'"/> -->
                         <button name="cancelar_rubrica" type="object" string="Cancelar"
-                            class="oe_highlight" attrs="{'invisible':[('state','!=','printed')]}"/>
+                            class="oe_highlight" invisible="state != 'printed'"/>
                         <button name="reset_formulario" type="object" string="Convertir a Borrador"
-                            class="oe_highlight" attrs="{'invisible':[('state','!=','cancel')]}"/>
+                            class="oe_highlight" invisible="state != 'cancel'"/>
                         <field name="state" widget="statusbar" />
                     </header>
                     <sheet>
                         <group>
                             <group>
-                                <field name="type"  required="1" attrs="{'readonly':[('state','!=','draft')]}" />
-                                <field name="company_id" required="1"
-                                    attrs="{'readonly':[('state','!=','draft')]}" />
-                                <field name="rubrica_id" required="1"
-                                    attrs="{'readonly':[('state','!=','draft')]}" />
+                                <field name="type"  required="1" readonly="state != 'draft'"/>
+                                <field name="company_id" required="1" readonly="state != 'draft'"/>
+                                <field name="rubrica_id" required="1" readonly="state != 'draft'"/>
                                 <field name="nro_rub_act" readonly="True" force_save="True"/>
                                 <field name="nro_rub_ini" readonly="True" force_save="True"/>
                                 <field name="nro_rub_fin" readonly="True" force_save="True"/>
-                                <field name="fecha_inicio" required="True"
-                                    attrs="{'readonly':[('state','!=','draft')]}" />
-                                <field name="fecha_fin" required="True"
-                                    attrs="{'readonly':[('state','!=','draft')]}" />
-                                <field name="detallado" readonly="False" attrs="{'invisible': [('type', '!=', 'mayor')]}" />
+                                <field name="fecha_inicio" required="True" readonly="state != 'draft'"/>
+                                <field name="fecha_fin" required="True" readonly="state != 'draft'"/>
+                                <field name="detallado" readonly="False" invisible="type != 'mayor'"/>
                                 <field name="page_qty" readonly="True"  />
 
                                 <button name="generar_pdf" type="object" string="Generar Archivo"
-                                    class="oe_highlight" attrs="{'invisible':[('state','!=','draft')]}" />
+                                    class="oe_highlight" invisible="state != 'draft'"/>
                             </group>
 
                             <group >

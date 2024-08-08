@@ -31,7 +31,7 @@ ACCOUNT_CODES_ENGINE_TERM_REGEX = re.compile(
 class AccountReport(models.Model):
     _inherit = 'account.report'
     
-    def _compute_formula_batch_with_engine_tax_tags(self, options, date_scope, formulas_dict, current_groupby, next_groupby, offset=0, limit=None):
+    def _compute_formula_batch_with_engine_tax_tags(self, options, date_scope, formulas_dict, current_groupby, next_groupby, offset=0, limit=None, warnings=None):
         """ Report engine.
 
         The formulas made for this report simply consist of a tag label. When an expression using this engine is created, it also creates two
@@ -47,7 +47,7 @@ class AccountReport(models.Model):
             all_expressions |= expressions
         tags = all_expressions._get_matching_tags()
 
-        currency_table_query = self.env['res.currency']._get_query_currency_table(options)
+        currency_table_query = self._get_query_currency_table(options)
         groupby_sql = f'account_move_line.{current_groupby}' if current_groupby else None
         tables, where_clause, where_params = self._query_get(options, date_scope)
         tail_query, tail_params = self._get_engine_query_tail(offset, limit)
@@ -108,7 +108,7 @@ class AccountReport(models.Model):
 
         return rslt
 
-    def _compute_formula_batch_with_engine_domain(self, options, date_scope, formulas_dict, current_groupby, next_groupby, offset=0, limit=None):
+    def _compute_formula_batch_with_engine_domain(self, options, date_scope, formulas_dict, current_groupby, next_groupby, offset=0, limit=None, warnings=None):
         """ Report engine.
 
         Formulas made for this engine consist of a domain on account.move.line. Only those move lines will be used to compute the result.
@@ -146,7 +146,7 @@ class AccountReport(models.Model):
         self._check_groupby_fields((next_groupby.split(',') if next_groupby else []) + ([current_groupby] if current_groupby else []))
 
         groupby_sql = f'account_move_line.{current_groupby}' if current_groupby else None
-        ct_query = self.env['res.currency']._get_query_currency_table(options)
+        ct_query = self._get_query_currency_table(options)
 
         rslt = {}
 
@@ -234,7 +234,7 @@ class AccountReport(models.Model):
         return rslt
     
     
-    def _compute_formula_batch_with_engine_account_codes(self, options, date_scope, formulas_dict, current_groupby, next_groupby, offset=0, limit=None):
+    def _compute_formula_batch_with_engine_account_codes(self, options, date_scope, formulas_dict, current_groupby, next_groupby, offset=0, limit=None, warnings=None):
         r""" Report engine.
 
         Formulas made for this engine target account prefixes. Each of the prefix used in the formula will be evaluated as the sum of the move
@@ -331,7 +331,7 @@ class AccountReport(models.Model):
         # Run main query
         tables, where_clause, where_params = self._query_get(options, date_scope)
 
-        currency_table_query = self.env['res.currency']._get_query_currency_table(options)
+        currency_table_query = self._get_query_currency_table(options)
         extra_groupby_sql = f', account_move_line.{current_groupby}' if current_groupby else ''
         extra_select_sql = f', account_move_line.{current_groupby} AS grouping_key' if current_groupby else ''
         tail_query, tail_params = self._get_engine_query_tail(offset, limit)

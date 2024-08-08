@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
         <record id="view_hr_payslip_form" model="ir.ui.view">
@@ -7,7 +7,7 @@
             <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//notebook" position="inside">
-                    <page string="Datos de Liquidación" name="datos_liquidacion" attrs="{'invisible':[('structure_type_tag','!=','liquidacion')]}">
+                    <page invisible="structure_type_tag != 'liquidacion'" name="datos_liquidacion" string="Datos de Liquidación">
                         <group>
                             <field name="liquidacion_dias_tabajados"/>
                             <field name="liquidacion_antiguedad"/>
@@ -22,8 +22,7 @@
                             <field name="liquidacion_periodo_prueba"/>
                         </group>
                     </page>
-                </xpath>
-            </field>
+                </xpath></field>
         </record>
     </data>
 </odoo>

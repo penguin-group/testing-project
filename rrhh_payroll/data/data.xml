@@ -116,7 +116,8 @@ model.obtener_contratos_a_notificar()
             <field name="code">SUPA</field>
             <!--            <field name="validation_type">hr</field>-->
             <field name="request_unit">day</field>
-            <field name="responsible_id" ref="base.user_admin"/>
+            <!-- <field name="responsible_id" ref="base.user_admin"/> -->
+            <field name="responsible_ids" eval="[(4, ref('base.user_admin'))]"/>
             <field name="requires_allocation">no</field>
             <field name="work_entry_type_id" ref="rrhh_payroll.tipo_entrada_suspension_pagada"/>
             <field name="company_id" eval="False"/>
@@ -126,7 +127,8 @@ model.obtener_contratos_a_notificar()
             <field name="code">SUNP</field>
             <!--            <field name="validation_type">hr</field>-->
             <field name="request_unit">day</field>
-            <field name="responsible_id" ref="base.user_admin"/>
+            <!-- <field name="responsible_id" ref="base.user_admin"/> -->
+            <field name="responsible_ids" eval="[(4, ref('base.user_admin'))]"/>
             <field name="requires_allocation">no</field>
             <field name="work_entry_type_id" ref="rrhh_payroll.tipo_entrada_suspension_no_pagada"/>
             <field name="company_id" eval="False"/>
@@ -136,7 +138,8 @@ model.obtener_contratos_a_notificar()
             <field name="code">AMON</field>
             <!--            <field name="validation_type">hr</field>-->
             <field name="request_unit">day</field>
-            <field name="responsible_id" ref="base.user_admin"/>
+            <!-- <field name="responsible_id" ref="base.user_admin"/> -->
+            <field name="responsible_ids" eval="[(4, ref('base.user_admin'))]"/>
             <field name="requires_allocation">no</field>
             <field name="work_entry_type_id" ref="rrhh_payroll.tipo_entrada_amonestacion"/>
             <field name="company_id" eval="False"/>
@@ -146,7 +149,8 @@ model.obtener_contratos_a_notificar()
             <field name="code">AUS</field>
             <!--            <field name="validation_type">hr</field>-->
             <field name="request_unit">day</field>
-            <field name="responsible_id" ref="base.user_admin"/>
+            <!-- <field name="responsible_id" ref="base.user_admin"/> -->
+            <field name="responsible_ids" eval="[(4, ref('base.user_admin'))]"/>
             <field name="requires_allocation">no</field>
             <field name="work_entry_type_id" ref="rrhh_payroll.tipo_entrada_ausencia"/>
             <field name="company_id" eval="False"/>
@@ -156,7 +160,8 @@ model.obtener_contratos_a_notificar()
             <field name="code">REP</field>
             <!--            <field name="validation_type">hr</field>-->
             <field name="request_unit">day</field>
-            <field name="responsible_id" ref="base.user_admin"/>
+            <!-- <field name="responsible_id" ref="base.user_admin"/> -->
+            <field name="responsible_ids" eval="[(4, ref('base.user_admin'))]"/>
             <field name="requires_allocation">no</field>
             <field name="work_entry_type_id" ref="rrhh_payroll.tipo_entrada_reposo"/>
             <field name="company_id" eval="False"/>

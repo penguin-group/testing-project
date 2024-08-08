@@ -3,11 +3,15 @@
 from odoo import models, fields, api
 import datetime
 
+import logging
+
+_logger = logging.getLogger(__name__)
 
 class HrPayslipRun(models.Model):
     _inherit = 'hr.payslip.run'
 
     def imprimir_reporte_ips_rei(self):
+        _logger.info('Ingreso al constructor del reporte')
         return self.env.ref('ips_rei_hr_payslip.ips_rei_action_xlsx').report_action(self)
 
 
@@ -16,6 +20,7 @@ class PartnerXlsx(models.AbstractModel):
     _inherit = 'report.report_xlsx.abstract'
 
     def get_monto_ausencia(self, payslip_employee):
+        _logger.info('Ingreso a : get_monto_ausencia with values: %s', payslip_employee)
         return sum([
             line_id.total
             for line_id in
@@ -24,6 +29,7 @@ class PartnerXlsx(models.AbstractModel):
         ])
 
     def get_payslip_gross(self, payslip_employee):
+        _logger.info('Ingreso a : get_payslip_gross with values: %s', payslip_employee)
         payslip_gross = int(sum(payslip_employee.line_ids.filtered(lambda line: line.code in ['GROSS']).mapped('total')))
         return payslip_gross
 
@@ -109,6 +115,13 @@ class PartnerXlsx(models.AbstractModel):
             simpleWrite(to_write, format)
 
         payslips_all = payslip_run.slip_ids.filtered(lambda x: x.state in ['done', 'paid'] and x.contract_id.seguro_ips)
+        #listamos todos los  slip_ids
+        #payslips_all = payslip_run.slip_ids
+        _logger.info('$$$$$$$$$$$$$ Ingreso a : rightAndWrite with values: %s', payslips_all)
+        # Contamos los registros
+        count_payslips = len(payslips_all)
+        # Mostrar el conteo en el logger
+        _logger.info('Number of payslips in state "done" or "paid": %d', count_payslips)
 
         for patronal_ips_id in payslips_all.contract_id.patronal_ips_id:
             payslips = payslips_all.filtered(lambda x: x.contract_id.patronal_ips_id == patronal_ips_id)

@@ -83,22 +83,12 @@ class AccountPaymentRegister(models.TransientModel):
         })
         return payment_vals
 
-    if release.major_version in ['16.0']:
-        def _get_total_amount_in_wizard_currency_to_full_reconcile(self, batch_result, early_payment_discount=True):
-            result = super(AccountPaymentRegister, self)._get_total_amount_in_wizard_currency_to_full_reconcile(batch_result, early_payment_discount)
-            comp_curr = self.company_id.currency_id
-            if self.source_currency_id != self.currency_id and self.source_currency_id != comp_curr and self.currency_id == comp_curr:
-                residual_amount = 0
-                for aml in batch_result['lines']:
-                    residual_amount += aml.amount_residual
-                return abs(residual_amount), False
-            return result
-
-    if release.major_version in ['15.0']:
-        @api.depends('source_amount', 'source_amount_currency', 'source_currency_id', 'company_id', 'currency_id', 'payment_date')
-        def _compute_amount(self):
-            result = super()._compute_amount()
-            for wizard in self:
-                if wizard.currency_id == wizard.company_id.currency_id:
-                    wizard.amount = wizard.source_amount
-            return result
+    def _get_total_amount_in_wizard_currency_to_full_reconcile(self, batch_result, early_payment_discount=True):
+        result = super(AccountPaymentRegister, self)._get_total_amount_in_wizard_currency_to_full_reconcile(batch_result, early_payment_discount)
+        comp_curr = self.company_id.currency_id
+        if self.source_currency_id != self.currency_id and self.source_currency_id != comp_curr and self.currency_id == comp_curr:
+            residual_amount = 0
+            for aml in batch_result['lines']:
+                residual_amount += aml.amount_residual
+            return abs(residual_amount), False
+        return result

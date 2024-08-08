@@ -1,102 +1,89 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-
-        <record model="ir.ui.view" id="reportes_ministerio_trabajo_slow_mode_tree">
+        <record id="reportes_ministerio_trabajo_slow_mode_tree" model="ir.ui.view">
             <field name="name">reportes_ministerio_trabajo_slow_mode_tree</field>
             <field name="model">reportes_ministerio_trabajo</field>
             <field name="arch" type="xml">
-                <tree string="Reportes para el Ministerio de Trabajo - PDF" create="False">
+                <tree create="False" string="Reportes para el Ministerio de Trabajo - PDF">
                     <field name="year"/>
                     <field name="company_ids"/>
-                </tree>
-            </field>
+                </tree></field>
         </record>
-
-        <record model="ir.ui.view" id="reportes_ministerio_trabajo_slow_mode_form">
+        <record id="reportes_ministerio_trabajo_slow_mode_form" model="ir.ui.view">
             <field name="name">reportes_ministerio_trabajo_form</field>
             <field name="model">reportes_ministerio_trabajo</field>
             <field name="arch" type="xml">
-                <form string="Reportes para el Ministerio de Trabajo - PDF" create="False" edit="False">
+                <form create="False" edit="False" string="Reportes para el Ministerio de Trabajo - PDF">
                     <sheet>
                         <div class="oe_button_box" name="button_box">
-                            <button name="action_open_empleados_y_obreros" class="oe_stat_button" icon="fa-book" type="object" help="Ver Empleados y Obreros"
-                                    attrs="{'invisible': [('empleados_y_obreros_count', '=', 0)]}">
+                            <button class="oe_stat_button" help="Ver Empleados y Obreros" icon="fa-book" invisible="empleados_y_obreros_count == 0" name="action_open_empleados_y_obreros" type="object">
                                 <div class="o_field_widget o_stat_info">
                                     <span class="o_stat_value">
                                         <field name="empleados_y_obreros_count"/>
                                     </span>
-                                    <span class="o_stat_text">Empleados y Obreros</span>
+                                    <span class="o_stat_text">
+                                        Empleados y Obreros
+                                    </span>
                                 </div>
                             </button>
-                            <button name="action_open_sueldos_y_jornales" class="oe_stat_button" icon="fa-book" type="object" help="Ver Sueldos y Jornales"
-                                    attrs="{'invisible': [('sueldos_y_jornales_count', '=', 0)]}">
+                            <button class="oe_stat_button" help="Ver Sueldos y Jornales" icon="fa-book" invisible="sueldos_y_jornales_count == 0" name="action_open_sueldos_y_jornales" type="object">
                                 <div class="o_field_widget o_stat_info">
                                     <span class="o_stat_value">
                                         <field name="sueldos_y_jornales_count"/>
                                     </span>
-                                    <span class="o_stat_text">Sueldos y Jornales</span>
+                                    <span class="o_stat_text">
+                                        Sueldos y Jornales
+                                    </span>
                                 </div>
                             </button>
-                            <button name="action_open_vacaciones" class="oe_stat_button" icon="fa-book" type="object" help="Ver Vacaciones"
-                                    attrs="{'invisible': [('vacaciones_count', '=', 0)]}">
+                            <button class="oe_stat_button" help="Ver Vacaciones" icon="fa-book" invisible="vacaciones_count == 0" name="action_open_vacaciones" type="object">
                                 <div class="o_field_widget o_stat_info">
                                     <span class="o_stat_value">
                                         <field name="vacaciones_count"/>
                                     </span>
-                                    <span class="o_stat_text">Vacaciones</span>
+                                    <span class="o_stat_text">
+                                        Vacaciones
+                                    </span>
                                 </div>
                             </button>
                         </div>
                         <group>
-                            <field name="company_ids" widget="many2many_tags" readonly="True"/>
+                            <field name="company_ids" readonly="True" widget="many2many_tags"/>
                             <field name="year" readonly="True"/>
                         </group>
                     </sheet>
-                </form>
-            </field>
+                </form></field>
         </record>
-
-        <record model="ir.actions.act_window" id="reportes_ministerio_trabajo_slow_mode_action">
+        <record id="reportes_ministerio_trabajo_slow_mode_action" model="ir.actions.act_window">
             <field name="name">Reportes para el Ministerio de Trabajo - PDF</field>
             <field name="res_model">reportes_ministerio_trabajo</field>
             <field name="view_mode">tree,form</field>
-            <field name="view_ids" eval="[
-                (5, 0, 0),
-                (0, 0, {'view_mode': 'tree', 'view_id': ref('reportes_ministerio_trabajo_py.reportes_ministerio_trabajo_slow_mode_tree')}),
-                (0, 0, {'view_mode': 'form', 'view_id': ref('reportes_ministerio_trabajo_py.reportes_ministerio_trabajo_slow_mode_form')}),
-            ]"/>
+            <field eval="[                 (5, 0, 0),                 (0, 0, {'view_mode': 'tree', 'view_id': ref('reportes_ministerio_trabajo_py.reportes_ministerio_trabajo_slow_mode_tree')}),                 (0, 0, {'view_mode': 'form', 'view_id': ref('reportes_ministerio_trabajo_py.reportes_ministerio_trabajo_slow_mode_form')}),             ]" name="view_ids"/>
             <field name="domain">[('wizard_report_type','=','pdf')]</field>
         </record>
-
-        <menuitem name="Reportes para el Ministerio de Trabajo - PDF"
-                  id="reportes_ministerio_trabajo_slow_mode_menuitem" sequence="50"
-                  parent="hr_payroll.menu_hr_payroll_report"
-                  action="reportes_ministerio_trabajo_slow_mode_action"/>
-
+        <menuitem action="reportes_ministerio_trabajo_slow_mode_action" id="reportes_ministerio_trabajo_slow_mode_menuitem" name="Reportes para el Ministerio de Trabajo - PDF" parent="hr_payroll.menu_hr_payroll_report" sequence="50"/>
     </data>
     <data>
-
-        <record model="ir.ui.view" id="empleados_y_obreros_slow_mode_tree_view">
+        <record id="empleados_y_obreros_slow_mode_tree_view" model="ir.ui.view">
             <field name="name">empleados_y_obreros_tree_view</field>
             <field name="model">empleados_y_obreros_zip_model</field>
             <field name="arch" type="xml">
-                <tree string="Empleados y Obreros" create="False">
+                <tree create="False" string="Empleados y Obreros">
                     <field name="year"/>
                     <field name="company_id"/>
                     <field name="patronal_mtess_id"/>
-                </tree>
-            </field>
+                </tree></field>
         </record>
-        <record model="ir.ui.view" id="empleados_y_obreros_slow_mode_form_view">
+        <record id="empleados_y_obreros_slow_mode_form_view" model="ir.ui.view">
             <field name="name">empleados_y_obreros_form_view</field>
             <field name="model">empleados_y_obreros_zip_model</field>
             <field name="arch" type="xml">
-                <form string="Empleados y Obreros" create="False" edit="False">
+                <form create="False" edit="False" string="Empleados y Obreros">
                     <header>
-                        <button string="Generar planilla - Empleados y Obreros" type="object" name="action_print_eyo_xlsx_slow_mode" class="oe_highlight"/>
-                        <button string="Generar planilla - Sueldos y Jornales" type="object" name="action_print_syj_xlsx_slow_mode" class="oe_highlight"/>
-                        <button string="Generar planilla - Resumen General" type="object" name="action_print_rg_xlsx_slow_mode" class="oe_highlight"/>
+                        <button class="oe_highlight" name="action_print_eyo_xlsx_slow_mode" string="Generar planilla - Empleados y Obreros" type="object"/>
+                        <button class="oe_highlight" name="action_print_syj_xlsx_slow_mode" string="Generar planilla - Sueldos y Jornales" type="object"/>
+                        <button class="oe_highlight" name="action_print_rg_xlsx_slow_mode" string="Generar planilla - Resumen General" type="object"/>
                     </header>
                     <sheet>
                         <group>
@@ -104,26 +91,15 @@
                             <field name="year" readonly="True"/>
                         </group>
                     </sheet>
-                </form>
-            </field>
+                </form></field>
         </record>
-
-        <record model="ir.actions.act_window" id="empleados_y_obreros_slow_mode_action">
+        <record id="empleados_y_obreros_slow_mode_action" model="ir.actions.act_window">
             <field name="name">Reportes para el Ministerio de Trabajo - XLSX</field>
             <field name="res_model">empleados_y_obreros_zip_model</field>
             <field name="view_mode">tree,form</field>
-            <field name="view_ids" eval="[
-                (5, 0, 0),
-                (0, 0, {'view_mode': 'tree', 'view_id': ref('reportes_ministerio_trabajo_py.empleados_y_obreros_slow_mode_tree_view')}),
-                (0, 0, {'view_mode': 'form', 'view_id': ref('reportes_ministerio_trabajo_py.empleados_y_obreros_slow_mode_form_view')}),
-            ]"/>
+            <field eval="[                 (5, 0, 0),                 (0, 0, {'view_mode': 'tree', 'view_id': ref('reportes_ministerio_trabajo_py.empleados_y_obreros_slow_mode_tree_view')}),                 (0, 0, {'view_mode': 'form', 'view_id': ref('reportes_ministerio_trabajo_py.empleados_y_obreros_slow_mode_form_view')}),             ]" name="view_ids"/>
             <field name="domain">[('is_report_for_xlsx','=',True)]</field>
         </record>
-
-        <menuitem name="Reportes para el Ministerio de Trabajo - XLSX"
-                  id="empleados_y_obreros_slow_mode_menuitem" sequence="55"
-                  parent="hr_payroll.menu_hr_payroll_report"
-                  action="empleados_y_obreros_slow_mode_action"/>
-
+        <menuitem action="empleados_y_obreros_slow_mode_action" id="empleados_y_obreros_slow_mode_menuitem" name="Reportes para el Ministerio de Trabajo - XLSX" parent="hr_payroll.menu_hr_payroll_report" sequence="55"/>
     </data>
 </odoo>

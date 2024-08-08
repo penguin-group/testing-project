@@ -9,7 +9,7 @@
             <field name="perm_write" eval="0"/>
             <field name="perm_create" eval="0"/>
             <field name="perm_unlink" eval="0"/>
-            <field name="groups" eval="[(4,ref('hr_attendance.group_hr_attendance'))]"/>
+            <field name="groups" eval="[(4,ref('base.group_user'))]"/>
         </record>
         <record id="hr_attendance_rule_all_contract" model="ir.rule">
             <field name="name">Manual Attendance: all contracts</field>

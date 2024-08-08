@@ -13,7 +13,7 @@ class HrEmployeeBase(models.AbstractModel):
 class HrEmployee(models.Model):
     _inherit = 'hr.employee'
 
-    def _attendance_action_change(self):
+    def _attendance_action_change(self, geo_information=None):
         # rrhh_asistencias/models/hr_employee.py
         self.ensure_one()
         action_date = fields.Datetime.now()
@@ -26,7 +26,6 @@ class HrEmployee(models.Model):
         return attendance
 
     def _compute_hours_today(self):
-        # rrhh_asistencias/models/hr_employee.py
         now = fields.Datetime.now()
         fecha, hora = self.env['rrhh_asistencias.marcaciones'].process_date(raw_fecha_hora=now)
         for employee in self:
@@ -37,9 +36,16 @@ class HrEmployee(models.Model):
                 ('salida_marcada', '=', False),
                 ('salida_marcada', '=', 0),
             ])
+            hours_previously_today = 0
             worked_hours = 0
+            attendance_worked_hours = 0
             for attendance in attendances:
-                worked_hours = +hora - attendance.entrada_marcada
+                attendance_worked_hours = +hora - attendance.entrada_marcada
+                worked_hours += attendance_worked_hours
+                hours_previously_today += attendance_worked_hours
+            employee.last_attendance_worked_hours = attendance_worked_hours
+            hours_previously_today -= attendance_worked_hours
+            employee.hours_previously_today = hours_previously_today
             employee.hours_today = worked_hours
 
     def _compute_attendance_state(self):

@@ -1,90 +1,89 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <record model="ir.ui.view" id="rrhh_asistencias.hr_attendance_tree_view_mod">
+        <record id="rrhh_asistencias.hr_attendance_tree_view_mod" model="ir.ui.view">
             <field name="name">rrhh_asistencias.hr_attendance_tree_view_mod</field>
             <field name="model">hr.attendance</field>
             <field name="inherit_id" ref="hr_attendance.view_attendance_tree"/>
             <field name="arch" type="xml">
                 <xpath expr="//tree" position="attributes">
-                    <attribute name="edit">0</attribute>
-                    <attribute name="decoration-danger">asistencia_fuera_de_planeado == True</attribute>
+                    <attribute name="edit">
+                        0</attribute>
+                    <attribute name="decoration-danger">
+                        asistencia_fuera_de_planeado == True</attribute>
                 </xpath>
                 <xpath expr="//tree/field[@name='check_in']" position="replace">
-                    <field name="asistencia_fuera_de_planeado" invisible="True"/>
+                    <field invisible="True" name="asistencia_fuera_de_planeado"/>
                     <field name="contract_id"/>
                     <field name="date"/>
                     <field name="day_period"/>
-                    <field widget="float_time" name="entrada_marcada"/>
-                    <field widget="float_time" name="salida_marcada"/>
+                    <field name="entrada_marcada" widget="float_time"/>
+                    <field name="salida_marcada" widget="float_time"/>
                 </xpath>
-                <xpath expr="//tree/field[@name='check_out']" position="replace"/>
-            </field>
+                <xpath expr="//tree/field[@name='check_out']" position="replace"/></field>
         </record>
-        <record model="ir.actions.act_window" id="hr_attendance.hr_attendance_action">
+        <record id="hr_attendance.hr_attendance_action" model="ir.actions.act_window">
             <field name="view_mode">tree,form</field>
         </record>
-        <record model="ir.ui.view" id="rrhh_asistencias.hr_attendance_view_form">
+        <record id="rrhh_asistencias.hr_attendance_view_form" model="ir.ui.view">
             <field name="name">rrhh_asistencias.hr_attendance_view_form</field>
             <field name="model">hr.attendance</field>
             <field name="inherit_id" ref="hr_attendance.hr_attendance_view_form"/>
             <field name="arch" type="xml">
                 <sheet position="replace">
                     <sheet>
-                        <field name="asistencia_fuera_de_planeado" invisible="True"/>
-                        <field name="asistencia_feriado" invisible="True"/>
-                        <h3 attrs="{'invisible':[('asistencia_fuera_de_planeado','=',False)]}"
-                            style="color:darkred;">
+                        <field invisible="True" name="asistencia_fuera_de_planeado"/>
+                        <field invisible="True" name="asistencia_feriado"/>
+                        <h3 invisible="asistencia_fuera_de_planeado == False" style="color:darkred;">
                             Esta asistencia está fuera del horario planeado del contrato.
                         </h3>
-                        <h3 attrs="{'invisible':[('asistencia_feriado','=',False)]}"
-                            style="color:darkred;">
+                        <h3 invisible="asistencia_feriado == False" style="color:darkred;">
                             Esta asistencia se encuentra en un día declarado como feriado.
                         </h3>
                         <group string="Datos del empleado">
                             <field name="employee_id"/>
-                            <field name="contract_id" domain="[('employee_id','=',employee_id)]" attrs="{'readonly':[('employee_id','=',False)]}"/>
+                            <field domain="[('employee_id','=',employee_id)]" name="contract_id" readonly="employee_id == False"/>
                         </group>
                         <group string="Datos de la asistencia">
                             <group>
                                 <field name="date"/>
-                                <field widget="float_time" name="entrada_marcada"/>
-                                <field widget="float_time" name="salida_marcada"/>
+                                <field name="entrada_marcada" widget="float_time"/>
+                                <field name="salida_marcada" widget="float_time"/>
                             </group>
-                            <group attrs="{'invisible':[('asistencia_fuera_de_planeado','=',True)]}">
+                            <group invisible="asistencia_fuera_de_planeado == True">
                                 <field name="day_period"/>
-                                <field widget="float_time" name="entrada_planeada"/>
-                                <field widget="float_time" name="salida_planeada"/>
+                                <field name="entrada_planeada" widget="float_time"/>
+                                <field name="salida_planeada" widget="float_time"/>
                                 <field name="resource_calendar_id"/>
                             </group>
                         </group>
                         <group string="Cálculo de horas">
                             <group>
-                                <field widget="float_time" name="horas_extra_50"/>
+                                <field name="horas_extra_50" widget="float_time"/>
                                 <field name="se_procesa_horas_extra_50" widget="boolean_toggle"/>
                             </group>
                             <group>
-                                <field widget="float_time" name="horas_extra_100"/>
+                                <field name="horas_extra_100" widget="float_time"/>
                                 <field name="se_procesa_horas_extra_100" widget="boolean_toggle"/>
                             </group>
                             <group>
-                                <field widget="float_time" name="horas_extra_nocturnas"/>
+                                <field name="horas_extra_nocturnas" widget="float_time"/>
                                 <field name="se_procesa_horas_extra_nocturnas" widget="boolean_toggle"/>
                             </group>
                             <group>
-                                <field widget="float_time" name="horas_nocturnas"/>
+                                <field name="horas_nocturnas" widget="float_time"/>
                                 <field name="se_procesa_horas_nocturnas" widget="boolean_toggle"/>
                             </group>
                             <group>
-                                <field widget="float_time" name="llegada_anticipada"/>
+                                <field name="llegada_anticipada" widget="float_time"/>
                                 <field name="se_procesa_llegada_anticipada" widget="boolean_toggle"/>
                             </group>
                             <group>
-                                <field widget="float_time" name="llegada_tardia"/>
+                                <field name="llegada_tardia" widget="float_time"/>
                                 <field name="se_procesa_llegada_tardia" widget="boolean_toggle"/>
                             </group>
                             <group>
-                                <field widget="float_time" name="salida_anticipada"/>
+                                <field name="salida_anticipada" widget="float_time"/>
                                 <field name="se_procesa_salida_anticipada" widget="boolean_toggle"/>
                             </group>
                             <group>
@@ -98,14 +97,13 @@
                             </group>
                         </group>
                     </sheet>
-                </sheet>
-            </field>
+                </sheet></field>
         </record>
-        <record model="ir.ui.menu" id="hr_attendance.menu_hr_attendance_view_attendances">
+        <!-- <record id="hr_attendance.menu_hr_attendance_view_attendances" model="ir.ui.menu">
             <field name="parent_id" ref="rrhh_asistencias.menu_asistencias_padre"/>
-        </record>
-        <record model="ir.ui.menu" id="hr_attendance.menu_hr_attendance_attendances_overview">
+        </record> -->
+        <!-- <record id="hr_attendance.menu_hr_attendance_root" model="ir.ui.menu">
             <field name="parent_id" ref="rrhh_asistencias.menu_asistencias_padre"/>
-        </record>
+        </record> -->
     </data>
 </odoo>

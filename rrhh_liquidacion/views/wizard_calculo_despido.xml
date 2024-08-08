@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
         <record id="rrhh_liquidacion.wizard_calculo_despido_form" model="ir.ui.view">
@@ -8,32 +9,30 @@
                     <sheet>
                         <group string="Datos primarios">
                             <field name="employee_id" options="{'no_create': True, 'no_create_edit':True}"/>
-                            <field name="contract_id" options="{'no_create': True, 'no_create_edit':True}"
-                                   attrs="{'readonly':[('employee_id','=',False)],'required':[('employee_id','!=',False)]}"/>
+                            <field name="contract_id" options="{'no_create': True, 'no_create_edit':True}" readonly="employee_id == False" required="employee_id != False"/>
                             <field name="fecha_inicio"/>
                             <field name="fecha_fin"/>
                         </group>
-                        <div attrs="{'invisible':['|',('fecha_inicio','=',False),('fecha_fin','=',False)]}">
+                        <div invisible="fecha_inicio == False or fecha_fin == False">
                             <group>
                                 <field name="antiguedad"/>
                             </group>
                             <group>
-                                <field name="posible_periodo_prueba" invisible="True"/>
-                                <field name="periodo_prueba" attrs="{'invisible':[('posible_periodo_prueba','=',False)]}"/>
+                                <field invisible="True" name="posible_periodo_prueba"/>
+                                <field invisible="posible_periodo_prueba == False" name="periodo_prueba"/>
                                 <field name="causa_justificada"/>
                             </group>
                             <group string="Modalidad de pagos">
                                 <field name="tipo_empleado"/>
                             </group>
-                            <div attrs="{'invisible':[('tipo_empleado','=',False)]}">
+                            <div invisible="tipo_empleado == False">
                                 <group col="2" string="Salarios">
                                     <group>
                                         <field name="aporta_ips"/>
                                         <!--                                        <field name="aporta_amh"/>-->
                                         <field name="salario_promedio_ultimos_meses"/>
                                     </group>
-
-                                    <group attrs="{'invisible':[('salario_promedio_ultimos_meses','=',True)]}">
+                                    <group invisible="salario_promedio_ultimos_meses == True">
                                         <field name="salario_mes_1"/>
                                         <field name="salario_mes_2"/>
                                         <field name="salario_mes_3"/>
@@ -43,23 +42,21 @@
                                     </group>
                                 </group>
                             </div>
-                            <div attrs="{'invisible':[('tipo_empleado','=',False)]}">
-                                <group attrs="{'invisible':[('tipo_empleado','!=','30')]}">
-                                    <field name="salario_promedio"
-                                           attrs="{'invisible':['|',('tipo_empleado','=','24'),('salario_promedio_ultimos_meses','=',False)],'readonly':[('salario_promedio_ultimos_meses','=',False)]}"/>
+                            <div invisible="tipo_empleado == False">
+                                <group invisible="tipo_empleado != '30'">
+                                    <field invisible="tipo_empleado == '24' or salario_promedio_ultimos_meses == False" name="salario_promedio" readonly="salario_promedio_ultimos_meses == False"/>
                                 </group>
                                 <group>
-                                    <field name="salario_promedio_diario"
-                                           attrs="{'invisible':['&amp;',('salario_promedio_ultimos_meses','=',True),('tipo_empleado','=','30')],'readonly':[('tipo_empleado','!=','24')]}"/>
+                                    <field invisible="(salario_promedio_ultimos_meses == True and tipo_empleado == '30')" name="salario_promedio_diario" readonly="tipo_empleado != '24'"/>
                                 </group>
                                 <!--                                <field name="testigo_id"/>-->
                             </div>
-                            <div attrs="{'invisible':['|',('salario_promedio_diario','=',0),('tipo_empleado','=',False)]}">
+                            <div invisible="salario_promedio_diario == 0 or tipo_empleado == False">
                                 <group string="Dias en el mes que aún no fueron abonados">
                                     <field name="dias_mes_aun_no_abonados"/>
                                 </group>
-                                <field name="posible_preaviso" invisible="True"/>
-                                <group string="Preavisos" attrs="{'invisible':[('causa_justificada','=',True)]}">
+                                <field invisible="True" name="posible_preaviso"/>
+                                <group invisible="causa_justificada == True" string="Preavisos">
                                     <field name="dias_preaviso_correspondido"/>
                                     <field name="dias_preaviso_recibido"/>
                                 </group>
@@ -67,7 +64,7 @@
                                     <field name="vacaciones_causadas"/>
                                     <field name="vacaciones_gozadas"/>
                                 </group>
-                                <group string="Vacaciones Proporcionales" attrs="{'invisible':[('causa_justificada','=',True)]}">
+                                <group invisible="causa_justificada == True" string="Vacaciones Proporcionales">
                                     <field name="vacaciones_proporcionales_correspondientes"/>
                                     <field name="vacaciones_proporcionales_gozadas"/>
                                 </group>
@@ -79,19 +76,17 @@
                                     <field name="otros_deberes"/>
                                 </group>
                                 <div>
-                                    <group string="Montos Finales" col="2">
+                                    <group col="2" string="Montos Finales">
                                         <group>
                                             <field name="show_liq_salario_dias_trabajados" readonly="True"/>
-                                            <field name="show_liq_preaviso" attrs="{'invisible':[('periodo_prueba','=',True)]}" readonly="True"/>
-
-                                            <label for="show_liq_indemnizacion" attrs="{'invisible':[('periodo_prueba','=',True)]}"/>
-                                            <div class="o_row" name="indemnizacion" attrs="{'invisible':[('periodo_prueba','=',True)]}">
+                                            <field invisible="periodo_prueba == True" name="show_liq_preaviso" readonly="True"/>
+                                            <label for="show_liq_indemnizacion" invisible="periodo_prueba == True"/>
+                                            <div class="o_row" invisible="periodo_prueba == True" name="indemnizacion">
                                                 <field name="show_liq_indemnizacion" readonly="True"/>
                                                 <i>
                                                     <field name="show_liq_indemnizacion_dias" readonly="True"/>
                                                 </i>
                                             </div>
-
                                             <field name="show_liq_vacaciones_causadas" readonly="True"/>
                                             <field name="show_liq_vacaciones_proporcionales" readonly="True"/>
                                             <field name="show_liq_vacaciones_acumuladas" readonly="True"/>
@@ -122,12 +117,11 @@
                                         el siguiente paso
                                     </strong>
                                 </div>
-
                                 <div invisible="True">
                                     <group string="Montos Finales Ocultos">
                                         <field name="liq_salario_dias_trabajados"/>
-                                        <field name="liq_preaviso" attrs="{'invisible':[('periodo_prueba','=',True)]}"/>
-                                        <field name="liq_indemnizacion" attrs="{'invisible':[('periodo_prueba','=',True)]}"/>
+                                        <field invisible="periodo_prueba == True" name="liq_preaviso"/>
+                                        <field invisible="periodo_prueba == True" name="liq_indemnizacion"/>
                                         <field name="liq_vacaciones_causadas"/>
                                         <field name="liq_vacaciones_proporcionales"/>
                                         <field name="liq_vacaciones_acumuladas"/>
@@ -148,27 +142,18 @@
                         <!--                    </footer>-->
                     </sheet>
                     <footer>
-                        <button class="btn-danger" name="let_the_purge_begin"
-                                confirm="Al confirmar, se creará la nómina con los montos especificados. Por favor no olvide confirmarla y dar de baja el contrato del empleado"
-                                string="Crear nómina para Liquidación"
-                                attrs="{'invisible':['|','|',('salario_promedio_diario','=',0),('contract_id','=',False),('fecha_fin','=',False)]}"
-                                type="object"/>
-                        <button string="Cancelar" class="oe_link" special="cancel"/>
+                        <button class="btn-danger" confirm="Al confirmar, se creará la nómina con los montos especificados. Por favor no olvide confirmarla y dar de baja el contrato del empleado" invisible="salario_promedio_diario == 0 or contract_id == False or fecha_fin == False" name="let_the_purge_begin" string="Crear nómina para Liquidación" type="object"/>
+                        <button class="oe_link" special="cancel" string="Cancelar"/>
                     </footer>
-                </form>
-            </field>
+                </form></field>
         </record>
-
-        <record model="ir.actions.act_window" id="rrhh_liquidacion.wizard_calculo_despido_action">
+        <record id="rrhh_liquidacion.wizard_calculo_despido_action" model="ir.actions.act_window">
             <field name="name">Cálculo de Despido</field>
             <field name="res_model">wizard.calculo.despido</field>
             <field name="view_mode">form</field>
             <field name="target">new</field>
         </record>
-
-        <menuitem name="Liquidacion de Funcionarios" id="rrhh_liquidacion.liquidacion_root" parent="hr_payroll.menu_hr_payroll_payslips" sequence="100"/>
-        <menuitem name="Calculo de Despido" id="rrhh_liquidacion.wizard_calculo_despido_menuitem" parent="rrhh_liquidacion.liquidacion_root"
-                  action="rrhh_liquidacion.wizard_calculo_despido_action"/>
+        <menuitem id="rrhh_liquidacion.liquidacion_root" name="Liquidacion de Funcionarios" parent="hr_payroll.menu_hr_payroll_payslips" sequence="100"/>
+        <menuitem action="rrhh_liquidacion.wizard_calculo_despido_action" id="rrhh_liquidacion.wizard_calculo_despido_menuitem" name="Calculo de Despido" parent="rrhh_liquidacion.liquidacion_root"/>
     </data>
-
 </odoo>
