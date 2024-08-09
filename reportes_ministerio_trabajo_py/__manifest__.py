@@ -24,7 +24,7 @@
         ],
     },
     # any module necessary for this one to work correctly
-    'depends': ['base', 'hr_attendance', 'hr_holidays', 'hr_payroll', 'report_xlsx'],
+    'depends': ['base', 'hr_attendance', 'hr_holidays','hr_payroll_account', 'report_xlsx'],
 
     # always loaded
     'data': [
