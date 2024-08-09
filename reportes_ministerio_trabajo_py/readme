@@ -1,0 +1,16 @@
+
+"""
+Leame: se hizo el cambio de dependecia de 'hr_payroll' a 'hr_payroll_account'
+donde uno de los principales cambios es la gestion de cuentas analiticas.
+
+consideraciones :
+===============
+
+- para que la actualizacion se haga de manera correcta los modulos de los cuales
+es dependiente este modulo deberan ser actualizados teniendo el debido cuidado para
+no alterar la integridad de los datos
+
+- se hizo una revision a cada uno de los modelos , vistas y reportes DEde los cuales se adjunto
+las listas correspondientes en la tarea Jira
+- en los test no encontre inconsistencias
+"""
