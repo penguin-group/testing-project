@@ -1,4 +1,4 @@
 pyzk==0.9
 numpy-financial<=1.0.0
-fpdf2
+fpdf2==2.7.9
 unidecode
