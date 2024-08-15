@@ -25,6 +25,6 @@
         'views/res_currency.xml',
         'views/account_move.xml',
         'views/account_payment.xml',
-        'views/account_payment_register.xml',
+        # 'views/account_payment_register.xml',
     ],
 }
