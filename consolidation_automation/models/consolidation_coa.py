@@ -1,5 +1,8 @@
 from odoo import _, api, fields, models
 
+import logging
+_logger = logging.getLogger(__name__)
+
 class ConsolidationCoa(models.Model):
     _inherit = 'consolidation.account'
 
@@ -9,22 +12,17 @@ class ConsolidationCoa(models.Model):
     )
 
     def check_consolidated_accounts(self):
-        # Iterate through each consolidated account
         consolidated_accounts = self.search([])
         for account in consolidated_accounts:
-            if account.account_prefixes:
-                # Get the prefixes
-                prefixes = account.account_prefixes.split(',')
-
-                # Search for all accounts that match the prefixes
-                for prefix in prefixes:
-                    matching_accounts = self.env['account.account'].search([
-                        ('code', '=like', prefix + '%')
-                    ])
-
-                    # Filter the accounts that are not included in the consolidated account
-                    accounts_to_add = matching_accounts - account.account_ids
-
-                    # Add the missing accounts to the consolidated account
-                    if accounts_to_add:
-                        account.write({'account_ids': [(4, acc.id) for acc in accounts_to_add]})
+            if account.account_prefix:
+                try:
+                    prefixes = account.account_prefix.split(',')
+                    for prefix in prefixes:
+                        matching_accounts = self.env['account.account'].search([
+                            ('code', '=like', prefix + '%')
+                        ])
+                        accounts_to_add = matching_accounts - account.account_ids
+                        if accounts_to_add:
+                            account.write({'account_ids': [(4, acc.id) for acc in accounts_to_add]})
+                except Exception as error:
+                    _logger.error(f'Error checking consolidated accounts: {str(error)}')
