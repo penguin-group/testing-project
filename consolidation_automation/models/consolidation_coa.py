@@ -19,7 +19,8 @@ class ConsolidationCoa(models.Model):
                     prefixes = account.account_prefix.split(',')
                     for prefix in prefixes:
                         matching_accounts = self.env['account.account'].search([
-                            ('code', '=like', prefix + '%')
+                            ('code', '=like', prefix + '%'),
+                            ('company_id', 'in', account.company_ids.mapped('id'))
                         ])
                         accounts_to_add = matching_accounts - account.account_ids
                         if accounts_to_add:
