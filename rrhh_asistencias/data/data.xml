@@ -21,7 +21,7 @@
         </record>
 
         <record id="cron_obtener_marcaciones" model="ir.cron">
-            <field name="name">Obtener marcaciones</field>
+            <field name="name">Obtener marcaciones de los relojes</field>
             <field name="model_id" ref="model_rrhh_asistencias_marcadores"/>
             <field name="user_id" ref="base.user_root"/>
             <field name="active" eval="True"/>
@@ -32,9 +32,10 @@
             <field name="numbercall">-1</field>
             <field name="code">model.obtener_marcaciones_cron()</field>
         </record>
+
         <record id="crear_asistencias" model="ir.cron">
             <field name="name">Crear Asistencias</field>
-            <field name="model_id" ref="rrhh_asistencias.model_rrhh_asistencias_marcaciones"/>
+            <field name="model_id" ref="model_rrhh_asistencias_marcadores"/>
             <field name="user_id" ref="base.user_root"/>
             <field name="active" eval="True"/>
             <field name="interval_number">2</field>
@@ -42,21 +43,7 @@
             <field name="state">code</field>
             <field name="priority">5</field>
             <field name="numbercall">-1</field>
-            <field name="code"><![CDATA[
-marcaciones_nuevas = model.search([
-    ('marcacion_procesada','=',False),
-    ('asistencia_creada','=',False),
-])
-marcaciones_a_reprocesar = model.search([
-    ('marcacion_procesada','=',True),
-    ('asistencia_creada','=',False),
-])
-marcaciones_nuevas = marcaciones_nuevas.filtered(lambda x:x.employee_id)
-marcaciones_a_reprocesar = marcaciones_a_reprocesar.filtered(lambda x:x.employee_id)
-
-marcaciones_nuevas.create_attendances()
-marcaciones_a_reprocesar.create_attendances()
-            ]]></field>
+            <field name="code">model.crear_asistencias_cron()</field>
         </record>
 
         <record model="hr.work.entry.type" id="tipo_entrada_horas_extra_50">
@@ -113,6 +100,26 @@ marcaciones_a_reprocesar.create_attendances()
             <field name="code"><![CDATA[
 action = records.reset_marcaciones()
             ]]></field>
+        </record>
+
+        <record id="error_message_email_template" model="mail.template">
+            <field name="name">Reloj marcador: Error</field>
+            <field name="model_id" ref="rrhh_asistencias.model_rrhh_asistencias_marcadores"/>
+            <field name="subject">{{ object.name }} - Alerta de Error</field>
+            <field name="description">Error en marcador</field>
+            <field name="body_html" type="html">
+                <div>
+                    <h3>Se ha detectado el siguiente error:</h3>
+                    <t t-out="object.connection_error_message"/>
+                    <t t-if="'timed out' in object.connection_error_message">
+                        <h4>Intente lo siguiente:</h4>
+                        <li>Verifique su conexión a internet</li>
+                        <li>Revise la configuración del router al cual está conectado el Reloj Biométrico, así como la conexión a internet del mismo</li>
+                        <li>Asegúrese de que el Reloj Biométrico está encendido</li>
+                    </t>
+                </div>
+            </field>
+            <field name="auto_delete" eval="False"/>
         </record>
 
     </data>
