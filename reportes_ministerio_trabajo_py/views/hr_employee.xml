@@ -23,7 +23,7 @@
                         <field name="bank_account"/>
                     </group>
                 </xpath>
-                <!--
+                
                 <xpath expr="//field[@name='children']" position="attributes">
                     <attribute name="invisible">True</attribute>
                 </xpath>
@@ -36,7 +36,7 @@
                             <field name="age"/>
                         </tree>
                     </field>
-                </xpath> -->
+                </xpath> 
 
                 <xpath expr="//group[@name='active_group']/field[@name='employee_type']" position="attributes">
                     <attribute name="invisible">True</attribute>
