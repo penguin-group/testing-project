@@ -22,7 +22,8 @@
                         <field name="bank_id"/>
                         <field name="bank_account"/>
                     </group>
-                <!-- </xpath>
+                </xpath>
+                <!--
                 <xpath expr="//field[@name='children']" position="attributes">
                     <attribute name="invisible">True</attribute>
                 </xpath>
