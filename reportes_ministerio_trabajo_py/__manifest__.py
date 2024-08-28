@@ -35,7 +35,7 @@
         'data/estructura_vacaciones.xml',
         'views/calendario_feriado.xml',
         'views/hr_contract.xml',
-        'views/hr_employee.xml',
+        #'views/hr_employee.xml',
         'views/hr_leave_type.xml',
         'views/hr_payroll_structure_type.xml',
         'views/hr_payslip.xml',
