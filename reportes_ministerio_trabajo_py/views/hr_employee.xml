@@ -49,6 +49,7 @@
 
             </field>
         </record>
+        
         <record model="ir.ui.view" id="hr_employee_form_inherit2">
             <field name="name">hr_employee_form_inherit2</field>
             <field name="model">hr.employee</field>
