@@ -13,9 +13,10 @@
                 </xpath>
                 <xpath expr="//div[@name='journal_div']/field[@name='currency_id']" position="attributes">
                     <attribute name="readonly">count_invoice_line_ids > 0</attribute>
-                    <attribute name="force_save">
-                        True</attribute>
-                </xpath></field>
+                    <attribute name="invisible">False</attribute>
+                    <attribute name="force_save">True</attribute>
+                </xpath>
+            </field>
         </record>
     </data>
 </odoo>
