@@ -1,6 +1,7 @@
 from odoo import fields, api, models, exceptions, _
 import datetime, pytz, logging
-
+from datetime import datetime, timedelta
+from datetime import time
 _logger = logging.getLogger(__name__)
 
 
@@ -115,12 +116,31 @@ class Marcaciones(models.Model):
                                                     )
 
             if not asistencia_fecha:
-                asistencias_modificadas |= asistencia_fecha.create({
-                    'employee_id': employee_id.id,
-                    'contract_id': contract.id,
-                    'date': fecha,
-                    'entrada_marcada': hora,
-                })
+
+                if self.is_near_22(hora):
+                    hora_final = time(23, 59, 59)
+                    asistencias_modificadas |= asistencia_fecha.create({
+                        'employee_id': employee_id.id,
+                        'contract_id': contract.id,
+                        'date': fecha,
+                        'entrada_marcada': hora,
+                        'salida_marcada': hora_final,
+                    })
+                else:
+                    asistencias_modificadas |= asistencia_fecha.create({
+                        'employee_id': employee_id.id,
+                        'contract_id': contract.id,
+                        'date': fecha,
+                        'entrada_marcada': hora,
+                    })
+
+                # if hora esta cerca de 22:00hs
+                #     crear la marcacion de salida en esta fecha a las 23:59
+                #     crear la marcacion de la fecha posterios a la variable fecha 00
+
+                    pass
+
+
             else:
                 asistencias_modificadas |= asistencia_fecha
                 if asistencia_fecha.entrada_marcada < hora:
@@ -145,6 +165,10 @@ class Marcaciones(models.Model):
         for marcacion in self:
             marcacion.create_attendance()
             self._cr.commit()
+            if marcacion['salida_marcacion'] == time(23, 59, 59):
+                self.crear_asistencia_entrada_0000hs(marcacion)
+                self._cr.commit()
+
 
     def reset_marcaciones(self):
         wizard_id = self.env['rrhh_asistencias.wizard_reset_marcaciones'].create({
@@ -161,6 +185,30 @@ class Marcaciones(models.Model):
             'type': 'ir.actions.act_window',
             'target': 'new',
         }
+
+    def is_near_22(time_to_check, margin_minutes=60):
+        # Definir la hora de las 22:00
+        target_time = datetime.combine(time_to_check.date(), datetime.strptime("22:00", "%H:%M").time())
+
+        # Calcular el margen de tiempo
+        lower_bound = target_time - timedelta(minutes=margin_minutes)
+        upper_bound = target_time + timedelta(minutes=margin_minutes)
+
+        # Verificar si la hora está dentro del rango
+        return lower_bound <= time_to_check <= upper_bound
+
+    def crear_asistencia_entrada_0000hs(self, marcacion):
+        # Validación simple para asegurar que marcacion tenga los atributos necesarios
+        if not all(hasattr(marcacion, attr) for attr in ['employee_id', 'contract', 'fecha']):
+            raise ValueError("La marcación debe tener 'employee_id', 'contract' y 'fecha' definidos.")
+
+        # Crear asistencia para el día siguiente a las 00:00:00
+        self.env['hr.attendance'].create({
+            'employee_id': marcacion.employee_id.id,
+            'contract_id': marcacion.contract.id,
+            'date': marcacion.fecha + timedelta(days=1),
+            'entrada_marcada': time(0, 0, 0),
+        })
 
 
 class WizardResetMarcaciones(models.TransientModel):
