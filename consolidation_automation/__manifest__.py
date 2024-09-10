@@ -10,6 +10,7 @@
         are always up-to-date, saving time and reducing manual effort.
     """,
     'author': "Penguin",
+    "license": "LGPL-3",
     'website': "https://penguin.software",
     'category': 'Accounting',
     'version': '17.0.0.1',
