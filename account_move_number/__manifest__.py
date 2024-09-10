@@ -11,6 +11,7 @@ Se crea una numeración correlativa para los asientos contables
     """,
 
     'author': "Interfaces S.A., Cristhian Cáceres",
+    "license": "LGPL-3",
     'website': "https://www.interfaces.com.,py",
 
     # Categories can be used to filter modules in modules listing

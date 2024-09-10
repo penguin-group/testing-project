@@ -11,6 +11,7 @@
     """,
 
     'author': "Interfaces S.A., Edgar Páez, Cristhian Cáceres",
+    "license": "LGPL-3",
     'website': "http://www.interfaces.com.py",
 
     # Categories can be used to filter modules in modules listing
