@@ -23,13 +23,31 @@ jobs:
         git config --global user.name "Your GitHub Actions Bot"
         git config --global user.email "actions@github.com"
 
+    - name: Get branch name
+      id: get_branch
+      run: echo ::set-output name=branch_name::${{ github.head_ref }}
+
+    - name: Check if hotfix branch
+      id: check_branch
+      run: |
+        branch_name="${{ steps.get_branch.outputs.branch_name }}"
+        if [[ "$branch_name" =~ ^hotfix/ ]]; then
+          echo "Branch is a hotfix. Proceeding with merge."
+          echo ::set-output name=is_hotfix::true
+        else
+          echo "Branch is not a hotfix. Skipping merge."
+          echo ::set-output name=is_hotfix::false
+        fi
+
     - name: Merge master into staging
+      if: ${{ steps.check_branch.outputs.is_hotfix == 'true' }}
       run: |
         git checkout staging
         git merge master
         git push origin staging
 
     - name: Merge master into dev
+      if: ${{ steps.check_branch.outputs.is_hotfix == 'true' }}
       run: |
         git checkout dev
         git merge master
