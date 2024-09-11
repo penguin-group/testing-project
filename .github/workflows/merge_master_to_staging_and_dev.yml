@@ -1,54 +1,51 @@
-name: Merge Master into Staging and Dev
+name: Merge master into dev and staging on hotfix PR merge
 
 on:
   pull_request:
+    types: [closed]
     branches:
       - master
-    types:
-      - closed
 
 jobs:
-  merge:
+  merge_master_to_staging_and_dev:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout master
-      uses: actions/checkout@v2
+    - name: Check if PR branch name starts with 'hotfix/'
+      id: branch_check
+      run: |
+        BRANCH_NAME=$(echo "${{ github.event.pull_request.head.ref }}")
+        if [[ "$BRANCH_NAME" == hotfix/* ]]; then
+          echo "Branch is a hotfix branch. Proceeding with merge."
+          echo "proceed=true" >> $GITHUB_ENV
+        else
+          echo "Branch is not a hotfix branch. Skipping merge."
+          echo "proceed=false" >> $GITHUB_ENV
+        fi
+
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      if: env.proceed == 'true'
       with:
         ref: master
 
     - name: Set up Git
+      if: env.proceed == 'true'
       run: |
-        git config --global user.name "Your GitHub Actions Bot"
+        git config --global user.name "GitHub Actions"
         git config --global user.email "actions@github.com"
 
-    - name: Get branch name
-      id: get_branch
-      run: echo ::set-output name=branch_name::${{ github.head_ref }}
-
-    - name: Check if hotfix branch
-      id: check_branch
-      run: |
-        branch_name="${{ steps.get_branch.outputs.branch_name }}"
-        if [[ "$branch_name" =~ ^hotfix/ ]]; then
-          echo "Branch is a hotfix. Proceeding with merge."
-          echo ::set-output name=is_hotfix::true
-        else
-          echo "Branch is not a hotfix. Skipping merge."
-          echo ::set-output name=is_hotfix::false
-        fi
-
-    - name: Merge master into staging
-      if: ${{ steps.check_branch.outputs.is_hotfix == 'true' }}
-      run: |
-        git checkout staging
-        git merge master
-        git push origin staging
-
     - name: Merge master into dev
-      if: ${{ steps.check_branch.outputs.is_hotfix == 'true' }}
+      if: env.proceed == 'true'
       run: |
         git checkout dev
-        git merge master
-        git push origin dev
+        git merge master || { echo "Merge conflict in dev, aborting"; exit 1; }
+        git push origin dev || { echo "Failed to push to dev"; exit 1; }
+
+    - name: Merge master into staging
+      if: env.proceed == 'true'
+      run: |
+        git checkout staging
+        git merge master || { echo "Merge conflict in staging, aborting"; exit 1; }
+        git push origin staging || { echo "Failed to push to staging"; exit 1; }
