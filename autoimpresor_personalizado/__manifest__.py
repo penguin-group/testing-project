@@ -20,6 +20,7 @@
     """,
 
     'author': "Interfaces S.A. - Edgar Gonzalez",
+    "license": "LGPL-3",
     'website': "https://www.interfaces.com.py",
 
     # Categories can be used to filter modules in modules listing

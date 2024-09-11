@@ -68,11 +68,11 @@ class ConnectToDevice(object):
     def __init__(self, ip_address, port, device_password):
 
         try:
-            zk = ZK(ip_address, port, password=device_password, timeout=45, force_udp=True, ommit_ping=True)
+            zk = ZK(ip_address, port, password=device_password, timeout=15, force_udp=True, ommit_ping=True)
             conn = zk.connect()
 
         except Exception as e:
-            raise exceptions.Warning(e)
+            raise exceptions.UserError(e)
 
         conn.disable_device()
         self.conn = conn

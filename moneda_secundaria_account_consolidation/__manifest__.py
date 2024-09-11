@@ -5,6 +5,7 @@
     'description': "Reportes de Consolidación con Moneda Consolidada (Módulo moneda_secundaria)",
 
     'author': "Interfaces S.A.",
+    "license": "LGPL-3",
     'website': "https://www.interfaces.com.py",
 
     # Categories can be used to filter modules in modules listing

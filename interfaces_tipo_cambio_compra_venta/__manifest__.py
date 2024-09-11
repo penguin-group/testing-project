@@ -9,6 +9,7 @@
         Tipos de cambio de Compra y Venta en las monedas""",
 
     'author': "Interfaces S.A., Cristhian Cáceres",
+    "license": "LGPL-3",
     'website': "https://www.interfaces.com.py",
 
     # Categories can be used to filter modules in modules listing
