@@ -1482,7 +1482,7 @@ class InformesRubricas(models.Model):
                 account_report_id,
         ):
             subformula_field = ''
-            if release.major_version in ['16.0']:
+            if release.major_version in ['17.0']:
                 subformula_field = 'subformula'
             if release.major_version in ['14.0', '15.0']:
                 subformula_field = 'formulas'
@@ -1494,13 +1494,13 @@ class InformesRubricas(models.Model):
 
             for report_line in report_lines:
                 foldable = False
-                if release.major_version in ['16.0']:
+                if release.major_version in ['17.0']:
                     foldable = report_line.foldable
                 if release.major_version in ['14.0', '15.0']:
                     foldable = report_line.show_domain == foldable
 
                 expression_ids = False
-                if release.major_version in ['16.0']:
+                if release.major_version in ['17.0']:
                     expression_ids = report_line.expression_ids
                 if release.major_version in ['14.0', '15.0']:
                     expression_ids = report_line.children_ids
@@ -1523,7 +1523,7 @@ class InformesRubricas(models.Model):
                         #    force_report_totals.get('value') for expression_id in expression_ids
                         # )
                 else:
-                    if release.major_version in ['16.0']:
+                    if release.major_version in ['17.0']:
                         report_line_total = sum(
                             sum(
                                 expressions_totals[expression_id][account_id].get('account_total')
@@ -1555,7 +1555,7 @@ class InformesRubricas(models.Model):
                 table_line.append(report_line_total)
 
                 report_line_expressions = []
-                if release.major_version in ['16.0']:
+                if release.major_version in ['17.0']:
                     report_line_expressions = report_line.expression_ids.filtered(lambda
                                                                                       x: x.engine == 'domain')  # Se filtran las expresiones de las líneas que forman la estructura del reporte, solo se usarán las expresiones que usen 'domain' para el cálculo de su contenido
                 if release.major_version in ['14.0', '15.0']:
@@ -1620,7 +1620,7 @@ class InformesRubricas(models.Model):
             raise exceptions.ValidationError(
                 'No está establecido un reporte base para el Balance General del reporte Libro Inventario, vaya a la configuración de contabilidad para establecer los parámetros necesarios')
         account_financial_report_bg_l10n_py_report_informations = False
-        if release.major_version in ['16.0']:
+        if release.major_version in ['17.0']:
             account_financial_report_bg_l10n_py_report_informations = account_financial_report_bg_l10n_py.get_report_informations(previous_options)
             account_financial_report_bg_l10n_py_report_informations = account_financial_report_bg_l10n_py_report_informations.get('column_groups_totals')
             account_financial_report_bg_l10n_py_report_informations = account_financial_report_bg_l10n_py_report_informations.get(
@@ -1634,7 +1634,7 @@ class InformesRubricas(models.Model):
 
         expressions_totals = {}  # Acá irán todos los valores de las cuentas a imprimir
         expression_ids = []
-        if release.major_version in ['16.0']:
+        if release.major_version in ['17.0']:
             expression_ids = account_financial_report_bg_l10n_py.line_ids.expression_ids.filtered(lambda
                                                                                                       x: x.engine == 'domain')  # Se filtran las expresiones de las líneas que forman la estructura del reporte, solo se usarán las expresiones que usen 'domain' para el cálculo de su contenido
         if release.major_version in ['14.0', '15.0']:
@@ -1645,7 +1645,7 @@ class InformesRubricas(models.Model):
         for expression_id in expression_ids:
             expressions_totals[expression_id] = {}
             aml_ids = self.env['account.move.line']
-            if release.major_version in ['16.0']:
+            if release.major_version in ['17.0']:
                 if expression_id.formula:
                     aml_ids = eval(
                         "self.env['account.move.line'].search(" + expression_id.formula + ")")  # Cada expresión a procesar tiene un dominio para obtener los apuntes contables, de los cuales se deben obtener las cuentas a preocesar
@@ -1664,7 +1664,7 @@ class InformesRubricas(models.Model):
                 query_result = self.env.cr.fetchall()
                 account_ids = account_ids.browse(list(set([t[0] for t in query_result])))
 
-            if release.major_version in ['16.0']:
+            if release.major_version in ['17.0']:
                 account_ids = account_ids.filtered(
                     lambda x:
                     x.account_type in [
@@ -1737,7 +1737,7 @@ class InformesRubricas(models.Model):
                 account_outbound = 0
                 account_inbound = 0
                 amount_field = 'amount_company_currency_signed'
-                if release.major_version in ['16.0']:
+                if release.major_version in ['17.0']:
                     amount_field = 'amount_company_currency_signed'
                 if release.major_version in ['14.0', '15.0']:
                     amount_field = 'amount'
@@ -1766,7 +1766,7 @@ class InformesRubricas(models.Model):
                 # En el modo 'mode_account_inventory' se detalla la valoración de inventario.
                 # En el modo 'mode_account_asset_fixed' se detalla la valoración de los activos fijos.
                 show_account_detail_mode = False
-                if release.major_version in ['16.0']:
+                if release.major_version in ['17.0']:
                     account_type = account_id.account_type
                     if self.company_id.show_libro_inventario_base_report_bg_details:
                         if account_type == 'asset_cash' and not account_id.reconcile:
@@ -1813,7 +1813,7 @@ class InformesRubricas(models.Model):
                             show_account_detail_mode = 'mode_account_asset_fixed'
 
                 subformula = ''
-                if release.major_version in ['16.0']:
+                if release.major_version in ['17.0']:
                     subformula = expression_id.subformula
                 if release.major_version in ['14.0', '15.0']:
                     subformula = expression_id.formulas
@@ -1858,7 +1858,7 @@ class InformesRubricas(models.Model):
             raise exceptions.ValidationError(
                 'No está establecido un reporte base para el Estado de Resultados del reporte Libro Inventario, vaya a la configuración de contabilidad para establecer los parámetros necesarios')
         account_financial_report_er_l10n_py_report_informations = False
-        if release.major_version in ['16.0']:
+        if release.major_version in ['17.0']:
             account_financial_report_er_l10n_py_report_informations = account_financial_report_er_l10n_py.get_report_informations(previous_options)
             account_financial_report_er_l10n_py_report_informations = account_financial_report_er_l10n_py_report_informations.get('column_groups_totals')
             account_financial_report_er_l10n_py_report_informations = account_financial_report_er_l10n_py_report_informations.get(
@@ -1873,7 +1873,7 @@ class InformesRubricas(models.Model):
         expressions_totals = {}  # Acá irán todos los valores de las cuentas a imprimir
 
         expression_ids = []
-        if release.major_version in ['16.0']:
+        if release.major_version in ['17.0']:
             expression_ids = account_financial_report_er_l10n_py.line_ids.expression_ids.filtered(lambda
                                                                                                       x: x.engine == 'domain')  # Se filtran las expresiones de las líneas que forman la estructura del reporte, solo se usarán las expresiones que usen 'domain' para el cálculo de su contenido
         if release.major_version in ['14.0', '15.0']:
@@ -1884,7 +1884,7 @@ class InformesRubricas(models.Model):
         for expression_id in expression_ids:
             expressions_totals[expression_id] = {}
             aml_ids = self.env['account.move.line']
-            if release.major_version in ['16.0']:
+            if release.major_version in ['17.0']:
                 if expression_id.formula:
                     aml_ids = eval(
                         "self.env['account.move.line'].search(" + expression_id.formula + ")")  # Cada expresión a procesar tiene un dominio para obtener los apuntes contables, de los cuales se deben obtener las cuentas a preocesar
@@ -1903,7 +1903,7 @@ class InformesRubricas(models.Model):
                 query_result = self.env.cr.fetchall()
                 account_ids = account_ids.browse(list(set([t[0] for t in query_result])))
 
-            if release.major_version in ['16.0']:
+            if release.major_version in ['17.0']:
                 account_ids = account_ids.filtered(
                     lambda x:
                     x.account_type in [
@@ -1963,7 +1963,7 @@ class InformesRubricas(models.Model):
                 account_outbound = 0
                 account_inbound = 0
                 amount_field = 'amount_company_currency_signed'
-                if release.major_version in ['16.0']:
+                if release.major_version in ['17.0']:
                     amount_field = 'amount_company_currency_signed'
                 if release.major_version in ['14.0', '15.0']:
                     amount_field = 'amount'
@@ -1989,7 +1989,7 @@ class InformesRubricas(models.Model):
                 show_account_detail_mode = False
 
                 subformula = ''
-                if release.major_version in ['16.0']:
+                if release.major_version in ['17.0']:
                     subformula = expression_id.subformula
                 if release.major_version in ['14.0', '15.0']:
                     subformula = expression_id.formulas

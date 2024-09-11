@@ -39,7 +39,7 @@ class AccountPayment(models.Model):
         if not self.freeze_currency_rate:
             self._onchange_currency()
 
-    def _prepare_move_line_default_vals(self, write_off_line_vals=None):
+    def _prepare_move_line_default_vals(self, write_off_line_vals=None, force_balance=None):
         # interfaces_tipo_cambio_compra_venta/models/account_payment.py
         ''' Prepare the dictionary to create the default account.move.lines for the current payment.
         :param write_off_line_vals: Optional list of dictionaries to create a write-off account.move.line easily containing:
