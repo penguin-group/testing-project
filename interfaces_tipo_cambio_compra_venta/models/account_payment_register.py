@@ -42,7 +42,7 @@ class AccountPaymentRegister(models.TransientModel):
     def _create_payment_vals_from_wizard(self, batch_result=False):
         # interfaces_tipo_cambio_compra_venta/models/account_payment_register.py
         payment_vals = {}
-        if release.major_version in ['16.0']:
+        if release.major_version in ['17.0']:
             payment_vals = super(AccountPaymentRegister, self)._create_payment_vals_from_wizard(batch_result)
             conversion_rate = self.env['res.currency']._get_conversion_rate(
                 self.currency_id,

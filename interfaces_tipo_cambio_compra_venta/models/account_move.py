@@ -40,7 +40,7 @@ class AccountMove(models.Model):
     def _onchange_currency(self):
         # interfaces_tipo_cambio_compra_venta/models/account_move.py
         self.get_tipo_cambio_default()
-        if release.major_version in ['16.0']:
+        if release.major_version in ['17.0']:
             for this in self:
                 for line in this.invoice_line_ids:
                     line.balance = line.company_id.currency_id.round(line.amount_currency / line.currency_rate)

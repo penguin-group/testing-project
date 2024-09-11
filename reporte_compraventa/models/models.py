@@ -176,7 +176,7 @@ class ReporteComprasXLSX(models.AbstractModel):
             if i.currency_id != self.env.company.currency_id:
                 balance = 1
                 amount_currency = 1
-                if release.major_version in ['16.0']:
+                if release.major_version in ['17.0']:
                     balance = abs(i.line_ids.filtered(
                         lambda x: x.currency_id == i.currency_id and x.account_id.account_type in ['asset_receivable', 'liability_payable'])[0].balance)
                     amount_currency = abs(
@@ -294,7 +294,7 @@ class ReporteComprasXLSX(models.AbstractModel):
             if i.currency_id != self.env.company.currency_id:
                 balance = 1
                 amount_currency = 1
-                if release.major_version in ['16.0']:
+                if release.major_version in ['17.0']:
                     balance = abs(i.line_ids.filtered(
                         lambda x: x.currency_id == i.currency_id and x.account_id.account_type in ['asset_receivable', 'liability_payable'])[0].balance)
                     amount_currency = abs(
@@ -513,7 +513,7 @@ class ReporteVentasXLSX(models.AbstractModel):
             if i.currency_id != self.env.company.currency_id:
                 balance = 1
                 amount_currency = 1
-                if release.major_version in ['16.0']:
+                if release.major_version in ['17.0']:
                     balance = abs(i.line_ids.filtered(
                         lambda x: x.currency_id == i.currency_id and x.account_id.account_type in ['asset_receivable', 'liability_payable'])[0].balance)
                     amount_currency = abs(
@@ -655,7 +655,7 @@ class ReporteVentasXLSX(models.AbstractModel):
             if i.currency_id != self.env.company.currency_id:
                 balance = 1
                 amount_currency = 1
-                if release.major_version in ['16.0']:
+                if release.major_version in ['17.0']:
                     balance = abs(i.line_ids.filtered(
                         lambda x: x.currency_id == i.currency_id and x.account_id.account_type in ['asset_receivable', 'liability_payable'])[0].balance)
                     amount_currency = abs(
