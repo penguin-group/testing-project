@@ -10,6 +10,7 @@ Módulo para LIQUIDACIÓN DE SALARIOS
 """,
 
     'author': "Interfaces S.A., Cristhian Cáceres",
+    "license": "LGPL-3",
     'website': "http://www.interfaces.com.py",
 
     # Categories can be used to filter modules in modules listing
