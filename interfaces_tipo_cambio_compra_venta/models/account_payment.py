@@ -1,4 +1,5 @@
 from odoo import api, fields, models, _, release
+from odoo.exceptions import UserError
 
 
 class AccountPayment(models.Model):

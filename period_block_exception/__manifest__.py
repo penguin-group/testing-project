@@ -9,6 +9,7 @@
     """,
 
     'author': "Giuliano Díaz",
+    "license": "LGPL-3",
     'website': "https://www.giulianodiaz.com/",
 
     # Categories can be used to filter modules in modules listing
