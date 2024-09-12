@@ -33,7 +33,7 @@ jobs:
         branch_name="${{ steps.get_branch.outputs.branch_name }}"
         if [[ "$branch_name" =~ release/v([0-9]+)\.([0-9]+)\.([0-9]+) ]]; then
           echo "release" > branch_type.txt
-          new_tag="${BASH_REMATCH[0]}"
+          new_tag="v${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.${BASH_REMATCH[3]}"
         elif [[ "$branch_name" =~ hotfix/ ]]; then
           echo "hotfix" > branch_type.txt
         else
