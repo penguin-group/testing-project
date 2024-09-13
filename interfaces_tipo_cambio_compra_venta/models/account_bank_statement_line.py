@@ -47,7 +47,7 @@ class AccountBankStatementLine(models.Model):
                 this.move_id.button_draft()
                 this.move_id.write({
                     'currency_rate': this.currency_rate,
-                    'freeze_currency_rate': True,
+                    'freeze_currency_rate': this.freeze_currency_rate,
                 })
                 this.move_id.with_context(check_move_validity=False)._onchange_currency()
                 this.move_id.line_ids._compute_currency_rate()
