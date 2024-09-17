@@ -7,7 +7,7 @@
             <field name="name">report.vat.purchase.wizard.form</field>
             <field name="model">report.vat.purchase.wizard</field>
             <field name="arch" type="xml">
-                <form string="Libro IVA Compras">
+                <form string="VAT Purchase Book">
                     <group>
                         <group>
                             <field name="date_start" autocomplete="off"/>
@@ -17,8 +17,8 @@
                         </group>
                     </group>
                     <footer>
-                        <button name="print_report" string="Exportar a xlsx" type="object" class="oe_highlight"/>
-                        <button special="cancel" string="Cancelar"/>
+                        <button name="print_report" string="Export to xlsx" type="object" class="oe_highlight"/>
+                        <button special="cancel" string="Cancel"/>
                     </footer>
 
                 </form>
@@ -26,23 +26,23 @@
         </record>
 
         <record id="report_vat_purchase_wizard_action" model="ir.actions.act_window">
-            <field name="name">Libro IVA Compras</field>
+            <field name="name">VAT Purchase Book</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">report.vat.purchase.wizard</field>
             <field name="view_mode">form</field>
             <field name="target">new</field>
         </record>
 
-        <menuitem id="report_vat_purchase_wizard_menu" parent="account.menu_finance_payables" name="Libro IVA Compras" sequence="12"
+        <menuitem id="report_vat_purchase_wizard_menu" parent="account.menu_finance_payables" name="VAT Purchase Book" sequence="10"
                 action="report_vat_purchase_wizard_action"/>
 
         <record id="report_vat_purchase_report" model="ir.actions.report">
-                <field name="name">Libro IVA Compras</field>
+                <field name="name">VAT Purchase Book</field>
                 <field name="model">report.vat.purchase.wizard</field>
                 <field name="report_type">xlsx</field>
                 <field name="report_name">l10n_py_account_vat_reports.report_vat_purchase</field>
                 <field name="report_file">l10n_py_account_vat_reports.report_vat_purchase</field>
-                <field name="print_report_name">'Libro IVA Compras'</field>
+                <field name="print_report_name">'VAT Purchase Book'</field>
         </record>
 
    

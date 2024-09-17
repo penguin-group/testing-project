@@ -26,5 +26,6 @@
     'demo': [
         'demo/demo.xml',
     ],
+    'i18n': ['i18n/es.po'],
 }
 

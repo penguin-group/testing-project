@@ -5,8 +5,8 @@ import base64
 class ReportVatPurchaseWizard(models.TransientModel):
     _name = 'report.vat.purchase.wizard'
 
-    date_start = fields.Date(string='Desde', required=True)
-    date_end = fields.Date(string='Hasta', required=True)
+    date_start = fields.Date(string='From', required=True)
+    date_end = fields.Date(string='To', required=True)
 
     def print_report(self):
         datas = {
@@ -27,6 +27,7 @@ class ReportVatPurchase(models.AbstractModel):
             ('state', 'in', ['posted']),
             ('invoice_date', '>=', date_start),
             ('invoice_date', '<=', date_end),
+            ('company_id', '=', self.env.company.id),
             ('line_ids.tax_ids', '!=', False),
         ])
 
@@ -102,8 +103,8 @@ class ReportVatPurchase(models.AbstractModel):
         breakAndWrite("RUC:", f_bold)
         rightAndWrite(self.env.company.partner_id.vat)
         breakAndWrite("Periodo:", f_bold)
-        rightAndWrite("Del " + datas.date_start.strftime("%d/%m/%Y") +
-                      " al " + datas.date_end.strftime('%d/%m/%Y'))
+        rightAndWrite("De " + datas.date_start.strftime("%d/%m/%Y") +
+                      " a " + datas.date_end.strftime('%d/%m/%Y'))
         addBreak()
         addRight()
         addRight()

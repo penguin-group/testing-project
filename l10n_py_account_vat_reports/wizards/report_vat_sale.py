@@ -6,8 +6,8 @@ import base64
 class ReportVatSaleWizard(models.TransientModel):
     _name = 'report.vat.sale.wizard'
 
-    date_start = fields.Date(string='Desde', required=True)
-    date_end = fields.Date(string='Hasta', required=True)
+    date_start = fields.Date(string='From', required=True)
+    date_end = fields.Date(string='To', required=True)
 
     def print_report(self):
         datas = {
@@ -25,9 +25,11 @@ class ReportVatSale(models.AbstractModel):
     def generate_xlsx_report(self, workbook, data, datas):
 
         invoices = self.env['account.move'].search(
-            [('move_type', '=', 'out_invoice'), ('state', 'in', ['posted', 'cancel']),
-             ('invoice_date', '>=', datas.date_start),
-             ('invoice_date', '<=', datas.date_end)])
+            [('move_type', '=', 'out_invoice'), 
+            ('state', 'in', ['posted', 'cancel']),
+            ('invoice_date', '>=', datas.date_start),
+            ('invoice_date', '<=', datas.date_end),
+            ('company_id', '=', self.env.company.id)])
         global sheet
         global f_bold
         global f_number
