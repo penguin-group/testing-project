@@ -66,15 +66,30 @@ class ReportVatPurchase(models.AbstractModel):
             return invoice.partner_id.vat
 
     def generate_xlsx_report(self, workbook, data, datas):
-
         invoices = self.get_purchase_invoices(datas.date_start, datas.date_end)
+
         global sheet
         global f_bold
         global f_number
         global position_x
         global position_y
         sheet = workbook.add_worksheet('Hoja 1')
+
+        # Width of the columns
+        sheet.set_column('A:A', 4)
+        sheet.set_column('B:B', 11)
+        sheet.set_column('C:C', 25)
+        sheet.set_column('D:E', 10)
+        sheet.set_column('F:F', 15)
+        sheet.set_column('G:N', 10)
+
+        # Formats
         f_bold = workbook.add_format({'bold': True})
+        f_title = workbook.add_format({
+            'bold': True,
+            'align': 'center',
+            'valign': 'vcenter'        
+        })
         f_number = workbook.add_format({'num_format': True, 'align': 'right'})
         f_number.set_num_format('#,##0')
         f_number_total = workbook.add_format(
@@ -82,9 +97,6 @@ class ReportVatPurchase(models.AbstractModel):
         f_number_total.set_num_format('#,##0')
         f_wrapped_text_bold = workbook.add_format({'bold': True})
         f_wrapped_text_bold.set_text_wrap()
-
-        position_x = 0
-        position_y = 0
 
         def addBreak():
             global position_x
@@ -110,19 +122,18 @@ class ReportVatPurchase(models.AbstractModel):
             addRight()
             sheet.write(position_y, position_x, to_write, format)
 
-        simpleWrite("Razon social:", f_bold)
-        rightAndWrite(self.env.company.name)
-        breakAndWrite("RUC:", f_bold)
-        rightAndWrite(self.env.company.partner_id.vat)
-        breakAndWrite("Periodo:", f_bold)
-        rightAndWrite("De " + datas.date_start.strftime("%d/%m/%Y") +
-                      " a " + datas.date_end.strftime('%d/%m/%Y'))
-        addBreak()
-        addRight()
-        addRight()
-        addRight()
-        addRight()
-        simpleWrite('Libro de compras - Ley 125/91', f_bold)
+        sheet.merge_range('A1:B1', 'Razón Social', f_bold)
+        sheet.merge_range('C1:D1', self.env.company.name)
+        sheet.merge_range('A2:B2', 'RUC', f_bold)
+        sheet.merge_range('C2:D2', self.env.company.partner_id.vat)
+        sheet.merge_range('A3:B3', 'Periodo', f_bold)
+        sheet.merge_range('C3:D3', 
+            "De " + datas.date_start.strftime("%d/%m/%Y") + " a " + datas.date_end.strftime('%d/%m/%Y'))
+        sheet.merge_range('A4:N4', 'Libro de compras - Ley 125/91', f_title)        
+
+        position_x = 0
+        position_y = 3
+
         breakAndWrite("Nro", f_bold)
         rightAndWrite("Fecha", f_bold)
         rightAndWrite("Proveedor", f_bold)
