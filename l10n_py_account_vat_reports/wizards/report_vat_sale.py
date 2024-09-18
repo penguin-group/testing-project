@@ -26,6 +26,30 @@ class ReportVatSale(models.AbstractModel):
     _name = 'report.l10n_py_account_vat_reports.report_vat_sale'
     _inherit = 'report.report_xlsx.abstract'
 
+    def get_vat_amounts(self, invoice_line):
+        base10 = 0
+        vat10 = 0
+        base5 = 0
+        vat5 = 0
+        exempt = 0
+
+        price_total = invoice_line.currency_id._convert(
+            invoice_line.price_total, 
+            self.env.ref('base.PYG'), 
+            self.env.company, 
+            invoice_line.move_id.invoice_date
+        )
+
+        if invoice_line.tax_ids and invoice_line.tax_ids[0].amount == 10:
+            base10 += price_total / 1.1
+            vat10 += price_total / 11
+        if invoice_line.tax_ids and invoice_line.tax_ids[0].amount == 5:
+            base5 += price_total / 1.05
+            vat5 += price_total / 21
+        if (invoice_line.tax_ids and invoice_line.tax_ids[0].amount == 0) or not invoice_line.tax_ids:
+            exempt += price_total
+        return base10, vat10, base5, vat5, exempt
+
     def generate_xlsx_report(self, workbook, data, datas):
 
         invoices = self.env['account.move'].search(
@@ -111,53 +135,27 @@ class ReportVatSale(models.AbstractModel):
         amount_total_exempt = 0
         for i in invoices.sorted(key=lambda x: x.name):
             cnt += 1
-            if i.state != 'cancel':
-                amount_total_invoice = i.amount_total
-            else:
-                amount_total_invoice = 0
-
             base10 = 0
-            base5 = 0
-            exempt = 0
             vat10 = 0
+            base5 = 0
             vat5 = 0
+            exempt = 0
             for t in i.filtered(lambda x: x.state != 'cancel').invoice_line_ids:
-                if t.tax_ids and t.tax_ids[0].amount == 10:
-                    base10 += t.price_total / 1.1
-                    vat10 += t.price_total / 11
-                if t.tax_ids and t.tax_ids[0].amount == 5:
-                    base5 += t.price_total / 1.05
-                    vat5 += t.price_total / 21
-                if (t.tax_ids and t.tax_ids[0].amount == 0) or not t.tax_ids:
-                    exempt += t.price_total
+                values = self.get_vat_amounts(t)
+                base10 += values[0]
+                vat10 += values[1]
+                base5 += values[2]
+                vat5 += values[3]
+                exempt += values[4]
 
-            if i.currency_id != self.env.company.currency_id:
-                balance = 1
-                amount_currency = 1
-                balance = abs(i.line_ids.filtered(
-                    lambda x: x.currency_id == i.currency_id and x.account_id.account_type in ['asset_receivable', 'liability_payable'])[0].balance)
-                amount_currency = abs(
-                    i.line_ids.filtered(
-                        lambda x: x.currency_id == i.currency_id and x.account_id.account_type in ['asset_receivable', 'liability_payable'])[
-                        0].amount_currency)
-                if balance > 0 and amount_currency > 0:
-                    currency_rate = balance / amount_currency
-                else:
-                    currency_rate = 1
+            amount_total_invoice = base10 + vat10 + base5 + vat5 + exempt
 
-                amount_total_invoice = i.amount_total_signed
-                base10 = base10 * currency_rate
-                vat10 = vat10 * currency_rate
-                base5 = base5 * currency_rate
-                vat5 = vat5 * currency_rate
-                exempt = exempt * currency_rate
-
-            amount_total_all += amount_total_invoice
             amount_total_base10 += base10
-            amount_total_base5 += base5
             amount_total_vat10 += vat10
+            amount_total_base5 += base5
             amount_total_vat5 += vat5
             amount_total_exempt += exempt
+            amount_total_all += amount_total_invoice
 
             breakAndWrite(cnt)
             if i.state != 'cancel':
@@ -248,44 +246,20 @@ class ReportVatSale(models.AbstractModel):
         amount_total_exempt = 0
         for i in credit_notes.sorted(key=lambda x: x.invoice_date):
             cnt += 1
-            if i.state != 'cancel':
-                amount_total_invoice = i.amount_total
-            else:
-                amount_total_invoice = 0
             base10 = 0
-            base5 = 0
-            exempt = 0
             vat10 = 0
+            base5 = 0
             vat5 = 0
+            exempt = 0
             for t in i.filtered(lambda x: x.state != 'cancel').invoice_line_ids:
-                if t.tax_ids and t.tax_ids[0].amount == 10:
-                    base10 += t.price_total / 1.1
-                    vat10 += t.price_total / 11
-                if t.tax_ids and t.tax_ids[0].amount == 5:
-                    base5 += t.price_total / 1.05
-                    vat5 += t.price_total / 21
-                if (t.tax_ids and t.tax_ids[0].amount == 0) or not t.tax_ids:
-                    exempt += t.price_total
-
-            if i.currency_id != self.env.company.currency_id:
-                balance = 1
-                amount_currency = 1
-                balance = abs(i.line_ids.filtered(
-                    lambda x: x.currency_id == i.currency_id and x.account_id.account_type in ['asset_receivable', 'liability_payable'])[0].balance)
-                amount_currency = abs(
-                    i.line_ids.filtered(
-                        lambda x: x.currency_id == i.currency_id and x.account_id.account_type in ['asset_receivable', 'liability_payable'])[
-                        0].amount_currency)
-                if balance > 0 and amount_currency > 0:
-                    currency_rate = balance / amount_currency
-                else:
-                    currency_rate = 1
-                amount_total_invoice = i.amount_total_signed
-                base10 = base10 * currency_rate
-                vat10 = vat10 * currency_rate
-                base5 = base5 * currency_rate
-                vat5 = vat5 * currency_rate
-                exempt = exempt * currency_rate
+                values = self.get_vat_amounts(t)
+                base10 += values[0]
+                vat10 += values[1]
+                base5 += values[2]
+                vat5 += values[3]
+                exempt += values[4]
+            
+            amount_total_invoice = base10 + vat10 + base5 + vat5 + exempt
 
             amount_total_all += amount_total_invoice
             amount_total_base10 += base10
