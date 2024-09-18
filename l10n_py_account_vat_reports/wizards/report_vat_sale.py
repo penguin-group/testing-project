@@ -1,4 +1,5 @@
-from odoo import models, fields, api, release
+from odoo import models, fields, api, release, _
+from odoo.exceptions import ValidationError
 import xlsxwriter
 import base64
 
@@ -10,12 +11,15 @@ class ReportVatSaleWizard(models.TransientModel):
     date_end = fields.Date(string='To', required=True)
 
     def print_report(self):
-        datas = {
-            'date_start': self.date_start,
-            'date_end': self.date_end,
-        }
+        if self.env.company.partner_id.country_id.code == 'PY':
+            datas = {
+                'date_start': self.date_start,
+                'date_end': self.date_end,
+            }
 
-        return self.env.ref('l10n_py_account_vat_reports.report_vat_sale_report').report_action(self, data=datas)
+            return self.env.ref('l10n_py_account_vat_reports.report_vat_sale_report').report_action(self, data=datas)
+        else:
+            raise ValidationError(_("This report is only for Paraguay-based companies."))
 
 
 class ReportVatSale(models.AbstractModel):
