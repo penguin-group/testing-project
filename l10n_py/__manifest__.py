@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "PY VAT Reports",
+    'name': "Paraguay - Accounting",
 
-    'summary': "Purchase and Sale VAT reports",
+    'summary': "This module adds accounting features to the Paraguayan localization.",
 
     'description': """
-        Purchase and Sale VAT reports
+        This module adds the following accounting features to the Paraguayan localization:
+        * VAT Purchase Book (xlsx report)
+        * VAT Sale Book (xlsx report)
     """,
 
     'author': "Penguin Infrastructure, José González",
@@ -13,18 +15,12 @@
     'category': 'Accounting',
     'version': '17.0.1.1.1',
 
-    # any module necessary for this one to work correctly
-    'depends': ['base', 'account', 'interfaces_timbrado', 'report_xlsx'],
+    'depends': ['base', 'account', 'report_xlsx'],
 
-    # always loaded
     'data': [
         'security/ir.model.access.csv',
         'wizards/report_vat_purchase_views.xml',
         'wizards/report_vat_sale_views.xml'
-    ],
-    # only loaded in demonstration mode
-    'demo': [
-        'demo/demo.xml',
     ],
     'i18n': ['i18n/es.po'],
 }
