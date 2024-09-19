@@ -6,6 +6,7 @@
 
     'description': """
         This module adds the following accounting features to the Paraguayan localization:
+        * Invoice Authorization
         * VAT Purchase Book (xlsx report)
         * VAT Sale Book (xlsx report)
     """,
@@ -19,6 +20,9 @@
 
     'data': [
         'security/ir.model.access.csv',
+        'views/account_journal_views.xml',
+        'views/account_move_views.xml',
+        'views/invoice_authorization_views.xml',
         'wizards/report_vat_purchase_views.xml',
         'wizards/report_vat_sale_views.xml'
     ],

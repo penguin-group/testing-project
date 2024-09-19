@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-17 20:19+0000\n"
-"PO-Revision-Date: 2024-09-17 20:19+0000\n"
+"POT-Creation-Date: 2024-09-19 21:45+0000\n"
+"PO-Revision-Date: 2024-09-19 21:45+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -26,28 +26,81 @@ msgid "'VAT Sale Book'"
 msgstr "'Libro IVA Ventas'"
 
 #. module: l10n_py
+#: model:ir.model.fields,help:l10n_py.field_account_journal__max_lines
+msgid "0 for unlimited lines."
+msgstr "0 para líneas ilimitadas"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__active
+msgid "Active"
+msgstr "Activo"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__name
+msgid "Authorization Number"
+msgstr "Timbrado"
+
+#. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.report_vat_purchase_wizard_form
 #: model_terms:ir.ui.view,arch_db:l10n_py.report_vat_sale_wizard_form
 msgid "Cancel"
 msgstr "Cancelar"
 
 #. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__company_id
+msgid "Company"
+msgstr "Empresa"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__create_uid
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_purchase_wizard__create_uid
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_sale_wizard__create_uid
 msgid "Created by"
 msgstr "Creado por"
 
 #. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__create_date
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_purchase_wizard__create_date
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_sale_wizard__create_date
 msgid "Created on"
 msgstr "Creado el"
 
 #. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__invoice_authorization__document_type__out_refund
+msgid "Credit Note"
+msgstr "Nota de Crédito"
+
+#. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__invoice_authorization__document_type__delivery_note
+msgid "Delivery Note"
+msgstr "Nota de Remisión"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__display_name
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_purchase_wizard__display_name
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_sale_wizard__display_name
 msgid "Display Name"
 msgstr "Nombre mostrado"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__document_type
+msgid "Document Type"
+msgstr "Tipo de Documento"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__end_date
+msgid "End Date"
+msgstr "Fecha Final"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__establishment_number
+msgid "Establishment Number"
+msgstr "Código de Establecimiento"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__expedition_point_number
+msgid "Expedition Point Number"
+msgstr "Código de Punto de Expedición"
 
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.report_vat_purchase_wizard_form
@@ -56,28 +109,95 @@ msgid "Export to xlsx"
 msgstr "Exportar a xlsx"
 
 #. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__final_invoice_number
+msgid "Final Invoice Number"
+msgstr "Número Final"
+
+#. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_purchase_wizard__date_start
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_sale_wizard__date_start
 msgid "From"
 msgstr "Desde"
 
 #. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__id
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_purchase_wizard__id
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_sale_wizard__id
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__initial_invoice_number
+msgid "Initial Invoice Number"
+msgstr "Número Inicial"
+
+#. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__invoice_authorization__document_type__out_invoice
+msgid "Invoice"
+msgstr "Factura"
+
+#. module: l10n_py
+#: model:ir.actions.act_window,name:l10n_py.invoice_authorization_action
+#: model:ir.model,name:l10n_py.model_invoice_authorization
+#: model:ir.model.fields,field_description:l10n_py.field_account_journal__invoice_authorization_id
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_authorization_view_form
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_authorization_view_tree
+msgid "Invoice Authorization"
+msgstr "Timbrado"
+
+#. module: l10n_py
+#: model:ir.ui.menu,name:l10n_py.invoice_authorization_menu
+msgid "Invoice Authorizations"
+msgstr "Timbrados"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Journal"
+msgstr "Diario"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_move
+msgid "Journal Entry"
+msgstr "Asiento contable"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__write_uid
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_purchase_wizard__write_uid
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_sale_wizard__write_uid
 msgid "Last Updated by"
 msgstr "Última actualización por"
 
 #. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__write_date
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_purchase_wizard__write_date
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_sale_wizard__write_date
 msgid "Last Updated on"
 msgstr "Última actualización el"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_journal__max_lines
+msgid "Maximum printable lines on the invoice"
+msgstr "Máximo de líneas imprimibles en la factura"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__start_date
+msgid "Start Date"
+msgstr "Fecha de Inicio"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__supplier_invoice_authorization
+#: model:ir.model.fields,field_description:l10n_py.field_account_move__supplier_invoice_authorization
+#: model:ir.model.fields,field_description:l10n_py.field_account_payment__supplier_invoice_authorization
+msgid "Supplier's Invoice Authorization"
+msgstr "Timbrado del Proveedor"
+
+#. module: l10n_py
+#. odoo-python
+#: code:addons/l10n_py/wizards/report_vat_purchase.py:0
+#: code:addons/l10n_py/wizards/report_vat_sale.py:0
+#, python-format
+msgid "This report is only for Paraguay-based companies."
+msgstr "Este reporte es solo para empresas de Paraguay."
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_purchase_wizard__date_end
