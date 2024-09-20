@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-19 21:45+0000\n"
-"PO-Revision-Date: 2024-09-19 21:45+0000\n"
+"POT-Creation-Date: 2024-09-20 13:54+0000\n"
+"PO-Revision-Date: 2024-09-20 13:54+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -67,8 +67,13 @@ msgstr "Creado el"
 
 #. module: l10n_py
 #: model:ir.model.fields.selection,name:l10n_py.selection__invoice_authorization__document_type__out_refund
-msgid "Credit Note"
+msgid "Customer Credit Note"
 msgstr "Nota de Crédito"
+
+#. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__invoice_authorization__document_type__out_invoice
+msgid "Customer Invoice"
+msgstr "Factura de Cliente"
 
 #. module: l10n_py
 #: model:ir.model.fields.selection,name:l10n_py.selection__invoice_authorization__document_type__delivery_note
@@ -132,11 +137,6 @@ msgid "Initial Invoice Number"
 msgstr "Número Inicial"
 
 #. module: l10n_py
-#: model:ir.model.fields.selection,name:l10n_py.selection__invoice_authorization__document_type__out_invoice
-msgid "Invoice"
-msgstr "Factura"
-
-#. module: l10n_py
 #: model:ir.actions.act_window,name:l10n_py.invoice_authorization_action
 #: model:ir.model,name:l10n_py.model_invoice_authorization
 #: model:ir.model.fields,field_description:l10n_py.field_account_journal__invoice_authorization_id
@@ -185,11 +185,26 @@ msgid "Start Date"
 msgstr "Fecha de Inicio"
 
 #. module: l10n_py
-#: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__supplier_invoice_authorization
-#: model:ir.model.fields,field_description:l10n_py.field_account_move__supplier_invoice_authorization
-#: model:ir.model.fields,field_description:l10n_py.field_account_payment__supplier_invoice_authorization
-msgid "Supplier's Invoice Authorization"
-msgstr "Timbrado del Proveedor"
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__partner_id
+msgid "Supplier"
+msgstr "Proveedor"
+
+#. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__invoice_authorization__document_type__in_refund
+msgid "Supplier Credit Note"
+msgstr "Nota de Crédito de Proveedor"
+
+#. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__invoice_authorization__document_type__in_invoice
+msgid "Supplier Invoice"
+msgstr "Factura de Proveedor"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__supplier_invoice_authorization_id
+#: model:ir.model.fields,field_description:l10n_py.field_account_move__supplier_invoice_authorization_id
+#: model:ir.model.fields,field_description:l10n_py.field_account_payment__supplier_invoice_authorization_id
+msgid "Supplier Invoice Authorization"
+msgstr "Timbrado de Proveedor"
 
 #. module: l10n_py
 #. odoo-python

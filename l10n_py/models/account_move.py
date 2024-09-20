@@ -9,7 +9,11 @@ import math
 class AccountMove(models.Model):
     _inherit = 'account.move'
 
-    supplier_invoice_authorization = fields.Char(string="Supplier's Invoice Authorization")
+    supplier_invoice_authorization_id = fields.Many2one(
+        'invoice.authorization',
+        string='Supplier Invoice Authorization',
+        domain="[('document_type', 'in', ['in_invoice', 'in_refund'])]"
+    )
 
     def validate_invoice_authorization(self):
         if self.move_type in ['out_invoice', 'out_refund'] and self.name and self.name != '/':
@@ -63,7 +67,17 @@ class AccountMove(models.Model):
                         "The maximum number of lines supported in the invoice has been reached.")
         return
 
+    def validate_supplier_invoice_number(self):
+        pattern = re.compile(r'^(\d{3}-){2}\d{7}$')
+        if not pattern.match(self.ref):
+            raise ValidationError(
+                'The invoice number does not have the correct format (xxx-xxx-xxxxxxx)'
+            )
+
     def action_post(self):
+        for record in self:
+            if record.move_type in ['in_invoice', 'in_refund']:
+                validate_supplier_invoice_number()
         result = super(AccountMove, self).action_post()
         for record in self:
             if record.move_type in ['out_invoice', 'out_refund']:

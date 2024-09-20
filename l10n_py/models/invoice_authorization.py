@@ -10,12 +10,15 @@ class InvoiceAuthorization(models.Model):
     document_type = fields.Selection(
         string="Document Type", 
         selection=[
-            ('out_invoice', 'Invoice'), 
-            ('out_refund', 'Credit Note'), 
+            ('out_invoice', 'Customer Invoice'), 
+            ('in_invoice', 'Supplier Invoice'),
+            ('out_refund', 'Customer Credit Note'), 
+            ('in_refund', 'Supplier Credit Note'), 
             ('delivery_note', 'Delivery Note')
         ], 
         default="out_invoice"
     )
+    partner_id = fields.Many2one(comodel_name='res.partner', string='Supplier')
     start_date = fields.Date(
         string='Start Date', 
         default=fields.Date.today(), 
@@ -57,5 +60,3 @@ class InvoiceAuthorization(models.Model):
         return res
 
 
-
-    
