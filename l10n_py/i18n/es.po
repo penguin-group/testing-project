@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-20 13:54+0000\n"
-"PO-Revision-Date: 2024-09-20 13:54+0000\n"
+"POT-Creation-Date: 2024-09-20 15:30+0000\n"
+"PO-Revision-Date: 2024-09-20 15:30+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -73,7 +73,7 @@ msgstr "Nota de Crédito"
 #. module: l10n_py
 #: model:ir.model.fields.selection,name:l10n_py.selection__invoice_authorization__document_type__out_invoice
 msgid "Customer Invoice"
-msgstr "Factura de Cliente"
+msgstr "Factura"
 
 #. module: l10n_py
 #: model:ir.model.fields.selection,name:l10n_py.selection__invoice_authorization__document_type__delivery_note
@@ -180,6 +180,11 @@ msgid "Maximum printable lines on the invoice"
 msgstr "Máximo de líneas imprimibles en la factura"
 
 #. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__self_printer_authorization
+msgid "Self-printer Authorization Number"
+msgstr "Autorización de Autoimpresor"
+
+#. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__start_date
 msgid "Start Date"
 msgstr "Fecha de Inicio"
@@ -197,7 +202,7 @@ msgstr "Nota de Crédito de Proveedor"
 #. module: l10n_py
 #: model:ir.model.fields.selection,name:l10n_py.selection__invoice_authorization__document_type__in_invoice
 msgid "Supplier Invoice"
-msgstr "Factura de Proveedor"
+msgstr "Factura Proveedor"
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__supplier_invoice_authorization_id

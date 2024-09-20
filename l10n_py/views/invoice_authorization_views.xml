@@ -26,6 +26,7 @@
                                 <field name="expedition_point_number"/>
                                 <field name="initial_invoice_number"/>
                                 <field name="final_invoice_number"/>
+                                <field name="self_printer_authorization" invisible="document_type not in ['out_invoice', 'out_refund']"/>
                             </group>
                         </group>
                     </sheet>

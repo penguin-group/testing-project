@@ -32,6 +32,7 @@ class InvoiceAuthorization(models.Model):
     expedition_point_number = fields.Char('Expedition Point Number', required=True, default="001")
     initial_invoice_number = fields.Integer('Initial Invoice Number', required=True, default=1)
     final_invoice_number = fields.Integer('Final Invoice Number', required=True, default=9999999)
+    self_printer_authorization = fields.Char('Self-printer Authorization Number')
     active = fields.Boolean(string='Active', default=True)
     company_id = fields.Many2one(
         'res.company', 
