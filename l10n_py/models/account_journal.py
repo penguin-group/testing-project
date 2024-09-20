@@ -14,3 +14,5 @@ class AccountJournal(models.Model):
         default=0,
         help="0 for unlimited lines."
     )
+    invoice_footer = fields.Html(string="Invoice Footer")
+    show_qr = fields.Boolean(string="Show QR in self-printed invoices")

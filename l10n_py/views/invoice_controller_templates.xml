@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data >
+        <template id="online_invoice">
+            <div style="text-align:center;margin-top:50px">
+                <strong>Invoice Number: </strong>
+                <span t-field="invoice.name"/>
+                <br/>
+                <strong>Invoice Authorization: </strong>
+                <span t-field="invoice.journal_id.invoice_authorization_id.name"/>
+                <br/>
+                <strong>Invoice Date: </strong>
+                <span t-field="invoice.invoice_date"/>
+                <br/>
+                <strong>Invoice Due Date: </strong>
+                <span t-field="invoice.invoice_date_due"/>
+                <br/>
+                <strong>Customer: </strong>
+                <span t-field="invoice.partner_id.name"/>
+                <br/>
+                <strong>Amount: </strong>
+                <span t-field="invoice.amount_total"/>
+                <br/>
+                <strong>State: </strong>
+                <span t-field="invoice.state"/>
+                <br/>
+            </div>
+        </template>
+
+        <template id="invalid_token">
+            <div style="text-align:center">
+                <span style="font-size:20px">Invalid Token</span>
+            </div>
+        </template>
+    </data>
+</odoo>

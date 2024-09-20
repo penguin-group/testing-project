@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-20 15:30+0000\n"
-"PO-Revision-Date: 2024-09-20 15:30+0000\n"
+"POT-Creation-Date: 2024-09-20 21:49+0000\n"
+"PO-Revision-Date: 2024-09-20 21:49+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -26,9 +26,188 @@ msgid "'VAT Sale Book'"
 msgstr "'Libro IVA Ventas'"
 
 #. module: l10n_py
+#: model:ir.actions.report,print_report_name:l10n_py.invoice_duplicate_report_action
+#: model:ir.actions.report,print_report_name:l10n_py.invoice_report_action
+msgid "(object.name)"
+msgstr ""
+
+#. module: l10n_py
 #: model:ir.model.fields,help:l10n_py.field_account_journal__max_lines
 msgid "0 for unlimited lines."
 msgstr "0 para líneas ilimitadas"
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "10%:"
+msgstr ""
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.online_invoice
+msgid ""
+"<br/>\n"
+"                <strong>Amount: </strong>"
+msgstr ""
+"<br/>\n"
+"                <strong>Monto: </strong>"
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.online_invoice
+msgid ""
+"<br/>\n"
+"                <strong>Customer: </strong>"
+msgstr ""
+"<br/>\n"
+"                <strong>Cliente: </strong>"
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.online_invoice
+msgid ""
+"<br/>\n"
+"                <strong>Invoice Authorization: </strong>"
+msgstr ""
+"<br/>\n"
+"                <strong>Timbrado: </strong>"
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.online_invoice
+msgid ""
+"<br/>\n"
+"                <strong>Invoice Date: </strong>"
+msgstr ""
+"<br/>\n"
+"                <strong>Fecha: </strong>"
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.online_invoice
+msgid ""
+"<br/>\n"
+"                <strong>Invoice Due Date: </strong>"
+msgstr ""
+"<br/>\n"
+"                <strong>Vencimiento: </strong>"
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.online_invoice
+msgid ""
+"<br/>\n"
+"                <strong>State: </strong>"
+msgstr ""
+"<br/>\n"
+"                <strong>Estado: </strong>"
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid ""
+"<span class=\"fields\" style=\"padding-top:10px;padding-bottom:10px;\">SUB\n"
+"                                    TOTALES:\n"
+"                                </span>"
+msgstr ""
+
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid ""
+"<span class=\"fields\" style=\"padding-top:10px;padding-bottom:10px;\">TOTAL"
+" A PAGAR: </span>"
+msgstr ""
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invalid_token
+msgid "<span style=\"font-size:20px\">Invalid Token</span>"
+msgstr "<span style=\"font-size:20px\">Token Inválido</span>"
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid ""
+"<span>AUTORIZADO COMO AUTOIMPRESOR Y TIMBRADO DE DOCUMENTOS NRO:</span>"
+msgstr ""
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "<span>Original: Cliente - Duplicado: Archivo Tributario</span>"
+msgstr ""
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "<strong style=\"visibility:hidden\">AA</strong>"
+msgstr ""
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid ""
+"<strong>\n"
+"                                    Aclaración de firma\n"
+"                                </strong>"
+msgstr ""
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid ""
+"<strong>\n"
+"                                    C.I. Nro. / RUC\n"
+"                                </strong>"
+msgstr ""
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid ""
+"<strong>\n"
+"                                    Fecha\n"
+"                                </strong>"
+msgstr ""
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid ""
+"<strong>\n"
+"                                    Firma y sello del Cliente\n"
+"                                </strong>"
+msgstr ""
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "<strong>DIRECCIÓN:</strong>"
+msgstr ""
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "<strong>EMAIL:</strong>"
+msgstr ""
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "<strong>FACTURA:</strong>"
+msgstr ""
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "<strong>FECHA DE EMISION:</strong>"
+msgstr ""
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.online_invoice
+msgid "<strong>Invoice Number: </strong>"
+msgstr "<strong>Número de Factura: </strong>"
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "<strong>NOMBRE:</strong>"
+msgstr ""
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "<strong>RUC:</strong>"
+msgstr ""
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "<strong>TEL:</strong>"
+msgstr ""
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "<strong>VENCIMIENTO:</strong>"
+msgstr ""
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__active
@@ -41,6 +220,21 @@ msgid "Authorization Number"
 msgstr "Timbrado"
 
 #. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "CANT."
+msgstr ""
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "COD."
+msgstr ""
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "CONDICIÓN DE VENTA:"
+msgstr ""
+
+#. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.report_vat_purchase_wizard_form
 #: model_terms:ir.ui.view,arch_db:l10n_py.report_vat_sale_wizard_form
 msgid "Cancel"
@@ -50,6 +244,16 @@ msgstr "Cancelar"
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__company_id
 msgid "Company"
 msgstr "Empresa"
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "Contado ( )"
+msgstr ""
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "Contado (X)"
+msgstr ""
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__create_uid
@@ -66,6 +270,16 @@ msgid "Created on"
 msgstr "Creado el"
 
 #. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "Crédito ( )"
+msgstr ""
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "Crédito (X)"
+msgstr ""
+
+#. module: l10n_py
 #: model:ir.model.fields.selection,name:l10n_py.selection__invoice_authorization__document_type__out_refund
 msgid "Customer Credit Note"
 msgstr "Nota de Crédito"
@@ -76,9 +290,21 @@ msgid "Customer Invoice"
 msgstr "Factura"
 
 #. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "DESCRIPCION"
+msgstr ""
+
+#. module: l10n_py
 #: model:ir.model.fields.selection,name:l10n_py.selection__invoice_authorization__document_type__delivery_note
 msgid "Delivery Note"
 msgstr "Nota de Remisión"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__delivery_note_number
+#: model:ir.model.fields,field_description:l10n_py.field_account_move__delivery_note_number
+#: model:ir.model.fields,field_description:l10n_py.field_account_payment__delivery_note_number
+msgid "Delivery Note Number"
+msgstr "Número de Nota de Remisión"
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__display_name
@@ -91,6 +317,16 @@ msgstr "Nombre mostrado"
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__document_type
 msgid "Document Type"
 msgstr "Tipo de Documento"
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "EXENTA"
+msgstr ""
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "Email:"
+msgstr ""
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__end_date
@@ -114,6 +350,16 @@ msgid "Export to xlsx"
 msgstr "Exportar a xlsx"
 
 #. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "FACTURA N°"
+msgstr ""
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "Fin de vigencia:"
+msgstr ""
+
+#. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__final_invoice_number
 msgid "Final Invoice Number"
 msgstr "Número Final"
@@ -129,6 +375,21 @@ msgstr "Desde"
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_purchase_wizard__id
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_sale_wizard__id
 msgid "ID"
+msgstr ""
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "IVA 10%"
+msgstr ""
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "IVA 5%"
+msgstr ""
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "Inicio de vigencia:"
 msgstr ""
 
 #. module: l10n_py
@@ -151,6 +412,16 @@ msgid "Invoice Authorizations"
 msgstr "Timbrados"
 
 #. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_journal__invoice_footer
+msgid "Invoice Footer"
+msgstr ""
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.view_move_form_inherited
+msgid "Invoice Number"
+msgstr ""
+
+#. module: l10n_py
 #: model:ir.model,name:l10n_py.model_account_journal
 msgid "Journal"
 msgstr "Diario"
@@ -159,6 +430,11 @@ msgstr "Diario"
 #: model:ir.model,name:l10n_py.model_account_move
 msgid "Journal Entry"
 msgstr "Asiento contable"
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "LIQUIDACIÓN DEL IVA:"
+msgstr ""
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__write_uid
@@ -180,9 +456,64 @@ msgid "Maximum printable lines on the invoice"
 msgstr "Máximo de líneas imprimibles en la factura"
 
 #. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "NOTA DE CREDITO N°"
+msgstr ""
+
+#. module: l10n_py
+#. odoo-python
+#: code:addons/l10n_py/models/account_move.py:0
+#, python-format
+msgid "Only invoices can be printed"
+msgstr "Solo se puede imprimir facturas"
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "PRECIO UNITARIO"
+msgstr ""
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__qr_code
+#: model:ir.model.fields,field_description:l10n_py.field_account_move__qr_code
+msgid "QR Code"
+msgstr "Código QR"
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "RUC:"
+msgstr ""
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__related_invoice_number
+#: model:ir.model.fields,field_description:l10n_py.field_account_move__related_invoice_number
+#: model:ir.model.fields,field_description:l10n_py.field_account_payment__related_invoice_number
+msgid "Related Invoice Number"
+msgstr "Número de factura relacionada"
+
+#. module: l10n_py
+#: model:ir.actions.report,name:l10n_py.invoice_duplicate_report_action
+msgid "Self-printed Invoice (Duplicate)"
+msgstr "Factura Autoimpresor (Duplicado)"
+
+#. module: l10n_py
+#: model:ir.actions.report,name:l10n_py.invoice_report_action
+msgid "Self-printed Invoice (Original)"
+msgstr "Factura Autoimpresor (Original)"
+
+#. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__self_printer_authorization
 msgid "Self-printer Authorization Number"
 msgstr "Autorización de Autoimpresor"
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.view_account_journal_form_inherited
+msgid "Self-printer parameters"
+msgstr "Configuración de Autoimpresor"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_journal__show_qr
+msgid "Show QR in self-printed invoices"
+msgstr "Mostrar QR en facturas autoimpresor"
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__start_date
@@ -212,6 +543,21 @@ msgid "Supplier Invoice Authorization"
 msgstr "Timbrado de Proveedor"
 
 #. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "TIMBRADO N°"
+msgstr ""
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "TOTAL IVA:"
+msgstr ""
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "Tel:"
+msgstr ""
+
+#. module: l10n_py
 #. odoo-python
 #: code:addons/l10n_py/wizards/report_vat_purchase.py:0
 #: code:addons/l10n_py/wizards/report_vat_sale.py:0
@@ -224,6 +570,11 @@ msgstr "Este reporte es solo para empresas de Paraguay."
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_sale_wizard__date_end
 msgid "To"
 msgstr "Hasta"
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "VALOR DE VENTA"
+msgstr ""
 
 #. module: l10n_py
 #: model:ir.actions.act_window,name:l10n_py.report_vat_purchase_wizard_action
@@ -240,6 +591,16 @@ msgstr "Libro IVA Compras"
 #: model_terms:ir.ui.view,arch_db:l10n_py.report_vat_sale_wizard_form
 msgid "VAT Sale Book"
 msgstr "Libro IVA Ventas"
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
+msgid "Web:"
+msgstr ""
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.view_move_form_inherited
+msgid "e.g.: 001-001-0000001"
+msgstr "Por ej.: 001-001-0000001"
 
 #. module: l10n_py
 #: model:ir.model,name:l10n_py.model_report_l10n_py_report_vat_purchase

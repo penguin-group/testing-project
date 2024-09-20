@@ -11,8 +11,16 @@
                 
                 <xpath expr="//field[@name='type']" position="after">
                     <field name="invoice_authorization_id" groups="account.group_account_manager"/>
-                    <field name="max_lineas" invisible="type != 'sale'" groups="account.group_account_manager"/>
+                    <field name="max_lines" invisible="type != 'sale'" groups="account.group_account_manager"/>
                 </xpath>
+
+                <xpath expr="//page[@name='advanced_settings']" position="inside">
+                    <group invisible="type != 'sale'" string="Self-printer parameters">
+                        <field name="show_qr"/>
+                        <field name="invoice_footer" options="{'codeview': true}" widget="html"/>
+                    </group>
+                </xpath>
+
             </field>
         </record>
     

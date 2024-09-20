@@ -11,6 +11,27 @@
                     <field name="supplier_invoice_authorization_id" invisible="move_type not in ['in_invoice', 'in_refund']"/>
                 </xpath>
 
+                <xpath expr="//div[@name='journal_div']" position="after">
+                    <label for="delivery_note_number"/>
+                    <div>
+                        <field name="delivery_note_number"/>
+                    </div>
+                    <label for="related_invoice_number" invisible="move_type not in ['out_refund', 'in_refund']"/>
+                    <div>
+                        <field name="related_invoice_number" invisible="move_type not in ['out_refund', 'in_refund']"/>
+                    </div>
+                </xpath>
+
+                <xpath expr="//label[@for='ref']" position="attributes">
+                    <attribute name="string">Invoice Number</attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='ref']" position="attributes">
+                    <attribute name="string">Invoice Number</attribute>
+                    <attribute name="placeholder">e.g.: 001-001-0000001</attribute>
+                </xpath>
+
+
             </field>
         </record>
 
