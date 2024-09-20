@@ -6,6 +6,7 @@
 
     'description': """
         This module adds the following accounting features to the Paraguayan localization:
+        * VAT number unique for customers and suppliers
         * Invoice Authorization
         * Self-printed Invoices
         * VAT Purchase Book (xlsx report)

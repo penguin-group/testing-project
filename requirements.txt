@@ -2,3 +2,4 @@ pyzk==0.9
 numpy-financial<=1.0.0
 fpdf2
 unidecode
+python-stdnum==1.20
