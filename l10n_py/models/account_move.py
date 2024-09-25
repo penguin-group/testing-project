@@ -149,7 +149,7 @@ class AccountMove(models.Model):
     def action_post(self):
         for record in self:
             if record.move_type in ['in_invoice', 'in_refund']:
-                validate_supplier_invoice_number()
+                record.validate_supplier_invoice_number()
         result = super(AccountMove, self).action_post()
         for record in self:
             if record.move_type in ['out_invoice', 'out_refund']:
