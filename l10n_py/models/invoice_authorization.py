@@ -1,4 +1,4 @@
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 import re
 from odoo.exceptions import ValidationError
 
@@ -44,7 +44,7 @@ class InvoiceAuthorization(models.Model):
         pattern = re.compile(r'(^\d{8}$){1}')
         match = pattern.match(name)
         if match is None:
-            raise ValidationError('The invoice authorization number does not have the correct format (8 digits)')
+            raise ValidationError(_('The invoice authorization number does not have the correct format (8 digits)'))
 
     def create(self, vals):
         # Validate the invoice authorization format before creating the record

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-25 22:02+0000\n"
-"PO-Revision-Date: 2024-09-25 22:02+0000\n"
+"POT-Creation-Date: 2024-09-25 22:37+0000\n"
+"PO-Revision-Date: 2024-09-25 22:37+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -53,5 +53,19 @@ msgid ""
 "Payment info for customers. This data will appear in the QR code of the "
 "self-printed invoice."
 msgstr ""
-"Información de pagos para clientes. Este dato se mostrará en el código QR de la "
-"factura."
+"Información de pagos para clientes. Este dato se mostrará en el código QR de"
+" la factura."
+
+#. module: pisa_account
+#. odoo-python
+#: code:addons/pisa_account/models/account_move.py:0
+#, python-format
+msgid "The \"Invoice Number\" field is required."
+msgstr "El campo \"Número de Factura\" es obligatorio."
+
+#. module: pisa_account
+#. odoo-python
+#: code:addons/pisa_account/models/account_move.py:0
+#, python-format
+msgid "The total invoice amount cannot be zero or negative."
+msgstr "El monto total de la factura no puede ser cero o negativo."

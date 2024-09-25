@@ -1,4 +1,4 @@
-from odoo import fields, models
+from odoo import fields, models, _
 from odoo.exceptions import ValidationError
 import hashlib
 import qrcode
@@ -55,8 +55,8 @@ class AccountMove(models.Model):
             if record.move_type == 'in_invoice':
                 # Check if the "ref" field is blank
                 if not record.ref:
-                    raise ValidationError('The "Invoice Number" field is required.')
+                    raise ValidationError(_('The "Invoice Number" field is required.'))
                 # Check if the total invoice amount is less than or equal to zero
                 if record.amount_total <= 0:
-                    raise ValidationError('The total invoice amount cannot be zero or negative.')
+                    raise ValidationError(_('The total invoice amount cannot be zero or negative.'))
         return super(AccountMove, self).action_post()

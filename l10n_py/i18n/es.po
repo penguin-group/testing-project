@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-20 21:49+0000\n"
-"PO-Revision-Date: 2024-09-20 21:49+0000\n"
+"POT-Creation-Date: 2024-09-25 22:44+0000\n"
+"PO-Revision-Date: 2024-09-25 22:44+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -98,17 +98,16 @@ msgstr ""
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
 msgid ""
-"<span class=\"fields\" style=\"padding-top:10px;padding-bottom:10px;\">SUB\n"
-"                                    TOTALES:\n"
-"                                </span>"
+"<span class=\"campos\" style=\"padding-top:10px;padding-bottom:10px;\">SUB "
+"TOTALES:</span>"
 msgstr ""
-
 
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
 msgid ""
-"<span class=\"fields\" style=\"padding-top:10px;padding-bottom:10px;\">TOTAL"
-" A PAGAR: </span>"
+"<span class=\"campos\" style=\"padding-top:10px;padding-bottom:10px;\">TOTAL\n"
+"                                    A PAGAR:\n"
+"                                </span>"
 msgstr ""
 
 #. module: l10n_py
@@ -244,6 +243,11 @@ msgstr "Cancelar"
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__company_id
 msgid "Company"
 msgstr "Empresa"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_res_partner
+msgid "Contact"
+msgstr "Contacto"
 
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
@@ -414,12 +418,12 @@ msgstr "Timbrados"
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_account_journal__invoice_footer
 msgid "Invoice Footer"
-msgstr ""
+msgstr "Pie de la Factura"
 
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.view_move_form_inherited
 msgid "Invoice Number"
-msgstr ""
+msgstr "Número de Factura"
 
 #. module: l10n_py
 #: model:ir.model,name:l10n_py.model_account_journal
@@ -553,9 +557,122 @@ msgid "TOTAL IVA:"
 msgstr ""
 
 #. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_res_partner__vat
+#: model:ir.model.fields,field_description:l10n_py.field_res_users__vat
+msgid "Tax ID"
+msgstr "NIF"
+
+#. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
 msgid "Tel:"
 msgstr ""
+
+#. module: l10n_py
+#: model:ir.model.fields,help:l10n_py.field_res_partner__vat
+#: model:ir.model.fields,help:l10n_py.field_res_users__vat
+msgid ""
+"The Tax Identification Number. Values here will be validated based on the "
+"country format. You can use '/' to indicate that the partner is not subject "
+"to tax."
+msgstr ""
+"El número de identificación fiscal. Los valores establecidos aquí se "
+"validarán según el formato del país. Puede utilizar \"/\" para indicar que "
+"el contacto no está sujeto a impuestos."
+
+#. module: l10n_py
+#. odoo-python
+#: code:addons/l10n_py/models/res_partner.py:0
+#, python-format
+msgid "The VAT %s already exists in another partner."
+msgstr "El RUC %s ya existe en otro contacto."
+
+#. module: l10n_py
+#. odoo-python
+#: code:addons/l10n_py/models/res_partner.py:0
+#, python-format
+msgid "The VAT %s is not valid."
+msgstr "El RUC %s no es válido."
+
+#. module: l10n_py
+#. odoo-python
+#: code:addons/l10n_py/models/account_move.py:0
+#, python-format
+msgid "The active invoice authorization has reached its invoice final number."
+msgstr "El timbrado activo alcanzó su número de factura final."
+
+#. module: l10n_py
+#. odoo-python
+#: code:addons/l10n_py/models/account_move.py:0
+#, python-format
+msgid "The customer does not have an assigned VAT. Please add it."
+msgstr "El cliente no tiene cargado un RUC. Por favor agréguelo."
+
+#. module: l10n_py
+#. odoo-python
+#: code:addons/l10n_py/models/account_move.py:0
+#, python-format
+msgid ""
+"The establishment number does not match the active invoice authorization."
+msgstr ""
+"El Código de Establecimiento no coincide con el timbrado activo."
+
+#. module: l10n_py
+#. odoo-python
+#: code:addons/l10n_py/models/account_move.py:0
+#, python-format
+msgid ""
+"The expedition point number does not match the active invoice authorization."
+msgstr ""
+"El Punto de Expedición no coincide con el timbrado activo."
+
+#. module: l10n_py
+#. odoo-python
+#: code:addons/l10n_py/models/invoice_authorization.py:0
+#, python-format
+msgid ""
+"The invoice authorization number does not have the correct format (8 digits)"
+msgstr ""
+"El número de timbrado no tiene el formato correcto (8 dígitos)."
+
+#. module: l10n_py
+#. odoo-python
+#: code:addons/l10n_py/models/account_move.py:0
+#, python-format
+msgid ""
+"The invoice date cannot be earlier than the invoice authorization’s start "
+"date."
+msgstr ""
+"La fecha de la factura no puede ser anterior al inicio del timbrado."
+
+#. module: l10n_py
+#. odoo-python
+#: code:addons/l10n_py/models/account_move.py:0
+#, python-format
+msgid ""
+"The invoice date cannot be later than the invoice authorization’s end date."
+msgstr ""
+"La fecha de la factura no puede ser posterior a la fecha final del timbrado."
+
+#. module: l10n_py
+#. odoo-python
+#: code:addons/l10n_py/models/account_move.py:0
+#, python-format
+msgid "The invoice number does not have the correct format (xxx-xxx-xxxxxxx)"
+msgstr "El número de factura no tiene el formato correcto (xxx-xxx-xxxxxxx)."
+
+#. module: l10n_py
+#. odoo-python
+#: code:addons/l10n_py/models/account_move.py:0
+#, python-format
+msgid "The maximum number of lines supported in the invoice has been reached."
+msgstr "Se ha alcanzado el número máximo de líneas para la factura."
+
+#. module: l10n_py
+#. odoo-python
+#: code:addons/l10n_py/models/account_move.py:0
+#, python-format
+msgid "There is no invoice authorization."
+msgstr "No se encontró un Timbrado."
 
 #. module: l10n_py
 #. odoo-python
