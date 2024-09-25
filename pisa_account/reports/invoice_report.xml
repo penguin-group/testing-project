@@ -4,11 +4,11 @@
         <template id="invoice_document" 
             inherit_id="l10n_py.invoice_document">
            
-            <xpath expr="//table[8]" position="replace">
+            <xpath expr="//table[@id='qr_section_table']" position="replace">
                 <style>
                     .lineaDetalle { font-weight: normal !important; font-size:13px;}
                 </style> 
-                <table class="table">
+                <table class="tabla" id="qr_section_table">
                     <tr>
                         <td style="width:20%">
                             <div style="display:table-cell;vertical-align:top;">
