@@ -6,6 +6,8 @@ import base64
 
 class ReportVatSaleWizard(models.TransientModel):
     _name = 'report.vat.sale.wizard'
+    _description = "VAT Sale Report Wizard"
+
 
     date_start = fields.Date(string='From', required=True)
     date_end = fields.Date(string='To', required=True)
@@ -25,6 +27,8 @@ class ReportVatSaleWizard(models.TransientModel):
 class ReportVatSale(models.AbstractModel):
     _name = 'report.l10n_py.report_vat_sale'
     _inherit = 'report.report_xlsx.abstract'
+    _description = "VAT Sale Report"
+
 
     def get_vat_amounts(self, invoice_line):
         base10 = 0

@@ -14,6 +14,7 @@
 
     'category': 'Accounting',
     'version': '17.0.1.1.1',
+    'license': "OPL-1",
 
     'depends': ['base', 'l10n_py'],
 
@@ -23,6 +24,11 @@
         'views/account_move_views.xml',
         'reports/invoice_report.xml',
     ],
+
+    'demo': [
+        'demo/account_journal_demo.xml',
+    ],
+
     'i18n': ['i18n/es.po'],
 }
 

@@ -5,6 +5,7 @@ import base64
 
 class ReportVatPurchaseWizard(models.TransientModel):
     _name = 'report.vat.purchase.wizard'
+    _description = "VAT Purchase Report Wizard"
 
     date_start = fields.Date(string='From', required=True)
     date_end = fields.Date(string='To', required=True)
@@ -24,6 +25,8 @@ class ReportVatPurchaseWizard(models.TransientModel):
 class ReportVatPurchase(models.AbstractModel):
     _name = 'report.l10n_py.report_vat_purchase'
     _inherit = 'report.report_xlsx.abstract'
+    _description = "VAT Purchase Report"
+
 
     def get_purchase_invoices(self, date_start, date_end):
         return self.env['account.move'].search([
