@@ -6,6 +6,7 @@
 
     'description': """
         * Self-printed invoices
+        * Invoice Approver Group: Permission to confirm invoices
     """,
 
     'author': "Penguin Infrastructure, José González",
@@ -17,6 +18,7 @@
     'depends': ['base', 'l10n_py'],
 
     'data': [
+        'security/account_security.xml',
         'views/account_journal_views.xml',
         'views/account_move_views.xml',
         'reports/invoice_report.xml',

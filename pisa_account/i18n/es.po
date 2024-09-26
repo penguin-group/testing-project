@@ -6,14 +6,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-25 22:37+0000\n"
-"PO-Revision-Date: 2024-09-25 22:37+0000\n"
+"POT-Creation-Date: 2024-09-26 12:24+0000\n"
+"PO-Revision-Date: 2024-09-26 12:24+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: pisa_account
+#: model:res.groups,name:pisa_account.group_account_invoice_approver
+msgid "Invoice Approver"
+msgstr "Aprobador de Facturas"
 
 #. module: pisa_account
 #: model:ir.model,name:pisa_account.model_account_journal
@@ -69,3 +74,10 @@ msgstr "El campo \"Número de Factura\" es obligatorio."
 #, python-format
 msgid "The total invoice amount cannot be zero or negative."
 msgstr "El monto total de la factura no puede ser cero o negativo."
+
+#. module: pisa_account
+#. odoo-python
+#: code:addons/pisa_account/models/account_move.py:0
+#, python-format
+msgid "You don't have permission to approve an invoice."
+msgstr "No tenés permiso para aprobar facturas."
