@@ -132,14 +132,19 @@
                                 <td class="campos text-right">
                                     CONDICIÓN DE VENTA:
                                 </td>
-                                <t t-if="o.invoice_date==o.invoice_date_due">
-                                    <td class="w-30 fs-16 ">Contado (X)</td>
-                                    <td class="w-30 fs-16 ">Crédito ( )</td>
+
+                                <t t-if="o.invoice_date and o.invoice_date_due">
+                                    <t t-if="o.invoice_date==o.invoice_date_due">
+                                        <td class="w-30 fs-16 ">Contado (X)</td>
+                                        <td class="w-30 fs-16 ">Crédito ( )</td>
+                                    </t>
+                                    <t t-if="o.invoice_date!=o.invoice_date_due">
+                                        <td class="w-30 fs-16 ">Contado ( )</td>
+                                        <td class="w-30 fs-16 ">Crédito (X)</td>
+                                    </t>
                                 </t>
-                                <t t-if="o.invoice_date!=o.invoice_date_due">
-                                    <td class="w-30 fs-16 ">Contado ( )</td>
-                                    <td class="w-30 fs-16 ">Crédito (X)</td>
-                                </t>
+
+
                             </tr>
                         </table>
                     </t>
@@ -163,18 +168,17 @@
                                 </span>
                             </td>
                             <td colspan="2" class="fs-16 text-left" style="border-right:1px solid black;">
-                                <t t-if="o.invoice_date_due and o.invoice_date_due>o.invoice_date and o.move_type=='out_invoice'">
-                                    <t t-if="o.invoice_date_due">
+
+                                <t t-if="o.invoice_date and o.invoice_date_due">
+                                    <t t-if="o.invoice_date_due > o.invoice_date and o.move_type=='out_invoice'">
                                         <t t-set="invoice_date_due" t-value="o.invoice_date_due.strftime('%d/%m/%Y')"/>
+                                        <span>
+                                            <strong>VENCIMIENTO:</strong>
+                                            <t t-esc="'&#160;' + invoice_date_due"/>
+                                        </span>
                                     </t>
-                                    <t t-else="">
-                                        <t t-set="invoice_date_due" t-value="'&#160;'"/>
-                                    </t>
-                                    <span>
-                                        <strong>VENCIMIENTO:</strong>
-                                        <t t-esc="'&#160;' + invoice_date_due"/>
-                                    </span>
                                 </t>
+                                
                                 <t t-else="">
                                     <span/>
                                 </t>
