@@ -185,7 +185,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <t t-set="partner_name" t-value=""/>
+                            <t t-set="partner_name" t-value="-"/>
                             <td class="fs-16 text-left" style="padding-left:5px;">
                                 <t t-if="o.partner_id.parent_id">
                                     <t t-set="partner_name" t-value="o.partner_id.parent_id.name"/>
