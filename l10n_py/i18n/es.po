@@ -621,3 +621,247 @@ msgstr ""
 #: model:ir.model,name:l10n_py.model_report_vat_sale_wizard
 msgid "report.vat.sale.wizard"
 msgstr ""
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_report_vat_sale_wizard
+msgid "Complete rg90 fields for delivery note"
+msgstr "Completar campos rg90 para nota de remision"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Self-invoicing"
+msgstr "Autofactura"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Self-invoicing"
+msgstr "Boleta de Transporte Público de Pasajeros"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Sales Invoice"
+msgstr "Boleta de Venta"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Resimple ticket"
+msgstr "Boleta Resimple"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Lottery Tickets, Games of Chance"
+msgstr "Boletos de Loterías, Juegos de Azar"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Ticket or air transportation ticket"
+msgstr "Boleto o ticket de Transporte aéreo"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Import clearance"
+msgstr "Despacho de importación"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Entrance to public shows"
+msgstr "Entrada a espectáculos públicos"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Bill"
+msgstr "Factura"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Credit note"
+msgstr "Nota de crédito"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Debit note"
+msgstr "Nota de débito"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Cash register machine ticket"
+msgstr "Ticket de máquina registradora"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Proof of expenses for credit purchases"
+msgstr "Comprobante de egresos por compras a crédito"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Legalized proof of foreign residence"
+msgstr "Comprobante del exterior legalizado"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Proof of income from credit sales"
+msgstr "Comprobante de ingreso por ventas a crédito"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Proof of income from Public, Religious or Public Benefit Entities"
+msgstr "Comprobante de ingreso de Entidades Públicas, Religiosas o de Beneficio Público"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Account statement - Electronic ticketing"
+msgstr "Extracto de cuenta - Billetaje electrónico"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Account statement - IPS"
+msgstr "Extracto de cuenta - IPS"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Account statement - TC/TD"
+msgstr "Extracto de cuenta - TC/TD"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Salary Settlement"
+msgstr "Liquidación de Salario"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Other expenditure vouchers"
+msgstr "Otros comprobantes de egresos"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Other proof of income"
+msgstr "Otros comprobantes de ingresos"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Bank transfers or money orders / Deposit slip"
+msgstr "Transferencias o giros bancarios / Boleta de depósito"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Exclude from Resolution 90"
+msgstr "Excluir de Resolucion 90"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "The records of this journal will not be included in resolution 90"
+msgstr "Los registros de este diario no serán incluídos en la resolucion 90"
+
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "RUC"
+msgstr "RUC"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Identity card"
+msgstr "Cédula de identidad"
+
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Passport"
+msgstr "Pasaporte"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Foreigner's ID card"
+msgstr "Cédula extranjero"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Unnamed"
+msgstr "Sin nombre"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Diplomatic"
+msgstr "Diplomático"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Tax ID"
+msgstr "Identificación tributaria"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Stamping No."
+msgstr "Nro. de timbrado"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Impute VAT"
+msgstr "Imputa IVA"
+
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "IRE charges"
+msgstr "Imputa IRE"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Charges IRP/RSP"
+msgstr "Imputa IRP/RSP"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Does not impute"
+msgstr "No imputa"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Associated voucher number"
+msgstr "Nro. de comprobante asociado"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Associated receipt stamp number"
+msgstr "Nro. de timbrado de comprobante asociado"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Exclude from Resolution 90"
+msgstr "Excluir de Resolucion 90"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "The records of this journal will not be included in resolution 90"
+msgstr "Los registros de este diario no serán incluídos en la resolucion 90"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "The value"
+msgstr "El valor"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "in the field of No. Stamped seat"
+msgstr "en el campo de Nro Timbrado del asiento"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "cannot be processed, please check if it is correct"
+msgstr "no puede ser procesado, por favor verificar si está correcto"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "There is more than one stamp for this type of invoice"
+msgstr "Tiene mas de un timbrado para este tipo de factura"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Generate file"
+msgstr "Generar archivo"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_journal
+msgid "Cancel"
+msgstr "Cancelar"
+

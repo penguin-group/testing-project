@@ -2,3 +2,4 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_accountant_report_vat_purchase,access.accountant.report.vat.purchase,model_report_vat_purchase_wizard,account.group_account_manager,1,1,1,1
 access_accountant_report_vat_sale,access.accountant.report.vat.sale,model_report_vat_sale_wizard,account.group_account_manager,1,1,1,1
 access_accountant_invoice_authorization,access.accountant.invoice.authorization,model_invoice_authorization,account.group_account_manager,1,1,1,1
+access_resolution_90_wizard,resolution_90_wizard_access,model_resolution_90_wizard,base.group_user,1,1,1,1

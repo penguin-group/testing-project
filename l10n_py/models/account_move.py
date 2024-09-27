@@ -1,4 +1,4 @@
-from odoo import api, fields, models, _
+from odoo import api, fields, models, _, exceptions
 from odoo.tools import index_exists
 from odoo.exceptions import ValidationError
 import hashlib
@@ -7,6 +7,8 @@ from io import BytesIO
 import base64
 import re
 import math
+
+from odoo.odoo.exceptions import UserError
 
 
 class AccountMove(models.Model):
@@ -149,14 +151,29 @@ class AccountMove(models.Model):
     def action_post(self):
         for record in self:
             if record.move_type in ['in_invoice', 'in_refund']:
-                validate_supplier_invoice_number()
+                self.validate_supplier_invoice_number()
         result = super(AccountMove, self).action_post()
         for record in self:
             if record.move_type in ['out_invoice', 'out_refund']:
                 record.validate_empty_vat()
                 record.validate_invoice_authorization()
                 record.validate_line_count()
+            if record.move_type in ['out_invoice', 'out_refund']:
+                tim = record.journal_id.timbrados_ids.filtered(lambda x: x.tipo_documento == record.move_type)
+                if len(tim) > 1:
+                    raise exceptions.ValidationError('There is more than one stamp for this type of invoice')
+                elif len(tim) == 1:
+                    record.write({'res90_number_invoice_authorization': tim.name})
+                    # i.write({'res90_number_invoice_authorization':i.timbrado})
+            elif record.move_type in ['in_invoice', 'in_refund']:
+                timbrado = False
+                # if i.timbrado_proveedor:
+                #     timbrado = i.timbrado_proveedor
+                if record.timbrado_id:
+                    timbrado = record.timbrado_id.name
+                record.write({'res90_number_invoice_authorization': timbrado})
         return result
+
 
     def action_invoice_print(self):
         """ Print the invoice and mark it as sent, so that we can more easily see the next step of the workflow. """
@@ -164,4 +181,282 @@ class AccountMove(models.Model):
             raise UserError(_("Only invoices can be printed"))
         self.filtered(lambda inv: not inv.action_invoice_sent).write({'mark_invoice_as_sent': True})
         return self.env.ref('l10n_py.invoice_report_action').report_action(self)
+
+    res90_identification_type = fields.Selection([('11', 'RUC'), ('12', 'Identity card'), ('13', 'Passport'), (
+        '14', "Foreigner's ID card"), ('15', 'Unnamed'), ('16', 'Diplomatic'), ('17', 'Tax ID')],
+                                                 default='11')
+
+    res90_type_receipt = fields.Selection([('101', 'Self-invoicing'),
+                                               ('102', 'Public Passenger Transport Ticket'),
+                                               ('103', 'Sales Invoice'),
+                                               ('104', 'Resimple ticket'),
+                                               ('105', 'Lottery Tickets, Games of Chance'),
+                                               ('106', 'Ticket or air transportation ticket'),
+                                               ('107', 'Import clearance'),
+                                               ('108', 'Entrance to public shows'),
+                                               ('109', 'Bill'),
+                                               ('110', 'Credit note'),
+                                               ('111', 'Debit note'),
+                                               ('112', 'Cash register machine ticket'),
+                                               ('201', 'Proof of expenses for credit purchases'),
+                                               ('202', 'Legalized proof of foreign residence'),
+                                               ('203', 'Proof of income from credit sales'),
+                                               ('204', 'Proof of income from Public, Religious or Public Benefit Entities'),
+                                               ('205', 'Account statement - Electronic ticketing'),
+                                               ('206', 'Account statement - IPS'),
+                                               ('207', 'Account statement - TC/TD'),
+                                               ('208', 'Salary Settlement'),
+                                               ('209', 'Other expenditure vouchers'),
+                                               ('210', 'Other proof of income'),
+                                               ('211', 'Bank transfers or money orders / Deposit slip'),
+                                               ])
+    res90_number_invoice_authorization = fields.Char(string='Stamping No.')
+    res90_imputes_vat = fields.Boolean(string="Impute VAT", default=True)
+    res90_imputes_ire = fields.Boolean(string="IRE charges")
+    res90_imputes_irp_rsp = fields.Boolean(string="Charges IRP/RSP")
+    res90_not_imputes = fields.Boolean(string="Does not impute", default=False)
+    res90_associated_voucher_number = fields.Char(string="Associated voucher number")
+    res90_associated_receipt_stamping = fields.Char(string="Associated receipt stamp number")
+    exclude_res90 = fields.Boolean(string="Exclude from Resolution 90",
+                                   help="The records of this journal will not be included in resolution 90")
+
+    @api.onchange('company_id')
+    @api.depends('company_id')
+    def onchangeCompany(self):
+        for i in self:
+            if i.company_id.res90_imputes_irp_rsp_default:
+                i.res90_imputes_irp_rsp = True
+
+    @api.onchange('journal_id')
+    @api.depends('journal_id')
+    def assign_voucher_type(self):
+        for i in self:
+            if i.journal_id:
+                if i.journal_id.res90_type_receipt:
+                    i.res90_type_receipt = i.journal_id.res90_type_receipt
+                elif i.move_type in ['out_invoice', 'in_invoice']:
+                    i.res90_type_receipt = '109'
+                elif i.move_type in ['out_refund', 'in_refund']:
+                    i.res90_type_receipt = '110'
+                else:
+                    i.res90_type_receipt = None
+
+    @api.onchange('partner_id')
+    @api.depends('partner_id')
+    def assign_id_type(self):
+        for i in self:
+            if i.partner_id:
+                if not i.partner_id.vat:
+                    i.res90_identification_type = '15'
+                else:
+                    pattern = "^[0-9]+-[0-9]$"
+                    if re.match(pattern, i.partner_id.vat) and i.partner_id.vat != '44444401-7':
+                        i.res90_identification_type = '11'
+                    elif re.match(pattern, i.partner_id.vat) and i.partner_id.vat == '44444401-7':
+                        i.res90_identification_type = '15'
+                    else:
+                        pattern = "^[0-9]+$"
+                        if re.match(pattern, self.partner_id.vat):
+                            i.res90_identification_type = '12'
+                        else:
+                            i.res90_identification_type = '15'
+
+    def get_id_type(self):
+        if self.res90_identification_type:
+            return int(self.res90_identification_type)
+        return 15
+
+    def get_identification(self):
+        identificacion = self.partner_id.vat
+
+        if identificacion and len(identificacion.split('-')) > 1:
+            identificacion = identificacion.split('-')[0]
+
+        return identificacion if self.partner_id.vat else '44444401'
+
+    def get_name_partner(self):
+        return self.partner_id.name
+
+    def get_receipt_type(self):
+        if self.res90_type_receipt:
+            return int(self.res90_type_receipt)
+        elif self.move_type in ['in_invoice', 'out_invoice']:
+            return 109
+        elif self.move_type in ['in_refund', 'out_refund']:
+            return 110
+        else:
+            return ''
+
+    def get_receipt_date(self):
+        return self.date.strftime('%d/%m/%Y')
+
+    def get_stamped(self):
+        if self.res90_number_invoice_authorization:
+            try:
+                return int(self.res90_number_invoice_authorization)
+            except:
+                raise exceptions.ValidationError(
+                    "The value " + self.res90_number_invoice_authorization + " in the field of No. Stamped seat " + self.name + " cannot be processed, please check if it is correct")
+        return 0
+
+    def get_receipt_number(self):
+        if self.move_type in ['out_invoice', 'out_refund']:
+            return self.name
+        elif self.move_type in ['in_invoice', 'in_refund']:
+            return self.ref
+        else:
+            return ''
+
+    def get_amount10(self):
+        monto10 = sum(self.invoice_line_ids.filtered(lambda x: 10 in x.tax_ids.mapped('amount')).mapped('price_total'))
+        if self.currency_id != self.env.company.currency_id:
+            balance = abs(
+                sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped('balance')))
+            amount_currency = abs(
+                sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped(
+                    'amount_currency')))
+            if balance > 0 and amount_currency > 0:
+                currency_rate = balance / amount_currency
+            else:
+                currency_rate = 1
+            monto10 = monto10 * currency_rate
+        return round(monto10)
+
+    def get_amount5(self):
+        monto5 = sum(self.invoice_line_ids.filtered(lambda x: 5 in x.tax_ids.mapped('amount')).mapped('price_total'))
+        if self.currency_id != self.env.company.currency_id:
+            balance = abs(
+                sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped('balance')))
+            amount_currency = abs(
+                sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped(
+                    'amount_currency')))
+            if balance > 0 and amount_currency > 0:
+                currency_rate = balance / amount_currency
+            else:
+                currency_rate = 1
+            monto5 = monto5 * currency_rate
+        return round(monto5)
+
+    def get_exempt_amount(self):
+        monto0 = sum(self.invoice_line_ids.filtered(lambda x: not x.tax_ids or 0 in x.tax_ids.mapped('amount')).mapped(
+            'price_total'))
+        if self.currency_id != self.env.company.currency_id:
+            balance = abs(
+                sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped('balance')))
+            amount_currency = abs(
+                sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped(
+                    'amount_currency')))
+            if balance > 0 and amount_currency > 0:
+                currency_rate = balance / amount_currency
+            else:
+                currency_rate = 1
+            monto0 = monto0 * currency_rate
+        return round(monto0)
+
+    def get_total_amount(self):
+        monto = abs(sum(self.invoice_line_ids.mapped('price_total')))
+        if self.currency_id != self.env.company.currency_id:
+            balance = abs(
+                sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped('balance')))
+            amount_currency = abs(
+                sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped(
+                    'amount_currency')))
+            if balance > 0 and amount_currency > 0:
+                currency_rate = balance / amount_currency
+            else:
+                currency_rate = 1
+            monto = monto * currency_rate
+        return round(monto)
+
+    def get_sale_condition(self):
+        if self.invoice_date_due > self.invoice_date:
+            return 2
+        return 1
+
+    def get_foreign_currency_operation(self):
+        if self.currency_id and self.currency_id.name == 'PYG':
+            return 'N'
+        elif self.currency_id and self.currency_id.name != 'PYG':
+            return 'S'
+        else:
+            return 'N'
+
+    def get_imput_vat(self):
+        if self.get_imput_vat:
+            return 'S'
+        return 'N'
+
+    def get_imput_ire(self):
+        if self.res90_imputes_ire:
+            return 'S'
+        return 'N'
+
+    def get_impute_irp_rsp(self):
+        if self.res90_imputes_irp_rsp:
+            return 'S'
+        return 'N'
+
+    def get_no_impute(self):
+        if self.res90_not_imputes:
+            return 'S'
+        return 'N'
+
+    def get_associated_voucher_number(self):
+        if self.res90_associated_voucher_number:
+            return self.res90_associated_voucher_number
+        return ''
+
+    def get_associated_receipt_stamping(self):
+        if self.res90_associated_receipt_stamping:
+            return self.res90_associated_receipt_stamping
+        return ''
+
+
+
+    # Function executed by a scheduled action to fill rg90 fields
+    @api.model
+    def rg90_remission_fields(self):
+        f_remision_venta = self.env['account.move'].search(
+            [('move_type', '=', 'out_refund'), ('reversed_entry_id', '!=', False)])
+        for fac in f_remision_venta:
+            timb = ''
+            if fac.reversed_entry_id.journal_id and fac.reversed_entry_id.journal_id.timbrados_ids:
+                timb = fac.reversed_entry_id.journal_id.timbrados_ids[0].name
+            if not fac.reversed_entry_id.res90_associated_voucher_number or not fac.reversed_entry_id.res90_associated_receipt_stamping:
+                fac.reversed_entry_id.sudo().write({
+                    'res90_associated_voucher_number': fac.name,
+                    'res90_associated_receipt_stamping': timb
+                })
+            timb = ''
+            if fac.journal_id and fac.journal_id.timbrados_ids:
+                timb = fac.journal_id.timbrados_ids[0].name
+
+            if not fac.res90_associated_voucher_number or not fac.res90_associated_receipt_stamping:
+                fac.sudo().write({
+                    'res90_associated_voucher_number': fac.reversed_entry_id.name or '',
+                    'res90_associated_receipt_stamping': timb
+                })
+
+        f_remision_compra = self.env['account.move'].search(
+            [('move_type', '=', 'in_refund'), ('reversed_entry_id', '!=', False)])
+        for fac in f_remision_compra:
+            timb = ''
+            if fac.reversed_entry_id.timbrado_id:
+                timb = fac.reversed_entry_id.timbrado_id.name
+
+            if not fac.reversed_entry_id.res90_associated_voucher_number or not fac.reversed_entry_id.res90_associated_receipt_stamping:
+                fac.reversed_entry_id.sudo().write({
+                    'res90_associated_voucher_number': fac.name,
+                    'res90_associated_receipt_stamping': timb
+                })
+            timb = ''
+            if fac.timbrado_id:
+                timb = fac.timbrado_id.name
+
+            if not fac.res90_associated_voucher_number or not fac.res90_associated_receipt_stamping:
+                fac.sudo().write({
+                    'res90_associated_voucher_number': fac.reversed_entry_id.name,
+                    'res90_associated_receipt_stamping': timb
+                })
+
 

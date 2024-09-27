@@ -21,6 +21,11 @@
                     </group>
                 </xpath>
 
+                <xpath expr="//field[@name='type']" position="after">
+                    <field invisible="type not in ['sale', 'purchase']" name="res90_type_receipt"/>
+                    <field name="exclude_res90"/>
+                </xpath>
+
             </field>
         </record>
     
