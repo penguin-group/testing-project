@@ -20,6 +20,8 @@ class AccountMoveLine(models.Model):
                 tipo_cambio=self.move_id.currency_rate
             else:
                 tipo_cambio = secondary_currency_id.rate_ids.filtered(lambda x: x.name <= self.date)
+                if tipo_cambio[0].rate < 1:
+                    tipo_cambio[0].rate = 1 / tipo_cambio[0].rate
                 tipo_cambio = round(tipo_cambio[0].rate,2)
             if not tipo_cambio:
                 raise exceptions.ValidationError('No existe un tipo de cambio definido para la fecha %s'%self.date)
