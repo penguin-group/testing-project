@@ -17,6 +17,7 @@
     'website': "https://penguin.digital",
     'category': 'Accounting',
     'version': '17.0.1.1.1',
+    'license': "OPL-1",
 
     'depends': ['base', 'account', 'report_xlsx'],
 
@@ -33,6 +34,13 @@
         'wizards/report_vat_purchase_views.xml',
         'wizards/report_vat_sale_views.xml'
     ],
+
+    'demo': [
+        'demo/res_partner_demo.xml',
+        'demo/invoice_authorization_demo.xml',
+        'demo/account_journal_demo.xml'
+    ],
+    
     'i18n': ['i18n/es.po'],
 }
 

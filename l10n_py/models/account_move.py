@@ -32,29 +32,29 @@ class AccountMove(models.Model):
                 expedition_point_number = self.name.split('-')[1]
                 if expedition_point_number != inv_auth.expedition_point_number:
                     raise ValidationError(
-                        'The expedition point number does not match the active invoice authorization.'
+                        _('The expedition point number does not match the active invoice authorization.')
                     )
                 if establishment_number != inv_auth.establishment_number:
                     raise ValidationError(
-                        'The establishment number does not match the active invoice authorization.'
+                        _('The establishment number does not match the active invoice authorization.')
                     )
                 if number > inv_auth.final_invoice_number:
                     raise ValidationError(
-                        'The active invoice authorization has reached its invoice final number.'
+                        _('The active invoice authorization has reached its invoice final number.')
                     )
                 date = self.invoice_date or fields.Date.today()
                 if date > inv_auth.end_date:
                     raise ValidationError(
-                        'The invoice date cannot be later than the invoice authorization’s end date.'
+                        _('The invoice date cannot be later than the invoice authorization’s end date.')
                     )
                 if date < inv_auth.start_date:
                     raise ValidationError(
-                        'The invoice date cannot be earlier than the invoice authorization’s start date.'
+                        _('The invoice date cannot be earlier than the invoice authorization’s start date.')
                     )
                 return
             else:
                 raise ValidationError(
-                    'There is no invoice authorization.'
+                    _('There is no invoice authorization.')
                 )
         else:
             return
@@ -62,7 +62,7 @@ class AccountMove(models.Model):
     def validate_empty_vat(self):
         for record in self:
             if not record.partner_id.vat:
-                raise ValidationError("The customer does not have an assigned VAT. Please add it.")
+                raise ValidationError(_("The customer does not have an assigned VAT. Please add it."))
         return
 
     @api.onchange('invoice_line_ids')
@@ -72,14 +72,14 @@ class AccountMove(models.Model):
             if record.journal_id.max_lines != 0:
                 if len(record.invoice_line_ids) > record.journal_id.max_lines:
                     raise ValidationError(
-                        "The maximum number of lines supported in the invoice has been reached.")
+                        _("The maximum number of lines supported in the invoice has been reached."))
         return
 
     def validate_supplier_invoice_number(self):
         pattern = re.compile(r'^(\d{3}-){2}\d{7}$')
         if not pattern.match(self.ref):
             raise ValidationError(
-                'The invoice number does not have the correct format (xxx-xxx-xxxxxxx)'
+                _('The invoice number does not have the correct format (xxx-xxx-xxxxxxx)')
             )
 
     def generate_token(self):
@@ -151,7 +151,11 @@ class AccountMove(models.Model):
     def action_post(self):
         for record in self:
             if record.move_type in ['in_invoice', 'in_refund']:
+<<<<<<< HEAD
                 self.validate_supplier_invoice_number()
+=======
+                record.validate_supplier_invoice_number()
+>>>>>>> 9fa0e258daf7af4ddbb8788f19517fa8ff122921
         result = super(AccountMove, self).action_post()
         for record in self:
             if record.move_type in ['out_invoice', 'out_refund']:
