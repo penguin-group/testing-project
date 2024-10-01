@@ -7,8 +7,8 @@ import random
 from zipfile import ZipFile
 
 
-class Wizard(models.Model):
-    _name = 'resolution_90.wizard'
+class ReportRes90(models.TransientModel):
+    _name = 'report.res90'
     _description = 'Res 90 Wizard'
 
     obligation_type = fields.Selection(string="Tipo de obligación", selection=[(

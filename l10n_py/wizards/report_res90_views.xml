@@ -2,10 +2,9 @@
 <odoo>
 
     <data>
-        <!-- model.name form view -->
-        <record id="wizard_form" model="ir.ui.view">
-            <field name="name">wizard_form</field>
-            <field name="model">resolution_90.wizard</field>
+        <record id="report_res90_form" model="ir.ui.view">
+            <field name="name">report.res90.form</field>
+            <field name="model">report.res90</field>
             <field name="arch" type="xml">
                 <form >
                     <sheet>
@@ -25,17 +24,16 @@
                 </form>
             </field>
         </record>
-        <!-- model.name action window -->
-        <record id="wizard_action_window" model="ir.actions.act_window">
+
+        <record id="report_res90_action" model="ir.actions.act_window">
             <field name="name">Resolución 90</field>
             <field name="type">ir.actions.act_window</field>
-            <field name="res_model">resolution_90.wizard</field>
+            <field name="res_model">report.res90</field>
             <field name="view_mode">form</field>
             <field name="target">new</field>
         </record>
 
-        <!-- This Menu Item must have a parent and an action -->
-        <menuitem id="menu_wizard" name="Resolución 90" parent="account.menu_finance_reports" action="wizard_action_window" sequence="100"/>
+        <menuitem id="report_res90_menu" name="Resolución 90" parent="account.menu_finance_reports" action="report_res90_action" sequence="100"/>
 
     </data>
 

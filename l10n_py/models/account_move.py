@@ -1,15 +1,12 @@
-from odoo import api, fields, models, _, exceptions
+from odoo import api, fields, models, _
 from odoo.tools import index_exists
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, UserError
 import hashlib
 import qrcode
 from io import BytesIO
 import base64
 import re
 import math
-
-from odoo.odoo.exceptions import UserError
-
 
 class AccountMove(models.Model):
     _inherit = 'account.move'
@@ -22,6 +19,43 @@ class AccountMove(models.Model):
     qr_code = fields.Binary(string="QR Code", compute="generate_qr_code")
     delivery_note_number = fields.Char(string="Delivery Note Number")
     related_invoice_number = fields.Char(string="Related Invoice Number")
+    res90_identification_type = fields.Selection([('11', 'RUC'), ('12', 'Identity card'), ('13', 'Passport'), (
+        '14', "Foreigner's ID card"), ('15', 'Unnamed'), ('16', 'Diplomatic'), ('17', 'Tax ID')],
+                                                 default='11')
+    res90_type_receipt = fields.Selection([('101', 'Self-invoicing'),
+                                               ('102', 'Public Passenger Transport Ticket'),
+                                               ('103', 'Sales Invoice'),
+                                               ('104', 'Resimple ticket'),
+                                               ('105', 'Lottery Tickets, Games of Chance'),
+                                               ('106', 'Ticket or air transportation ticket'),
+                                               ('107', 'Import clearance'),
+                                               ('108', 'Entrance to public shows'),
+                                               ('109', 'Bill'),
+                                               ('110', 'Credit note'),
+                                               ('111', 'Debit note'),
+                                               ('112', 'Cash register machine ticket'),
+                                               ('201', 'Proof of expenses for credit purchases'),
+                                               ('202', 'Legalized proof of foreign residence'),
+                                               ('203', 'Proof of income from credit sales'),
+                                               ('204', 'Proof of income from Public, Religious or Public Benefit Entities'),
+                                               ('205', 'Account statement - Electronic ticketing'),
+                                               ('206', 'Account statement - IPS'),
+                                               ('207', 'Account statement - TC/TD'),
+                                               ('208', 'Salary Settlement'),
+                                               ('209', 'Other expenditure vouchers'),
+                                               ('210', 'Other proof of income'),
+                                               ('211', 'Bank transfers or money orders / Deposit slip'),
+                                               ])
+    res90_number_invoice_authorization = fields.Char(string='Invoice Authorization No.')
+    res90_imputes_vat = fields.Boolean(string="Impute VAT", default=True)
+    res90_imputes_ire = fields.Boolean(string="IRE charges")
+    res90_imputes_irp_rsp = fields.Boolean(string="Charges IRP/RSP")
+    res90_not_imputes = fields.Boolean(string="Does not impute", default=False)
+    res90_associated_voucher_number = fields.Char(string="Associated voucher number")
+    res90_associated_receipt_stamping = fields.Char(string="Associated receipt stamp number")
+    exclude_res90 = fields.Boolean(string="Exclude from Resolution 90",
+                                   help="The records of this journal will not be included in resolution 90")
+
 
     def validate_invoice_authorization(self):
         if self.move_type in ['out_invoice', 'out_refund'] and self.name and self.name != '/':
@@ -151,11 +185,7 @@ class AccountMove(models.Model):
     def action_post(self):
         for record in self:
             if record.move_type in ['in_invoice', 'in_refund']:
-<<<<<<< HEAD
-                self.validate_supplier_invoice_number()
-=======
                 record.validate_supplier_invoice_number()
->>>>>>> 9fa0e258daf7af4ddbb8788f19517fa8ff122921
         result = super(AccountMove, self).action_post()
         for record in self:
             if record.move_type in ['out_invoice', 'out_refund']:
@@ -165,7 +195,7 @@ class AccountMove(models.Model):
             if record.move_type in ['out_invoice', 'out_refund']:
                 tim = record.journal_id.timbrados_ids.filtered(lambda x: x.tipo_documento == record.move_type)
                 if len(tim) > 1:
-                    raise exceptions.ValidationError('There is more than one stamp for this type of invoice')
+                    raise ValidationError('There is more than one stamp for this type of invoice')
                 elif len(tim) == 1:
                     record.write({'res90_number_invoice_authorization': tim.name})
                     # i.write({'res90_number_invoice_authorization':i.timbrado})
@@ -186,49 +216,12 @@ class AccountMove(models.Model):
         self.filtered(lambda inv: not inv.action_invoice_sent).write({'mark_invoice_as_sent': True})
         return self.env.ref('l10n_py.invoice_report_action').report_action(self)
 
-    res90_identification_type = fields.Selection([('11', 'RUC'), ('12', 'Identity card'), ('13', 'Passport'), (
-        '14', "Foreigner's ID card"), ('15', 'Unnamed'), ('16', 'Diplomatic'), ('17', 'Tax ID')],
-                                                 default='11')
-
-    res90_type_receipt = fields.Selection([('101', 'Self-invoicing'),
-                                               ('102', 'Public Passenger Transport Ticket'),
-                                               ('103', 'Sales Invoice'),
-                                               ('104', 'Resimple ticket'),
-                                               ('105', 'Lottery Tickets, Games of Chance'),
-                                               ('106', 'Ticket or air transportation ticket'),
-                                               ('107', 'Import clearance'),
-                                               ('108', 'Entrance to public shows'),
-                                               ('109', 'Bill'),
-                                               ('110', 'Credit note'),
-                                               ('111', 'Debit note'),
-                                               ('112', 'Cash register machine ticket'),
-                                               ('201', 'Proof of expenses for credit purchases'),
-                                               ('202', 'Legalized proof of foreign residence'),
-                                               ('203', 'Proof of income from credit sales'),
-                                               ('204', 'Proof of income from Public, Religious or Public Benefit Entities'),
-                                               ('205', 'Account statement - Electronic ticketing'),
-                                               ('206', 'Account statement - IPS'),
-                                               ('207', 'Account statement - TC/TD'),
-                                               ('208', 'Salary Settlement'),
-                                               ('209', 'Other expenditure vouchers'),
-                                               ('210', 'Other proof of income'),
-                                               ('211', 'Bank transfers or money orders / Deposit slip'),
-                                               ])
-    res90_number_invoice_authorization = fields.Char(string='Stamping No.')
-    res90_imputes_vat = fields.Boolean(string="Impute VAT", default=True)
-    res90_imputes_ire = fields.Boolean(string="IRE charges")
-    res90_imputes_irp_rsp = fields.Boolean(string="Charges IRP/RSP")
-    res90_not_imputes = fields.Boolean(string="Does not impute", default=False)
-    res90_associated_voucher_number = fields.Char(string="Associated voucher number")
-    res90_associated_receipt_stamping = fields.Char(string="Associated receipt stamp number")
-    exclude_res90 = fields.Boolean(string="Exclude from Resolution 90",
-                                   help="The records of this journal will not be included in resolution 90")
-
-    @api.onchange('company_id')
-    @api.depends('company_id')
+    
+    @api.onchange('journal_id')
+    @api.depends('journal_id')
     def onchangeCompany(self):
         for i in self:
-            if i.company_id.res90_imputes_irp_rsp_default:
+            if i.journal_id.res90_imputes_irp_rsp_default:
                 i.res90_imputes_irp_rsp = True
 
     @api.onchange('journal_id')
@@ -299,7 +292,7 @@ class AccountMove(models.Model):
             try:
                 return int(self.res90_number_invoice_authorization)
             except:
-                raise exceptions.ValidationError(
+                raise ValidationError(
                     "The value " + self.res90_number_invoice_authorization + " in the field of No. Stamped seat " + self.name + " cannot be processed, please check if it is correct")
         return 0
 

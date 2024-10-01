@@ -40,7 +40,7 @@ class AccountJournal(models.Model):
                                                ('210', 'Other proof of income'),
                                                ('211', 'Bank transfers or money orders / Deposit slip'),
                                                ])
-
+    res90_imputes_irp_rsp_default = fields.Boolean(string="Impute IRP/RSP by default")
     exclude_res90=fields.Boolean(string="Exclude from Resolution 90",copy=False,help="The records of this journal will not be included in resolution 90")
 
     @api.onchange('type')

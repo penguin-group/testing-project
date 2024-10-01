@@ -23,7 +23,19 @@ class Res90(http.Controller):
     @http.route('/res90/download_file/', auth='public')
     def index(self, **kw):
         if kw.get('file'):
-            filepath = os.path.join('/tmp/' + kw.get('file'))
-            r = http.send_file(filepath, kw.get('file') + '.txt', as_attachment=True, filename=kw.get('filename'))
-
-            return r
+            filepath = os.path.join('/tmp/', kw.get('file'))
+            filename = kw.get('filename', kw.get('file') + '.txt')
+            
+            # Open the file in binary mode
+            with open(filepath, 'rb') as file_content:
+                file_data = file_content.read()
+                
+                # Create a Response object with the file content
+                response = http.request.make_response(
+                    file_data,
+                    headers=[
+                        ('Content-Disposition', f'attachment; filename="{filename}"'),
+                        ('Content-Type', 'application/octet-stream'),
+                    ]
+                )
+                return response
