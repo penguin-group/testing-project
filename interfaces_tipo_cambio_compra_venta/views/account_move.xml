@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//div/field[@name='journal_id']/.." position="after">
                     <field invisible="True" name="count_invoice_line_ids"/>
-                    <field force_save="True" name="currency_rate" readonly="freeze_currency_rate == False or state in ['posted', 'cancel']" required="True"/>
+                    <field force_save="True" name="currency_rate" digits="[12,12]" readonly="freeze_currency_rate == False or state in ['posted', 'cancel']" required="True"/>
                     <field invisible="state in ['posted', 'cancel']" name="freeze_currency_rate"/>
                 </xpath>
                 <xpath expr="//div[@name='journal_div']/field[@name='currency_id']" position="attributes">
