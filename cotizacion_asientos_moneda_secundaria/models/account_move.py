@@ -20,16 +20,21 @@ class AccountMoveLine(models.Model):
             credit_ms = abs(self.amount_currency) if self.credit else 0
             balance_ms = self.amount_currency
         else: 
-            debit_ms = company_currency_id._convert(self.debit, secondary_currency_id, self.company_id, self.date)
-            credit_ms = company_currency_id._convert(self.credit, secondary_currency_id, self.company_id, self.date)
-            balance_ms = company_currency_id._convert(self.balance, secondary_currency_id, self.company_id, self.date)
+            if self.move_id.freeze_currency_rate:
+                debit_ms = self.debit * self.move_id.currency_rate
+                credit_ms = self.credit * self.move_id.currency_rate
+                balance_ms = self.balance * self.move_id.currency_rate
+            else:
+                debit_ms = company_currency_id._convert(self.debit, secondary_currency_id, self.company_id, self.date)
+                credit_ms = company_currency_id._convert(self.credit, secondary_currency_id, self.company_id, self.date)
+                balance_ms = company_currency_id._convert(self.balance, secondary_currency_id, self.company_id, self.date)
         
         self.write({
             'debit_ms': debit_ms,
             'credit_ms': credit_ms,
             'balance_ms': balance_ms,
             'secondary_currency_id': secondary_currency_id.id,
-            'tipo_cambio': secondary_currency_id.rate,
+            'tipo_cambio': abs(balance_ms) / abs(self.balance),
         })
 
     def _apply_price_difference(self):
