@@ -9,33 +9,34 @@ class AccountMoveLine(models.Model):
     
     
     def compute_secondary_values(self):
-        company_currency_id = self.env.company.currency_id
-        secondary_currency_id = self.env.company.secondary_currency_id
+        if not self.display_type:
+            company_currency_id = self.env.company.currency_id
+            secondary_currency_id = self.env.company.secondary_currency_id
 
-        if not secondary_currency_id:
-            return
+            if not secondary_currency_id:
+                return
 
-        if self.move_id.currency_id == secondary_currency_id:
-            debit_ms = abs(self.amount_currency) if self.debit else 0
-            credit_ms = abs(self.amount_currency) if self.credit else 0
-            balance_ms = self.amount_currency
-        else: 
-            if self.move_id.freeze_currency_rate:
-                debit_ms = self.debit * self.move_id.currency_rate
-                credit_ms = self.credit * self.move_id.currency_rate
-                balance_ms = self.balance * self.move_id.currency_rate
-            else:
-                debit_ms = company_currency_id._convert(self.debit, secondary_currency_id, self.company_id, self.date)
-                credit_ms = company_currency_id._convert(self.credit, secondary_currency_id, self.company_id, self.date)
-                balance_ms = company_currency_id._convert(self.balance, secondary_currency_id, self.company_id, self.date)
-        
-        self.write({
-            'debit_ms': debit_ms,
-            'credit_ms': credit_ms,
-            'balance_ms': balance_ms,
-            'secondary_currency_id': secondary_currency_id.id,
-            'tipo_cambio': abs(balance_ms) / abs(self.balance),
-        })
+            if self.move_id.currency_id == secondary_currency_id:
+                debit_ms = abs(self.amount_currency) if self.debit else 0
+                credit_ms = abs(self.amount_currency) if self.credit else 0
+                balance_ms = self.amount_currency
+            else: 
+                if self.move_id.freeze_currency_rate:
+                    debit_ms = self.debit * self.move_id.currency_rate
+                    credit_ms = self.credit * self.move_id.currency_rate
+                    balance_ms = self.balance * self.move_id.currency_rate
+                else:
+                    debit_ms = company_currency_id._convert(self.debit, secondary_currency_id, self.company_id, self.date)
+                    credit_ms = company_currency_id._convert(self.credit, secondary_currency_id, self.company_id, self.date)
+                    balance_ms = company_currency_id._convert(self.balance, secondary_currency_id, self.company_id, self.date)
+            
+            self.write({
+                'debit_ms': debit_ms,
+                'credit_ms': credit_ms,
+                'balance_ms': balance_ms,
+                'secondary_currency_id': secondary_currency_id.id,
+                'tipo_cambio': abs(balance_ms) / abs(self.balance),
+            })
 
     def _apply_price_difference(self):
         svl_vals_list = []
