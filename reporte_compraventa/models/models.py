@@ -38,6 +38,18 @@ class ReporteComprasXLSX(models.AbstractModel):
         ])
 
     def get_exenta_5_10(self, invoice_line):
+        pyg = self.env.ref('base.PYG')
+        
+        def get_line_amount(line):
+            if line.currency_id.id == pyg.id:
+                amount = line.price_total
+            else:
+                if line.move_id.freeze_currency_rate:
+                    amount = line.price_total * line.tipo_cambio
+                else:
+                    amount = line.currency_id._convert(line.price_total, pyg, line.company_id, line.date)
+            return amount
+        
         base10 = 0
         iva10 = 0
         base5 = 0
@@ -45,13 +57,13 @@ class ReporteComprasXLSX(models.AbstractModel):
         exentas = 0
         imponible_importaciones = 0
         if invoice_line.tax_ids and invoice_line.tax_ids[0].amount == 10:
-            base10 += invoice_line.price_total / 1.1
-            iva10 += invoice_line.price_total / 11
+            base10 += get_line_amount(invoice_line) / 1.1
+            iva10 += get_line_amount(invoice_line) / 11
         if invoice_line.tax_ids and invoice_line.tax_ids[0].amount == 5:
-            base5 += invoice_line.price_total / 1.05
-            iva5 += invoice_line.price_total / 21
+            base5 += get_line_amount(invoice_line) / 1.05
+            iva5 += get_line_amount(invoice_line) / 21
         if (invoice_line.tax_ids and invoice_line.tax_ids[0].amount == 0) or not invoice_line.tax_ids:
-            exentas += invoice_line.price_total
+            exentas += get_line_amount(invoice_line)
         return base10, iva10, base5, iva5, exentas, imponible_importaciones
 
     def get_proveedor(self, invoice, campo):
@@ -145,16 +157,7 @@ class ReporteComprasXLSX(models.AbstractModel):
         total_imponible_importaciones = 0
         for i in facturas.sorted(key=lambda r: r.invoice_date):
             cont += 1
-            """
-            if not i.es_gasto:
-                total_factura = i.amount_total_signed
-            elif i.es_gasto and not i.tipo_gasto == 'despacho':
-                total_factura = i.amount_total_signed
-            elif i.es_gasto and i.tipo_gasto == 'despacho':
-                total_factura = 0
-            else:
-            """
-            total_factura = abs(i.amount_total_signed)
+
             base10 = 0
             iva10 = 0
             base5 = 0
@@ -169,34 +172,8 @@ class ReporteComprasXLSX(models.AbstractModel):
                 iva5 += values[3]
                 exentas += values[4]
                 imponible_importaciones += values[5]
-                # base10, base5, exentas, iva10, iva5 = self.get_exenta_5_10(t, base10, base5, exentas, iva10, iva5)
 
             total_factura = base10 + iva10 + base5 + iva5 + exentas
-
-            if i.currency_id != self.env.company.currency_id:
-                balance = 1
-                amount_currency = 1
-                if release.major_version in ['17.0']:
-                    balance = abs(i.line_ids.filtered(
-                        lambda x: x.currency_id == i.currency_id and x.account_id.account_type in ['asset_receivable', 'liability_payable'])[0].balance)
-                    amount_currency = abs(
-                        i.line_ids.filtered(
-                            lambda x: x.currency_id == i.currency_id and x.account_id.account_type in ['asset_receivable', 'liability_payable'])[
-                            0].amount_currency)
-                if release.major_version in ['15.0']:
-                    balance = sum(abs(line.balance) for line in i.line_ids.filtered(lambda x: x.currency_id == i.currency_id))
-                    amount_currency = sum(abs(line.amount_currency) for line in i.line_ids.filtered(lambda x: x.currency_id == i.currency_id))
-                if balance > 0 and amount_currency > 0:
-                    currency_rate = balance / amount_currency
-                else:
-                    currency_rate = 1
-                total_factura = abs(i.amount_total_signed)
-                base10 = base10 * currency_rate
-                iva10 = iva10 * currency_rate
-                base5 = base5 * currency_rate
-                iva5 = iva5 * currency_rate
-                exentas = exentas * currency_rate
-                imponible_importaciones = imponible_importaciones * currency_rate
 
             total_gral_base10 += base10
             total_gral_iva10 += iva10
@@ -270,50 +247,20 @@ class ReporteComprasXLSX(models.AbstractModel):
         total_gral_exentas = 0
         for i in notas.sorted(key=lambda x: x.name):
             cont += 1
-            if i.state != 'cancel':
-                total_factura = abs(i.amount_total_signed)
-            else:
-                total_factura = 0
             base10 = 0
             base5 = 0
             exentas = 0
             iva10 = 0
             iva5 = 0
             for t in i.filtered(lambda x: x.state != 'cancel').invoice_line_ids:
-                if t.tax_ids and t.tax_ids[0].amount == 10:
-                    base10 += t.price_total / 1.1
-                    iva10 += t.price_total / 11
-                if t.tax_ids and t.tax_ids[0].amount == 5:
-                    base5 += t.price_total / 1.05
-                    iva5 += t.price_total / 21
-                if (t.tax_ids and t.tax_ids[0].amount == 0) or not t.tax_ids:
-                    exentas += t.price_total
-            # if not i.line_ids.tax_line_id and i.state !='cancel':
-            #    exentas+=i.price_total
+                values = self.get_exenta_5_10(t)
+                base10 += values[0]
+                iva10 += values[1]
+                base5 += values[2]
+                iva5 += values[3]
+                exentas += values[4]
 
-            if i.currency_id != self.env.company.currency_id:
-                balance = 1
-                amount_currency = 1
-                if release.major_version in ['17.0']:
-                    balance = abs(i.line_ids.filtered(
-                        lambda x: x.currency_id == i.currency_id and x.account_id.account_type in ['asset_receivable', 'liability_payable'])[0].balance)
-                    amount_currency = abs(
-                        i.line_ids.filtered(
-                            lambda x: x.currency_id == i.currency_id and x.account_id.account_type in ['asset_receivable', 'liability_payable'])[
-                            0].amount_currency)
-                if release.major_version in ['15.0']:
-                    balance = sum(abs(line.balance) for line in i.line_ids.filtered(lambda x: x.currency_id == i.currency_id))
-                    amount_currency = sum(abs(line.amount_currency) for line in i.line_ids.filtered(lambda x: x.currency_id == i.currency_id))
-                if balance > 0 and amount_currency > 0:
-                    currency_rate = balance / amount_currency
-                else:
-                    currency_rate = 1
-                total_factura = abs(i.amount_total_signed)
-                base10 = base10 * currency_rate
-                iva10 = iva10 * currency_rate
-                base5 = base5 * currency_rate
-                iva5 = iva5 * currency_rate
-                exentas = exentas * currency_rate
+            total_factura = base10 + iva10 + base5 + iva5 + exentas
 
             total_gral_total += total_factura
             total_gral_base10 += base10
@@ -405,6 +352,35 @@ class ReporteVentasXLSX(models.AbstractModel):
 
     def generate_xlsx_report(self, workbook, data, datas):
 
+        def get_exenta_5_10(invoice_line):
+            pyg = self.env.ref('base.PYG')
+            
+            def get_line_amount(line):
+                if line.currency_id.id == pyg.id:
+                    amount = line.price_total
+                else:
+                    if line.move_id.freeze_currency_rate:
+                        amount = line.price_total * line.move_id.currency_rate
+                    else:
+                        amount = line.currency_id._convert(line.price_total, pyg, line.company_id, line.date)
+                return amount
+            
+            base10 = 0
+            iva10 = 0
+            base5 = 0
+            iva5 = 0
+            exentas = 0
+            imponible_importaciones = 0
+            if invoice_line.tax_ids and invoice_line.tax_ids[0].amount == 10:
+                base10 += get_line_amount(invoice_line) / 1.1
+                iva10 += get_line_amount(invoice_line) / 11
+            if invoice_line.tax_ids and invoice_line.tax_ids[0].amount == 5:
+                base5 += get_line_amount(invoice_line) / 1.05
+                iva5 += get_line_amount(invoice_line) / 21
+            if (invoice_line.tax_ids and invoice_line.tax_ids[0].amount == 0) or not invoice_line.tax_ids:
+                exentas += get_line_amount(invoice_line)
+            return base10, iva10, base5, iva5, exentas, imponible_importaciones
+
         facturas = self.env['account.move'].search(
             [('move_type', '=', 'out_invoice'), ('state', 'in', ['posted', 'cancel']),
              ('invoice_date', '>=', datas.fecha_inicio),
@@ -488,52 +464,24 @@ class ReporteVentasXLSX(models.AbstractModel):
         total_gral_exentas = 0
         for i in facturas.sorted(key=lambda x: x.name):
             cont += 1
-            if i.state != 'cancel':
-                total_factura = i.amount_total
-            else:
-                total_factura = 0
 
             base10 = 0
             base5 = 0
             exentas = 0
             iva10 = 0
             iva5 = 0
+            imponible_importaciones = 0
+
             for t in i.filtered(lambda x: x.state != 'cancel').invoice_line_ids:
-                if t.tax_ids and t.tax_ids[0].amount == 10:
-                    base10 += t.price_total / 1.1
-                    iva10 += t.price_total / 11
-                if t.tax_ids and t.tax_ids[0].amount == 5:
-                    base5 += t.price_total / 1.05
-                    iva5 += t.price_total / 21
-                if (t.tax_ids and t.tax_ids[0].amount == 0) or not t.tax_ids:
-                    exentas += t.price_total
-            # if not i.line_ids.tax_line_id and i.state !='cancel':
-            #    exentas+=i.price_total
+                values = get_exenta_5_10(t)
+                base10 += values[0]
+                iva10 += values[1]
+                base5 += values[2]
+                iva5 += values[3]
+                exentas += values[4]
+                imponible_importaciones += values[5]
 
-            if i.currency_id != self.env.company.currency_id:
-                balance = 1
-                amount_currency = 1
-                if release.major_version in ['17.0']:
-                    balance = abs(i.line_ids.filtered(
-                        lambda x: x.currency_id == i.currency_id and x.account_id.account_type in ['asset_receivable', 'liability_payable'])[0].balance)
-                    amount_currency = abs(
-                        i.line_ids.filtered(
-                            lambda x: x.currency_id == i.currency_id and x.account_id.account_type in ['asset_receivable', 'liability_payable'])[
-                            0].amount_currency)
-                if release.major_version in ['15.0']:
-                    balance = sum(abs(line.balance) for line in i.line_ids.filtered(lambda x: x.currency_id == i.currency_id))
-                    amount_currency = sum(abs(line.amount_currency) for line in i.line_ids.filtered(lambda x: x.currency_id == i.currency_id))
-                if balance > 0 and amount_currency > 0:
-                    currency_rate = balance / amount_currency
-                else:
-                    currency_rate = 1
-
-                total_factura = i.amount_total_signed
-                base10 = base10 * currency_rate
-                iva10 = iva10 * currency_rate
-                base5 = base5 * currency_rate
-                iva5 = iva5 * currency_rate
-                exentas = exentas * currency_rate
+            total_factura = base10 + iva10 + base5 + iva5 + exentas
 
             total_gral_total += total_factura
             total_gral_base10 += base10
@@ -631,57 +579,30 @@ class ReporteVentasXLSX(models.AbstractModel):
         total_gral_exentas = 0
         for i in notas.sorted(key=lambda x: x.invoice_date):
             cont += 1
-            if i.state != 'cancel':
-                total_factura = i.amount_total
-            else:
-                total_factura = 0
+
             base10 = 0
-            base5 = 0
-            exentas = 0
             iva10 = 0
+            base5 = 0
             iva5 = 0
+            exentas = 0
+            imponible_importaciones = 0
             for t in i.filtered(lambda x: x.state != 'cancel').invoice_line_ids:
-                if t.tax_ids and t.tax_ids[0].amount == 10:
-                    base10 += t.price_total / 1.1
-                    iva10 += t.price_total / 11
-                if t.tax_ids and t.tax_ids[0].amount == 5:
-                    base5 += t.price_total / 1.05
-                    iva5 += t.price_total / 21
-                if (t.tax_ids and t.tax_ids[0].amount == 0) or not t.tax_ids:
-                    exentas += t.price_total
-            # if not i.line_ids.tax_line_id and i.state !='cancel':
-            #    exentas+=i.price_total
+                values = self.get_exenta_5_10(t)
+                base10 += values[0]
+                iva10 += values[1]
+                base5 += values[2]
+                iva5 += values[3]
+                exentas += values[4]
+                imponible_importaciones += values[5]
 
-            if i.currency_id != self.env.company.currency_id:
-                balance = 1
-                amount_currency = 1
-                if release.major_version in ['17.0']:
-                    balance = abs(i.line_ids.filtered(
-                        lambda x: x.currency_id == i.currency_id and x.account_id.account_type in ['asset_receivable', 'liability_payable'])[0].balance)
-                    amount_currency = abs(
-                        i.line_ids.filtered(
-                            lambda x: x.currency_id == i.currency_id and x.account_id.account_type in ['asset_receivable', 'liability_payable'])[
-                            0].amount_currency)
-                if release.major_version in ['15.0']:
-                    balance = sum(abs(line.balance) for line in i.line_ids.filtered(lambda x: x.currency_id == i.currency_id))
-                    amount_currency = sum(abs(line.amount_currency) for line in i.line_ids.filtered(lambda x: x.currency_id == i.currency_id))
-                if balance > 0 and amount_currency > 0:
-                    currency_rate = balance / amount_currency
-                else:
-                    currency_rate = 1
-                total_factura = i.amount_total_signed
-                base10 = base10 * currency_rate
-                iva10 = iva10 * currency_rate
-                base5 = base5 * currency_rate
-                iva5 = iva5 * currency_rate
-                exentas = exentas * currency_rate
+            total_factura = base10 + iva10 + base5 + iva5 + exentas
 
-            total_gral_total += total_factura
             total_gral_base10 += base10
-            total_gral_base5 += base5
             total_gral_iva10 += iva10
+            total_gral_base5 += base5
             total_gral_iva5 += iva5
             total_gral_exentas += exentas
+            total_gral_total += total_factura
 
             breakAndWrite(cont)
             if i.state != 'cancel':
