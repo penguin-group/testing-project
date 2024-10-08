@@ -41,11 +41,11 @@ class ReporteComprasXLSX(models.AbstractModel):
         pyg = self.env.ref('base.PYG')
         
         def get_line_amount(line):
-            if line.currency_id.id == pyg.id:
+            if line.currency_id == pyg:
                 amount = line.price_total
             else:
                 if line.move_id.freeze_currency_rate:
-                    amount = line.price_total * line.tipo_cambio
+                    amount = line.price_total * line.move_id.currency_rate
                 else:
                     amount = line.currency_id._convert(line.price_total, pyg, line.company_id, line.date)
             return amount
