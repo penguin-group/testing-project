@@ -132,51 +132,43 @@ class AccountMove(models.Model):
             return ''
 
     def get_monto10(self):
+        pyg = self.env.ref('base.PYG')
         monto10 = sum(self.invoice_line_ids.filtered(lambda x: 10 in x.tax_ids.mapped('amount')).mapped('price_total'))
-        if self.currency_id != self.env.company.currency_id:
-            balance = abs(sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped('balance')))
-            amount_currency = abs(sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped('amount_currency')))
-            if balance > 0 and amount_currency > 0:
-                currency_rate = balance / amount_currency
+        if self.currency_id != pyg:
+            if self.freeze_currency_rate:
+                monto10 = monto10 * self.currency_rate
             else:
-                currency_rate = 1
-            monto10 = monto10 * currency_rate
+                monto10 = self.currency_id._convert(monto10, pyg, self.company_id, self.invoice_date)
         return round(monto10)
 
     def get_monto5(self):
+        pyg = self.env.ref('base.PYG')
         monto5 = sum(self.invoice_line_ids.filtered(lambda x: 5 in x.tax_ids.mapped('amount')).mapped('price_total'))
-        if self.currency_id != self.env.company.currency_id:
-            balance = abs(sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped('balance')))
-            amount_currency = abs(sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped('amount_currency')))
-            if balance > 0 and amount_currency > 0:
-                currency_rate = balance / amount_currency
+        if self.currency_id != pyg:
+            if self.freeze_currency_rate:
+                monto5 = monto5 * self.currency_rate
             else:
-                currency_rate = 1
-            monto5 = monto5 * currency_rate
+                monto5 = self.currency_id._convert(monto5, pyg, self.company_id, self.invoice_date)
         return round(monto5)
 
     def get_monto_exento(self):
-        monto0 = sum(self.invoice_line_ids.filtered(lambda x: not x.tax_ids or 0 in x.tax_ids.mapped('amount')).mapped('price_total'))
-        if self.currency_id != self.env.company.currency_id:
-            balance = abs(sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped('balance')))
-            amount_currency = abs(sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped('amount_currency')))
-            if balance > 0 and amount_currency > 0:
-                currency_rate = balance / amount_currency
+        pyg = self.env.ref('base.PYG')
+        monto0 = sum(self.invoice_line_ids.filtered(lambda x: 0 in x.tax_ids.mapped('amount')).mapped('price_total'))
+        if self.currency_id != pyg:
+            if self.freeze_currency_rate:
+                monto0 = monto0 * self.currency_rate
             else:
-                currency_rate = 1
-            monto0 = monto0 * currency_rate
+                monto0 = self.currency_id._convert(monto0, pyg, self.company_id, self.invoice_date)
         return round(monto0)
 
     def get_monto_total(self):
-        monto = abs(sum(self.invoice_line_ids.mapped('price_total')))
-        if self.currency_id != self.env.company.currency_id:
-            balance = abs(sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped('balance')))
-            amount_currency = abs(sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped('amount_currency')))
-            if balance > 0 and amount_currency > 0:
-                currency_rate = balance / amount_currency
+        pyg = self.env.ref('base.PYG')
+        monto = sum(self.invoice_line_ids.mapped('price_total'))
+        if self.currency_id != pyg:
+            if self.freeze_currency_rate:
+                monto = monto * self.currency_rate
             else:
-                currency_rate = 1
-            monto = monto * currency_rate
+                monto = self.currency_id._convert(monto, pyg, self.company_id, self.invoice_date)
         return round(monto)
 
     def get_condicion_venta(self):
