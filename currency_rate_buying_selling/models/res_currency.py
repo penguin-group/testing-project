@@ -4,6 +4,25 @@ from odoo import api, fields, models, tools, _
 class Currency(models.Model):
     _inherit = 'res.currency'
 
+    @api.depends('rate_ids.rate')
+    @api.depends_context('to_currency', 'date', 'company', 'company_id')
+    def _compute_current_rate(self):
+        # Override original method to add the rate type to get
+        date = self._context.get('date') or fields.Date.context_today(self)
+        company = self.env['res.company'].browse(self._context.get('company_id')) or self.env.company
+        company = company.root_id
+        to_currency = self.browse(self.env.context.get('to_currency')) or company.currency_id
+        rate_type = self.env.context.get('rate_type') or 'selling'
+        # the subquery selects the last rate before 'date' for the given currency/company
+        currency_rates = (self + to_currency)._get_rates(self.env.company, date, rate_type)
+        for currency in self:
+            currency.rate = (currency_rates.get(currency.id) or 1.0) / currency_rates.get(to_currency.id)
+            currency.inverse_rate = 1 / currency.rate
+            if currency != company.currency_id:
+                currency.rate_string = '1 %s = %.6f %s' % (to_currency.name, currency.rate, currency.name)
+            else:
+                currency.rate_string = ''
+    
     def _get_rates(self, company, date, rate_type='selling'):
         # Override original method to add the rate type to get
         if not self.ids:
