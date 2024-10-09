@@ -21,7 +21,7 @@
     'version': '17.0.1.0',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'proveedores_timbrado', 'cotizacion_asientos_moneda_secundaria'],
+    'depends': ['base', 'proveedores_timbrado'],
 
     # always loaded
     'data': [
