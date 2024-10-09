@@ -587,7 +587,7 @@ class ReporteVentasXLSX(models.AbstractModel):
             exentas = 0
             imponible_importaciones = 0
             for t in i.filtered(lambda x: x.state != 'cancel').invoice_line_ids:
-                values = self.get_exenta_5_10(t)
+                values = get_exenta_5_10(t)
                 base10 += values[0]
                 iva10 += values[1]
                 base5 += values[2]
