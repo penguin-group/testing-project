@@ -15,10 +15,9 @@ class AccountMove(models.Model):
     def _compute_invoice_currency_rate(self):
         for move in self:
             if move.is_invoice(include_receipts=True):
-                rate_type = 'buying' if move.move_type == 'out_invoice' else 'selling'
                 if move.currency_id:
-                    move = move.with_context(rate_type=rate_type)
-                    move.invoice_currency_rate = self.env['res.currency']._get_conversion_rate(
+                    conversion_method = self.env['res.currency']._get_buying_conversion_rate if move.move_type == 'out_invoice' else self.env['res.currency']._get_conversion_rate
+                    move.invoice_currency_rate = conversion_method(
                         from_currency=move.company_currency_id,
                         to_currency=move.currency_id,
                         company=move.company_id,

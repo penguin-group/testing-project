@@ -8,8 +8,10 @@
             <field name="model">res.currency.rate</field>
             <field name="inherit_id" ref="base.view_currency_rate_tree"/>
             <field name="arch" type="xml">
-                <field name="name" position="after">
-                    <field name="rate_type"/>
+                <field name="rate" position="after">
+                    <field name="buying_company_rate" digits="[12,12]"/>
+                    <field name="buying_inverse_company_rate" digits="[12,12]"/>
+                    <field name="buying_rate" digits="[12,12]" optional="hide"/>
                 </field>
             </field>
         </record>
@@ -19,8 +21,10 @@
             <field name="model">res.currency.rate</field>
             <field name="inherit_id" ref="base.view_currency_rate_form"/>
             <field name="arch" type="xml">
-                <field name="name" position="after">
-                    <field name="rate_type"/>
+                <field name="inverse_company_rate" position="after">
+                    <field name="buying_rate" digits="[12,12]" groups="base.group_no_one"/>
+                    <field name="buying_company_rate" digits="[12,12]"/>
+                    <field name="buying_inverse_company_rate" digits="[12,12]"/>
                 </field>
             </field>
         </record>
@@ -30,8 +34,10 @@
             <field name="model">res.currency</field>
             <field name="inherit_id" ref="base.view_currency_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//sheet/notebook/page/field/tree/field[@name='name']" position="after">
-                    <field name="rate_type" optional="show"/>
+                <xpath expr="//sheet/notebook/page/field/tree/field[@name='rate']" position="after">
+                    <field name="buying_company_rate" digits="[12,12]"/>
+                    <field name="buying_inverse_company_rate" digits="[12,12]"/>
+                    <field name="buying_rate" digits="[12,12]" optional="hide"/>
                 </xpath>
             </field>
         </record>
