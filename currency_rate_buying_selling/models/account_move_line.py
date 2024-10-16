@@ -4,13 +4,13 @@ from odoo import models, fields, api
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
     
-    @api.depends('currency_id', 'company_id', 'move_id.date')
+    @api.depends('currency_id', 'company_id', 'move_id.invoice_currency_rate', 'move_id.date')
     def _compute_currency_rate(self):
-    # Override original method to include the rate type in the context
+    # Override original method to use account move rate for invoices
         for line in self:
-            rate_type = 'buying' if line.move_id.move_type == 'out_invoice' else 'selling'
-            if line.currency_id:
-                line = line.with_context(rate_type=rate_type)
+            if line.move_id.is_invoice(include_receipts=True):
+                line.currency_rate = line.move_id.invoice_currency_rate
+            elif line.currency_id:
                 line.currency_rate = self.env['res.currency']._get_conversion_rate(
                     from_currency=line.company_currency_id,
                     to_currency=line.currency_id,
