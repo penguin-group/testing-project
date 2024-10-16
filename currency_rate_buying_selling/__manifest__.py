@@ -13,7 +13,8 @@
     'depends': ['base', 'account'],
 
     'data': [
-        'views/res_currency_views.xml'
+        'views/res_currency_views.xml',
+        'views/account_move_views.xml',
     ],
 }
 
