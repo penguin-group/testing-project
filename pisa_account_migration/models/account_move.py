@@ -1,8 +1,21 @@
 import logging
 from odoo import models, fields, api
+from itertools import islice
 
 
 _logger = logging.getLogger(__name__)
+
+
+def grouper(iterable, n):
+    """
+    Collect data into fixed-length chunks or blocks
+    """
+    it = iter(iterable)
+    while True:
+        chunk = list(islice(it, n))
+        if not chunk:
+            return
+        yield chunk
 
 
 class AccountMove(models.Model):
@@ -117,23 +130,27 @@ class AccountMove(models.Model):
                     'res90_imputes_irp_rsp_default': company.res90_imputa_irp_rsp_defecto, 
                     })
                 _logger.info(f"Diario {journal.name}.")
-            account_moves = self.env['account.move'].sudo().search([]).filtered(lambda x: (x.move_type in ['in_invoice', 'in_refund', 'out_invoice', 'out_refund']) and x.company_id.id == company.id)
+            
             cnt = 0
-            for move in account_moves:
-                cnt += 1
-                _logger.info(f"{int(cnt/len(account_moves)*100)}%. Datos de RG90 {move.name or str(move.id)} {cnt}/{len(account_moves)}")
-                move.sudo().write({
-                    'res90_number_invoice_authorization': move.res90_nro_timbrado,
-                    'res90_type_receipt': move.res90_tipo_comprobante,
-                    'res90_identification_type': move.res90_tipo_identificacion,
-                    'res90_imputes_vat': move.res90_imputa_iva,
-                    'res90_imputes_ire': move.res90_imputa_ire,
-                    'res90_imputes_irp_rsp': move.res90_imputa_irp_rsp,
-                    'res90_not_imputes': move.res90_no_imputa,
-                    'res90_associated_voucher_number': move.res90_nro_comprobante_asociado,
-                    'res90_associated_receipt_stamping': move.res90_timbrado_comprobante_asociado,
-                    'exclude_res90': move.excluir_res90,
-                })
+            account_moves = self.env['account.move'].sudo().search([]).filtered(lambda x: (x.move_type in ['in_invoice', 'in_refund', 'out_invoice', 'out_refund']) and x.company_id.id == company.id)
+            # Process account_moves in groups of 100
+            for group in grouper(account_moves, 100):
+                for move in group:
+                    cnt += 1
+                    _logger.info(f"{int(cnt/len(account_moves)*100)}%. Datos de RG90 {move.name or str(move.id)} {cnt}/{len(account_moves)}")
+                    move.sudo().write({
+                        'res90_number_invoice_authorization': move.res90_nro_timbrado,
+                        'res90_type_receipt': move.res90_tipo_comprobante,
+                        'res90_identification_type': move.res90_tipo_identificacion,
+                        'res90_imputes_vat': move.res90_imputa_iva,
+                        'res90_imputes_ire': move.res90_imputa_ire,
+                        'res90_imputes_irp_rsp': move.res90_imputa_irp_rsp,
+                        'res90_not_imputes': move.res90_no_imputa,
+                        'res90_associated_voucher_number': move.res90_nro_comprobante_asociado,
+                        'res90_associated_receipt_stamping': move.res90_timbrado_comprobante_asociado,
+                        'exclude_res90': move.excluir_res90,
+                    })
+                self.env.cr.commit()
             return True
         except Exception as e:
             _logger.error(str(e))
@@ -142,11 +159,11 @@ class AccountMove(models.Model):
     def migrate_data(self):
         result = []
         result.append(self.migrate_timbrado_proveedores())
-        # for company in self.env['res.company'].sudo().search([]):
-        #     _logger.info(f"MIGRANDO DATOS DE LA COMPAÑÍA {company.name}")
-        #     result.append(self.migrate_timbrado(company))
-        #     result.append(self.migrate_autoimpresor(company))
-        #     result.append(self.migrate_rg90(company))
+        for company in self.env['res.company'].sudo().search([]):
+            _logger.info(f"MIGRANDO DATOS DE LA COMPAÑÍA {company.name}")
+            result.append(self.migrate_timbrado(company))
+            result.append(self.migrate_autoimpresor(company))
+            result.append(self.migrate_rg90(company))
 
         if all(result):
             _logger.info("El proceso de migración se completó exitosamente.")
