@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-# Powered by Kanak Infosystems LLP.
-# © 2020 Kanak Infosystems LLP. (<https://www.kanakinfosystems.com>).
-
 {
     'name': 'Account Reports Multi Currency',
     'version': '17.0.1.0',
