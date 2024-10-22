@@ -1,0 +1,34 @@
+# -*- coding: utf-8 -*-
+{
+    'name': "PISA Accounting",
+
+    'summary': "Customized features for PISA in the accounting application.",
+
+    'description': """
+        * Self-printed invoices
+        * Invoice Approver Group: Permission to confirm invoices
+    """,
+
+    'author': "Penguin Infrastructure, José González",
+    'website': "https://penguin.digital",
+
+    'category': 'Accounting',
+    'version': '17.0.1.1.1',
+    'license': "OPL-1",
+
+    'depends': ['base', 'l10n_py'],
+
+    'data': [
+        'security/account_security.xml',
+        'views/account_journal_views.xml',
+        'views/account_move_views.xml',
+        'reports/invoice_report.xml',
+    ],
+
+    'demo': [
+        'demo/account_journal_demo.xml',
+    ],
+
+    'i18n': ['i18n/es.po'],
+}
+
