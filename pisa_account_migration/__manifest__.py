@@ -10,6 +10,7 @@
 
     'author': "Penguin Infrastructure, José González",
     'website': "https://penguin.digital",
+    'license': "OPL-1",
 
     'category': 'Accounting',
     'version': '17.0.1.1.1',

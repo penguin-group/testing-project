@@ -19,6 +19,19 @@ class AccountMove(models.Model):
     qr_code = fields.Binary(string="QR Code", compute="generate_qr_code")
     delivery_note_number = fields.Char(string="Delivery Note Number")
     related_invoice_number = fields.Char(string="Related Invoice Number")
+    foreign_invoice = fields.Boolean(string='Foreign Invoice')
+    import_clearance = fields.Boolean(string='Import Clearance', default=False)
+    import_invoice_ids = fields.Many2many(
+        'account.move', 
+        'account_move_import_invoice_ids', 
+        'account_move_master', 
+        'account_move_helper',
+        string='Import Invoices', domain=[
+            ('foreign_invoice', '=', True),
+            ('state', '=', 'posted'),
+            ('move_type', '=', 'in_invoice'),
+        ]
+    )
     res90_identification_type = fields.Selection([('11', 'RUC'), ('12', 'Identity card'), ('13', 'Passport'), (
         '14', "Foreigner's ID card"), ('15', 'Unnamed'), ('16', 'Diplomatic'), ('17', 'Tax ID')],
                                                  default='11')
@@ -259,20 +272,28 @@ class AccountMove(models.Model):
                             i.res90_identification_type = '15'
 
     def get_id_type(self):
+        result = 15
         if self.res90_identification_type:
             return int(self.res90_identification_type)
-        return 15
+        if self.import_clearance:
+            result = 17
+        return result
 
     def get_identification(self):
-        identificacion = self.partner_id.vat
-
-        if identificacion and len(identificacion.split('-')) > 1:
-            identificacion = identificacion.split('-')[0]
-
-        return identificacion if self.partner_id.vat else '44444401'
+        id = self.partner_id.vat
+        if id and len(id.split('-')) > 1:
+            id = id.split('-')[0]
+        if self.import_clearance:
+            id = self.import_invoice_ids.mapped('partner_id').vat
+            if id and len(id.split('-')) > 1:
+                id = id.split('-')[0]
+        return id or '44444401'
 
     def get_name_partner(self):
-        return self.partner_id.name
+        result = self.partner_id.name
+        if self.import_clearance:
+            result = self.import_invoice_ids.mapped('partner_id').name
+        return result
 
     def get_receipt_type(self):
         if self.res90_type_receipt:
@@ -288,13 +309,15 @@ class AccountMove(models.Model):
         return self.date.strftime('%d/%m/%Y')
 
     def get_stamped(self):
-        if self.res90_number_invoice_authorization:
-            try:
-                return int(self.res90_number_invoice_authorization)
-            except:
-                raise ValidationError(
-                    "The value " + self.res90_number_invoice_authorization + " in the field of No. Stamped seat " + self.name + " cannot be processed, please check if it is correct")
-        return 0
+        result = 0
+        if not self.import_clearance:
+            if self.res90_number_invoice_authorization:
+                try:
+                    result = int(self.res90_number_invoice_authorization)
+                except:
+                    raise ValidationError(
+                        "The value " + self.res90_number_invoice_authorization + " in the field of No. Stamped seat " + self.name + " cannot be processed, please check if it is correct")
+        return result
 
     def get_receipt_number(self):
         if self.move_type in ['out_invoice', 'out_refund']:
@@ -408,8 +431,6 @@ class AccountMove(models.Model):
             return self.res90_associated_receipt_stamping
         return ''
 
-
-
     # Function executed by a scheduled action to fill rg90 fields
     @api.model
     def rg90_remission_fields(self):
@@ -456,4 +477,9 @@ class AccountMove(models.Model):
                     'res90_associated_receipt_stamping': timb
                 })
 
+    def write(self, vals):
+        res = super(AccountMove, self).write(vals)
+        if any(self.mapped('foreign_invoice')) and self.mapped('invoice_line_ids.tax_ids') and any(self.mapped('invoice_line_ids.tax_ids.amount')):
+            raise ValidationError('A Foreign Invoice (Import) should only have Exempts as taxes')
+        return res
 
