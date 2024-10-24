@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+
+        <record id="view_account_journal_form_inherited" model="ir.ui.view">
+            <field name="name">view.account.journal.form.inherited</field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="account.view_account_journal_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='type']" position="after">
+                    <field name="local_suppliers" invisible="type != 'purchase'" widget="boolean"/>
+                </xpath>
+                
+                <xpath expr="//notebook" position="inside">
+                    <page string="Payment Info" invisible="type != 'sale'">
+                        <group>
+                            <field name="payment_info"/>
+                        </group>
+                    </page>
+                </xpath>
+
+            </field>
+        </record>
+    
+   
+    </data>
+    
+
+</odoo>

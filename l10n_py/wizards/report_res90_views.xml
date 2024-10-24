@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+        <record id="report_res90_form" model="ir.ui.view">
+            <field name="name">report.res90.form</field>
+            <field name="model">report.res90</field>
+            <field name="arch" type="xml">
+                <form >
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="obligation_type"/>
+                                <field name="month"/>
+                                <field name="year"/>
+                                <field name="version"/>
+                            </group>
+                        </group>
+                        <footer>
+                            <button string="Generate file" type="object" name="button_generate_file" class="oe_highlight"/>
+                            <button string="Cancel" special="cancel"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="report_res90_action" model="ir.actions.act_window">
+            <field name="name">Resolución 90</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">report.res90</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="report_res90_menu" name="Resolución 90" parent="account.menu_finance_reports" action="report_res90_action" sequence="100"/>
+
+    </data>
+
+
+</odoo>

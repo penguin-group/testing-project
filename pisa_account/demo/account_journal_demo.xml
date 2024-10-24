@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+    
+        <!-- Updating an existing account.journal record -->
+        <record id="account.1_sale" model="account.journal">
+            <field name="payment_info"><![CDATA[<p>Bank Account: 123456789<br/>Bank Name: Demo Bank<br/>IBAN: XY12 3456 7890 1234 5678 90</p>]]></field>
+            <field name="local_suppliers">True</field>
+        </record>
+    
+    </data>
+    
+
+</odoo>
