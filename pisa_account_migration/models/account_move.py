@@ -135,6 +135,7 @@ class AccountMove(models.Model):
             account_moves = self.env['account.move'].sudo().search([]).filtered(lambda x: (x.move_type in ['in_invoice', 'in_refund', 'out_invoice', 'out_refund']) and x.company_id.id == company.id)
             # Process account_moves in groups of 25
             for group in grouper(account_moves, 25):
+
                 for move in group:
                     cnt += 1
                     _logger.info(f"{int(cnt/len(account_moves)*100)}%. Datos de RG90 {move.name or str(move.id)} {cnt}/{len(account_moves)}")
