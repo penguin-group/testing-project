@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+    
+        <record id="view_currency_rate_tree_inherited" model="ir.ui.view">
+            <field name="name">view.currency.rate.tree.inherited</field>
+            <field name="model">res.currency.rate</field>
+            <field name="inherit_id" ref="base.view_currency_rate_tree"/>
+            <field name="arch" type="xml">
+                <field name="rate" position="after">
+                    <field name="buying_company_rate" digits="[12,12]"/>
+                    <field name="buying_inverse_company_rate" digits="[12,12]"/>
+                    <field name="buying_rate" digits="[12,12]" optional="hide"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_currency_rate_form_inherited" model="ir.ui.view">
+            <field name="name">view.currency.rate.form.inherited</field>
+            <field name="model">res.currency.rate</field>
+            <field name="inherit_id" ref="base.view_currency_rate_form"/>
+            <field name="arch" type="xml">
+                <field name="inverse_company_rate" position="after">
+                    <field name="buying_rate" digits="[12,12]" groups="base.group_no_one"/>
+                    <field name="buying_company_rate" digits="[12,12]"/>
+                    <field name="buying_inverse_company_rate" digits="[12,12]"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_currency_form_inherit" model="ir.ui.view">
+            <field name="name">view.currency.form.inherit</field>
+            <field name="model">res.currency</field>
+            <field name="inherit_id" ref="base.view_currency_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet/notebook/page/field/tree/field[@name='rate']" position="after">
+                    <field name="buying_company_rate" digits="[12,12]"/>
+                    <field name="buying_inverse_company_rate" digits="[12,12]"/>
+                    <field name="buying_rate" digits="[12,12]" optional="hide"/>
+                </xpath>
+            </field>
+        </record>
+
+
+    
+    </data>
+    
+
+</odoo>

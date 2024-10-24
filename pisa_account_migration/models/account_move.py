@@ -133,24 +133,36 @@ class AccountMove(models.Model):
             
             cnt = 0
             account_moves = self.env['account.move'].sudo().search([]).filtered(lambda x: (x.move_type in ['in_invoice', 'in_refund', 'out_invoice', 'out_refund']) and x.company_id.id == company.id)
-            # Process account_moves in groups of 50
-            for group in grouper(account_moves, 50):
-                for move in group:
-                    cnt += 1
-                    _logger.info(f"{int(cnt/len(account_moves)*100)}%. Datos de RG90 {move.name or str(move.id)} {cnt}/{len(account_moves)}")
-                    move.sudo().write({
-                        'res90_number_invoice_authorization': move.res90_nro_timbrado,
-                        'res90_type_receipt': move.res90_tipo_comprobante,
-                        'res90_identification_type': move.res90_tipo_identificacion,
-                        'res90_imputes_vat': move.res90_imputa_iva,
-                        'res90_imputes_ire': move.res90_imputa_ire,
-                        'res90_imputes_irp_rsp': move.res90_imputa_irp_rsp,
-                        'res90_not_imputes': move.res90_no_imputa,
-                        'res90_associated_voucher_number': move.res90_nro_comprobante_asociado,
-                        'res90_associated_receipt_stamping': move.res90_timbrado_comprobante_asociado,
-                        'exclude_res90': move.excluir_res90,
-                    })
-                self.env.cr.commit()
+            for move in account_moves:
+                cnt += 1
+                _logger.info(f"{int(cnt/len(account_moves)*100)}%. Datos de RG90 {move.name or str(move.id)} {cnt}/{len(account_moves)}")
+                self.env.cr.execute("""
+                    UPDATE account_move
+                    SET
+                        res90_number_invoice_authorization = %s,
+                        res90_type_receipt = %s,
+                        res90_identification_type = %s,
+                        res90_imputes_vat = %s,
+                        res90_imputes_ire = %s,
+                        res90_imputes_irp_rsp = %s,
+                        res90_not_imputes = %s,
+                        res90_associated_voucher_number = %s,
+                        res90_associated_receipt_stamping = %s,
+                        exclude_res90 = %s
+                    WHERE id = %s
+                """, (
+                    move.res90_nro_timbrado,
+                    move.res90_tipo_comprobante,
+                    move.res90_tipo_identificacion,
+                    move.res90_imputa_iva,
+                    move.res90_imputa_ire,
+                    move.res90_imputa_irp_rsp,
+                    move.res90_no_imputa,
+                    move.res90_nro_comprobante_asociado,
+                    move.res90_timbrado_comprobante_asociado,
+                    move.excluir_res90,
+                    move.id
+                ))
             return True
         except Exception as e:
             _logger.error(str(e))
