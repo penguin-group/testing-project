@@ -65,14 +65,16 @@ class AccountMoveLine(models.Model):
                 tipo_cambio = abs(self.balance) / abs(self.amount_currency)
         else:
             tipo_cambio = secondary_currency_id.rate_ids.filtered(lambda x: x.name <= self.date)
+            if tipo_cambio[0].rate < 1:
+                tipo_cambio[0].rate = 1 / tipo_cambio[0].rate
             if tipo_cambio:
-                tipo_cambio = round(tipo_cambio[0].inverse_company_rate,2)
+                tipo_cambio = round(tipo_cambio[0].rate,2)
             if not tipo_cambio:
                 raise exceptions.ValidationError('No existe un tipo de cambio definido para la fecha %s'%self.date)
         if tipo_cambio>0:
-            debit_ms = round(self.debit / tipo_cambio,2)
-            credit_ms = round(self.credit / tipo_cambio,2)
-            balance_ms = round(self.balance / tipo_cambio,2)
+            debit_ms = round(self.debit / tipo_cambio)
+            credit_ms = round(self.credit / tipo_cambio)
+            balance_ms = round(self.balance / tipo_cambio)
         else:
             debit_ms = 0
             credit_ms = 0
