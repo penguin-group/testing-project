@@ -328,7 +328,7 @@ class AccountMove(models.Model):
             return ''
 
     def get_amount10(self):
-        monto10 = sum(self.invoice_line_ids.filtered(lambda x: 10 in x.tax_ids.mapped('amount')).mapped('price_total'))
+        amount10 = sum(self.invoice_line_ids.filtered(lambda x: 10 in x.tax_ids.mapped('amount')).mapped('price_total'))
         if self.currency_id != self.env.company.currency_id:
             balance = abs(
                 sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped('balance')))
@@ -339,8 +339,10 @@ class AccountMove(models.Model):
                 currency_rate = balance / amount_currency
             else:
                 currency_rate = 1
-            monto10 = monto10 * currency_rate
-        return round(monto10)
+            amount10 = amount10 * currency_rate
+        if self.import_clearance:
+            result = 11 * sum(line.price_subtotal for line in self.invoice_line_ids.filtered(lambda x: x.account_id.es_cuenta_iva_importacion))
+        return round(amount10)
 
     def get_amount5(self):
         monto5 = sum(self.invoice_line_ids.filtered(lambda x: 5 in x.tax_ids.mapped('amount')).mapped('price_total'))
@@ -358,7 +360,7 @@ class AccountMove(models.Model):
         return round(monto5)
 
     def get_exempt_amount(self):
-        monto0 = sum(self.invoice_line_ids.filtered(lambda x: not x.tax_ids or 0 in x.tax_ids.mapped('amount')).mapped(
+        amount0 = sum(self.invoice_line_ids.filtered(lambda x: not x.tax_ids or 0 in x.tax_ids.mapped('amount')).mapped(
             'price_total'))
         if self.currency_id != self.env.company.currency_id:
             balance = abs(
@@ -370,11 +372,13 @@ class AccountMove(models.Model):
                 currency_rate = balance / amount_currency
             else:
                 currency_rate = 1
-            monto0 = monto0 * currency_rate
-        return round(monto0)
+            amount0 = amount0 * currency_rate
+        if self.import_clearance:
+            amount0 = 0
+        return round(amount0)
 
     def get_total_amount(self):
-        monto = abs(sum(self.invoice_line_ids.mapped('price_total')))
+        amount = abs(sum(self.invoice_line_ids.mapped('price_total')))
         if self.currency_id != self.env.company.currency_id:
             balance = abs(
                 sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped('balance')))
@@ -385,8 +389,10 @@ class AccountMove(models.Model):
                 currency_rate = balance / amount_currency
             else:
                 currency_rate = 1
-            monto = monto * currency_rate
-        return round(monto)
+            amount = amount * currency_rate
+        if self.import_clearance:
+            amount = self.get_amount10()
+        return round(amount)
 
     def get_sale_condition(self):
         if self.invoice_date_due > self.invoice_date:
@@ -394,6 +400,8 @@ class AccountMove(models.Model):
         return 1
 
     def get_foreign_currency_operation(self):
+        if self.import_clearance:
+            return 'S'
         if self.currency_id and self.currency_id.name == 'PYG':
             return 'N'
         elif self.currency_id and self.currency_id.name != 'PYG':

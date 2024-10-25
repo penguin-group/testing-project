@@ -8,6 +8,7 @@ class ResPartner(models.Model):
     _inherit = "res.partner"
 
     vat = fields.Char(copy=False)
+    foreign_default_supplier = fields.Boolean(string='Foreign Default Supplier', default=False)
 
     @api.constrains("vat", "parent_id")
     def _check_vat(self):
@@ -37,4 +38,10 @@ class ResPartner(models.Model):
             raise ValidationError(
                 _("The VAT %s is not valid.") % self.vat
             )
+
+    @api.constrains('foreign_default_supplier')
+    def _check_foreign_default_supplier(self):
+        for record in self:
+            if record.foreign_default_supplier and len(self.search([('foreign_default_supplier', '=', True), ('id', '!=', record.id)])):
+                raise ValidationError(_("There should only be one default foreign default supplier."))
             

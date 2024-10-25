@@ -50,7 +50,7 @@ class ReportRes90(models.TransientModel):
             compras_invoice_ids = self.env['account.move'].search(
                 [('move_type', 'in', ['in_invoice', 'out_refund']), ('journal_id.exclude_res90', '=', False), ('exclude_res90', '=', False), (
                     'invoice_date', '>=', fecha_inicio), ('invoice_date', '<=', fecha_fin), ('state', '=', 'posted'), ('company_id', '=', self.env.company.id)])
-            return compras_invoice_ids.sorted(key=lambda x: x.date)
+            return compras_invoice_ids.filtered(lambda x: not x.foreign_invoice).sorted(key=lambda x: x.date)
 
     @api.model
     def get_sales_values(self, facturas):
