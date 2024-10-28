@@ -23,11 +23,13 @@
 
     'data': [
         'security/ir.model.access.csv',
+        'views/res_partner.xml',
         'views/account_journal_views.xml',
         'views/account_move_views.xml',
         'views/invoice_authorization_views.xml',
         'views/invoice_controller_templates.xml',
         'views/account_move.xml',
+        'views/account_account.xml',
         'reports/invoice_report.xml',
         'wizards/report_vat_purchase_views.xml',
         'wizards/report_vat_sale_views.xml',

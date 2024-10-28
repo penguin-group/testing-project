@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-25 22:44+0000\n"
-"PO-Revision-Date: 2024-09-25 22:44+0000\n"
+"POT-Creation-Date: 2024-10-28 18:32+0000\n"
+"PO-Revision-Date: 2024-10-28 18:32+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -39,6 +39,16 @@ msgstr "0 para líneas ilimitadas"
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
 msgid "10%:"
+msgstr ""
+
+#. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__report_res90__obligation_type__mensual
+msgid "955 - Registro mensual de comprobantes"
+msgstr ""
+
+#. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__report_res90__obligation_type__anual
+msgid "956 - Registro anual de comprobantes"
 msgstr ""
 
 #. module: l10n_py
@@ -209,14 +219,73 @@ msgid "<strong>VENCIMIENTO:</strong>"
 msgstr ""
 
 #. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_account
+msgid "Account"
+msgstr "Cuenta"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_move_reversal
+msgid "Account Move Reversal"
+msgstr "Reversión de movimiento de cuenta"
+
+#. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_journal__res90_type_receipt__205
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_type_receipt__205
+msgid "Account statement - Electronic ticketing"
+msgstr "Extracto de cuenta - Billetaje electrónico"
+
+#. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_journal__res90_type_receipt__206
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_type_receipt__206
+msgid "Account statement - IPS"
+msgstr "Extracto de cuenta - IPS"
+
+#. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_journal__res90_type_receipt__207
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_type_receipt__207
+msgid "Account statement - TC/TD"
+msgstr "Extracto de cuenta - TC/TD"
+
+#. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__active
 msgid "Active"
 msgstr "Activo"
 
 #. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__res90_associated_receipt_stamping
+#: model:ir.model.fields,field_description:l10n_py.field_account_move__res90_associated_receipt_stamping
+#: model:ir.model.fields,field_description:l10n_py.field_account_payment__res90_associated_receipt_stamping
+msgid "Associated receipt stamp number"
+msgstr "Timbrado del Recibo Asociado"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__res90_associated_voucher_number
+#: model:ir.model.fields,field_description:l10n_py.field_account_move__res90_associated_voucher_number
+#: model:ir.model.fields,field_description:l10n_py.field_account_payment__res90_associated_voucher_number
+msgid "Associated voucher number"
+msgstr "Número de la boleta asociada"
+
+#. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__name
 msgid "Authorization Number"
 msgstr "Timbrado"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_report_res90__year
+msgid "Año"
+msgstr ""
+
+#. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_journal__res90_type_receipt__211
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_type_receipt__211
+msgid "Bank transfers or money orders / Deposit slip"
+msgstr "Transferencias o giros bancarios / Boleta de depósito"
+
+#. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_journal__res90_type_receipt__109
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_type_receipt__109
+msgid "Bill"
+msgstr "Factura"
 
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
@@ -234,10 +303,24 @@ msgid "CONDICIÓN DE VENTA:"
 msgstr ""
 
 #. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.report_res90_form
 #: model_terms:ir.ui.view,arch_db:l10n_py.report_vat_purchase_wizard_form
 #: model_terms:ir.ui.view,arch_db:l10n_py.report_vat_sale_wizard_form
 msgid "Cancel"
 msgstr "Cancelar"
+
+#. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_journal__res90_type_receipt__112
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_type_receipt__112
+msgid "Cash register machine ticket"
+msgstr "Ticket de máquina registradora"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__res90_imputes_irp_rsp
+#: model:ir.model.fields,field_description:l10n_py.field_account_move__res90_imputes_irp_rsp
+#: model:ir.model.fields,field_description:l10n_py.field_account_payment__res90_imputes_irp_rsp
+msgid "Charges IRP/RSP"
+msgstr "Imputa IRP/RSP"
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__company_id
@@ -261,6 +344,7 @@ msgstr ""
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__create_uid
+#: model:ir.model.fields,field_description:l10n_py.field_report_res90__create_uid
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_purchase_wizard__create_uid
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_sale_wizard__create_uid
 msgid "Created by"
@@ -268,10 +352,17 @@ msgstr "Creado por"
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__create_date
+#: model:ir.model.fields,field_description:l10n_py.field_report_res90__create_date
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_purchase_wizard__create_date
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_sale_wizard__create_date
 msgid "Created on"
 msgstr "Creado el"
+
+#. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_journal__res90_type_receipt__110
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_type_receipt__110
+msgid "Credit note"
+msgstr "Nota de Crédito"
 
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
@@ -299,6 +390,12 @@ msgid "DESCRIPCION"
 msgstr ""
 
 #. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_journal__res90_type_receipt__111
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_type_receipt__111
+msgid "Debit note"
+msgstr "Nota de Débito"
+
+#. module: l10n_py
 #: model:ir.model.fields.selection,name:l10n_py.selection__invoice_authorization__document_type__delivery_note
 msgid "Delivery Note"
 msgstr "Nota de Remisión"
@@ -311,7 +408,13 @@ msgid "Delivery Note Number"
 msgstr "Número de Nota de Remisión"
 
 #. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_identification_type__16
+msgid "Diplomatic"
+msgstr "Diplomático"
+
+#. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__display_name
+#: model:ir.model.fields,field_description:l10n_py.field_report_res90__display_name
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_purchase_wizard__display_name
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_sale_wizard__display_name
 msgid "Display Name"
@@ -323,6 +426,13 @@ msgid "Document Type"
 msgstr "Tipo de Documento"
 
 #. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__res90_not_imputes
+#: model:ir.model.fields,field_description:l10n_py.field_account_move__res90_not_imputes
+#: model:ir.model.fields,field_description:l10n_py.field_account_payment__res90_not_imputes
+msgid "Does not impute"
+msgstr "No Imputa"
+
+#. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
 msgid "EXENTA"
 msgstr ""
@@ -330,7 +440,7 @@ msgstr ""
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
 msgid "Email:"
-msgstr ""
+msgstr "Correo Electrónico"
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__end_date
@@ -338,9 +448,23 @@ msgid "End Date"
 msgstr "Fecha Final"
 
 #. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_journal__res90_type_receipt__108
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_type_receipt__108
+msgid "Entrance to public shows"
+msgstr "Entrada a espectáculos públicos"
+
+#. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__establishment_number
 msgid "Establishment Number"
 msgstr "Código de Establecimiento"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__exclude_res90
+#: model:ir.model.fields,field_description:l10n_py.field_account_journal__exclude_res90
+#: model:ir.model.fields,field_description:l10n_py.field_account_move__exclude_res90
+#: model:ir.model.fields,field_description:l10n_py.field_account_payment__exclude_res90
+msgid "Exclude from Resolution 90"
+msgstr "Excluir de Resolucion 90"
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__expedition_point_number
@@ -369,17 +493,48 @@ msgid "Final Invoice Number"
 msgstr "Número Final"
 
 #. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_res_partner__foreign_default_supplier
+#: model:ir.model.fields,field_description:l10n_py.field_res_users__foreign_default_supplier
+msgid "Foreign Default Supplier"
+msgstr "Proveedor del Exterior por Defecto"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__foreign_invoice
+#: model:ir.model.fields,field_description:l10n_py.field_account_move__foreign_invoice
+#: model:ir.model.fields,field_description:l10n_py.field_account_payment__foreign_invoice
+msgid "Foreign Invoice"
+msgstr "Factura del Exterior"
+
+#. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_identification_type__14
+msgid "Foreigner's ID card"
+msgstr "Cédula extranjero"
+
+#. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_purchase_wizard__date_start
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_sale_wizard__date_start
 msgid "From"
 msgstr "Desde"
 
 #. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.report_res90_form
+msgid "Generate file"
+msgstr "Generar Archivo"
+
+#. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__id
+#: model:ir.model.fields,field_description:l10n_py.field_report_res90__id
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_purchase_wizard__id
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_sale_wizard__id
 msgid "ID"
 msgstr ""
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__res90_imputes_ire
+#: model:ir.model.fields,field_description:l10n_py.field_account_move__res90_imputes_ire
+#: model:ir.model.fields,field_description:l10n_py.field_account_payment__res90_imputes_ire
+msgid "IRE charges"
+msgstr "Imputa al IRE"
 
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
@@ -390,6 +545,44 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
 msgid "IVA 5%"
 msgstr ""
+
+#. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_identification_type__12
+msgid "Identity card"
+msgstr "Cédula de identidad"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__import_clearance
+#: model:ir.model.fields,field_description:l10n_py.field_account_move__import_clearance
+#: model:ir.model.fields,field_description:l10n_py.field_account_payment__import_clearance
+msgid "Import Clearance"
+msgstr "Despacho de Importación"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__import_invoice_ids
+#: model:ir.model.fields,field_description:l10n_py.field_account_move__import_invoice_ids
+#: model:ir.model.fields,field_description:l10n_py.field_account_payment__import_invoice_ids
+#: model_terms:ir.ui.view,arch_db:l10n_py.view_move_form
+msgid "Import Invoices"
+msgstr "Facturas de Importación"
+
+#. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_journal__res90_type_receipt__107
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_type_receipt__107
+msgid "Import clearance"
+msgstr "Despacho de Importación"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_journal__res90_imputes_irp_rsp_default
+msgid "Impute IRP/RSP by default"
+msgstr "Imputa al IRP/RSP por defecto"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__res90_imputes_vat
+#: model:ir.model.fields,field_description:l10n_py.field_account_move__res90_imputes_vat
+#: model:ir.model.fields,field_description:l10n_py.field_account_payment__res90_imputes_vat
+msgid "Impute VAT"
+msgstr "Imputa al IVA"
 
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
@@ -409,6 +602,13 @@ msgstr "Número Inicial"
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_authorization_view_tree
 msgid "Invoice Authorization"
 msgstr "Timbrado"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__res90_number_invoice_authorization
+#: model:ir.model.fields,field_description:l10n_py.field_account_move__res90_number_invoice_authorization
+#: model:ir.model.fields,field_description:l10n_py.field_account_payment__res90_number_invoice_authorization
+msgid "Invoice Authorization No."
+msgstr "Timbrado Nro."
 
 #. module: l10n_py
 #: model:ir.ui.menu,name:l10n_py.invoice_authorization_menu
@@ -442,6 +642,7 @@ msgstr ""
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__write_uid
+#: model:ir.model.fields,field_description:l10n_py.field_report_res90__write_uid
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_purchase_wizard__write_uid
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_sale_wizard__write_uid
 msgid "Last Updated by"
@@ -449,15 +650,33 @@ msgstr "Última actualización por"
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__write_date
+#: model:ir.model.fields,field_description:l10n_py.field_report_res90__write_date
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_purchase_wizard__write_date
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_sale_wizard__write_date
 msgid "Last Updated on"
 msgstr "Última actualización el"
 
 #. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_journal__res90_type_receipt__202
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_type_receipt__202
+msgid "Legalized proof of foreign residence"
+msgstr "Comprobante del exterior legalizado"
+
+#. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_journal__res90_type_receipt__105
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_type_receipt__105
+msgid "Lottery Tickets, Games of Chance"
+msgstr "Boletos de Loterías, Juegos de Azar"
+
+#. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_account_journal__max_lines
 msgid "Maximum printable lines on the invoice"
 msgstr "Máximo de líneas imprimibles en la factura"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_report_res90__month
+msgid "Mes"
+msgstr ""
 
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
@@ -472,15 +691,63 @@ msgid "Only invoices can be printed"
 msgstr "Solo se puede imprimir facturas"
 
 #. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_journal__res90_type_receipt__209
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_type_receipt__209
+msgid "Other expenditure vouchers"
+msgstr "Otros comprobantes de egresos"
+
+#. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_journal__res90_type_receipt__210
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_type_receipt__210
+msgid "Other proof of income"
+msgstr "Otros comprobantes de ingresos"
+
+#. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
 msgid "PRECIO UNITARIO"
 msgstr ""
+
+#. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_identification_type__13
+msgid "Passport"
+msgstr "Pasaporte"
+
+#. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_journal__res90_type_receipt__201
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_type_receipt__201
+msgid "Proof of expenses for credit purchases"
+msgstr "Comprobante de egresos por compras a crédito"
+
+#. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_journal__res90_type_receipt__204
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_type_receipt__204
+msgid "Proof of income from Public, Religious or Public Benefit Entities"
+msgstr "Comprobante de ingreso de Entidades Públicas, Religiosas o de Beneficio Público"
+
+#. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_journal__res90_type_receipt__203
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_type_receipt__203
+msgid "Proof of income from credit sales"
+msgstr "Comprobante de ingreso por ventas a crédito"
+
+#. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_journal__res90_type_receipt__102
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_type_receipt__102
+msgid "Public Passenger Transport Ticket"
+msgstr "Boleta de Transporte Público de Pasajeros"
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__qr_code
 #: model:ir.model.fields,field_description:l10n_py.field_account_move__qr_code
 msgid "QR Code"
 msgstr "Código QR"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_res_partner__vat
+#: model:ir.model.fields,field_description:l10n_py.field_res_users__vat
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_identification_type__11
+msgid "RUC"
+msgstr "RUC"
 
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
@@ -493,6 +760,57 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_py.field_account_payment__related_invoice_number
 msgid "Related Invoice Number"
 msgstr "Número de factura relacionada"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_report_res90
+msgid "Res 90 Wizard"
+msgstr "Diálogo Res. 90"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__res90_identification_type
+#: model:ir.model.fields,field_description:l10n_py.field_account_move__res90_identification_type
+#: model:ir.model.fields,field_description:l10n_py.field_account_payment__res90_identification_type
+msgid "Res90 Identification Type"
+msgstr "Res. 90 - Tipo de Identificación"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__res90_type_receipt
+#: model:ir.model.fields,field_description:l10n_py.field_account_journal__res90_type_receipt
+#: model:ir.model.fields,field_description:l10n_py.field_account_move__res90_type_receipt
+#: model:ir.model.fields,field_description:l10n_py.field_account_payment__res90_type_receipt
+msgid "Res90 Type Receipt"
+msgstr "Res. 90 - Tipo de Recibo"
+
+#. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_journal__res90_type_receipt__104
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_type_receipt__104
+msgid "Resimple ticket"
+msgstr "Boleta Resimple"
+
+#. module: l10n_py
+#: model:ir.actions.act_window,name:l10n_py.report_res90_action
+#: model:ir.ui.menu,name:l10n_py.report_res90_menu
+#: model_terms:ir.ui.view,arch_db:l10n_py.view_move_form
+msgid "Resolución 90"
+msgstr ""
+
+#. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_journal__res90_type_receipt__208
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_type_receipt__208
+msgid "Salary Settlement"
+msgstr "Liquidación de Salario"
+
+#. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_journal__res90_type_receipt__103
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_type_receipt__103
+msgid "Sales Invoice"
+msgstr "Boleta de Venta"
+
+#. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_journal__res90_type_receipt__101
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_type_receipt__101
+msgid "Self-invoicing"
+msgstr "Autofactura"
 
 #. module: l10n_py
 #: model:ir.actions.report,name:l10n_py.invoice_duplicate_report_action
@@ -537,7 +855,7 @@ msgstr "Nota de Crédito de Proveedor"
 #. module: l10n_py
 #: model:ir.model.fields.selection,name:l10n_py.selection__invoice_authorization__document_type__in_invoice
 msgid "Supplier Invoice"
-msgstr "Factura Proveedor"
+msgstr "Factura de Proveedor"
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__supplier_invoice_authorization_id
@@ -557,10 +875,9 @@ msgid "TOTAL IVA:"
 msgstr ""
 
 #. module: l10n_py
-#: model:ir.model.fields,field_description:l10n_py.field_res_partner__vat
-#: model:ir.model.fields,field_description:l10n_py.field_res_users__vat
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_identification_type__17
 msgid "Tax ID"
-msgstr "NIF"
+msgstr ""
 
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
@@ -613,8 +930,7 @@ msgstr "El cliente no tiene cargado un RUC. Por favor agréguelo."
 #, python-format
 msgid ""
 "The establishment number does not match the active invoice authorization."
-msgstr ""
-"El Código de Establecimiento no coincide con el timbrado activo."
+msgstr "El Código de Establecimiento no coincide con el timbrado activo."
 
 #. module: l10n_py
 #. odoo-python
@@ -622,8 +938,7 @@ msgstr ""
 #, python-format
 msgid ""
 "The expedition point number does not match the active invoice authorization."
-msgstr ""
-"El Punto de Expedición no coincide con el timbrado activo."
+msgstr "El Punto de Expedición no coincide con el timbrado activo."
 
 #. module: l10n_py
 #. odoo-python
@@ -631,8 +946,7 @@ msgstr ""
 #, python-format
 msgid ""
 "The invoice authorization number does not have the correct format (8 digits)"
-msgstr ""
-"El número de timbrado no tiene el formato correcto (8 dígitos)."
+msgstr "El número de timbrado no tiene el formato correcto (8 dígitos)."
 
 #. module: l10n_py
 #. odoo-python
@@ -641,8 +955,7 @@ msgstr ""
 msgid ""
 "The invoice date cannot be earlier than the invoice authorization’s start "
 "date."
-msgstr ""
-"La fecha de la factura no puede ser anterior al inicio del timbrado."
+msgstr "La fecha de la factura no puede ser anterior al inicio del timbrado."
 
 #. module: l10n_py
 #. odoo-python
@@ -668,11 +981,31 @@ msgid "The maximum number of lines supported in the invoice has been reached."
 msgstr "Se ha alcanzado el número máximo de líneas para la factura."
 
 #. module: l10n_py
+#: model:ir.model.fields,help:l10n_py.field_account_bank_statement_line__exclude_res90
+#: model:ir.model.fields,help:l10n_py.field_account_journal__exclude_res90
+#: model:ir.model.fields,help:l10n_py.field_account_move__exclude_res90
+#: model:ir.model.fields,help:l10n_py.field_account_payment__exclude_res90
+msgid "The records of this journal will not be included in resolution 90"
+msgstr "Los registros de este diario no serán incluídos en la resolucion 90"
+
+#. module: l10n_py
 #. odoo-python
 #: code:addons/l10n_py/models/account_move.py:0
 #, python-format
 msgid "There is no invoice authorization."
 msgstr "No se encontró un Timbrado."
+
+#. module: l10n_py
+#. odoo-python
+#: code:addons/l10n_py/models/res_partner.py:0
+#, python-format
+msgid "There should only be one default foreign default supplier."
+msgstr "Solo debe haber un proveedor extranjero por defecto."
+
+#. module: l10n_py
+#: model:ir.model.fields,help:l10n_py.field_account_account__vat_import
+msgid "This account is for import VAT"
+msgstr "Esta cuenta es por IVA de Importaciones"
 
 #. module: l10n_py
 #. odoo-python
@@ -683,15 +1016,36 @@ msgid "This report is only for Paraguay-based companies."
 msgstr "Este reporte es solo para empresas de Paraguay."
 
 #. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_journal__res90_type_receipt__106
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_type_receipt__106
+msgid "Ticket or air transportation ticket"
+msgstr "Boleto o ticket de Transporte aéreo"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_report_res90__obligation_type
+msgid "Tipo de obligación"
+msgstr ""
+
+#. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_purchase_wizard__date_end
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_sale_wizard__date_end
 msgid "To"
 msgstr "Hasta"
 
 #. module: l10n_py
+#: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_identification_type__15
+msgid "Unnamed"
+msgstr "Sin nombre"
+
+#. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
 msgid "VALOR DE VENTA"
 msgstr ""
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_account__vat_import
+msgid "VAT Import"
+msgstr "IVA Importación"
 
 #. module: l10n_py
 #: model:ir.actions.act_window,name:l10n_py.report_vat_purchase_wizard_action
@@ -702,12 +1056,37 @@ msgid "VAT Purchase Book"
 msgstr "Libro IVA Compras"
 
 #. module: l10n_py
+#: model:ir.model,name:l10n_py.model_report_l10n_py_report_vat_purchase
+msgid "VAT Purchase Report"
+msgstr "Libro IVA Compras"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_report_vat_purchase_wizard
+msgid "VAT Purchase Report Wizard"
+msgstr "Diálogo de Libro IVA Compras"
+
+#. module: l10n_py
 #: model:ir.actions.act_window,name:l10n_py.report_vat_sale_wizard_action
 #: model:ir.actions.report,name:l10n_py.report_vat_sale_report
 #: model:ir.ui.menu,name:l10n_py.report_vat_sale_wizard_menu
 #: model_terms:ir.ui.view,arch_db:l10n_py.report_vat_sale_wizard_form
 msgid "VAT Sale Book"
 msgstr "Libro IVA Ventas"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_report_l10n_py_report_vat_sale
+msgid "VAT Sale Report"
+msgstr "Libro IVA Ventas"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_report_vat_sale_wizard
+msgid "VAT Sale Report Wizard"
+msgstr "Completar campos rg90 para nota de remision"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_report_res90__version
+msgid "Versión"
+msgstr ""
 
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
@@ -718,267 +1097,3 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_py.view_move_form_inherited
 msgid "e.g.: 001-001-0000001"
 msgstr "Por ej.: 001-001-0000001"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_report_l10n_py_report_vat_purchase
-msgid "report.l10n_py.report_vat_purchase"
-msgstr ""
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_report_l10n_py_report_vat_sale
-msgid "report.l10n_py.report_vat_sale"
-msgstr ""
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_report_vat_purchase_wizard
-msgid "report.vat.purchase.wizard"
-msgstr ""
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_report_vat_sale_wizard
-msgid "report.vat.sale.wizard"
-msgstr ""
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_report_vat_sale_wizard
-msgid "Complete rg90 fields for delivery note"
-msgstr "Completar campos rg90 para nota de remision"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Self-invoicing"
-msgstr "Autofactura"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Self-invoicing"
-msgstr "Boleta de Transporte Público de Pasajeros"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Sales Invoice"
-msgstr "Boleta de Venta"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Resimple ticket"
-msgstr "Boleta Resimple"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Lottery Tickets, Games of Chance"
-msgstr "Boletos de Loterías, Juegos de Azar"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Ticket or air transportation ticket"
-msgstr "Boleto o ticket de Transporte aéreo"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Import clearance"
-msgstr "Despacho de importación"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Entrance to public shows"
-msgstr "Entrada a espectáculos públicos"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Bill"
-msgstr "Factura"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Credit note"
-msgstr "Nota de crédito"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Debit note"
-msgstr "Nota de débito"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Cash register machine ticket"
-msgstr "Ticket de máquina registradora"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Proof of expenses for credit purchases"
-msgstr "Comprobante de egresos por compras a crédito"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Legalized proof of foreign residence"
-msgstr "Comprobante del exterior legalizado"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Proof of income from credit sales"
-msgstr "Comprobante de ingreso por ventas a crédito"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Proof of income from Public, Religious or Public Benefit Entities"
-msgstr "Comprobante de ingreso de Entidades Públicas, Religiosas o de Beneficio Público"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Account statement - Electronic ticketing"
-msgstr "Extracto de cuenta - Billetaje electrónico"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Account statement - IPS"
-msgstr "Extracto de cuenta - IPS"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Account statement - TC/TD"
-msgstr "Extracto de cuenta - TC/TD"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Salary Settlement"
-msgstr "Liquidación de Salario"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Other expenditure vouchers"
-msgstr "Otros comprobantes de egresos"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Other proof of income"
-msgstr "Otros comprobantes de ingresos"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Bank transfers or money orders / Deposit slip"
-msgstr "Transferencias o giros bancarios / Boleta de depósito"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Exclude from Resolution 90"
-msgstr "Excluir de Resolucion 90"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "The records of this journal will not be included in resolution 90"
-msgstr "Los registros de este diario no serán incluídos en la resolucion 90"
-
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "RUC"
-msgstr "RUC"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Identity card"
-msgstr "Cédula de identidad"
-
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Passport"
-msgstr "Pasaporte"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Foreigner's ID card"
-msgstr "Cédula extranjero"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Unnamed"
-msgstr "Sin nombre"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Diplomatic"
-msgstr "Diplomático"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Tax ID"
-msgstr "Identificación tributaria"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Stamping No."
-msgstr "Nro. de timbrado"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Impute VAT"
-msgstr "Imputa IVA"
-
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "IRE charges"
-msgstr "Imputa IRE"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Charges IRP/RSP"
-msgstr "Imputa IRP/RSP"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Does not impute"
-msgstr "No imputa"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Associated voucher number"
-msgstr "Nro. de comprobante asociado"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Associated receipt stamp number"
-msgstr "Nro. de timbrado de comprobante asociado"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Exclude from Resolution 90"
-msgstr "Excluir de Resolucion 90"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "The records of this journal will not be included in resolution 90"
-msgstr "Los registros de este diario no serán incluídos en la resolucion 90"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "The value"
-msgstr "El valor"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "in the field of No. Stamped seat"
-msgstr "en el campo de Nro Timbrado del asiento"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "cannot be processed, please check if it is correct"
-msgstr "no puede ser procesado, por favor verificar si está correcto"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "There is more than one stamp for this type of invoice"
-msgstr "Tiene mas de un timbrado para este tipo de factura"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Generate file"
-msgstr "Generar archivo"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_journal
-msgid "Cancel"
-msgstr "Cancelar"
-
