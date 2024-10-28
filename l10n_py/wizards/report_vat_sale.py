@@ -27,34 +27,39 @@ class ReportVatSaleWizard(models.TransientModel):
 class ReportVatSale(models.AbstractModel):
     _name = 'report.l10n_py.report_vat_sale'
     _inherit = 'report.report_xlsx.abstract'
-    _description = "VAT Sale Report"
-
-
-    def get_vat_amounts(self, invoice_line):
-        base10 = 0
-        vat10 = 0
-        base5 = 0
-        vat5 = 0
-        exempt = 0
-
-        price_total = invoice_line.currency_id._convert(
-            invoice_line.price_total, 
-            self.env.ref('base.PYG'), 
-            self.env.company, 
-            invoice_line.move_id.invoice_date
-        )
-
-        if invoice_line.tax_ids and invoice_line.tax_ids[0].amount == 10:
-            base10 += price_total / 1.1
-            vat10 += price_total / 11
-        if invoice_line.tax_ids and invoice_line.tax_ids[0].amount == 5:
-            base5 += price_total / 1.05
-            vat5 += price_total / 21
-        if (invoice_line.tax_ids and invoice_line.tax_ids[0].amount == 0) or not invoice_line.tax_ids:
-            exempt += price_total
-        return base10, vat10, base5, vat5, exempt
+    _description = "VAT Sale Report"  
 
     def generate_xlsx_report(self, workbook, data, datas):
+
+        def get_exempt_5_10(invoice_line):
+            pyg = self.env.ref('base.PYG')
+            
+            def get_line_amount(line):
+                if line.currency_id.id == pyg.id:
+                    amount = line.price_total
+                else:
+                    # TODO: Figure out what we should do with freeze_currency_rate
+                    # if line.move_id.freeze_currency_rate:
+                    #     amount = line.price_total * line.move_id.currency_rate
+                    # else:
+                    amount = line.currency_id._convert(line.price_total, pyg, line.company_id, line.date)
+                return amount
+            
+            base10 = 0
+            iva10 = 0
+            base5 = 0
+            iva5 = 0
+            exempt = 0
+            taxable_imports = 0
+            if invoice_line.tax_ids and invoice_line.tax_ids[0].amount == 10:
+                base10 += get_line_amount(invoice_line) / 1.1
+                iva10 += get_line_amount(invoice_line) / 11
+            if invoice_line.tax_ids and invoice_line.tax_ids[0].amount == 5:
+                base5 += get_line_amount(invoice_line) / 1.05
+                iva5 += get_line_amount(invoice_line) / 21
+            if (invoice_line.tax_ids and invoice_line.tax_ids[0].amount == 0) or not invoice_line.tax_ids:
+                exempt += get_line_amount(invoice_line)
+            return base10, iva10, base5, iva5, exempt, taxable_imports
 
         invoices = self.env['account.move'].search(
             [('move_type', '=', 'out_invoice'), 
@@ -156,12 +161,13 @@ class ReportVatSale(models.AbstractModel):
             vat5 = 0
             exempt = 0
             for t in i.filtered(lambda x: x.state != 'cancel').invoice_line_ids:
-                values = self.get_vat_amounts(t)
+                values = get_exempt_5_10(t)
                 base10 += values[0]
                 vat10 += values[1]
                 base5 += values[2]
                 vat5 += values[3]
                 exempt += values[4]
+                taxable_imports += values[5]
 
             amount_total_invoice = base10 + vat10 + base5 + vat5 + exempt
 
@@ -267,7 +273,7 @@ class ReportVatSale(models.AbstractModel):
             vat5 = 0
             exempt = 0
             for t in i.filtered(lambda x: x.state != 'cancel').invoice_line_ids:
-                values = self.get_vat_amounts(t)
+                values = get_exempt_5_10(t)
                 base10 += values[0]
                 vat10 += values[1]
                 base5 += values[2]
