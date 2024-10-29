@@ -167,6 +167,40 @@ class AccountMove(models.Model):
         except Exception as e:
             _logger.error(str(e))
             return False
+
+    def migrate_imports(self, company):
+        _logger.info("IMPORTACIONES...")
+        try:
+            for partner in self.env['res.partner'].sudo().search([('company_id', '=', company.id), ('es_proveedor_por_defecto_exterior', '=', True)]):
+                partner.sudo().write({
+                    'foreign_default_supplier': partner.es_proveedor_por_defecto_exterior,
+                    })
+                _logger.info(f"Contacto {partner.name}.")
+
+            for account in self.env['account.account'].sudo().search([('company_id', '=', company.id), ('es_cuenta_iva_importacion', '=', True)]):
+                account.sudo().write({
+                    'vat_import': account.es_cuenta_iva_importacion,
+                    })
+                _logger.info(f"Cuenta {account.code} - {account.name}.")
+            
+            cnt = 0
+            import_clearances = self.env['account.move'].sudo().search([('company_id', '=', company.id), ('move_type', '=', 'in_invoice'), ('es_despacho_importacion', '=', True)])
+            for move in import_clearances:
+                cnt += 1
+                _logger.info(f"{int(cnt/len(import_clearances)*100)}%. Despacho {move.name or str(move.id)} {cnt}/{len(import_clearances)}")
+                for import_invoice in move.importacion_factura_compra_ids:
+                    import_invoice.sudo().write({
+                        'foreign_invoice': import_invoice.es_factura_exterior
+                    })
+                move.sudo().write({
+                    'import_clearance': move.es_despacho_importacion,
+                    'import_invoice_ids': [(6, 0, move.importacion_factura_compra_ids.mapped('id'))]
+                })
+                
+            return True
+        except Exception as e:
+            _logger.error(str(e))
+            return False
     
     def migrate_data(self):
         result = []
@@ -176,6 +210,7 @@ class AccountMove(models.Model):
             result.append(self.migrate_timbrado(company))
             result.append(self.migrate_autoimpresor(company))
             result.append(self.migrate_rg90(company))
+            result.append(self.migrate_imports(company))
 
         if all(result):
             _logger.info("El proceso de migración se completó exitosamente.")

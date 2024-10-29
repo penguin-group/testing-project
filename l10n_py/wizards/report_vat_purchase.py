@@ -36,7 +36,7 @@ class ReportVatPurchase(models.AbstractModel):
             ('invoice_date', '<=', date_end),
             ('company_id', '=', self.env.company.id),
             ('line_ids.tax_ids', '!=', False),
-        ])
+        ]).filtered(lambda x: not x.foreign_invoice)
 
     def get_vat_amounts(self, invoice_line):
         base10 = 0
@@ -44,6 +44,7 @@ class ReportVatPurchase(models.AbstractModel):
         base5 = 0
         vat5 = 0
         exempt = 0
+        import_taxable = 0
 
         price_total = invoice_line.currency_id._convert(
             invoice_line.price_total, 
@@ -60,13 +61,27 @@ class ReportVatPurchase(models.AbstractModel):
             vat5 += price_total / 21
         if (invoice_line.tax_ids and invoice_line.tax_ids[0].amount == 0) or not invoice_line.tax_ids:
             exempt += price_total
-        return base10, vat10, base5, vat5, exempt
+        
+        if invoice_line.move_id.import_clearance:
+            if invoice_line.account_id.vat_import:
+                vat10 = exempt
+                base10 = vat10 * 10
+                import_taxable = base10
+            exempt = 0
+
+        return base10, vat10, base5, vat5, exempt, import_taxable
 
     def get_supplier(self, invoice, field_name):
+        if invoice.import_clearance:
+            partner = self.env['res.partner'].search([('foreign_default_supplier', '=', True)])
+            if not partner:
+                raise ValidationError('A default foreign default supplier must be established in order to continue.')
+        else:
+            partner = invoice.partner_id
         if field_name == 'name':
-            return invoice.partner_id.name
+            return partner.name
         if field_name == 'vat':
-            return invoice.partner_id.vat
+            return partner.vat
 
     def generate_xlsx_report(self, workbook, data, datas):
         invoices = self.get_purchase_invoices(datas.date_start, datas.date_end)

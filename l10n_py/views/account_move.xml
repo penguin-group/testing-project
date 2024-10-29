@@ -24,7 +24,18 @@
                             </group>
                         </group>
                     </page>
-                </xpath></field>
+                </xpath>
+
+                <xpath expr="//field[@name='partner_id']/../.." position="inside">
+                    <group invisible="move_type not in ['in_invoice']" string="Import Invoices">
+                        <field invisible="import_clearance == True" name="foreign_invoice" readonly="state != 'draft'"/>
+                        <field invisible="foreign_invoice == True" name="import_clearance" readonly="state != 'draft'"/>
+                        <field invisible="import_clearance == False" name="import_invoice_ids" readonly="state != 'draft'" 
+                            required="import_clearance == True" widget="many2many_tags"/>
+                    </group>
+                </xpath>
+
+            </field>
         </record>
     </data>
 </odoo>
