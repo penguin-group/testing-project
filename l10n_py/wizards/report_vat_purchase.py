@@ -39,43 +39,46 @@ class ReportVatPurchase(models.AbstractModel):
         ]).filtered(lambda x: not x.foreign_invoice)
 
     def get_vat_amounts(self, invoice_line):
+        pyg = self.env.ref('base.PYG')
+            
+        def get_line_amount(line):
+            if line.currency_id.id == pyg.id:
+                amount = line.price_total
+            else:
+                amount = line.currency_id._convert(line.price_total, pyg, line.company_id, line.date)
+            return amount
+        
         base10 = 0
-        vat10 = 0
+        iva10 = 0
         base5 = 0
-        vat5 = 0
+        iva5 = 0
         exempt = 0
-        import_taxable = 0
-
-        price_total = invoice_line.currency_id._convert(
-            invoice_line.price_total, 
-            self.env.ref('base.PYG'), 
-            self.env.company, 
-            invoice_line.move_id.invoice_date
-        )
+        taxable_imports = 0
 
         if invoice_line.tax_ids and invoice_line.tax_ids[0].amount == 10:
-            base10 += price_total / 1.1
-            vat10 += price_total / 11
+            base10 += get_line_amount(invoice_line) / 1.1
+            iva10 += get_line_amount(invoice_line) / 11
         if invoice_line.tax_ids and invoice_line.tax_ids[0].amount == 5:
-            base5 += price_total / 1.05
-            vat5 += price_total / 21
+            base5 += get_line_amount(invoice_line) / 1.05
+            iva5 += get_line_amount(invoice_line) / 21
         if (invoice_line.tax_ids and invoice_line.tax_ids[0].amount == 0) or not invoice_line.tax_ids:
-            exempt += price_total
+            exempt += get_line_amount(invoice_line)
         
+        # Handle import clearance invoices
         if invoice_line.move_id.import_clearance:
             if invoice_line.account_id.vat_import:
                 vat10 = exempt
                 base10 = vat10 * 10
-                import_taxable = base10
+                taxable_imports = base10
             exempt = 0
 
-        return base10, vat10, base5, vat5, exempt, import_taxable
+        return base10, iva10, base5, iva5, exempt, taxable_imports
 
     def get_supplier(self, invoice, field_name):
         if invoice.import_clearance:
             partner = self.env['res.partner'].search([('foreign_default_supplier', '=', True)])
             if not partner:
-                raise ValidationError('A default foreign default supplier must be established in order to continue.')
+                raise ValidationError(_('A default foreign default supplier must be established in order to continue.'))
         else:
             partner = invoice.partner_id
         if field_name == 'name':
