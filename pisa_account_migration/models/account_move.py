@@ -171,7 +171,7 @@ class AccountMove(models.Model):
     def migrate_imports(self, company):
         _logger.info("IMPORTACIONES...")
         try:
-            for partner in self.env['res.partner'].sudo().search([('company_id', '=', company.id), ('es_proveedor_por_defecto_exterior', '=', True)]):
+            for partner in self.env['res.partner'].sudo().search([('es_proveedor_por_defecto_exterior', '=', True)]):
                 partner.sudo().write({
                     'foreign_default_supplier': partner.es_proveedor_por_defecto_exterior,
                     })
