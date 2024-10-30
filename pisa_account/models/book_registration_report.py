@@ -88,7 +88,7 @@ class BookRegistrationReport(models.Model):
 
         os.remove(tmp_file.name)
         pdf_base64 = base64.b64encode(pdf_bytes)
-        self.archivo_nombre = "Libro_diario.pdf"
+        self.report_file_name = "Libro_diario.pdf"
         self.write({
             'report_file': pdf_base64
         })
