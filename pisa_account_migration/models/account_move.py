@@ -21,6 +21,55 @@ def grouper(iterable, n):
 class AccountMove(models.Model):
     _inherit = 'account.move'
 
+    def migrate_registro_rubrica(self,company):
+        _logger.info("DATOS DE registro_rubrica...")
+        try:
+            registros_de_interfaces = self.env['interfaces_rubrica.registro_rubrica'].sudo().search([('company_id', '=', company.id)])
+            for un_registro_de_interface in registros_de_interfaces:
+                registro_new = self.env['book.registration']
+                new_registro = registro_new.create({
+                    'name': un_registro_de_interface.name,
+                    'initial_number': un_registro_de_interface.nro_ini,
+                    'final_number': un_registro_de_interface.nro_fin,
+                    'current_number': un_registro_de_interface.nro_actual,
+                    'signature_image': un_registro_de_interface.imagen,
+                    'company_id': un_registro_de_interface.company_id,
+                    'active': un_registro_de_interface.activo,
+                    'type': un_registro_de_interface.type,
+            })
+            return True
+        except Exception as e:
+            _logger.error(str(e))
+            return False
+
+    def migrate_informe_rubrica(self,company):
+        _logger.info("DATOS DE informe_rubrica...")
+        try:
+            registros_de_interfaces = self.env['interfaces_rubrica.informe_rubrica'].sudo().search([('company_id', '=', company.id)])
+            for un_registro_de_interface in registros_de_interfaces:
+                registro_new = self.env['book.registration']
+                new_registro = registro_new.create({
+                    'name': un_registro_de_interface.name,
+                    'page_quantity': un_registro_de_interface.nro_ini,
+                    'registration_id': un_registro_de_interface.nro_fin,
+                    'report_file': un_registro_de_interface.nro_actual,
+                    'report_file_name': un_registro_de_interface.imagen,
+                    'company_id': un_registro_de_interface.company_id,
+                    'active': un_registro_de_interface.activo,
+                    'detailed': un_registro_de_interface.detallado,
+                    'type': un_registro_de_interface.type,
+                    'state': un_registro_de_interface.state,
+                    'current_registration_number': un_registro_de_interface.nro_rub_act,
+                    'initial_registration_number': un_registro_de_interface.nro_rub_ini,
+                    'final_registration_number': un_registro_de_interface.nro_rub_fin,
+                    'start_date': un_registro_de_interface.fecha_inicio,
+                    'end_date': un_registro_de_interface.fecha_fin,
+            })
+            return True
+        except Exception as e:
+            _logger.error(str(e))
+            return False
+
     def migrate_timbrado(self, company):
         _logger.info("DATOS DE TIMBRADOS...")
         
