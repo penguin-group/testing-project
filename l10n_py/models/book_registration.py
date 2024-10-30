@@ -64,7 +64,7 @@ class BookRegistrationReport(models.Model):
     registration_id = fields.Many2one(
         'book.registration', 
         string="Book Registration",
-        domain="[('activo','=', True),('company_id','=',company_id)]"
+        domain="[('active','=', True),('company_id','=',company_id)]"
     )
     report_file = fields.Binary(string="Report File")
     report_file_name = fields.Char(string="Report File Name")
