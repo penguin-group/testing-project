@@ -341,7 +341,7 @@ class AccountMove(models.Model):
                 currency_rate = 1
             amount10 = amount10 * currency_rate
         if self.import_clearance:
-            result = 11 * sum(line.price_subtotal for line in self.invoice_line_ids.filtered(lambda x: x.account_id.es_cuenta_iva_importacion))
+            result = 11 * sum(line.price_subtotal for line in self.invoice_line_ids.filtered(lambda x: x.account_id.vat_import))
         return round(amount10)
 
     def get_amount5(self):
