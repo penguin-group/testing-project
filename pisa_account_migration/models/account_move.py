@@ -21,62 +21,76 @@ def grouper(iterable, n):
 class AccountMove(models.Model):
     _inherit = 'account.move'
 
-    def migrate_registro_rubrica(self, company):
+    def migrate_rubrica(self,company):
         _logger.info("DATOS DE registro_rubrica...")
         try:
-            return True
-        except Exception as e:
-            _logger.error(str(e))
-            return False
+            reg_type_dict = {
+                'compra': 'purchase', 
+                'venta': 'sale', 
+                'diario': 'daily', 
+                'mayor': 'general', 
+                'inventario': 'inventory'
+            }
+            rep_type_dict = {
+                'compra': 'purchase', 
+                'venta': 'sale', 
+                'diario': 'daily', 
+                'diario_resumido_mensual': 'daily_month_summary', 
+                'diario_resumido_dia': 'daily_summary', 
+                'mayor': 'general', 
+                'inventario': 'inventory'
+            }
 
-    def migrate_registro_rubrica(self,company):
-        _logger.info("DATOS DE registro_rubrica...")
-        try:
             registros_de_interfaces = self.env['interfaces_rubrica.registro_rubrica'].sudo().search([('company_id', '=', company.id)])
-            registro_en_el_sistema = self.env['book.registration'].search([])
-            if len(registro_en_el_sistema) == 0:
-                for un_registro_de_interface in registros_de_interfaces:
-                    registro_new = self.env['book.registration']
-                    new_registro = registro_new.create({
-                        'name': un_registro_de_interface.name,
-                        'initial_number': un_registro_de_interface.nro_ini,
-                        'final_number': un_registro_de_interface.nro_fin,
-                        'current_number': un_registro_de_interface.nro_actual,
-                        'signature_image': un_registro_de_interface.imagen,
-                        'company_id': un_registro_de_interface.company_id,
-                        'active': un_registro_de_interface.activo,
-                        'type': un_registro_de_interface.type,
-                })
-            return True
-        except Exception as e:
-            _logger.error(str(e))
-            return False
+            for reg in registros_de_interfaces:
+                new_reg = self.env['book.registration'].search([('name', '=', reg.name), ('type', '=', reg_type_dict[reg.type])])
+                if not new_reg:
+                    new_reg = self.env['book.registration'].create({
+                        'name': reg.name,
+                        'initial_number': reg.nro_ini,
+                        'final_number': reg.nro_fin,
+                        'current_number': reg.nro_actual,
+                        'signature_image': reg.imagen,
+                        'company_id': reg.company_id.id,
+                        'active': reg.activo,
+                        'type': reg_type_dict[reg.type],
+                    })
+                    _logger.info(f"Se creó el registro {new_reg.name} de tipo {new_reg.type}")
+                else:
+                    _logger.info(f"Ya existía el registro {new_reg.name} de tipo {new_reg.type}")
 
-    def migrate_informe_rubrica(self,company):
-        _logger.info("DATOS DE informe_rubrica...")
-        try:
-            registros_de_interfaces = self.env['interfaces_rubrica.informe_rubrica'].sudo().search([('company_id', '=', company.id)])
-            registro_en_el_sistema = self.env['book.registration.report'].search([])
-            if len(registro_en_el_sistema) == 0:
-                for un_registro_de_interface in registros_de_interfaces:
-                    registro_new = self.env['book.registration.report']
-                    new_registro = registro_new.create({
-                        'name': un_registro_de_interface.name,
-                        'page_quantity': un_registro_de_interface.nro_ini,
-                        'registration_id': un_registro_de_interface.nro_fin,
-                        'report_file': un_registro_de_interface.nro_actual,
-                        'report_file_name': un_registro_de_interface.imagen,
-                        'company_id': un_registro_de_interface.company_id,
-                        'active': un_registro_de_interface.activo,
-                        'detailed': un_registro_de_interface.detallado,
-                        'type': un_registro_de_interface.type,
-                        'state': un_registro_de_interface.state,
-                        'current_registration_number': un_registro_de_interface.nro_rub_act,
-                        'initial_registration_number': un_registro_de_interface.nro_rub_ini,
-                        'final_registration_number': un_registro_de_interface.nro_rub_fin,
-                        'start_date': un_registro_de_interface.fecha_inicio,
-                        'end_date': un_registro_de_interface.fecha_fin,
-                })
+                for rep in self.env['interfaces_rubrica.informe_rubrica'].sudo().search([('company_id', '=', company.id), ('rubrica_id', '=', reg.id)]):
+                    new_rep = self.env['book.registration.report'].search([('name', '=', rep.name), ('type', '=', rep_type_dict[rep.type])])
+                    if not new_rep:
+                        new_rep = self.env['book.registration.report'].create({
+                            'name': rep.name,
+                            'page_quantity': rep.page_qty,
+                            'registration_id': new_reg.id,
+                            'report_file': rep.archivo_rub,
+                            'report_file_name': rep.archivo_nombre,
+                            'company_id': rep.company_id.id,
+                            'active': True,
+                            'detailed': rep.detallado,
+                            'type': rep_type_dict[rep.type],
+                            'state': rep.state,
+                            'current_registration_number': rep.nro_rub_act,
+                            'initial_registration_number': rep.nro_rub_ini,
+                            'final_registration_number': rep.nro_rub_fin,
+                            'start_date': rep.fecha_inicio,
+                            'end_date': rep.fecha_fin,
+                        })
+                        _logger.info(f"Se creó el informe {new_rep.name} de tipo {new_rep.type}")
+                    else:
+                        _logger.info(f"Ya existía el informe {new_rep.name} de tipo {new_rep.type}")
+            
+            # Company Settings
+            company.write({
+                'inventory_book_base_report_bs': company.reporte_libro_inventario_base_report_bg,
+                'inventory_book_base_report_is': company.reporte_libro_inventario_base_report_er,
+                'show_inventory_book_base_report_bs_details': company.show_libro_inventario_base_report_bg_details,
+            })
+            _logger.info("Company settings saved.")
+            
             return True
         except Exception as e:
             _logger.error(str(e))
@@ -265,13 +279,14 @@ class AccountMove(models.Model):
     
     def migrate_data(self):
         result = []
-        result.append(self.migrate_timbrado_proveedores())
+        # result.append(self.migrate_timbrado_proveedores())
         for company in self.env['res.company'].sudo().search([]):
             _logger.info(f"MIGRANDO DATOS DE LA COMPAÑÍA {company.name}")
-            result.append(self.migrate_timbrado(company))
-            result.append(self.migrate_autoimpresor(company))
-            result.append(self.migrate_rg90(company))
-            result.append(self.migrate_imports(company))
+            # result.append(self.migrate_timbrado(company))
+            # result.append(self.migrate_autoimpresor(company))
+            # result.append(self.migrate_rg90(company))
+            # result.append(self.migrate_imports(company))
+            result.append(self.migrate_rubrica(company))
 
         if all(result):
             _logger.info("El proceso de migración se completó exitosamente.")
