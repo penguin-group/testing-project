@@ -164,7 +164,6 @@ class ReportVatSale(models.AbstractModel):
                 base5 += values[2]
                 vat5 += values[3]
                 exempt += values[4]
-                taxable_imports += values[5]
 
             amount_total_invoice = base10 + vat10 + base5 + vat5 + exempt
 
