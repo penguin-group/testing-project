@@ -38,10 +38,6 @@ class ReportVatSale(models.AbstractModel):
                 if line.currency_id.id == pyg.id:
                     amount = line.price_total
                 else:
-                    # TODO: Figure out what we should do with freeze_currency_rate
-                    # if line.move_id.freeze_currency_rate:
-                    #     amount = line.price_total * line.move_id.currency_rate
-                    # else:
                     amount = line.currency_id._convert(line.price_total, pyg, line.company_id, line.date)
                 return amount
             
@@ -51,6 +47,7 @@ class ReportVatSale(models.AbstractModel):
             iva5 = 0
             exempt = 0
             taxable_imports = 0
+            
             if invoice_line.tax_ids and invoice_line.tax_ids[0].amount == 10:
                 base10 += get_line_amount(invoice_line) / 1.1
                 iva10 += get_line_amount(invoice_line) / 11

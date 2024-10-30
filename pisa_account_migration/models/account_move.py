@@ -151,15 +151,15 @@ class AccountMove(models.Model):
                         exclude_res90 = %s
                     WHERE id = %s
                 """, (
-                    move.res90_nro_timbrado,
+                    move.res90_nro_timbrado or '',
                     move.res90_tipo_comprobante,
                     move.res90_tipo_identificacion,
                     move.res90_imputa_iva,
                     move.res90_imputa_ire,
                     move.res90_imputa_irp_rsp,
                     move.res90_no_imputa,
-                    move.res90_nro_comprobante_asociado,
-                    move.res90_timbrado_comprobante_asociado,
+                    move.res90_nro_comprobante_asociado or '',
+                    move.res90_timbrado_comprobante_asociado or '',
                     move.excluir_res90,
                     move.id
                 ))
@@ -171,7 +171,7 @@ class AccountMove(models.Model):
     def migrate_imports(self, company):
         _logger.info("IMPORTACIONES...")
         try:
-            for partner in self.env['res.partner'].sudo().search([('company_id', '=', company.id), ('es_proveedor_por_defecto_exterior', '=', True)]):
+            for partner in self.env['res.partner'].sudo().search([('es_proveedor_por_defecto_exterior', '=', True)]):
                 partner.sudo().write({
                     'foreign_default_supplier': partner.es_proveedor_por_defecto_exterior,
                     })
