@@ -4,7 +4,7 @@ from odoo import http
 from odoo.http import request
 
 
-class RubricController(http.Controller):
+class BookRegistrationController(http.Controller):
     @http.route('/binary/download', type='http', auth='user')
     def download_binary_file(self, **kwargs):
         record_id = kwargs.get('record_id')

@@ -9,13 +9,34 @@ from fpdf import FPDF
 from werkzeug.urls import url_encode, url_join
 from odoo.tools.misc import format_date, DEFAULT_SERVER_DATE_FORMAT
 import logging
-from l10n_py.models.book_registration import CustomPDF
 
 
 def format_number_to_string(number):
     if number == '':
         return ''
     return '{0:,.0f}'.format(int(number)).replace(',', '.')
+
+class CustomPDF(FPDF):
+    def __init__(self):
+        super().__init__()
+        self.start_page_number = 0
+        self.signature_image = None
+        self.company = None
+        self.title = ''
+        self.subtitle = False
+
+    def header(self, data=None):
+        self.set_font("Arial", "B", 10)
+        if self.signature_image:
+            self.image(self.signature_image, 165, 10, 45)
+        self.cell(0, 2, self.company.name, align="L")
+        self.cell(-20, 2, f"Nro: {self.start_page_number + self.page_no()}", align="R", ln=True)
+        self.cell(0, 5, self.company.vat, align="L", ln=True)
+        self.cell(0, 5, self.company.street if self.company.street else '', align="L", ln=True)
+        self.set_font("Arial", "B", 14)
+        self.cell(0, 20, self.title, align="C", ln=True)
+        if self.subtitle:
+            self.cell(0, 10, self.subtitle, align="C", ln=True)
 
 
 class BookRegistrationReport(models.Model):
@@ -45,7 +66,7 @@ class BookRegistrationReport(models.Model):
         pdf.company = self.company_id
         pdf.title = "Libro Diario"
         if self.registration_id.signature_image:
-            pdf.signature_image = base64.b64decode(self.rubrica_id.imagen)
+            pdf.signature_image = base64.b64decode(self.registration_id.signature_image)
         pdf.add_page()
 
         with pdf.table(col_widths=(20, 30, 20, 10, 10)) as table:
