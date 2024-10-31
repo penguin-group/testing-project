@@ -62,13 +62,14 @@ class BookRegistrationReport(models.Model):
     name = fields.Char(string="Name")
     page_quantity = fields.Integer(string="Page Quantity")
     registration_id = fields.Many2one(
-        'book.registration', 
+        'book.registration',
         string="Book Registration",
         domain="[('active','=', True),('company_id','=',company_id)]"
     )
     report_file = fields.Binary(string="Report File")
     report_file_name = fields.Char(string="Report File Name")
-    company_id = fields.Many2one("res.company", string="Company", default=lambda self: self.env.company)
+    company_id = fields.Many2one(
+        "res.company", string="Company", default=lambda self: self.env.company)
     active = fields.Boolean(string="Active")
     detailed = fields.Boolean(string="Detailed Report")
     type = fields.Selection(string="Type", selection=[
@@ -111,9 +112,11 @@ class BookRegistrationReport(models.Model):
             raise UserError(_("Please generate the file before printing."))
 
         if self.final_registration_number < self.current_registration_number + self.page_quantity:
-            raise UserError(_("The number of pages exceeds the maximum available number."))
+            raise UserError(
+                _("The number of pages exceeds the maximum available number."))
 
-        base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+        base_url = self.env['ir.config_parameter'].sudo(
+        ).get_param('web.base.url')
         download_url = url_join(base_url, '/binary/download')
 
         params = {
@@ -135,7 +138,8 @@ class BookRegistrationReport(models.Model):
     def cancel_book_registration(self):
         current_number = self.registration_id.current_number
         if current_number != self.current_registration_number + self.page_quantity:
-            raise UserError(_("The document cannot be canceled; it does not correspond to the last sequence."))
+            raise UserError(
+                _("The document cannot be canceled; it does not correspond to the last sequence."))
 
         self.registration_id.current_number -= self.page_quantity
         self.state = 'cancel'
@@ -145,7 +149,8 @@ class BookRegistrationReport(models.Model):
         self.state = 'draft'
 
     def format_table_data(self, table_data):
-        table_data = [[remove_unwanted_characters(cell) for cell in sublist] for sublist in table_data]
+        table_data = [[remove_unwanted_characters(
+            cell) for cell in sublist] for sublist in table_data]
         return table_data
 
     def generate_pdf(self):
@@ -175,7 +180,7 @@ class BookRegistrationReport(models.Model):
             except:
                 raise UserError(_("Error generating PDF."))
             self.purchase_sale_pdf(type='purchase')
-        
+
         if self.type == 'sale':
             try:
                 self.purchase_sale_pdf(type='sale')
@@ -244,59 +249,60 @@ class BookRegistrationReport(models.Model):
         """.format(type, self.start_date.strftime('%d/%m/%Y'), self.end_date.strftime('%d/%m/%Y'))
         pdf.title = title
         if self.registration_id.signature_image:
-            pdf.signature_image = base64.b64decode(self.registration_id.signature_image)
+            pdf.signature_image = base64.b64decode(
+                self.registration_id.signature_image)
 
         pdf.set_font("Arial", "B", 10)
         pdf.add_page()
         pdf.cell(0, 6, "", align="L", ln=True)
 
-        cont = 0
+        cnt = 0
         total_gral_total = 0
         total_gral_base10 = 0
         total_gral_base5 = 0
-        total_gral_iva10 = 0
-        total_gral_iva5 = 0
-        total_gral_exentas = 0
+        total_gral_vat10 = 0
+        total_gral_vat5 = 0
+        total_gral_exempt = 0
         for i in invoices.sorted(key=lambda r: r.invoice_date):
             a = 1
-            cont += 1
-            total_factura = 0
+            cnt += 1
+            total_invoice = 0
             if i.state != 'cancel':
-                total_factura = abs(i.amount_total_signed)
+                total_invoice = abs(i.amount_total_signed)
             base10 = 0
             base5 = 0
-            exentas = 0
-            iva10 = 0
-            iva5 = 0
+            exempt = 0
+            vat10 = 0
+            vat5 = 0
 
             for t in i.filtered(lambda x: x.state != 'cancel').invoice_line_ids:
                 if t.tax_ids and t.tax_ids[0].amount == 10:
                     base10 += t.price_total / 1.1
-                    iva10 += t.price_total / 11
+                    vat10 += t.price_total / 11
                 if t.tax_ids and t.tax_ids[0].amount == 5:
                     base5 += t.price_total / 1.05
-                    iva5 += t.price_total / 21
+                    vat5 += t.price_total / 21
                 if (t.tax_ids and t.tax_ids[0].amount == 0) or not t.tax_ids:
-                    exentas += t.price_total
+                    exempt += t.price_total
 
             if i.currency_id != self.company_id.currency_id:
                 base10 = i.currency_id._convert(
                     base10, self.company_id.currency_id, self.company_id, i.invoice_date)
-                iva10 = i.currency_id._convert(
-                    iva10, self.company_id.currency_id, self.company_id, i.invoice_date)
+                vat10 = i.currency_id._convert(
+                    vat10, self.company_id.currency_id, self.company_id, i.invoice_date)
                 base5 = i.currency_id._convert(
                     base5, self.company_id.currency_id, self.company_id, i.invoice_date)
-                iva5 = i.currency_id._convert(
-                    iva5, self.company_id.currency_id, self.company_id, i.invoice_date)
-                exentas = i.currency_id._convert(
-                    exentas, self.company_id.currency_id, self.company_id, i.invoice_date)
+                vat5 = i.currency_id._convert(
+                    vat5, self.company_id.currency_id, self.company_id, i.invoice_date)
+                exempt = i.currency_id._convert(
+                    exempt, self.company_id.currency_id, self.company_id, i.invoice_date)
 
-            total_gral_total += total_factura
+            total_gral_total += total_invoice
             total_gral_base10 += base10
             total_gral_base5 += base5
-            total_gral_iva10 += iva10
-            total_gral_iva5 += iva5
-            total_gral_exentas += exentas
+            total_gral_vat10 += vat10
+            total_gral_vat5 += vat5
+            total_gral_exempt += exempt
 
             def _get_type_doc(invo):
                 type = "Anulado"
@@ -309,7 +315,7 @@ class BookRegistrationReport(models.Model):
 
             if type == 'purchase':
                 TABLE_DATA_INVOICES.append([
-                    str(cont),
+                    str(cnt),
                     str(i.invoice_date.strftime("%d/%m/%y")),
                     str(i.partner_id.name),
                     str(i.partner_id.vat),
@@ -317,48 +323,72 @@ class BookRegistrationReport(models.Model):
                     str(i.supplier_invoice_authorization_id.name) if i.supplier_invoice_authorization_id else ' ',
                     str(i.ref) if i.ref else '',
 
-                    '{0:,.0f}'.format(int(base10)).replace(',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(iva10)).replace(',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(base5)).replace(',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(iva5)).replace(',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(exentas)).replace(',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(total_factura)).replace(',', '.') if i.state != 'cancel' else "0"
+                    '{0:,.0f}'.format(int(base10)).replace(
+                        ',', '.') if i.state != 'cancel' else "0",
+                    '{0:,.0f}'.format(int(vat10)).replace(
+                        ',', '.') if i.state != 'cancel' else "0",
+                    '{0:,.0f}'.format(int(base5)).replace(
+                        ',', '.') if i.state != 'cancel' else "0",
+                    '{0:,.0f}'.format(int(vat5)).replace(
+                        ',', '.') if i.state != 'cancel' else "0",
+                    '{0:,.0f}'.format(int(exempt)).replace(
+                        ',', '.') if i.state != 'cancel' else "0",
+                    '{0:,.0f}'.format(int(total_invoice)).replace(
+                        ',', '.') if i.state != 'cancel' else "0"
                 ])
             else:
                 TABLE_DATA_INVOICES.append([
-                    str(cont),
+                    str(cnt),
                     str(i.invoice_date.strftime("%d/%m/%y")),
                     str(i.partner_id.name),
                     str(i.partner_id.vat),
                     _get_type_doc(i),
                     str(i.name),
 
-                    '{0:,.0f}'.format(int(base10)).replace(',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(iva10)).replace(',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(base5)).replace(',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(iva5)).replace(',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(exentas)).replace(',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(total_factura)).replace(',', '.') if i.state != 'cancel' else "0"
+                    '{0:,.0f}'.format(int(base10)).replace(
+                        ',', '.') if i.state != 'cancel' else "0",
+                    '{0:,.0f}'.format(int(vat10)).replace(
+                        ',', '.') if i.state != 'cancel' else "0",
+                    '{0:,.0f}'.format(int(base5)).replace(
+                        ',', '.') if i.state != 'cancel' else "0",
+                    '{0:,.0f}'.format(int(vat5)).replace(
+                        ',', '.') if i.state != 'cancel' else "0",
+                    '{0:,.0f}'.format(int(exempt)).replace(
+                        ',', '.') if i.state != 'cancel' else "0",
+                    '{0:,.0f}'.format(int(total_invoice)).replace(
+                        ',', '.') if i.state != 'cancel' else "0"
                 ])
 
         if type == 'purchase':
             TABLE_DATA_INVOICES.append([' ', ' ', 'Total', ' ', ' ', ' ', ' ',
-                                        '{0:,.0f}'.format(int(total_gral_base10)).replace(',', '.'),
-                                        '{0:,.0f}'.format(int(total_gral_iva10)).replace(',', '.'),
-                                        '{0:,.0f}'.format(int(total_gral_base5)).replace(',', '.'),
-                                        '{0:,.0f}'.format(int(total_gral_iva5)).replace(',', '.'),
-                                        '{0:,.0f}'.format(int(total_gral_exentas)).replace(',', '.'),
-                                        '{0:,.0f}'.format(int(total_gral_total)).replace(',', '.')
+                                        '{0:,.0f}'.format(
+                                            int(total_gral_base10)).replace(',', '.'),
+                                        '{0:,.0f}'.format(
+                                            int(total_gral_vat10)).replace(',', '.'),
+                                        '{0:,.0f}'.format(
+                                            int(total_gral_base5)).replace(',', '.'),
+                                        '{0:,.0f}'.format(
+                                            int(total_gral_vat5)).replace(',', '.'),
+                                        '{0:,.0f}'.format(
+                                            int(total_gral_exempt)).replace(',', '.'),
+                                        '{0:,.0f}'.format(
+                                            int(total_gral_total)).replace(',', '.')
                                         ])
-        
+
         if type == 'sale':
             TABLE_DATA_INVOICES.append([' ', ' ', 'Total', ' ', ' ', ' ',
-                                        '{0:,.0f}'.format(int(total_gral_base10)).replace(',', '.'),
-                                        '{0:,.0f}'.format(int(total_gral_iva10)).replace(',', '.'),
-                                        '{0:,.0f}'.format(int(total_gral_base5)).replace(',', '.'),
-                                        '{0:,.0f}'.format(int(total_gral_iva5)).replace(',', '.'),
-                                        '{0:,.0f}'.format(int(total_gral_exentas)).replace(',', '.'),
-                                        '{0:,.0f}'.format(int(total_gral_total)).replace(',', '.')
+                                        '{0:,.0f}'.format(
+                                            int(total_gral_base10)).replace(',', '.'),
+                                        '{0:,.0f}'.format(
+                                            int(total_gral_vat10)).replace(',', '.'),
+                                        '{0:,.0f}'.format(
+                                            int(total_gral_base5)).replace(',', '.'),
+                                        '{0:,.0f}'.format(
+                                            int(total_gral_vat5)).replace(',', '.'),
+                                        '{0:,.0f}'.format(
+                                            int(total_gral_exempt)).replace(',', '.'),
+                                        '{0:,.0f}'.format(
+                                            int(total_gral_total)).replace(',', '.')
                                         ])
 
         pdf.set_font("Arial", "", 6)
@@ -432,112 +462,136 @@ class BookRegistrationReport(models.Model):
             pdf.cell(0, 5, "Notas de crédito recibidas", align="L", ln=True)
         pdf.cell(0, 5, "", align="L", ln=True)
 
-        cont = 0
+        cnt = 0
         total_gral_total = 0
         total_gral_base10 = 0
         total_gral_base5 = 0
-        total_gral_iva10 = 0
-        total_gral_iva5 = 0
-        total_gral_exentas = 0
+        total_gral_vat10 = 0
+        total_gral_vat5 = 0
+        total_gral_exempt = 0
         for i in credit_notes.sorted(key=lambda x: x.invoice_date):
-            cont += 1
-            total_factura = 0
+            cnt += 1
+            total_invoice = 0
             if i.state != 'cancel':
-                total_factura = i.amount_total
+                total_invoice = i.amount_total
             base10 = 0
             base5 = 0
-            exentas = 0
-            iva10 = 0
-            iva5 = 0
+            exempt = 0
+            vat10 = 0
+            vat5 = 0
             for t in i.filtered(lambda x: x.state != 'cancel').invoice_line_ids:
                 if t.tax_ids and t.tax_ids[0].amount == 10:
                     base10 += t.price_total / 1.1
-                    iva10 += t.price_total / 11
+                    vat10 += t.price_total / 11
                 if t.tax_ids and t.tax_ids[0].amount == 5:
                     base5 += t.price_total / 1.05
-                    iva5 += t.price_total / 21
+                    vat5 += t.price_total / 21
                 if (t.tax_ids and t.tax_ids[0].amount == 0) or not t.tax_ids:
-                    exentas += t.price_total
+                    exempt += t.price_total
 
             if i.currency_id != self.company_id.currency_id:
                 base10 = i.currency_id._convert(
                     base10, self.company_id.currency_id, self.company_id, i.invoice_date)
-                iva10 = i.currency_id._convert(
-                    iva10, self.company_id.currency_id, self.company_id, i.invoice_date)
+                vat10 = i.currency_id._convert(
+                    vat10, self.company_id.currency_id, self.company_id, i.invoice_date)
                 base5 = i.currency_id._convert(
                     base5, self.company_id.currency_id, self.company_id, i.invoice_date)
-                iva5 = i.currency_id._convert(
-                    iva5, self.company_id.currency_id, self.company_id, i.invoice_date)
-                exentas = i.currency_id._convert(
-                    exentas, self.company_id.currency_id, self.company_id, i.invoice_date)
-                total_factura = i.currency_id._convert(
-                    total_factura, self.company_id.currency_id, self.company_id, i.invoice_date)
+                vat5 = i.currency_id._convert(
+                    vat5, self.company_id.currency_id, self.company_id, i.invoice_date)
+                exempt = i.currency_id._convert(
+                    exempt, self.company_id.currency_id, self.company_id, i.invoice_date)
+                total_invoice = i.currency_id._convert(
+                    total_invoice, self.company_id.currency_id, self.company_id, i.invoice_date)
 
-            total_gral_total += total_factura
+            total_gral_total += total_invoice
             total_gral_base10 += base10
             total_gral_base5 += base5
-            total_gral_iva10 += iva10
-            total_gral_iva5 += iva5
-            total_gral_exentas += exentas
+            total_gral_vat10 += vat10
+            total_gral_vat5 += vat5
+            total_gral_exempt += exempt
 
-            def _get_type_doc(invo):
+            def _get_type_doc(invoice):
                 type = " "
-                if invo.state != 'cancel':
+                if invoice.state != 'cancel':
                     type = "Nota crédito"
                 return type
 
             if type == 'purchase':
                 TABLE_DATA_CREDIT_NOTES.append([
-                    str(cont),
+                    str(cnt),
                     str(i.invoice_date.strftime("%d/%m/%y")),
                     str(i.partner_id.name).strip(),
                     str(i.partner_id.vat).strip(),
                     _get_type_doc(i),
                     str(i.name),
-                    '{0:,.0f}'.format(int(base10)).replace(',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(iva10)).replace(',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(base5)).replace(',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(iva5)).replace(',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(exentas)).replace(',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(total_factura)).replace(',', '.') if i.state != 'cancel' else "0"
+                    '{0:,.0f}'.format(int(base10)).replace(
+                        ',', '.') if i.state != 'cancel' else "0",
+                    '{0:,.0f}'.format(int(vat10)).replace(
+                        ',', '.') if i.state != 'cancel' else "0",
+                    '{0:,.0f}'.format(int(base5)).replace(
+                        ',', '.') if i.state != 'cancel' else "0",
+                    '{0:,.0f}'.format(int(vat5)).replace(
+                        ',', '.') if i.state != 'cancel' else "0",
+                    '{0:,.0f}'.format(int(exempt)).replace(
+                        ',', '.') if i.state != 'cancel' else "0",
+                    '{0:,.0f}'.format(int(total_invoice)).replace(
+                        ',', '.') if i.state != 'cancel' else "0"
                 ])
-            
+
             if type == 'sale':
                 TABLE_DATA_CREDIT_NOTES.append([
-                    str(cont),
+                    str(cnt),
                     str(i.invoice_date.strftime("%d/%m/%y")),
                     str(i.partner_id.name).strip(),
                     str(i.partner_id.vat).strip(),
                     _get_type_doc(i),
                     i.supplier_invoice_authorization_id.name if i.supplier_invoice_authorization_id else ' ',
                     str(i.ref),
-                    '{0:,.0f}'.format(int(base10)).replace(',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(iva10)).replace(',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(base5)).replace(',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(iva5)).replace(',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(exentas)).replace(',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(total_factura)).replace(',', '.') if i.state != 'cancel' else "0"
+                    '{0:,.0f}'.format(int(base10)).replace(
+                        ',', '.') if i.state != 'cancel' else "0",
+                    '{0:,.0f}'.format(int(vat10)).replace(
+                        ',', '.') if i.state != 'cancel' else "0",
+                    '{0:,.0f}'.format(int(base5)).replace(
+                        ',', '.') if i.state != 'cancel' else "0",
+                    '{0:,.0f}'.format(int(vat5)).replace(
+                        ',', '.') if i.state != 'cancel' else "0",
+                    '{0:,.0f}'.format(int(exempt)).replace(
+                        ',', '.') if i.state != 'cancel' else "0",
+                    '{0:,.0f}'.format(int(total_invoice)).replace(
+                        ',', '.') if i.state != 'cancel' else "0"
                 ])
-        
+
         if type == 'sale':
             TABLE_DATA_CREDIT_NOTES.append([' ', ' ', 'Total', ' ', ' ', ' ', ' ',
-                                     '{0:,.0f}'.format(int(total_gral_base10)).replace(',', '.'),
-                                     '{0:,.0f}'.format(int(total_gral_iva10)).replace(',', '.'),
-                                     '{0:,.0f}'.format(int(total_gral_base5)).replace(',', '.'),
-                                     '{0:,.0f}'.format(int(total_gral_iva5)).replace(',', '.'),
-                                     '{0:,.0f}'.format(int(total_gral_exentas)).replace(',', '.'),
-                                     '{0:,.0f}'.format(int(total_gral_total)).replace(',', '.')
-                                     ])
-        
+                                            '{0:,.0f}'.format(
+                                                int(total_gral_base10)).replace(',', '.'),
+                                            '{0:,.0f}'.format(
+                                                int(total_gral_vat10)).replace(',', '.'),
+                                            '{0:,.0f}'.format(
+                                                int(total_gral_base5)).replace(',', '.'),
+                                            '{0:,.0f}'.format(
+                                                int(total_gral_vat5)).replace(',', '.'),
+                                            '{0:,.0f}'.format(
+                                                int(total_gral_exempt)).replace(',', '.'),
+                                            '{0:,.0f}'.format(
+                                                int(total_gral_total)).replace(',', '.')
+                                            ])
+
         if type == 'purchase':
             TABLE_DATA_CREDIT_NOTES.append([' ', ' ', 'Total', ' ', ' ', ' ',
-                                     '{0:,.0f}'.format(int(total_gral_base10)).replace(',', '.'),
-                                     '{0:,.0f}'.format(int(total_gral_iva10)).replace(',', '.'),
-                                     '{0:,.0f}'.format(int(total_gral_base5)).replace(',', '.'),
-                                     '{0:,.0f}'.format(int(total_gral_iva5)).replace(',', '.'),
-                                     '{0:,.0f}'.format(int(total_gral_exentas)).replace(',', '.'),
-                                     '{0:,.0f}'.format(int(total_gral_total)).replace(',', '.')
-                                     ])
+                                            '{0:,.0f}'.format(
+                                                int(total_gral_base10)).replace(',', '.'),
+                                            '{0:,.0f}'.format(
+                                                int(total_gral_vat10)).replace(',', '.'),
+                                            '{0:,.0f}'.format(
+                                                int(total_gral_base5)).replace(',', '.'),
+                                            '{0:,.0f}'.format(
+                                                int(total_gral_vat5)).replace(',', '.'),
+                                            '{0:,.0f}'.format(
+                                                int(total_gral_exempt)).replace(',', '.'),
+                                            '{0:,.0f}'.format(
+                                                int(total_gral_total)).replace(',', '.')
+                                            ])
         pdf.set_font("Arial", "", 6)
 
         if type == 'sale':
@@ -563,7 +617,7 @@ class BookRegistrationReport(models.Model):
 
         os.remove(tmp_file.name)
         pdf_base64 = base64.b64encode(pdf_bytes)
-        self.archivo_nombre = "Libro_{0}.pdf".format(type)
+        self.report_file_name = "Libro_{0}.pdf".format(type)
         self.write({
             'report_file': pdf_base64
         })
@@ -578,13 +632,15 @@ class BookRegistrationReport(models.Model):
         pdf.set_font("Arial", "", 5)
         pdf.start_page_number = self.registration_id.current_number
         pdf.company = self.company_id
-        pdf.title = "Libro Mayor - Periodo: Del {0} al {1}".format(self.start_date.strftime('%d/%m/%Y'), self.end_date.strftime('%d/%m/%Y'))
+        pdf.title = "Libro Mayor - Periodo: Del {0} al {1}".format(
+            self.start_date.strftime('%d/%m/%Y'), self.end_date.strftime('%d/%m/%Y'))
         if self.registration_id.signature_image:
-            pdf.signature_image = base64.b64decode(self.registration_id.signature_image)
+            pdf.signature_image = base64.b64decode(
+                self.registration_id.signature_image)
         pdf.add_page()
         if not self.detailed:
             query = f"""
-                select ml.account_id as cuenta_id, aa.name as nombre_cuenta, sum(ml.debit) as debit,
+                select ml.account_id as r_account_id, aa.name as r_account_name, sum(ml.debit) as debit,
                 sum(ml.credit) as credit, sum(ml.balance) as balance, aa.code as code
                 FROM public.account_move_line as ml inner join account_account as aa on ml.account_id = aa.id
                 where ml.date <= '{self.end_date}' and ml.company_id = '{self.company_id.id}' and ml.parent_state = 'posted'
@@ -603,34 +659,39 @@ class BookRegistrationReport(models.Model):
                 'Saldo'
             )]
 
-            cont = 0
-            total_credito = 0
-            total_debito = 0
+            cnt = 0
+            total_credit = 0
+            total_debit = 0
             total_balance = 0
             for row in results:
-                cuenta_id, nombre_cuenta, debit, credit, balance, code = row
+                r_account_id, r_account_name, debit, credit, balance, code = row
 
                 debit = int(debit)
                 credit = int(credit)
                 balance = int(balance)
-                total_debito_t = debit
-                total_credito_t = credit
+                total_debit_t = debit
+                total_credit_t = credit
                 total_balance_t = balance
                 TABLE_DATA.append([
-                    str(code) + ' - ' + str(nombre_cuenta).replace('₲', '').strip(),  # cuenta contable
-                    '{0:,.0f}'.format(int(debit)).replace(',', '.'),  # debito - DEBE
-                    '{0:,.0f}'.format(int(credit)).replace(',', '.'),  # Credito - HABER
-                    '{0:,.0f}'.format(int(balance)).replace(',', '.')  # balance
+                    str(code) + ' - ' +
+                    str(r_account_name).replace('₲', '').strip(),  # Account
+                    '{0:,.0f}'.format(int(debit)).replace(',', '.'),  # Debit
+                    '{0:,.0f}'.format(int(credit)).replace(',', '.'),  # Credit
+                    '{0:,.0f}'.format(int(balance)).replace(
+                        ',', '.')  # Balance
 
                 ])
-                total_debito += total_debito_t
-                total_credito += total_credito_t
+                total_debit += total_debit_t
+                total_credit += total_credit_t
                 total_balance += total_balance_t
-            
+
             TABLE_DATA.append(['',
-                               '{0:,.0f}'.format(int(total_debito)).replace(',', '.'),
-                               '{0:,.0f}'.format(int(total_credito)).replace(',', '.'),
-                               '{0:,.0f}'.format(int(total_balance)).replace(',', '.'),
+                               '{0:,.0f}'.format(
+                                   int(total_debit)).replace(',', '.'),
+                               '{0:,.0f}'.format(
+                                   int(total_credit)).replace(',', '.'),
+                               '{0:,.0f}'.format(
+                                   int(total_balance)).replace(',', '.'),
                                ])
 
             TABLE_DATA = self.format_table_data(TABLE_DATA)
@@ -654,7 +715,7 @@ class BookRegistrationReport(models.Model):
                 'Saldo'
             )]
             query = f"""
-                    WITH subconsulta AS (
+                    WITH subquery AS (
                         SELECT
                             ml.account_id,
                             SUM(ml.debit) AS debit_total,
@@ -663,46 +724,45 @@ class BookRegistrationReport(models.Model):
                         FROM
                             public.account_move_line AS ml
                         WHERE
-                            ml.date < '{self.start_date}' -- Fecha límite para fechas anteriores
-                            AND ml.company_id = '{self.company_id.id}' 
+                            ml.date < '{self.start_date}' -- Deadline for previous dates
+                            AND ml.company_id = '{self.company_id.id}'
                             and ml.parent_state = 'posted'
                         GROUP BY
                             ml.account_id
                     )
                     SELECT
                         am.move_number as move_number,
-                        ml.date as fecha,
-                        ml.account_id AS cuenta_id,
-                        aa.name as nombre_cuenta,
-                        ml.name as nombre_linea_cuenta,
+                        ml.date as date,
+                        ml.account_id AS r_account_id,
+                        aa.name as r_account_name,
+                        ml.name as account_line_name,
                         ml.debit as debit,
                         ml.credit as credit,
                         ml.balance as balance,
                         sub.debit_total as debit_total,
                         sub.credit_total as credit_total,
                         sub.balance_total as balance_total,
-                        aa.id as codigo_cuenta,
-                        am.name as referencia,
+                        aa.id as account_code,
+                        am.name as reference,
                         aa.code as code,
                         CASE
                             WHEN aa.name IS NOT NULL THEN 'Dentro del Rango'
-                        END as estado_consulta,
-                        ml.id as codigo_linea
-
+                        END as query_state,
+                        ml.id as line_code
 
                     FROM
                         public.account_move_line AS ml
                     INNER JOIN
                         account_account AS aa ON ml.account_id = aa.id
-                    inner 
-                        join account_move as am on ml.move_id = am.id 
+                    inner
+                        join account_move as am on ml.move_id = am.id
                     LEFT JOIN
-                        subconsulta as sub ON ml.account_id = sub.account_id
+                        subquery as sub ON ml.account_id = sub.account_id
                     WHERE
                         ml.date >= '{self.start_date}'
                         AND ml.date <= '{self.end_date}'
-                        AND ml.company_id = '{self.company_id.id}' 
-                        and ml.parent_state = 'posted'          
+                        AND ml.company_id = '{self.company_id.id}'
+                        and ml.parent_state = 'posted'
                     GROUP BY
                         move_number,ml.date, ml.account_id, aa.name, ml.name,sub.debit_total, sub.credit_total,sub.balance_total,
                         ml.debit,ml.credit,ml.balance,aa.id, am.name,aa.code, ml.id
@@ -711,23 +771,23 @@ class BookRegistrationReport(models.Model):
 
                     SELECT
                         NULL as move_number,
-                        NULL as fecha,
+                        NULL as date,
                         ml.account_id,
-                        aa.name as nombre_cuenta,
-                        Null as nombre_linea_cuenta,
+                        aa.name as r_account_name,
+                        Null as account_line_name,
                         0 as debit,
                         0 as credit,
                         0 as balance,
                         SUM(ml.debit) AS debit_total,
                         SUM(ml.credit) AS credit_total,
                         SUM(ml.balance) AS balance_total,
-                        aa.id as codigo_cuenta,
-                        NULL as referencia,
+                        aa.id as account_code,
+                        NULL as reference,
                         aa.code as code,
                         CASE
                             WHEN aa.name IS NOT NULL THEN 'Otras Cuentas'
-                        END as estado_consulta,
-                        NULL as codigo_linea
+                        END as query_state,
+                        NULL as line_code
                     FROM
                         public.account_move_line AS ml
                     INNER JOIN
@@ -737,15 +797,15 @@ class BookRegistrationReport(models.Model):
                         AND ml.company_id = '{self.company_id.id}'
                         AND ml.parent_state = 'posted'
                         AND NOT EXISTS (
-								SELECT 1
-								FROM public.account_move_line AS ml_sub
-								WHERE
-									ml_sub.account_id = ml.account_id
-									AND ml_sub.date >= '{self.start_date}'
-									AND ml_sub.date <= '{self.end_date}'
-									AND ml_sub.company_id = '{self.company_id.id}'
-									AND ml_sub.parent_state = 'posted'
-							)
+                                                                SELECT 1
+                                                                FROM public.account_move_line AS ml_sub
+                                                                WHERE
+                                                                        ml_sub.account_id = ml.account_id
+                                                                        AND ml_sub.date >= '{self.start_date}'
+                                                                        AND ml_sub.date <= '{self.end_date}'
+                                                                        AND ml_sub.company_id = '{self.company_id.id}'
+                                                                        AND ml_sub.parent_state = 'posted'
+                                                        )
                     GROUP BY
                         ml.account_id, aa.name, aa.code, aa.id
 
@@ -753,66 +813,68 @@ class BookRegistrationReport(models.Model):
                 ORDER BY
                     ---ml.account_id, ml.date,aa.code
                     code, move_number
-                    ---, fecha DESC;
+                    ---, date DESC;
 
             """
 
             self.env.cr.execute(query)
             results = self.env.cr.fetchall()
-            cuenta_nombre_grupo = []
+            account_name_group = []
 
             for row in results:
-                nro_asiento, fecha, cuenta_id, nombre_cuenta, nombre_linea_cuenta, debit, credit, balance, debit_total, credit_total, balance_total, codigo_cuenta, referencia, code, estado_consulta, codigo_linea = row
-                if cuenta_id not in [item['cuenta'] for item in cuenta_nombre_grupo]:
+                move_number, date, r_account_id, r_account_name, account_line_name, debit, credit, balance, debit_total, credit_total, total_balance, account_code, reference, code, query_state, line_code = row
+                if r_account_id not in [item['account'] for item in account_name_group]:
                     a = {
-                        'cuenta': cuenta_id,
-                        'nombre_cuenta': nombre_cuenta,
+                        'account': r_account_id,
+                        'r_account_name': r_account_name,
                         'debit_total': (debit_total),
                         'credit_total': (credit_total),
-                        'balance_total': (balance_total),
+                        'balance_total': (total_balance),
                         'code': code,
-                        'estado_consulta': estado_consulta
+                        'query_state': query_state
 
                     }
-                    cuenta_nombre_grupo.append(a)
-    
-            total_credito_final = 0
-            total_debito_final = 0
+                    account_name_group.append(a)
+
+            total_credit_final = 0
+            total_debit_final = 0
             total_balance_final = 0
 
-            total_debito_sin_detalle = 0
-            total_credito_sin_detalle = 0
-            total_balance_sin_detalle = 0
+            total_debit_no_details = 0
+            total_credit_no_details = 0
+            total_balance_no_details = 0
 
-            for item in cuenta_nombre_grupo:
-                total_credito = 0
-                total_debito = 0
+            for item in account_name_group:
+                total_credit = 0
+                total_debit = 0
                 total_balance = 0
                 if not item['debit_total']:
                     debit_total = 0
                 else:
                     debit_total = item['debit_total']
 
-                debit_total_saldo = debit_total
+                debit_total_balance = debit_total
 
                 if not item['credit_total']:
                     credit_total = 0
                 else:
                     credit_total = item['credit_total']
 
-                credit_total_saldo = credit_total
+                credit_total_balance = credit_total
 
                 if not item['balance_total']:
-                    balance_total = 0
+                    total_balance = 0
                 else:
-                    balance_total = item['balance_total']
+                    total_balance = item['balance_total']
 
-                balance_total_saldo = balance_total
+                balance_total_balance = total_balance
 
                 TABLE_DATA.append([
                     '',
                     '',
-                    str(item['code']) + ' - ' + str(item['nombre_cuenta']).replace('₲', '').strip(),  # cuenta contable
+                    str(item['code']) + ' - ' + str(item['r_account_name']
+                                                    # Account
+                                                    ).replace('₲', '').strip(),
                     '',
                     '',
                     '',
@@ -826,131 +888,145 @@ class BookRegistrationReport(models.Model):
                     '',
                     '{0:,.0f}'.format(int(debit_total)).replace(',', '.'),
                     '{0:,.0f}'.format(int(credit_total)).replace(',', '.'),
-                    '{0:,.0f}'.format(int(balance_total)).replace(',', '.'),
+                    '{0:,.0f}'.format(int(total_balance)).replace(',', '.'),
 
                 ])
-                calculo_saldo_referencia = 0
-                cont = 0
+                reference_balance_computation = 0
+                cnt = 0
                 for row in results:
-
-                    nro_asiento, fecha, cuenta_id, nombre_cuenta, nombre_linea_cuenta, debit, credit, balance, debit_total, credit_total, balance_total, codigo_cuenta, referencia, code, estado_consulta, codigo_linea = row
-                    if item['estado_consulta'] == 'Dentro del Rango':
-                        if cuenta_id == item['cuenta']:
-
-                            if not nombre_linea_cuenta:
-                                nombre_linea_cuenta = ''
+                    move_number, date, r_account_id, r_account_name, account_line_name, debit, credit, balance, debit_total, credit_total, total_balance, account_code, reference, code, query_state, line_code = row
+                    if item['query_state'] == 'Dentro del Rango':
+                        if r_account_id == item['account']:
+                            if not account_line_name:
+                                account_line_name = ''
                             else:
-                                nombre_linea_cuenta = str(nombre_linea_cuenta).replace('₲', '').strip()
-                            total_debito_t = debit
-                            total_credito_t = credit
+                                account_line_name = str(
+                                    account_line_name).replace('₲', '').strip()
+                            total_debit_t = debit
+                            total_credit_t = credit
                             total_balance_t = balance
-                            if not fecha:
-                                fecha = ''
+                            if not date:
+                                date = ''
                             else:
-                                fecha = str(fecha.strftime("%d/%m/%y"))
-                            if referencia:
-                                referencia = referencia
+                                date = str(date.strftime("%d/%m/%y"))
+                            if reference:
+                                reference = reference
                             else:
-                                referencia = ''
-                            cont += 1
+                                reference = ''
+                            cnt += 1
 
-                            if cont == 1:
-                                calculo_saldo_referencia = (balance_total_saldo + debit) - credit
+                            if cnt == 1:
+                                reference_balance_computation = (
+                                    balance_total_balance + debit) - credit
                             else:
-                                c = calculo_saldo_referencia
-                                calculo_saldo_referencia = (c + debit) - credit
+                                c = reference_balance_computation
+                                reference_balance_computation = (
+                                    c + debit) - credit
 
                             TABLE_DATA.append([
-                                '{0:,.0f}'.format(int(nro_asiento)).replace(',', '.'),
-                                fecha,
+                                '{0:,.0f}'.format(
+                                    int(move_number)).replace(',', '.'),
+                                date,
                                 '',
-                                referencia,
-                                '{0:,.0f}'.format(int(debit)).replace(',', '.'),
-                                '{0:,.0f}'.format(int(credit)).replace(',', '.'),
-                                '{0:,.0f}'.format(int(calculo_saldo_referencia)).replace(',', '.'),
+                                reference,
+                                '{0:,.0f}'.format(
+                                    int(debit)).replace(',', '.'),
+                                '{0:,.0f}'.format(
+                                    int(credit)).replace(',', '.'),
+                                '{0:,.0f}'.format(
+                                    int(reference_balance_computation)).replace(',', '.'),
                             ])
-                            total_debito += total_debito_t
-                            total_credito += total_credito_t
+                            total_debit += total_debit_t
+                            total_credit += total_credit_t
                             total_balance += total_balance_t
 
-                            total_debito_final += total_debito_t
-                            total_credito_final += total_credito_t
+                            total_debit_final += total_debit_t
+                            total_credit_final += total_credit_t
                             total_balance_final += total_balance_t
 
-                if item['estado_consulta'] == 'Dentro del Rango':
+                if item['query_state'] == 'Dentro del Rango':
 
-                    ## Sumamos el total del saldo incial y el total de las lineas de cuentas por cuentas
-                    ###Debito
-                    if debit_total_saldo > 0 and total_debito > 0:
-                        total_debit_total_saldo_incial = debit_total_saldo + total_debito
+                    # We add the total of the initial balance and the total of the account lines by accounts
+                    # Debit
+                    if debit_total_balance > 0 and total_debit > 0:
+                        total_debit_total_inicial_balance = debit_total_balance + total_debit
 
-                    elif debit_total_saldo > 0 and total_debito == 0:
-                        total_debit_total_saldo_incial = debit_total_saldo
-
-                    else:
-                        total_debit_total_saldo_incial = total_debito
-                    ####Credito
-                    if credit_total_saldo > 0 and total_credito > 0:
-                        total_credit_total_saldo_incial = credit_total_saldo + total_credito
-
-                    elif credit_total_saldo > 0 and total_credito == 0:
-                        total_credit_total_saldo_incial = credit_total_saldo
+                    elif debit_total_balance > 0 and total_debit == 0:
+                        total_debit_total_inicial_balance = debit_total_balance
 
                     else:
-                        total_credit_total_saldo_incial = total_credito
+                        total_debit_total_inicial_balance = total_debit
+                    # Credit
+                    if credit_total_balance > 0 and total_credit > 0:
+                        total_credit_total_inicial_balance = credit_total_balance + total_credit
 
-                    ###Saldo
-                    if balance_total_saldo != 0 and total_balance != 0:
-                        total_balance_total_saldo_incial = balance_total_saldo + total_balance
+                    elif credit_total_balance > 0 and total_credit == 0:
+                        total_credit_total_inicial_balance = credit_total_balance
+
                     else:
-                        total_balance_total_saldo_incial = total_balance
+                        total_credit_total_inicial_balance = total_credit
+
+                    # Saldo
+                    if balance_total_balance != 0 and total_balance != 0:
+                        total_balance_total_inicial_balance = balance_total_balance + total_balance
+                    else:
+                        total_balance_total_inicial_balance = total_balance
 
                     TABLE_DATA.append([
                         ' ',
                         ' ',
-                        'Total ' + str(item['code']) + ' - ' + str(item['nombre_cuenta']).replace('₲', '').strip(),  # cuenta contable
+                        'Total ' + str(item['code']) + ' - ' + str(
+                            # Account
+                            item['r_account_name']).replace('₲', '').strip(),
                         ' ',
-                        '{0:,.0f}'.format(int(total_debit_total_saldo_incial)).replace(',', '.'),
-                        '{0:,.0f}'.format(int(total_credit_total_saldo_incial)).replace(',', '.'),
-                        '{0:,.0f}'.format(int(total_balance_total_saldo_incial)).replace(',', '.'),
+                        '{0:,.0f}'.format(
+                            int(total_debit_total_inicial_balance)).replace(',', '.'),
+                        '{0:,.0f}'.format(
+                            int(total_credit_total_inicial_balance)).replace(',', '.'),
+                        '{0:,.0f}'.format(
+                            int(total_balance_total_inicial_balance)).replace(',', '.'),
                     ])
                 else:
                     TABLE_DATA.append([
                         ' ',
                         ' ',
-                        'Total ' + str(item['code']) + ' - ' + str(item['nombre_cuenta']).replace('₲', '').strip(),  # cuenta contable
+                        'Total ' + str(item['code']) + ' - ' + str(
+                            # Account
+                            item['r_account_name']).replace('₲', '').strip(),
                         ' ',
-                        '{0:,.0f}'.format(int(debit_total_saldo)).replace(',', '.'),
-                        '{0:,.0f}'.format(int(credit_total_saldo)).replace(',', '.'),
-                        '{0:,.0f}'.format(int(balance_total_saldo)).replace(',', '.'),
-
+                        '{0:,.0f}'.format(
+                            int(debit_total_balance)).replace(',', '.'),
+                        '{0:,.0f}'.format(
+                            int(credit_total_balance)).replace(',', '.'),
+                        '{0:,.0f}'.format(
+                            int(balance_total_balance)).replace(',', '.'),
                     ])
 
-            if debit_total_saldo > 0:
-                resultado_debito = total_debito_sin_detalle + total_debito_final
+            if debit_total_balance > 0:
+                result_debit = total_debit_no_details + total_debit_final
             else:
-                resultado_debito = total_debito_final
+                result_debit = total_debit_final
 
-            if credit_total_saldo > 0:
-                total_credito_sin_detalle += credit_total_saldo
-                resultado_credito = total_credito_sin_detalle + total_credito_final
+            if credit_total_balance > 0:
+                total_credit_no_details += credit_total_balance
+                result_credit = total_credit_no_details + total_credit_final
             else:
-                resultado_credito = total_credito_final
+                result_credit = total_credit_final
 
-            if balance_total_saldo != 0:
-                total_balance_sin_detalle += balance_total_saldo
-                resultado_balance = total_balance_sin_detalle + total_balance_final
+            if balance_total_balance != 0:
+                total_balance_no_details += balance_total_balance
+                result_balance = total_balance_no_details + total_balance_final
             else:
-                resultado_balance = total_balance_final
+                result_balance = total_balance_final
 
             TABLE_DATA.append([
                 ' ',
                 ' ',
                 ' ',
                 ' ',
-                '{0:,.0f}'.format(int(resultado_debito)).replace(',', '.'),
-                '{0:,.0f}'.format(int(resultado_credito)).replace(',', '.'),
-                '{0:,.0f}'.format(int(resultado_balance)).replace(',', '.'),
+                '{0:,.0f}'.format(int(result_debit)).replace(',', '.'),
+                '{0:,.0f}'.format(int(result_credit)).replace(',', '.'),
+                '{0:,.0f}'.format(int(result_balance)).replace(',', '.'),
             ])
 
             TABLE_DATA = self.format_table_data(TABLE_DATA)
@@ -980,21 +1056,28 @@ class BookRegistrationReport(models.Model):
         })
 
     def daily_book_pdf(self):
-        TABLE_DATA = [('Cuenta', 'Descripción', 'Detalle', 'Crédito', 'Débito')]
-        moves = self.env['account.move'].search([('date', '>=', self.start_date), ('date', '<=', self.end_date), ('state', '=', 'posted')])
+        TABLE_DATA = [
+            ('Cuenta', 'Descripción', 'Detalle', 'Crédito', 'Débito')]
+        moves = self.env['account.move'].search(
+            [('date', '>=', self.start_date), ('date', '<=', self.end_date), ('state', '=', 'posted')])
         if moves:
             moves = list(moves)
             moves.reverse()
         for move in moves:
-            TABLE_DATA.append(('Asiento:{0} Fecha: {1}'.format(str(move.move_number).strip(), str(move.date.strftime('%d/%m/%Y')).strip()), '', '', '', ''))
+            TABLE_DATA.append(('Asiento:{0} Fecha: {1}'.format(str(move.move_number).strip(
+            ), str(move.date.strftime('%d/%m/%Y')).strip()), '', '', '', ''))
 
             for line in move.line_ids:
                 table_line = (
-                    str(line.account_id.display_name if line.account_id.display_name else ' ').replace('₲', '').strip(),
-                    str(line.name if line.name else ' ').replace('₲', '').strip(),
+                    str(line.account_id.display_name if line.account_id.display_name else ' ').replace(
+                        '₲', '').strip(),
+                    str(line.name if line.name else ' ').replace(
+                        '₲', '').strip(),
                     str(line.ref if line.ref else ' ').replace('₲', '').strip(),
-                    '{0:,.0f}'.format(int(line.debit)).replace(',', '.') if line.debit else '0',
-                    '{0:,.0f}'.format(int(line.credit)).replace(',', '.') if line.credit else '0'
+                    '{0:,.0f}'.format(int(line.debit)).replace(
+                        ',', '.') if line.debit else '0',
+                    '{0:,.0f}'.format(int(line.credit)).replace(
+                        ',', '.') if line.credit else '0'
                 )
                 TABLE_DATA.append(table_line)
 
@@ -1006,9 +1089,11 @@ class BookRegistrationReport(models.Model):
         pdf.company = self.company_id
         pdf.title = "Libro Diario"
         if self.registration_id.signature_image:
-            pdf.signature_image = base64.b64decode(self.registration_id.signature_image)
+            pdf.signature_image = base64.b64decode(
+                self.registration_id.signature_image)
         if self.registration_id.signature_image:
-            pdf.signature_image = base64.b64decode(self.registration_id.signature_image)
+            pdf.signature_image = base64.b64decode(
+                self.registration_id.signature_image)
         pdf.add_page()
 
         with pdf.table(col_widths=(20, 30, 20, 10, 10)) as table:
@@ -1037,62 +1122,81 @@ class BookRegistrationReport(models.Model):
 
     def daily_month_summary_pdf(self):
         TABLE_DATA = [('Cuenta', 'Débito', 'Crédito')]
-        moves = self.env['account.move'].search([('date', '>=', self.start_date), ('date', '<=', self.end_date), ('state', '=', 'posted')])
+        moves = self.env['account.move'].search(
+            [('date', '>=', self.start_date), ('date', '<=', self.end_date), ('state', '=', 'posted')])
 
         if moves:
-            anhos = set(moves.sorted(key=lambda x: x.date).mapped(lambda x: x.date.year))
-            meses = set(moves.sorted(key=lambda x: x.date).mapped(lambda x: x.date.month))
+            years = set(moves.sorted(key=lambda x: x.date).mapped(
+                lambda x: x.date.year))
+            months = set(moves.sorted(key=lambda x: x.date).mapped(
+                lambda x: x.date.month))
             moves = moves.sorted(key=lambda x: (x.date, x.id))
-            total_gral_debito = 0
-            total_gral_credito = 0
-            for anho in anhos:
-                for mes in meses:
-                    total_debito = 0
-                    total_credito = 0
-                    TABLE_DATA.append(('Fecha: %s/%s' % (mes, anho), '', ''))
-                    month_moves = moves.filtered(lambda x: x.date.month == mes and x.date.year == anho)
-                    month_move_lines_debits = month_moves.mapped('line_ids').filtered(lambda x: x.debit > 0)
-                    month_move_lines_debits_accts = sorted(list(set(month_move_lines_debits.mapped('account_id'))), key=lambda x: x.display_name)
-                    for cuenta in month_move_lines_debits_accts:
-                        debito = sum(month_move_lines_debits.filtered(lambda x: x.account_id == cuenta).mapped('debit'))
-                        credito = sum(month_move_lines_debits.filtered(lambda x: x.account_id == cuenta).mapped('credit'))
+            total_gral_debit = 0
+            total_gral_credit = 0
+            for year in years:
+                for month in months:
+                    total_debit = 0
+                    total_credit = 0
+                    TABLE_DATA.append(('Fecha: %s/%s' % (month, year), '', ''))
+                    month_moves = moves.filtered(
+                        lambda x: x.date.month == month and x.date.year == year)
+                    month_move_lines_debits = month_moves.mapped(
+                        'line_ids').filtered(lambda x: x.debit > 0)
+                    month_move_lines_debits_accts = sorted(list(
+                        set(month_move_lines_debits.mapped('account_id'))), key=lambda x: x.display_name)
+                    for account in month_move_lines_debits_accts:
+                        debit = sum(month_move_lines_debits.filtered(
+                            lambda x: x.account_id == account).mapped('debit'))
+                        credit = sum(month_move_lines_debits.filtered(
+                            lambda x: x.account_id == account).mapped('credit'))
                         table_line = (
-                            cuenta.display_name,
-                            '{0:,.0f}'.format(debito),
-                            '{0:,.0f}'.format(credito),
+                            account.display_name,
+                            '{0:,.0f}'.format(debit),
+                            '{0:,.0f}'.format(credit),
                         )
-                        total_debito += debito
-                        total_credito += credito
-                        total_gral_debito += debito
-                        total_gral_credito += credito
+                        total_debit += debit
+                        total_credit += credit
+                        total_gral_debit += debit
+                        total_gral_credit += credit
                         TABLE_DATA.append(table_line)
-                    month_move_lines_credits = month_moves.mapped('line_ids').filtered(lambda x: x.credit > 0)
-                    month_move_lines_credits_accts = sorted(list(set(month_move_lines_credits.mapped('account_id'))), key=lambda x: x.display_name)
-                    for cuenta in month_move_lines_credits_accts:
-                        debito = sum(month_move_lines_credits.filtered(lambda x: x.account_id == cuenta).mapped('debit'))
-                        credito = sum(month_move_lines_credits.filtered(lambda x: x.account_id == cuenta).mapped('credit'))
+                    month_move_lines_credits = month_moves.mapped(
+                        'line_ids').filtered(lambda x: x.credit > 0)
+                    month_move_lines_credits_accts = sorted(list(
+                        set(month_move_lines_credits.mapped('account_id'))), key=lambda x: x.display_name)
+                    for account in month_move_lines_credits_accts:
+                        debit = sum(month_move_lines_credits.filtered(
+                            lambda x: x.account_id == account).mapped('debit'))
+                        credit = sum(month_move_lines_credits.filtered(
+                            lambda x: x.account_id == account).mapped('credit'))
                         table_line = (
-                            cuenta.display_name,
-                            '{0:,.0f}'.format(sum(month_move_lines_credits.filtered(lambda x: x.account_id == cuenta).mapped('debit'))),
-                            '{0:,.0f}'.format(sum(month_move_lines_credits.filtered(lambda x: x.account_id == cuenta).mapped('credit'))),
+                            account.display_name,
+                            '{0:,.0f}'.format(sum(month_move_lines_credits.filtered(
+                                lambda x: x.account_id == account).mapped('debit'))),
+                            '{0:,.0f}'.format(sum(month_move_lines_credits.filtered(
+                                lambda x: x.account_id == account).mapped('credit'))),
                         )
-                        total_debito += debito
-                        total_credito += credito
-                        total_gral_debito += debito
-                        total_gral_credito += credito
+                        total_debit += debit
+                        total_credit += credit
+                        total_gral_debit += debit
+                        total_gral_credit += credit
                         TABLE_DATA.append(table_line)
-                    TABLE_DATA.append(('Total %s/%s' % (mes, anho), '{0:,.0f}'.format(total_debito), '{0:,.0f}'.format(total_credito)))
-            TABLE_DATA.append(('Total general', '{0:,.0f}'.format(total_gral_debito), '{0:,.0f}'.format(total_gral_credito)))
+                    TABLE_DATA.append(('Total %s/%s' % (month, year), '{0:,.0f}'.format(
+                        total_debit), '{0:,.0f}'.format(total_credit)))
+            TABLE_DATA.append(('Total general', '{0:,.0f}'.format(
+                total_gral_debit), '{0:,.0f}'.format(total_gral_credit)))
         pdf = CustomPDF()
         pdf.set_font("Arial", "", 6)
         pdf.start_page_number = self.registration_id.current_number
         pdf.company = self.company_id
         pdf.title = "Libro Diario"
-        pdf.subtitle = "Del: %s al %s" % (self.start_date.strftime('%d/%m/%Y'), self.end_date.strftime('%d/%m/%Y'))
+        pdf.subtitle = "Del: %s al %s" % (self.start_date.strftime(
+            '%d/%m/%Y'), self.end_date.strftime('%d/%m/%Y'))
         if self.registration_id.signature_image:
-            pdf.signature_image = base64.b64decode(self.registration_id.signature_image)
+            pdf.signature_image = base64.b64decode(
+                self.registration_id.signature_image)
         if self.registration_id.signature_image:
-            pdf.signature_image = base64.b64decode(self.registration_id.signature_image)
+            pdf.signature_image = base64.b64decode(
+                self.registration_id.signature_image)
         pdf.add_page()
 
         TABLE_DATA = self.format_table_data(TABLE_DATA)
@@ -1124,65 +1228,86 @@ class BookRegistrationReport(models.Model):
 
     def daily_summary_pdf(self):
         TABLE_DATA = [('Cuenta', 'Débito', 'Crédito')]
-        moves = self.env['account.move'].search([('date', '>=', self.start_date), ('date', '<=', self.end_date), ('state', '=', 'posted')])
+        moves = self.env['account.move'].search(
+            [('date', '>=', self.start_date), ('date', '<=', self.end_date), ('state', '=', 'posted')])
 
         if moves:
-            anhos = set(moves.sorted(key=lambda x: x.date).mapped(lambda x: x.date.year))
-            meses = set(moves.sorted(key=lambda x: x.date).mapped(lambda x: x.date.month))
-            dias = set(moves.sorted(key=lambda x: x.date).mapped(lambda x: x.date.day))
+            years = set(moves.sorted(key=lambda x: x.date).mapped(
+                lambda x: x.date.year))
+            months = set(moves.sorted(key=lambda x: x.date).mapped(
+                lambda x: x.date.month))
+            days = set(moves.sorted(key=lambda x: x.date).mapped(
+                lambda x: x.date.day))
             moves = moves.sorted(key=lambda x: (x.date, x.id))
-            total_gral_debito = 0
-            total_gral_credito = 0
-            for anho in anhos:
-                for mes in meses:
-                    for dia in dias:
-                        total_debito = 0
-                        total_credito = 0
-                        TABLE_DATA.append(('Fecha: %s/%s/%s' % (dia, mes, anho), '', ''))
-                        day_moves = moves.filtered(lambda x: x.date.month == mes and x.date.year == anho and x.date.day == dia)
-                        day_move_lines_debits = day_moves.mapped('line_ids').filtered(lambda x: x.debit > 0)
-                        day_move_lines_debits_accts = sorted(list(set(day_move_lines_debits.mapped('account_id'))), key=lambda x: x.display_name)
-                        for cuenta in day_move_lines_debits_accts:
-                            debito = sum(day_move_lines_debits.filtered(lambda x: x.account_id == cuenta).mapped('debit'))
-                            credito = sum(day_move_lines_debits.filtered(lambda x: x.account_id == cuenta).mapped('credit'))
+            total_gral_debit = 0
+            total_gral_credit = 0
+            for year in years:
+                for month in months:
+                    for day in days:
+                        total_debit = 0
+                        total_credit = 0
+                        TABLE_DATA.append(('Fecha: %s/%s/%s' %
+                                          (day, month, year), '', ''))
+                        day_moves = moves.filtered(
+                            lambda x: x.date.month == month and x.date.year == year and x.date.day == day)
+                        day_move_lines_debits = day_moves.mapped(
+                            'line_ids').filtered(lambda x: x.debit > 0)
+                        day_move_lines_debits_accts = sorted(list(
+                            set(day_move_lines_debits.mapped('account_id'))), key=lambda x: x.display_name)
+                        for account in day_move_lines_debits_accts:
+                            debit = sum(day_move_lines_debits.filtered(
+                                lambda x: x.account_id == account).mapped('debit'))
+                            credit = sum(day_move_lines_debits.filtered(
+                                lambda x: x.account_id == account).mapped('credit'))
                             table_line = (
-                                cuenta.display_name,
-                                '{0:,.0f}'.format(debito),
-                                '{0:,.0f}'.format(credito),
+                                account.display_name,
+                                '{0:,.0f}'.format(debit),
+                                '{0:,.0f}'.format(credit),
                             )
-                            total_debito += debito
-                            total_credito += credito
-                            total_gral_debito += debito
-                            total_gral_credito += credito
+                            total_debit += debit
+                            total_credit += credit
+                            total_gral_debit += debit
+                            total_gral_credit += credit
                             TABLE_DATA.append(table_line)
-                        day_move_lines_credits = day_moves.mapped('line_ids').filtered(lambda x: x.credit > 0)
-                        day_move_lines_credits_accts = sorted(list(set(day_move_lines_credits.mapped('account_id'))), key=lambda x: x.display_name)
-                        for cuenta in day_move_lines_credits_accts:
-                            debito = sum(day_move_lines_credits.filtered(lambda x: x.account_id == cuenta).mapped('debit'))
-                            credito = sum(day_move_lines_credits.filtered(lambda x: x.account_id == cuenta).mapped('credit'))
+                        day_move_lines_credits = day_moves.mapped(
+                            'line_ids').filtered(lambda x: x.credit > 0)
+                        day_move_lines_credits_accts = sorted(list(
+                            set(day_move_lines_credits.mapped('account_id'))), key=lambda x: x.display_name)
+                        for account in day_move_lines_credits_accts:
+                            debit = sum(day_move_lines_credits.filtered(
+                                lambda x: x.account_id == account).mapped('debit'))
+                            credit = sum(day_move_lines_credits.filtered(
+                                lambda x: x.account_id == account).mapped('credit'))
                             table_line = (
-                                cuenta.display_name,
-                                '{0:,.0f}'.format(sum(day_move_lines_credits.filtered(lambda x: x.account_id == cuenta).mapped('debit'))),
-                                '{0:,.0f}'.format(sum(day_move_lines_credits.filtered(lambda x: x.account_id == cuenta).mapped('credit'))),
+                                account.display_name,
+                                '{0:,.0f}'.format(sum(day_move_lines_credits.filtered(
+                                    lambda x: x.account_id == account).mapped('debit'))),
+                                '{0:,.0f}'.format(sum(day_move_lines_credits.filtered(
+                                    lambda x: x.account_id == account).mapped('credit'))),
                             )
-                            total_debito += debito
-                            total_credito += credito
-                            total_gral_debito += debito
-                            total_gral_credito += credito
+                            total_debit += debit
+                            total_credit += credit
+                            total_gral_debit += debit
+                            total_gral_credit += credit
                             TABLE_DATA.append(table_line)
-                        TABLE_DATA.append(('Total %s/%s/%s' % (dia, mes, anho), '{0:,.0f}'.format(total_debito), '{0:,.0f}'.format(total_credito)))
-            TABLE_DATA.append(('Total general', '{0:,.0f}'.format(total_gral_debito), '{0:,.0f}'.format(total_gral_credito)))
+                        TABLE_DATA.append(('Total %s/%s/%s' % (day, month, year), '{0:,.0f}'.format(
+                            total_debit), '{0:,.0f}'.format(total_credit)))
+            TABLE_DATA.append(('Total general', '{0:,.0f}'.format(
+                total_gral_debit), '{0:,.0f}'.format(total_gral_credit)))
 
         pdf = CustomPDF()
         pdf.set_font("Arial", "", 6)
         pdf.start_page_number = self.registration_id.current_number
         pdf.company = self.company_id
         pdf.title = "Libro Diario"
-        pdf.subtitle = "Del: %s al %s" % (self.start_date.strftime('%d/%m/%Y'), self.end_date.strftime('%d/%m/%Y'))
+        pdf.subtitle = "Del: %s al %s" % (self.start_date.strftime(
+            '%d/%m/%Y'), self.end_date.strftime('%d/%m/%Y'))
         if self.registration_id.signature_image:
-            pdf.signature_image = base64.b64decode(self.registration_id.signature_image)
+            pdf.signature_image = base64.b64decode(
+                self.registration_id.signature_image)
         if self.registration_id.signature_image:
-            pdf.signature_image = base64.b64decode(self.registration_id.signature_image)
+            pdf.signature_image = base64.b64decode(
+                self.registration_id.signature_image)
         pdf.add_page()
 
         with pdf.table(col_widths=(70, 15, 15)) as table:
@@ -1211,7 +1336,9 @@ class BookRegistrationReport(models.Model):
 
     def inventory_pdf(self):
         debug_mode = False
-        global expressions_totals  # The content of this variable will be calculated outside the function that prints the lines; therefore, it is declared as a global variable.
+        # The content of this variable will be calculated outside the function that prints the lines;
+        # therefore, it is declared as a global variable.
+        global expressions_totals
 
         if self.company_id.show_inventory_book_base_report_bs_details:
             TABLE_DATA_BS = [
@@ -1261,7 +1388,7 @@ class BookRegistrationReport(models.Model):
             'unposted_in_period': False
         }
 
-        def print_account(env,expression_id,account_id,padding=0,hide_empty_lines=True,):
+        def print_account(env, expression_id, account_id, padding=0, hide_empty_lines=True,):
             global expressions_totals
             table_lines = []
             table_line = []
@@ -1270,7 +1397,8 @@ class BookRegistrationReport(models.Model):
                     not any(account_id_dict.get(balance_type) for balance_type in ['account_balance', 'pending_outbound', 'pending_inbound']) and \
                     not debug_mode:
                 return
-            show_account_detail_mode = account_id_dict.get('show_account_detail_mode')
+            show_account_detail_mode = account_id_dict.get(
+                'show_account_detail_mode')
             if self.company_id.show_inventory_book_base_report_bs_details:
                 table_line += ['']
             table_line.append(account_id.code + ' - ' + account_id.name)
@@ -1314,7 +1442,8 @@ class BookRegistrationReport(models.Model):
                 table_line = []
 
             elif show_account_detail_mode == 'mode_account_partners':
-                account_move_line_ids = account_id_dict.get('account_move_line_ids')
+                account_move_line_ids = account_id_dict.get(
+                    'account_move_line_ids')
                 if account_move_line_ids:
                     partner_ids = account_move_line_ids.mapped('partner_id')
                     partner_ids_list = list(partner_ids)
@@ -1326,18 +1455,22 @@ class BookRegistrationReport(models.Model):
                             lambda x: x.partner_id == partner_id
                         )
                         table_line += ['']
-                        table_line.append(partner_id.name if partner_id else 'Sin nombre')
-                        table_line.append(sum(account_move_line.amount_residual for account_move_line in account_move_line_ids_partner))
+                        table_line.append(
+                            partner_id.name if partner_id else 'Sin nombre')
+                        table_line.append(sum(
+                            account_move_line.amount_residual for account_move_line in account_move_line_ids_partner))
                         table_line += [''] * 2
                         table_lines.append(table_line)
             elif show_account_detail_mode == 'mode_account_inventory':
                 if env.ref('base.module_stock').state in ['installed', 'to upgrade']:
                     stock_valuation_layer_ids = env['stock.valuation.layer'].sudo().search([
-                        ('product_id.categ_id.property_stock_valuation_account_id', '=', account_id.id),
+                        ('product_id.categ_id.property_stock_valuation_account_id',
+                         '=', account_id.id),
                     ])
                     for product_id in stock_valuation_layer_ids.sudo().product_id:
                         table_line = []
-                        stock_valuation_layers_product_id = stock_valuation_layer_ids.filtered(lambda x: x.product_id == product_id)
+                        stock_valuation_layers_product_id = stock_valuation_layer_ids.filtered(
+                            lambda x: x.product_id == product_id)
 
                         stock_valuation_layers_product_id_quantity = sum(
                             stock_valuation_layer_product_id.quantity for stock_valuation_layer_product_id in stock_valuation_layers_product_id
@@ -1349,12 +1482,16 @@ class BookRegistrationReport(models.Model):
 
                         stock_valuation_layers_product_id_unit_cost = 0
                         if stock_valuation_layers_product_id_value and stock_valuation_layers_product_id_quantity:
-                            stock_valuation_layers_product_id_unit_cost = stock_valuation_layers_product_id_value / stock_valuation_layers_product_id_quantity
+                            stock_valuation_layers_product_id_unit_cost = stock_valuation_layers_product_id_value / \
+                                stock_valuation_layers_product_id_quantity
 
-                        table_line.append(stock_valuation_layers_product_id_quantity)
+                        table_line.append(
+                            stock_valuation_layers_product_id_quantity)
                         table_line.append(product_id.name)
-                        table_line.append(stock_valuation_layers_product_id_unit_cost)
-                        table_line.append(stock_valuation_layers_product_id_value)
+                        table_line.append(
+                            stock_valuation_layers_product_id_unit_cost)
+                        table_line.append(
+                            stock_valuation_layers_product_id_value)
                         table_line += ['']
                         table_lines.append(table_line)
             elif show_account_detail_mode == 'mode_account_asset_fixed':
@@ -1378,7 +1515,8 @@ class BookRegistrationReport(models.Model):
 
         def print_accounts_by_group(env, expression_id, padding, hide_empty_lines, group_ids, allowed_account_group_ids, account_ids,):
             for group_id in group_ids:
-                child_group_ids = group_ids.search([('parent_id', '=', group_id.id), ('id', 'in', allowed_account_group_ids.ids)])
+                child_group_ids = group_ids.search(
+                    [('parent_id', '=', group_id.id), ('id', 'in', allowed_account_group_ids.ids)])
                 for account_group_id in child_group_ids:
                     table_line = []
                     account_group_for_total_ids = account_group_id
@@ -1400,7 +1538,8 @@ class BookRegistrationReport(models.Model):
                     ])
                     if self.company_id.show_inventory_book_base_report_bs_details:
                         table_line += ['']
-                    table_line.append(account_group_id.code_prefix_start + ' - ' + account_group_id.name)
+                    table_line.append(
+                        account_group_id.code_prefix_start + ' - ' + account_group_id.name)
                     if self.company_id.show_inventory_book_base_report_bs_details:
                         table_line += ['']
                     table_line += ['']
@@ -1453,9 +1592,9 @@ class BookRegistrationReport(models.Model):
                 if force_print_from_report_totals and \
                         force_report_totals or \
                         (
-                                force_report_totals and
-                                ('cross_report' in [expression_id[subformula_field] for expression_id in expression_ids]) or
-                                (not foldable and not report_line.hide_if_zero)
+                            force_report_totals and
+                            ('cross_report' in [expression_id[subformula_field] for expression_id in expression_ids]) or
+                            (not foldable and not report_line.hide_if_zero)
                         ):
                     if force_report_totals:
                         for clave in force_report_totals:
@@ -1466,11 +1605,13 @@ class BookRegistrationReport(models.Model):
                 else:
                     report_line_total = sum(
                         sum(
-                            expressions_totals[expression_id][account_id].get('account_total')
+                            expressions_totals[expression_id][account_id].get(
+                                'account_total')
                             for account_id in expressions_totals[expression_id]
                         )
                         for expression_id in
-                        report_line.search([('id', 'child_of', report_line.ids)]).expression_ids.filtered(lambda x: x.engine == 'domain')
+                        report_line.search([('id', 'child_of', report_line.ids)]).expression_ids.filtered(
+                            lambda x: x.engine == 'domain')
                     )
 
                 if hide_empty_lines and not report_line_total and not debug_mode:
@@ -1479,28 +1620,35 @@ class BookRegistrationReport(models.Model):
                 if self.company_id.show_inventory_book_base_report_bs_details:
                     table_line += ['']
                 table_line.append(report_line.name)
-                if debug_mode: table_line.append(report_line.id)  # ONLY PRESENT IN DEBUG MODE
+                if debug_mode:
+                    # ONLY PRESENT IN DEBUG MODE
+                    table_line.append(report_line.id)
                 if self.company_id.show_inventory_book_base_report_bs_details:
                     table_line += ['']
                 table_line += ['']
                 table_line.append(report_line_total)
 
                 report_line_expressions = []
-                report_line_expressions = report_line.expression_ids.filtered(lambda x: x.engine == 'domain')
-                # The expressions of the lines that form the report structure are filtered, only the expressions that use 'domain' for the calculation of their content will be used.
+                report_line_expressions = report_line.expression_ids.filtered(
+                    lambda x: x.engine == 'domain')
+                # The expressions of the lines that form the report structure are filtered,
+                # only the expressions that use 'domain' for the calculation of their content will be used.
 
                 TABLE_DATA.append(table_line)
                 for expression_id in report_line_expressions:
                     if account_report_id.filter_hierarchy == 'by_default':
-                        account_ids = env['account.account'].browse([a.id for a in expressions_totals[expression_id]])
+                        account_ids = env['account.account'].browse(
+                            [a.id for a in expressions_totals[expression_id]])
                         account_group_ids = account_ids.group_id
                         while True:
-                            account_group_parent_ids = account_group_ids.parent_id.filtered(lambda x: x not in account_group_ids)
+                            account_group_parent_ids = account_group_ids.parent_id.filtered(
+                                lambda x: x not in account_group_ids)
                             if account_group_parent_ids:
                                 account_group_ids |= account_group_parent_ids
                             else:
                                 break
-                        root_group_ids = account_group_ids.filtered(lambda x: not x.parent_id)
+                        root_group_ids = account_group_ids.filtered(
+                            lambda x: not x.parent_id)
 
                         print_accounts_by_group(
                             env=env,
@@ -1538,36 +1686,46 @@ class BookRegistrationReport(models.Model):
         account_financial_report_bg_l10n_py = self.company_id.inventory_book_base_report_bs
         if not account_financial_report_bg_l10n_py:
             raise ValidationError(_
-                ('A base report for the Balance Sheet of the Inventory Book report is not set. Please go to the accounting settings to establish the necessary parameters.'))
+                                  ('A base report for the Balance Sheet of the Inventory Book report is not set. Please go to the accounting settings to establish the necessary parameters.'))
         account_financial_report_bg_l10n_py_report_informations = False
-        account_financial_report_bg_l10n_py_report_informations = account_financial_report_bg_l10n_py.get_report_information(previous_options)
-        account_financial_report_bg_l10n_py_report_informations = account_financial_report_bg_l10n_py_report_informations.get('column_groups_totals')
+        account_financial_report_bg_l10n_py_report_informations = account_financial_report_bg_l10n_py.get_report_information(
+            previous_options)
         account_financial_report_bg_l10n_py_report_informations = account_financial_report_bg_l10n_py_report_informations.get(
-            list(account_financial_report_bg_l10n_py_report_informations.keys())[0]
+            'column_groups_totals')
+        account_financial_report_bg_l10n_py_report_informations = account_financial_report_bg_l10n_py_report_informations.get(
+            list(account_financial_report_bg_l10n_py_report_informations.keys())[
+                0]
         )
 
-        expressions_totals = {}  # All the account values to be printed will go here.
+        # All the account values to be printed will go here.
+        expressions_totals = {}
         expression_ids = []
-        expression_ids = account_financial_report_bg_l10n_py.line_ids.expression_ids.filtered(lambda x: x.engine == 'domain')  
-        # The expressions of the lines that form the report structure are filtered; only the expressions that use 'domain' for calculating their content will be used.
+        expression_ids = account_financial_report_bg_l10n_py.line_ids.expression_ids.filtered(
+            lambda x: x.engine == 'domain')
+        # The expressions of the lines that form the report structure are filtered; 
+        # only the expressions that use 'domain' for calculating their content will be used.
 
         for expression_id in expression_ids:
             expressions_totals[expression_id] = {}
             aml_ids = self.env['account.move.line']
             if expression_id.formula:
                 aml_ids = eval(
-                    "self.env['account.move.line'].search(" + expression_id.formula + ")")  
-                    # Each expression to be processed has a domain to obtain the accounting entries, from which the accounts to be processed must be obtained.
+                    "self.env['account.move.line'].search(" + expression_id.formula + ")")
+                # Each expression to be processed has a domain to obtain the accounting entries, 
+                # from which the accounts to be processed must be obtained.
 
-            aml_ids = aml_ids.search([('id', 'in', aml_ids.ids), ('date', '<=', previous_options['date']['date_to'])])
+            aml_ids = aml_ids.search(
+                [('id', 'in', aml_ids.ids), ('date', '<=', previous_options['date']['date_to'])])
 
             account_ids = self.env['account.account']
             if aml_ids:
                 self.env.cr.execute(
-                    """SELECT account_id FROM account_move_line WHERE id IN %s""" % ("(" + ','.join(str(aml_id) for aml_id in aml_ids.ids)) + ")"
+                    """SELECT account_id FROM account_move_line WHERE id IN %s""" % (
+                        "(" + ','.join(str(aml_id) for aml_id in aml_ids.ids)) + ")"
                 )
                 query_result = self.env.cr.fetchall()
-                account_ids = account_ids.browse(list(set([t[0] for t in query_result])))
+                account_ids = account_ids.browse(
+                    list(set([t[0] for t in query_result])))
 
             account_ids = account_ids.filtered(
                 lambda x:
@@ -1596,7 +1754,8 @@ class BookRegistrationReport(models.Model):
                     ('parent_state', '=', 'posted'),
                 ])
                 if account_move_line_ids:
-                    account_balance = sum(account_move_line_ids.mapped('balance'))
+                    account_balance = sum(
+                        account_move_line_ids.mapped('balance'))
                 else:
                     account_balance = 0
                 account_outbound = 0
@@ -1614,19 +1773,21 @@ class BookRegistrationReport(models.Model):
                                    AND move.journal_id = ANY(%s)
                               GROUP BY move.company_id, move.journal_id, move.currency_id
                             """, [move_type, self.env['account.journal'].search(
-                        [('default_account_id', '=', account_id.id)]).ids])  # Debemos obtener todos los saldos pendientes de conciliar para la cuenta
+                        [('default_account_id', '=', account_id.id)]).ids])  # We must obtain all outstanding balances for the account
                     query_result = self.env.cr.fetchall()
-                    amount_result = sum(sum(j for j in t) for t in query_result)
+                    amount_result = sum(sum(j for j in t)
+                                        for t in query_result)
                     if move_type == 'outbound':
                         account_outbound = -amount_result
                     if move_type == 'inbound':
                         account_inbound = amount_result
 
-                # Determinamos qué modo de detalles va a tener la cuenta.
-                # En el modo 'mode_account_balance' se detalla el saldo conciliado, y los pendientes de conciliación de entrada y salida.
-                # En el modo 'mode_account_partners' se detalla los saldos pendientes de conciliación pero agrupados por proveedor o cliente.
-                # En el modo 'mode_account_inventory' se detalla la valoración de inventario.
-                # En el modo 'mode_account_asset_fixed' se detalla la valoración de los activos fijos.
+                # Determine the detail mode for the account.
+                # In 'mode_account_balance' mode, the reconciled balance and the outstanding reconciliation of incoming and outgoing are detailed.
+                # In 'mode_account_partners' mode, the outstanding reconciliation balances are detailed but grouped by supplier or customer.
+                # In 'mode_account_inventory' mode, the inventory valuation is detailed.
+                # In 'mode_account_asset_fixed' mode, the valuation of fixed assets is detailed.
+
                 show_account_detail_mode = False
                 account_type = account_id.account_type
                 if self.company_id.show_inventory_book_base_report_bs_details:
@@ -1643,11 +1804,11 @@ class BookRegistrationReport(models.Model):
                     elif (account_type == 'asset_fixed') or \
                             (account_type == 'liability_current') or \
                             (
-                                    account_type == 'asset_current' and
-                                    not account_id.reconcile and
-                                    account_id.create_asset in ['draft', 'validate'] and
-                                    account_id.asset_model
-                            ):
+                        account_type == 'asset_current' and
+                        not account_id.reconcile and
+                        account_id.create_asset in ['draft', 'validate'] and
+                        account_id.asset_model
+                    ):
                         show_account_detail_mode = 'mode_account_asset_fixed'
                 account_user_type = account_id.user_type_id
                 if self.company_id.show_inventory_book_base_report_bs_details:
@@ -1665,11 +1826,11 @@ class BookRegistrationReport(models.Model):
                     elif (account_user_type == self.env.ref('account.data_account_type_fixed_assets')) or \
                             (account_user_type == self.env.ref('account.data_account_type_current_liabilities')) or \
                             (
-                                    account_user_type == self.env.ref('account.data_account_type_current_assets') and
-                                    not account_id.reconcile and
-                                    account_id.create_asset in ['draft', 'validate'] and
-                                    account_id.asset_model
-                            ):
+                        account_user_type == self.env.ref('account.data_account_type_current_assets') and
+                        not account_id.reconcile and
+                        account_id.create_asset in ['draft', 'validate'] and
+                        account_id.asset_model
+                    ):
                         show_account_detail_mode = 'mode_account_asset_fixed'
 
                 subformula = ''
@@ -1690,7 +1851,8 @@ class BookRegistrationReport(models.Model):
                 }
         print_report_lines(
             env=self.env,
-            report_lines=account_financial_report_bg_l10n_py.line_ids.filtered(lambda x: not x.parent_id),
+            report_lines=account_financial_report_bg_l10n_py.line_ids.filtered(
+                lambda x: not x.parent_id),
             padding=1,
             headers=True,
             quantity_headers=True,
@@ -1711,36 +1873,44 @@ class BookRegistrationReport(models.Model):
                 'necessary parameters.'
             ))
         account_financial_report_er_l10n_py_report_informations = False
-        account_financial_report_er_l10n_py_report_informations = account_financial_report_er_l10n_py.get_report_information(previous_options)
-        account_financial_report_er_l10n_py_report_informations = account_financial_report_er_l10n_py_report_informations.get('column_groups_totals')
+        account_financial_report_er_l10n_py_report_informations = account_financial_report_er_l10n_py.get_report_information(
+            previous_options)
         account_financial_report_er_l10n_py_report_informations = account_financial_report_er_l10n_py_report_informations.get(
-            list(account_financial_report_er_l10n_py_report_informations.keys())[0]
+            'column_groups_totals')
+        account_financial_report_er_l10n_py_report_informations = account_financial_report_er_l10n_py_report_informations.get(
+            list(account_financial_report_er_l10n_py_report_informations.keys())[
+                0]
         )
 
-        expressions_totals = {}  # All the account values to be printed will go here.
+        # All the account values to be printed will go here.
+        expressions_totals = {}
 
         expression_ids = []
-        expression_ids = account_financial_report_er_l10n_py.line_ids.expression_ids.filtered(lambda x: x.engine == 'domain')  
-        # The expressions of the lines that form the report structure are filtered; 
+        expression_ids = account_financial_report_er_l10n_py.line_ids.expression_ids.filtered(
+            lambda x: x.engine == 'domain')
+        # The expressions of the lines that form the report structure are filtered;
         # only the expressions that use 'domain' for calculating their content will be used.
         for expression_id in expression_ids:
             expressions_totals[expression_id] = {}
             aml_ids = self.env['account.move.line']
             if expression_id.formula:
                 aml_ids = eval(
-                    "self.env['account.move.line'].search(" + expression_id.formula + ")")  
-                    # Each expression to be processed has a domain to obtain the accounting entries, 
-                    # from which the accounts to be processed must be obtained.
+                    "self.env['account.move.line'].search(" + expression_id.formula + ")")
+                # Each expression to be processed has a domain to obtain the accounting entries,
+                # from which the accounts to be processed must be obtained.
 
-            aml_ids = aml_ids.search([('id', 'in', aml_ids.ids), ('date', '<=', previous_options['date']['date_to'])])
+            aml_ids = aml_ids.search(
+                [('id', 'in', aml_ids.ids), ('date', '<=', previous_options['date']['date_to'])])
 
             account_ids = self.env['account.account']
             if aml_ids:
                 self.env.cr.execute(
-                    """SELECT account_id FROM account_move_line WHERE id IN %s""" % ("(" + ','.join(str(aml_id) for aml_id in aml_ids.ids)) + ")"
+                    """SELECT account_id FROM account_move_line WHERE id IN %s""" % (
+                        "(" + ','.join(str(aml_id) for aml_id in aml_ids.ids)) + ")"
                 )
                 query_result = self.env.cr.fetchall()
-                account_ids = account_ids.browse(list(set([t[0] for t in query_result])))
+                account_ids = account_ids.browse(
+                    list(set([t[0] for t in query_result])))
 
             account_ids = account_ids.filtered(
                 lambda x:
@@ -1755,7 +1925,6 @@ class BookRegistrationReport(models.Model):
                     x.company_id.account_journal_payment_credit_account_id,
                 )
             ).sorted(key=lambda x: x.code)
-            
 
             for account_id in account_ids:
 
@@ -1766,7 +1935,8 @@ class BookRegistrationReport(models.Model):
                     ('date', '<=', previous_options['date']['date_to'])
                 ])
                 if account_move_line_ids:
-                    account_balance = sum(account_move_line_ids.mapped('balance'))
+                    account_balance = sum(
+                        account_move_line_ids.mapped('balance'))
                 else:
                     account_balance = 0
                 account_outbound = 0
@@ -1784,9 +1954,10 @@ class BookRegistrationReport(models.Model):
                                    AND move.journal_id = ANY(%s)
                               GROUP BY move.company_id, move.journal_id, move.currency_id
                             """, [move_type, self.env['account.journal'].search(
-                        [('default_account_id', '=', account_id.id)]).ids])  # Debemos obtener todos los saldos pendientes de conciliar para la cuenta
+                        [('default_account_id', '=', account_id.id)]).ids])  # We must obtain all outstanding balances for the account
                     query_result = self.env.cr.fetchall()
-                    amount_result = sum(sum(j for j in t) for t in query_result)
+                    amount_result = sum(sum(j for j in t)
+                                        for t in query_result)
                     if move_type == 'outbound':
                         account_outbound = -amount_result
                     if move_type == 'inbound':
@@ -1813,7 +1984,8 @@ class BookRegistrationReport(models.Model):
 
         print_report_lines(
             env=self.env,
-            report_lines=account_financial_report_er_l10n_py.line_ids.filtered(lambda x: not x.parent_id),
+            report_lines=account_financial_report_er_l10n_py.line_ids.filtered(
+                lambda x: not x.parent_id),
             padding=1,
             headers=True,
             quantity_headers=False,
@@ -1828,7 +2000,8 @@ class BookRegistrationReport(models.Model):
         pdf.start_page_number = self.registration_id.current_number
         pdf.company = self.company_id
         if self.registration_id.signature_image:
-            pdf.signature_image = base64.b64decode(self.registration_id.signature_image)
+            pdf.signature_image = base64.b64decode(
+                self.registration_id.signature_image)
         if self.company_id.show_inventory_book_base_report_bs_details:
             col_widths = (10, 50, 10, 10, 10)
             col_number_format = (0, 2, 3, 4)
@@ -1849,9 +2022,11 @@ class BookRegistrationReport(models.Model):
                     row = table.row()
                     for column_count, data in enumerate(data_row):
                         if column_count in col_number_format and line_count > 0:
-                            row.cell(text=format_number_to_string(data), align='R')
+                            row.cell(text=format_number_to_string(
+                                data), align='R')
                         else:
-                            row.cell(text=remove_unwanted_characters(str(data)), align='L')
+                            row.cell(text=remove_unwanted_characters(
+                                str(data)), align='L')
 
         pdf_bytes = None
         with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as tmp_file:
@@ -1883,9 +2058,11 @@ class CustomPDF(FPDF):
         if self.signature_image:
             self.image(self.signature_image, 165, 10, 45)
         self.cell(0, 2, self.company.name, align="L")
-        self.cell(-20, 2, f"Nro: {self.start_page_number + self.page_no()}", align="R", ln=True)
+        self.cell(-20, 2, f"Nro: {self.start_page_number +
+                  self.page_no()}", align="R", ln=True)
         self.cell(0, 5, self.company.vat, align="L", ln=True)
-        self.cell(0, 5, self.company.street if self.company.street else '', align="L", ln=True)
+        self.cell(
+            0, 5, self.company.street if self.company.street else '', align="L", ln=True)
         self.set_font("Arial", "B", 14)
         self.cell(0, 20, self.title, align="C", ln=True)
         if self.subtitle:
