@@ -731,7 +731,7 @@ class BookRegistrationReport(models.Model):
                             ml.account_id
                     )
                     SELECT
-                        am.move_number as move_number,
+                        am.journal_entry_number as journal_entry_number,
                         ml.date as date,
                         ml.account_id AS r_account_id,
                         aa.name as r_account_name,
@@ -764,13 +764,13 @@ class BookRegistrationReport(models.Model):
                         AND ml.company_id = '{self.company_id.id}'
                         and ml.parent_state = 'posted'
                     GROUP BY
-                        move_number,ml.date, ml.account_id, aa.name, ml.name,sub.debit_total, sub.credit_total,sub.balance_total,
+                        journal_entry_number,ml.date, ml.account_id, aa.name, ml.name,sub.debit_total, sub.credit_total,sub.balance_total,
                         ml.debit,ml.credit,ml.balance,aa.id, am.name,aa.code, ml.id
 
                 UNION
 
                     SELECT
-                        NULL as move_number,
+                        NULL as journal_entry_number,
                         NULL as date,
                         ml.account_id,
                         aa.name as r_account_name,
@@ -812,7 +812,7 @@ class BookRegistrationReport(models.Model):
 
                 ORDER BY
                     ---ml.account_id, ml.date,aa.code
-                    code, move_number
+                    code, journal_entry_number
                     ---, date DESC;
 
             """
@@ -822,7 +822,7 @@ class BookRegistrationReport(models.Model):
             account_name_group = []
 
             for row in results:
-                move_number, date, r_account_id, r_account_name, account_line_name, debit, credit, balance, debit_total, credit_total, total_balance, account_code, reference, code, query_state, line_code = row
+                journal_entry_number, date, r_account_id, r_account_name, account_line_name, debit, credit, balance, debit_total, credit_total, total_balance, account_code, reference, code, query_state, line_code = row
                 if r_account_id not in [item['account'] for item in account_name_group]:
                     a = {
                         'account': r_account_id,
@@ -894,7 +894,7 @@ class BookRegistrationReport(models.Model):
                 reference_balance_computation = 0
                 cnt = 0
                 for row in results:
-                    move_number, date, r_account_id, r_account_name, account_line_name, debit, credit, balance, debit_total, credit_total, total_balance, account_code, reference, code, query_state, line_code = row
+                    journal_entry_number, date, r_account_id, r_account_name, account_line_name, debit, credit, balance, debit_total, credit_total, total_balance, account_code, reference, code, query_state, line_code = row
                     if item['query_state'] == 'Dentro del Rango':
                         if r_account_id == item['account']:
                             if not account_line_name:
@@ -925,7 +925,7 @@ class BookRegistrationReport(models.Model):
 
                             TABLE_DATA.append([
                                 '{0:,.0f}'.format(
-                                    int(move_number)).replace(',', '.'),
+                                    int(journal_entry_number)).replace(',', '.'),
                                 date,
                                 '',
                                 reference,
@@ -1064,7 +1064,7 @@ class BookRegistrationReport(models.Model):
             moves = list(moves)
             moves.reverse()
         for move in moves:
-            TABLE_DATA.append(('Asiento:{0} Fecha: {1}'.format(str(move.move_number).strip(
+            TABLE_DATA.append(('Asiento:{0} Fecha: {1}'.format(str(move.journal_entry_number).strip(
             ), str(move.date.strftime('%d/%m/%Y')).strip()), '', '', '', ''))
 
             for line in move.line_ids:

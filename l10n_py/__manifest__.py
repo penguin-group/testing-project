@@ -37,6 +37,7 @@
         'wizards/report_vat_purchase_views.xml',
         'wizards/report_vat_sale_views.xml',
         'wizards/report_res90_views.xml',
+        'data/service_cron.xml'
     ],
 
     'demo': [
