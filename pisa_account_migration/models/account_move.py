@@ -57,11 +57,9 @@ class AccountMove(models.Model):
                         'active': reg.activo,
                         'type': reg_type_dict[reg.type],
                     })
-                    _logger.info(f"Se creó el registro {
-                                 new_reg.name} de tipo {new_reg.type}")
+                    _logger.info(f"Se creó el registro {new_reg.name} de tipo {new_reg.type}")
                 else:
-                    _logger.info(f"Ya existía el registro {
-                                 new_reg.name} de tipo {new_reg.type}")
+                    _logger.info(f"Ya existía el registro {new_reg.name} de tipo {new_reg.type}")
 
                 for rep in self.env['interfaces_rubrica.informe_rubrica'].sudo().search([('company_id', '=', company.id), ('rubrica_id', '=', reg.id)]):
                     new_rep = self.env['book.registration.report'].search(
@@ -84,11 +82,9 @@ class AccountMove(models.Model):
                             'start_date': rep.fecha_inicio,
                             'end_date': rep.fecha_fin,
                         })
-                        _logger.info(f"Se creó el informe {
-                                     new_rep.name} de tipo {new_rep.type}")
+                        _logger.info(f"Se creó el informe {new_rep.name} de tipo {new_rep.type}")
                     else:
-                        _logger.info(f"Ya existía el informe {
-                                     new_rep.name} de tipo {new_rep.type}")
+                        _logger.info(f"Ya existía el informe {new_rep.name} de tipo {new_rep.type}")
 
             # Company Settings
             company.write({
@@ -132,16 +128,13 @@ class AccountMove(models.Model):
                     d.update({'company_id': company.id})
                     inv_auth = self.env['invoice.authorization'].sudo().create(
                         d)
-                    _logger.info(f"Creado invoice.authorization {
-                                 inv_auth.id}/{inv_auth.name}")
+                    _logger.info(f"Creado invoice.authorization {inv_auth.id}/{inv_auth.name}")
                 else:
-                    _logger.info(f"Ya existía invoice.authorization {
-                                 inv_auth.id}/{inv_auth.name}")
+                    _logger.info(f"Ya existía invoice.authorization {inv_auth.id}/{inv_auth.name}")
 
                 timbrado.journal_id.sudo().write(
                     {'invoice_authorization_id': inv_auth.id})
-                _logger.info(f"Relacionado con el Diario {
-                             timbrado.journal_id.name}")
+                _logger.info(f"Relacionado con el Diario {timbrado.journal_id.name}")
 
             return True
 
@@ -163,8 +156,7 @@ class AccountMove(models.Model):
             cnt = 0
             for timbrado in timbrados:
                 cnt += 1
-                _logger.info(f"{int(cnt/len(timbrados)*100)}%. Timbrado de proveedor {
-                             timbrado.name} {cnt}/{len(timbrados)}")
+                _logger.info(f"{int(cnt/len(timbrados)*100)}%. Timbrado de proveedor {timbrado.name} {cnt}/{len(timbrados)}")
                 # only set relation to inv auth with the correct format
                 if timbrado.name and len(timbrado.name) == 8:
                     inv_auth = self.env['invoice.authorization'].sudo().search(
@@ -176,8 +168,7 @@ class AccountMove(models.Model):
                         d.update({'company_id': False, 'document_type': 'in_invoice',
                                  'partner_id': timbrado.partner_id.id})
                         inv_auth = self.env['invoice.authorization'].create(d)
-                        _logger.info(f"Creado invoice.authorization de proveedor {
-                                     timbrado.partner_id.name} {inv_auth.id}/{inv_auth.name}")
+                        _logger.info(f"Creado invoice.authorization de proveedor {timbrado.partner_id.name} {inv_auth.id}/{inv_auth.name}")
                         # Set related field in account.move records
                         all_company_ids = self.env['res.company'].search(
                             []).ids
@@ -185,12 +176,10 @@ class AccountMove(models.Model):
                             [('timbrado_id', '=', timbrado.id), ('move_type', 'in', ['in_invoice', 'in_refund']), ('es_factura_exterior', '=', False)])
                         invoices.sudo().write(
                             {'supplier_invoice_authorization_id': inv_auth.id})
-                        _logger.info(f"Relacionado con las facturas {', '.join(
-                            invoices.mapped(lambda r: r.ref or r.name or str(r.id)))}")
+                        _logger.info(f"Relacionado con las facturas {', '.join(invoices.mapped(lambda r: r.ref or r.name or str(r.id)))}")
                         self.env.cr.commit()
                     else:
-                        _logger.info(f"invoice.authorization {
-                                     inv_auth.name} existente.")
+                        _logger.info(f"invoice.authorization {inv_auth.name} existente.")
                 else:
                     _logger.info(
                         "El timbrado no tiene el formato correcto. No se pudo registrar.")
@@ -239,8 +228,7 @@ class AccountMove(models.Model):
                 'in_invoice', 'in_refund', 'out_invoice', 'out_refund']) and x.company_id.id == company.id)
             for move in account_moves:
                 cnt += 1
-                _logger.info(f"{int(cnt/len(account_moves)*100)}%. Datos de RG90 {
-                             move.name or str(move.id)} {cnt}/{len(account_moves)}")
+                _logger.info(f"{int(cnt/len(account_moves)*100)}%. Datos de RG90 {move.name or str(move.id)} {cnt}/{len(account_moves)}")
                 self.env.cr.execute("""
                     UPDATE account_move
                     SET
@@ -293,8 +281,7 @@ class AccountMove(models.Model):
                 [('company_id', '=', company.id), ('move_type', '=', 'in_invoice'), ('es_despacho_importacion', '=', True)])
             for move in import_clearances:
                 cnt += 1
-                _logger.info(f"{int(cnt/len(import_clearances)*100)}%. Despacho {
-                             move.name or str(move.id)} {cnt}/{len(import_clearances)}")
+                _logger.info(f"{int(cnt/len(import_clearances)*100)}%. Despacho {move.name or str(move.id)} {cnt}/{len(import_clearances)}")
                 for import_invoice in move.importacion_factura_compra_ids:
                     import_invoice.sudo().write({
                         'foreign_invoice': import_invoice.es_factura_exterior

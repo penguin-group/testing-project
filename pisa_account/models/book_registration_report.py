@@ -31,11 +31,9 @@ class CustomPDF(FPDF):
         if self.signature_image:
             self.image(self.signature_image, 165, 10, 45)
         self.cell(0, 2, self.company.name, align="L")
-        self.cell(-20, 2, f"Nro: {self.start_page_number +
-                  self.page_no()}", align="R", ln=True)
+        self.cell(-20, 2, f"Nro: {self.start_page_number + self.page_no()}", align="R", ln=True)
         self.cell(0, 5, self.company.vat, align="L", ln=True)
-        self.cell(
-            0, 5, self.company.street if self.company.street else '', align="L", ln=True)
+        self.cell(0, 5, self.company.street if self.company.street else '', align="L", ln=True)
         self.set_font("Arial", "B", 14)
         self.cell(0, 20, self.title, align="C", ln=True)
         if self.subtitle:
