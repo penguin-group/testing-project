@@ -68,6 +68,7 @@ class AccountMove(models.Model):
     res90_associated_receipt_stamping = fields.Char(string="Associated receipt stamp number")
     exclude_res90 = fields.Boolean(string="Exclude from Resolution 90",
                                    help="The records of this journal will not be included in resolution 90")
+    journal_entry_number = fields.Integer(string='Journal Entry Number', index=True)
 
 
     def validate_invoice_authorization(self):
@@ -490,4 +491,17 @@ class AccountMove(models.Model):
         if any(self.mapped('foreign_invoice')) and self.mapped('invoice_line_ids.tax_ids') and any(self.mapped('invoice_line_ids.tax_ids.amount')):
             raise ValidationError('A Foreign Invoice (Import) should only have Exempts as taxes')
         return res
+
+    def set_journal_entry_numbers(self):
+        for company in self.env['res.company'].sudo().search([]):
+            self.env.cr.execute("SELECT id FROM account_move WHERE company_id=%s AND state='posted' ORDER BY date,name,id" % company.id)
+            account_move_ids = [x[0] for x in self.env.cr.fetchall()]
+            sql_querys = ''
+            journal_entry_number = 1
+            for account_move_id in account_move_ids:
+                sql_querys += 'UPDATE account_move SET journal_entry_number=%s WHERE id=%s AND (journal_entry_number!=%s OR journal_entry_number IS NULL);' % (
+                    journal_entry_number, account_move_id, journal_entry_number
+                )
+                journal_entry_number += 1
+            self.env.cr.execute(sql_querys)
 

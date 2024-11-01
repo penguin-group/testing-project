@@ -1,0 +1,68 @@
+<odoo>
+    <data>
+
+        <record id="book_registration_report_tree" model="ir.ui.view" >
+            <field name="name">book.registration.report.tree</field>
+            <field name="model">book.registration.report</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" />
+                    <field name="page_quantity" />
+                    <field name="company_id" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="book_registration_report_form" model="ir.ui.view">
+            <field name="name">book.registration.report.form</field>
+            <field name="model">book.registration.report</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="download_pdf" type="object" string="Download PDF"
+                            class="oe_highlight" invisible="state != 'draft'"/>=
+                        <button name="cancel_book_registration" type="object" string="Cancel"
+                            class="oe_highlight" invisible="state != 'printed'"/>
+                        <button name="reset_form" type="object" string="Convert to Draft"
+                            class="oe_highlight" invisible="state != 'cancel'"/>
+                        <field name="state" widget="statusbar" />
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="type"  required="1" readonly="state != 'draft'"/>
+                                <field name="company_id" required="1" readonly="state != 'draft'"/>
+                                <field name="registration_id" required="1" readonly="state != 'draft'"/>
+                                <field name="current_registration_number" readonly="True" force_save="True"/>
+                                <field name="initial_registration_number" readonly="True" force_save="True"/>
+                                <field name="final_registration_number" readonly="True" force_save="True"/>
+                                <field name="start_date" required="True" readonly="state != 'draft'"/>
+                                <field name="end_date" required="True" readonly="state != 'draft'"/>
+                                <field name="detailed" readonly="False" invisible="type != 'general'"/>
+                                <field name="page_quantity" readonly="True"  />
+
+                                <button name="generate_pdf" type="object" string="Generate PDF File"
+                                    class="oe_highlight" invisible="state != 'draft'"/>
+                            </group>
+
+                            <group >
+                                <field name="report_file" nolabel="1" readonly="True" widget="pdf_viewer"
+                                    filename="report_file_name" style="width:700%" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <record id="book_registration_report_action" model="ir.actions.act_window" >
+            <field name="name">Book Registration Report</field>
+            <field name="res_model">book.registration.report</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="book_registration_report_menu" name="Book Registration Report"
+            parent="account.menu_finance_entries" action="book_registration_report_action"
+            sequence="100" />
+    </data>
+</odoo>

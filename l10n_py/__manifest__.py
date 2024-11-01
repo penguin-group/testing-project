@@ -30,10 +30,14 @@
         'views/invoice_controller_templates.xml',
         'views/account_move.xml',
         'views/account_account.xml',
+        'views/book_registration_views.xml',
+        'views/book_registration_report_views.xml',
+        'views/res_config_settings_views.xml',
         'reports/invoice_report.xml',
         'wizards/report_vat_purchase_views.xml',
         'wizards/report_vat_sale_views.xml',
         'wizards/report_res90_views.xml',
+        'data/service_cron.xml'
     ],
 
     'demo': [
