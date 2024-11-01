@@ -28,12 +28,12 @@
         'views/account_move_views.xml',
         'views/invoice_authorization_views.xml',
         'views/invoice_controller_templates.xml',
-        'views/account_move.xml',
         'views/account_account.xml',
         'reports/invoice_report.xml',
         'wizards/report_vat_purchase_views.xml',
         'wizards/report_vat_sale_views.xml',
         'wizards/report_res90_views.xml',
+        'wizards/invoice_cancel_views.xml',
     ],
 
     'demo': [
