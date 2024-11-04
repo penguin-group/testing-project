@@ -8,7 +8,6 @@
             <field name="invoice_authorization_id" ref="l10n_py.invoice_authorization_demo_1"/>
             <field name="max_lines">0</field>
             <field name="invoice_footer">Test footer: Thank you for your continued business!</field>
-            <field name="show_qr">True</field>
         </record>
     
     </data>

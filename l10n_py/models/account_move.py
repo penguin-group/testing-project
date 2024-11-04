@@ -501,3 +501,8 @@ class AccountMove(models.Model):
             raise ValidationError('A Foreign Invoice (Import) should only have Exempts as taxes')
         return res
 
+    def action_print(self):
+        for record in self:
+            if not record.move_type in ['out_invoice', 'out_refund']:
+                raise ValidationError(_("Only customer invoices can be printed"))
+        return super(AccountMove, self).action_print()

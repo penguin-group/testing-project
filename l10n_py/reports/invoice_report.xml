@@ -338,12 +338,7 @@
                             </th>
                         </tr>
                     </table>
-                    <t t-if="o.journal_id.show_qr">
-                        <t t-set="table_style" t-value="'t-detalle-qr'"/>
-                    </t>
-                    <t t-else="">
-                        <t t-set="table_style" t-value="'t-detalle'"/>
-                    </t>
+                    <t t-set="table_style" t-value="'t-detalle-qr'"/>
                     <table t-att-class="table_style" id="tablaDetalle">
                         <t t-set="max_line" t-value="0"/>
                         <t t-set="subtotalExentas" t-value="0"/>
@@ -571,30 +566,28 @@
                     </table>
 
                     <!-- QR Code -->
-                    <t t-if="o.journal_id.show_qr">
-                        <table class="tabla" id="qr_section_table">
-                            <tr>
-                                <td style="width:20%">
-                                    <div style="display:table-cell;vertical-align:top;">
+                    <table class="tabla" id="qr_section_table">
+                        <tr>
+                            <td style="width:20%">
+                                <div style="display:table-cell;vertical-align:top;">
 
-                                        <img t-att-src="image_data_uri(o.qr_code)"
-                                             style="max-width:150px;max-height:150px;margin-left:15px"
-                                        />
-                                    </div>
-                                </td>
-                                <td style="font-size:10px;width:80%;padding:2px;color:black">
-                                    <div style="display:table-cell;vertical-align:top">
-                                        <t t-if="o.journal_id.invoice_footer">
-                                            <t t-raw="o.journal_id.invoice_footer"/>
-                                        </t>
-                                        <t t-else="">
-                                            <span></span>
-                                        </t>
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-                    </t>
+                                    <img t-att-src="image_data_uri(o.qr_code)"
+                                            style="max-width:150px;max-height:150px;margin-left:15px"
+                                    />
+                                </div>
+                            </td>
+                            <td style="font-size:10px;width:80%;padding:2px;color:black">
+                                <div style="display:table-cell;vertical-align:top">
+                                    <t t-if="o.journal_id.invoice_footer">
+                                        <t t-raw="o.journal_id.invoice_footer"/>
+                                    </t>
+                                    <t t-else="">
+                                        <span></span>
+                                    </t>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
 
                     <!-- Signatures -->
                     <table style="width:100%;border:1px solid black">

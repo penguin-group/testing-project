@@ -15,7 +15,6 @@ class AccountJournal(models.Model):
         help="0 for unlimited lines."
     )
     invoice_footer = fields.Html(string="Invoice Footer")
-    show_qr = fields.Boolean(string="Show QR in self-printed invoices")
     res90_type_receipt = fields.Selection([('101', 'Self-invoicing'),
                                                ('102', 'Public Passenger Transport Ticket'),
                                                ('103', 'Sales Invoice'),

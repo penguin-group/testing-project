@@ -884,11 +884,6 @@ msgid "Self-printer parameters"
 msgstr "Configuración de Autoimpresor"
 
 #. module: l10n_py
-#: model:ir.model.fields,field_description:l10n_py.field_account_journal__show_qr
-msgid "Show QR in self-printed invoices"
-msgstr "Mostrar QR en facturas autoimpresor"
-
-#. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__start_date
 msgid "Start Date"
 msgstr "Fecha de Inicio"
