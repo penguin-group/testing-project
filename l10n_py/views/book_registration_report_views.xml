@@ -59,6 +59,7 @@
             <field name="name">Book Registration Report</field>
             <field name="res_model">book.registration.report</field>
             <field name="view_mode">tree,form</field>
+            <field name="domain">[("active", "in", [True, False])]</field>
         </record>
 
         <menuitem id="book_registration_report_menu" name="Book Registration Report"
