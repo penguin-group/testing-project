@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-31 19:24+0000\n"
-"PO-Revision-Date: 2024-10-31 19:24+0000\n"
+"POT-Creation-Date: 2024-11-01 21:39+0000\n"
+"PO-Revision-Date: 2024-11-01 21:39+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -220,24 +220,11 @@ msgstr ""
 
 #. module: l10n_py
 #. odoo-python
-#: code:addons/l10n_py/models/book_registration.py:0
-#, python-format
-msgid ""
-"A base report for the Income Statement of the Inventory Book report is not "
-"set. Please go to the accounting settings to establish the necessary "
-"parameters."
-msgstr ""
-"El reporte base para el Estado de Resultados del reporte Libro Inventario no está configurado."
-"Por favor, vaya a la configuración de contabilidad para establecer los parámetros necesarios."
-
-#. module: l10n_py
-#. odoo-python
 #: code:addons/l10n_py/wizards/report_vat_purchase.py:0
 #, python-format
 msgid ""
 "A default foreign default supplier must be established in order to continue."
 msgstr ""
-"Se debe establecer un proveedor extranjero predeterminado para continuar."
 
 #. module: l10n_py
 #: model:ir.model,name:l10n_py.model_account_account
@@ -278,6 +265,11 @@ msgstr "Reporte Financiero"
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__active
 msgid "Active"
 msgstr "Activo"
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_cancel_form
+msgid "Apply"
+msgstr "Aplicar"
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_interfaces_rubrica_informe_rubrica__archivo_rub
@@ -368,12 +360,25 @@ msgid "CONDICIÓN DE VENTA:"
 msgstr ""
 
 #. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_cancel_form
 #: model_terms:ir.ui.view,arch_db:l10n_py.book_registration_report_form
 #: model_terms:ir.ui.view,arch_db:l10n_py.report_res90_form
 #: model_terms:ir.ui.view,arch_db:l10n_py.report_vat_purchase_wizard_form
 #: model_terms:ir.ui.view,arch_db:l10n_py.report_vat_sale_wizard_form
 msgid "Cancel"
 msgstr "Cancelar"
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.view_move_form_inherited
+msgid "Cancel Invoice"
+msgstr "Anular"
+
+#. module: l10n_py
+#. odoo-python
+#: code:addons/l10n_py/wizards/invoice_cancel.py:0
+#, python-format
+msgid "Cancellation Reason: %s"
+msgstr "Motivo de Anulación: %s"
 
 #. module: l10n_py
 #: model:ir.model.fields.selection,name:l10n_py.selection__interfaces_rubrica_informe_rubrica__state__cancel
@@ -450,6 +455,7 @@ msgstr "Pasar a Borrador"
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration_report__create_uid
 #: model:ir.model.fields,field_description:l10n_py.field_interfaces_rubrica_informe_rubrica__create_uid
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__create_uid
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_cancel__create_uid
 #: model:ir.model.fields,field_description:l10n_py.field_report_res90__create_uid
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_purchase_wizard__create_uid
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_sale_wizard__create_uid
@@ -461,6 +467,7 @@ msgstr "Creado por"
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration_report__create_date
 #: model:ir.model.fields,field_description:l10n_py.field_interfaces_rubrica_informe_rubrica__create_date
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__create_date
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_cancel__create_date
 #: model:ir.model.fields,field_description:l10n_py.field_report_res90__create_date
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_purchase_wizard__create_date
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_sale_wizard__create_date
@@ -562,6 +569,7 @@ msgstr "Diplomático"
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration_report__display_name
 #: model:ir.model.fields,field_description:l10n_py.field_interfaces_rubrica_informe_rubrica__display_name
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__display_name
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_cancel__display_name
 #: model:ir.model.fields,field_description:l10n_py.field_report_res90__display_name
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_purchase_wizard__display_name
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_sale_wizard__display_name
@@ -727,6 +735,7 @@ msgstr "Generar Archivo"
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration_report__id
 #: model:ir.model.fields,field_description:l10n_py.field_interfaces_rubrica_informe_rubrica__id
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__id
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_cancel__id
 #: model:ir.model.fields,field_description:l10n_py.field_report_res90__id
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_purchase_wizard__id
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_sale_wizard__id
@@ -766,7 +775,7 @@ msgstr "Despacho de Importación"
 #: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__import_invoice_ids
 #: model:ir.model.fields,field_description:l10n_py.field_account_move__import_invoice_ids
 #: model:ir.model.fields,field_description:l10n_py.field_account_payment__import_invoice_ids
-#: model_terms:ir.ui.view,arch_db:l10n_py.view_move_form
+#: model_terms:ir.ui.view,arch_db:l10n_py.view_move_form_inherited
 msgid "Import Invoices"
 msgstr "Facturas de Importación"
 
@@ -847,6 +856,20 @@ msgid "Invoice Authorizations"
 msgstr "Timbrados"
 
 #. module: l10n_py
+#. odoo-python
+#: code:addons/l10n_py/wizards/invoice_cancel.py:0
+#, python-format
+msgid "Invoice Cancellation"
+msgstr "Anulación de Factura"
+
+#. module: l10n_py
+#: model:ir.actions.act_window,name:l10n_py.invoice_cancel_action
+#: model:ir.model,name:l10n_py.model_invoice_cancel
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_cancel_form
+msgid "Invoice Cancellation Wizard"
+msgstr "Diálogo de Anulación de Factura"
+
+#. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_account_journal__invoice_footer
 msgid "Invoice Footer"
 msgstr "Pie de la Factura"
@@ -876,6 +899,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration_report__write_uid
 #: model:ir.model.fields,field_description:l10n_py.field_interfaces_rubrica_informe_rubrica__write_uid
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__write_uid
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_cancel__write_uid
 #: model:ir.model.fields,field_description:l10n_py.field_report_res90__write_uid
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_purchase_wizard__write_uid
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_sale_wizard__write_uid
@@ -887,6 +911,7 @@ msgstr "Última actualización por"
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration_report__write_date
 #: model:ir.model.fields,field_description:l10n_py.field_interfaces_rubrica_informe_rubrica__write_date
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__write_date
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_cancel__write_date
 #: model:ir.model.fields,field_description:l10n_py.field_report_res90__write_date
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_purchase_wizard__write_date
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_sale_wizard__write_date
@@ -1075,11 +1100,9 @@ msgid "QR Code"
 msgstr "Código QR"
 
 #. module: l10n_py
-#: model:ir.model.fields,field_description:l10n_py.field_res_partner__vat
-#: model:ir.model.fields,field_description:l10n_py.field_res_users__vat
 #: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_identification_type__11
 msgid "RUC"
-msgstr "NIF"
+msgstr "RUC"
 
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
@@ -1153,7 +1176,7 @@ msgstr "Boleta Resimple"
 #. module: l10n_py
 #: model:ir.actions.act_window,name:l10n_py.report_res90_action
 #: model:ir.ui.menu,name:l10n_py.report_res90_menu
-#: model_terms:ir.ui.view,arch_db:l10n_py.view_move_form
+#: model_terms:ir.ui.view,arch_db:l10n_py.view_move_form_inherited
 msgid "Resolución 90"
 msgstr ""
 
@@ -1256,7 +1279,7 @@ msgstr "Nota de Crédito de Proveedor"
 #. module: l10n_py
 #: model:ir.model.fields.selection,name:l10n_py.selection__invoice_authorization__document_type__in_invoice
 msgid "Supplier Invoice"
-msgstr "Factura de Proveedor"
+msgstr "Factura Proveedor"
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__supplier_invoice_authorization_id
@@ -1276,9 +1299,11 @@ msgid "TOTAL IVA:"
 msgstr ""
 
 #. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_res_partner__vat
+#: model:ir.model.fields,field_description:l10n_py.field_res_users__vat
 #: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_identification_type__17
 msgid "Tax ID"
-msgstr ""
+msgstr "NIF"
 
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
