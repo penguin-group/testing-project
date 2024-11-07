@@ -17,8 +17,13 @@ Account Reports Multi Currency module is used to print account financial reports
     ''',
     'depends': ['account_reports'],
     'data': [
-        'views/account_report_view.xml',
+        # 'views/account_report_view.xml',
     ],
-    'images': ['static/description/banner.gif'],
+    'assets': {
+        'web.assets_backend': [
+            'account_report_multi_currency/static/src/components/**/*',
+        ],
+    },
+    'images': [],
     'installable': True,
 }
