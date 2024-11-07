@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+    
+        <record id="view_account_journal_form_inherited" model="ir.ui.view">
+            <field name="name">view.account.journal.form.inherited</field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="account.view_account_journal_form"/>
+            <field name="arch" type="xml">
+                
+                <xpath expr="//field[@name='type']" position="after">
+                    <field name="invoice_authorization_id" groups="account.group_account_manager"/>
+                    <field name="max_lines" invisible="type != 'sale'" groups="account.group_account_manager"/>
+                    <field invisible="type not in ['sale', 'purchase']" name="res90_type_receipt"/>
+                    <field name="res90_imputes_irp_rsp_default"/>
+                    <field name="exclude_res90"/>
+                </xpath>
+
+                <xpath expr="//page[@name='advanced_settings']" position="inside">
+                    <group invisible="type != 'sale'" string="Self-printer parameters">
+                        <field name="invoice_footer" options="{'codeview': true}" widget="html"/>
+                    </group>
+                </xpath>
+
+            </field>
+        </record>
+    
+    </data>
+    
+
+</odoo>

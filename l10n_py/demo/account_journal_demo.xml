@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+    
+        <!-- Updating an existing account.journal record -->
+        <record id="account.1_sale" model="account.journal">
+            <field name="invoice_authorization_id" ref="l10n_py.invoice_authorization_demo_1"/>
+            <field name="max_lines">0</field>
+            <field name="invoice_footer">Test footer: Thank you for your continued business!</field>
+        </record>
+    
+    </data>
+    
+
+</odoo>
