@@ -1246,11 +1246,6 @@ msgid "Show Account Details"
 msgstr "Mostrar Detalles de Cuentas"
 
 #. module: l10n_py
-#: model:ir.model.fields,field_description:l10n_py.field_account_journal__show_qr
-msgid "Show QR in self-printed invoices"
-msgstr "Mostrar QR en facturas autoimpresor"
-
-#. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration__signature_image
 msgid "Signature Image"
 msgstr "Imagen de la Firma"

@@ -515,3 +515,8 @@ class AccountMove(models.Model):
                 journal_entry_number += 1
             self.env.cr.execute(sql_querys)
 
+    def action_print(self):
+        for record in self:
+            if not record.move_type in ['out_invoice', 'out_refund']:
+                raise ValidationError(_("Only customer invoices can be printed"))
+        return super(AccountMove, self).action_print()
