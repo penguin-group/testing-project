@@ -71,6 +71,23 @@ class AccountMove(models.Model):
     journal_entry_number = fields.Integer(string='Journal Entry Number', index=True)
 
 
+    def button_cancel_invoice(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'invoice.cancel',
+            'view_mode': 'form',
+            'view_id': self.env.ref('l10n_py.invoice_cancel_form').id,
+            'target': 'new',
+            'context': {'active_id': self.id}
+        }
+
+    def cancel_invoice(self):
+        for invoice in self.filtered(lambda i: i.move_type in ['out_invoice', 'out_refund']):
+            invoice.validate_invoice_authorization()
+            if invoice.state != 'draft':
+                invoice.button_draft()
+            invoice.button_cancel()
+    
     def validate_invoice_authorization(self):
         if self.move_type in ['out_invoice', 'out_refund'] and self.name and self.name != '/':
             inv_auth = self.journal_id.invoice_authorization_id
@@ -207,19 +224,12 @@ class AccountMove(models.Model):
                 record.validate_invoice_authorization()
                 record.validate_line_count()
             if record.move_type in ['out_invoice', 'out_refund']:
-                tim = record.journal_id.timbrados_ids.filtered(lambda x: x.tipo_documento == record.move_type)
-                if len(tim) > 1:
-                    raise ValidationError('There is more than one stamp for this type of invoice')
-                elif len(tim) == 1:
-                    record.write({'res90_number_invoice_authorization': tim.name})
-                    # i.write({'res90_number_invoice_authorization':i.timbrado})
+                record.write({'res90_number_invoice_authorization': record.journal_id.invoice_authorization_id.name})
             elif record.move_type in ['in_invoice', 'in_refund']:
-                timbrado = False
-                # if i.timbrado_proveedor:
-                #     timbrado = i.timbrado_proveedor
-                if record.timbrado_id:
-                    timbrado = record.timbrado_id.name
-                record.write({'res90_number_invoice_authorization': timbrado})
+                supplier_invoice_authorization = False
+                if record.supplier_invoice_authorization_id:
+                    supplier_invoice_authorization = record.supplier_invoice_authorization_id.name
+                record.write({'res90_number_invoice_authorization': supplier_invoice_authorization or ''})
         return result
 
 
@@ -443,47 +453,47 @@ class AccountMove(models.Model):
     # Function executed by a scheduled action to fill rg90 fields
     @api.model
     def rg90_remission_fields(self):
-        f_remision_venta = self.env['account.move'].search(
+        credit_note_customers = self.env['account.move'].search(
             [('move_type', '=', 'out_refund'), ('reversed_entry_id', '!=', False)])
-        for fac in f_remision_venta:
-            timb = ''
-            if fac.reversed_entry_id.journal_id and fac.reversed_entry_id.journal_id.timbrados_ids:
-                timb = fac.reversed_entry_id.journal_id.timbrados_ids[0].name
-            if not fac.reversed_entry_id.res90_associated_voucher_number or not fac.reversed_entry_id.res90_associated_receipt_stamping:
-                fac.reversed_entry_id.sudo().write({
-                    'res90_associated_voucher_number': fac.name,
-                    'res90_associated_receipt_stamping': timb
+        for cn in credit_note_customers:
+            authorization = ''
+            if cn.reversed_entry_id.journal_id and cn.reversed_entry_id.journal_id.invoice_authorization_id:
+                authorization = cn.reversed_entry_id.journal_id.invoice_authorization_id.name
+            if not cn.reversed_entry_id.res90_associated_voucher_number or not cn.reversed_entry_id.res90_associated_receipt_stamping:
+                cn.reversed_entry_id.sudo().write({
+                    'res90_associated_voucher_number': cn.name,
+                    'res90_associated_receipt_stamping': authorization
                 })
-            timb = ''
-            if fac.journal_id and fac.journal_id.timbrados_ids:
-                timb = fac.journal_id.timbrados_ids[0].name
+            authorization = ''
+            if cn.journal_id and cn.journal_id.invoice_authorization_id:
+                authorization = cn.journal_id.invoice_authorization_id.name
 
-            if not fac.res90_associated_voucher_number or not fac.res90_associated_receipt_stamping:
-                fac.sudo().write({
-                    'res90_associated_voucher_number': fac.reversed_entry_id.name or '',
-                    'res90_associated_receipt_stamping': timb
+            if not cn.res90_associated_voucher_number or not cn.res90_associated_receipt_stamping:
+                cn.sudo().write({
+                    'res90_associated_voucher_number': cn.reversed_entry_id.name or '',
+                    'res90_associated_receipt_stamping': authorization
                 })
 
-        f_remision_compra = self.env['account.move'].search(
+        credit_note_suppliers = self.env['account.move'].search(
             [('move_type', '=', 'in_refund'), ('reversed_entry_id', '!=', False)])
-        for fac in f_remision_compra:
-            timb = ''
-            if fac.reversed_entry_id.timbrado_id:
-                timb = fac.reversed_entry_id.timbrado_id.name
+        for cn in credit_note_suppliers:
+            authorization = ''
+            if cn.reversed_entry_id.supplier_invoice_authorization_id:
+                authorization = cn.reversed_entry_id.supplier_invoice_authorization_id.name
 
-            if not fac.reversed_entry_id.res90_associated_voucher_number or not fac.reversed_entry_id.res90_associated_receipt_stamping:
-                fac.reversed_entry_id.sudo().write({
-                    'res90_associated_voucher_number': fac.name,
-                    'res90_associated_receipt_stamping': timb
+            if not cn.reversed_entry_id.res90_associated_voucher_number or not cn.reversed_entry_id.res90_associated_receipt_stamping:
+                cn.reversed_entry_id.sudo().write({
+                    'res90_associated_voucher_number': cn.name,
+                    'res90_associated_receipt_stamping': authorization
                 })
-            timb = ''
-            if fac.timbrado_id:
-                timb = fac.timbrado_id.name
+            authorization = ''
+            if cn.supplier_invoice_authorization_id:
+                authorization = cn.supplier_invoice_authorization_id.name
 
-            if not fac.res90_associated_voucher_number or not fac.res90_associated_receipt_stamping:
-                fac.sudo().write({
-                    'res90_associated_voucher_number': fac.reversed_entry_id.name,
-                    'res90_associated_receipt_stamping': timb
+            if not cn.res90_associated_voucher_number or not cn.res90_associated_receipt_stamping:
+                cn.sudo().write({
+                    'res90_associated_voucher_number': cn.reversed_entry_id.name,
+                    'res90_associated_receipt_stamping': authorization
                 })
 
     def write(self, vals):
@@ -505,3 +515,8 @@ class AccountMove(models.Model):
                 journal_entry_number += 1
             self.env.cr.execute(sql_querys)
 
+    def action_print(self):
+        for record in self:
+            if not record.move_type in ['out_invoice', 'out_refund']:
+                raise ValidationError(_("Only customer invoices can be printed"))
+        return super(AccountMove, self).action_print()

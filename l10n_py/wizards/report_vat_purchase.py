@@ -216,7 +216,7 @@ class ReportVatPurchase(models.AbstractModel):
             else:
                 rightAndWrite("Contado")
             rightAndWrite(i.ref)
-            rightAndWrite(i.timbrado_proveedor or '')
+            rightAndWrite(i.supplier_invoice_authorization_id.name if i.supplier_invoice_authorization_id else '')
             rightAndWrite(base10, f_number)
             rightAndWrite(vat10, f_number)
             rightAndWrite(base5, f_number)
