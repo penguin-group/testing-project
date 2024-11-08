@@ -195,7 +195,6 @@ class AccountMove(models.Model):
                 journal.sudo().write({
                     'payment_info': company.datos_banco,
                     'invoice_footer': journal.pie_factura,
-                    'show_qr': journal.mostrar_qr,
                     'max_lines': journal.max_lineas,
                 })
                 _logger.info(f"Actualizado el diario {journal.name}.")
