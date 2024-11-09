@@ -19,10 +19,12 @@
     'version': '17.0.1.1.1',
     'license': "OPL-1",
 
-    'depends': ['base', 'account', 'report_xlsx'],
+    'depends': ['base', 'account', 'report_xlsx', 'web'],
 
     'data': [
         'security/ir.model.access.csv',
+        'security/security.xml',
+        'security/book_registration_security.xml',
         'views/res_partner.xml',
         'views/account_journal_views.xml',
         'views/account_move_views.xml',
@@ -45,7 +47,11 @@
         'demo/invoice_authorization_demo.xml',
         'demo/account_journal_demo.xml'
     ],
-    
     'i18n': ['i18n/es.po'],
+    'assets': {
+        'web.assets_backend': [
+            'l10n_py/static/src/webclient/company_service.js',
+        ],
+    },
 }
 

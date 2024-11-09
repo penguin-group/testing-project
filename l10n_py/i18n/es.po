@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-01 21:39+0000\n"
-"PO-Revision-Date: 2024-11-01 21:39+0000\n"
+"POT-Creation-Date: 2024-11-09 15:17+0000\n"
+"PO-Revision-Date: 2024-11-09 15:17+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -138,43 +138,6 @@ msgstr ""
 
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
-msgid "<strong style=\"visibility:hidden\">AA</strong>"
-msgstr ""
-
-#. module: l10n_py
-#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
-msgid ""
-"<strong>\n"
-"                                    Aclaración de firma\n"
-"                                </strong>"
-msgstr ""
-
-#. module: l10n_py
-#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
-msgid ""
-"<strong>\n"
-"                                    C.I. Nro. / RUC\n"
-"                                </strong>"
-msgstr ""
-
-#. module: l10n_py
-#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
-msgid ""
-"<strong>\n"
-"                                    Fecha\n"
-"                                </strong>"
-msgstr ""
-
-#. module: l10n_py
-#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
-msgid ""
-"<strong>\n"
-"                                    Firma y sello del Cliente\n"
-"                                </strong>"
-msgstr ""
-
-#. module: l10n_py
-#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
 msgid "<strong>DIRECCIÓN:</strong>"
 msgstr ""
 
@@ -220,11 +183,25 @@ msgstr ""
 
 #. module: l10n_py
 #. odoo-python
+#: code:addons/l10n_py/models/book_registration.py:0
+#, python-format
+msgid ""
+"A base report for the Income Statement of the Inventory Book report is not "
+"set. Please go to the accounting settings to establish the necessary "
+"parameters."
+msgstr ""
+"Un informe base para el Estado de Resultados del informe del Libro de Inventarios no está " 
+"establecido. Por favor, vaya a la configuración contable para establecer los " 
+"parámetros necesarios."
+
+#. module: l10n_py
+#. odoo-python
 #: code:addons/l10n_py/wizards/report_vat_purchase.py:0
 #, python-format
 msgid ""
 "A default foreign default supplier must be established in order to continue."
 msgstr ""
+"Se debe establecer un proveedor extranjero predeterminado para continuar."
 
 #. module: l10n_py
 #: model:ir.model,name:l10n_py.model_account_account
@@ -257,7 +234,7 @@ msgstr "Extracto de cuenta - TC/TD"
 #. module: l10n_py
 #: model:ir.model,name:l10n_py.model_account_report
 msgid "Accounting Report"
-msgstr "Reporte Financiero"
+msgstr "Informe contable"
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration__active
@@ -267,14 +244,14 @@ msgid "Active"
 msgstr "Activo"
 
 #. module: l10n_py
+#: model:ir.actions.server,name:l10n_py.ir_cron_add_users_to_group_ir_actions_server
+msgid "Add Users to l10n_py Security Group Job"
+msgstr "Agregar usuarios al grupo de seguridad l10n_py"
+
+#. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_cancel_form
 msgid "Apply"
 msgstr "Aplicar"
-
-#. module: l10n_py
-#: model:ir.model.fields,field_description:l10n_py.field_interfaces_rubrica_informe_rubrica__archivo_rub
-msgid "Archivo"
-msgstr ""
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__res90_associated_receipt_stamping
@@ -310,7 +287,7 @@ msgstr "Transferencias o giros bancarios / Boleta de depósito"
 #: model:ir.model.fields,field_description:l10n_py.field_res_company__inventory_book_base_report_bs
 #: model:ir.model.fields,field_description:l10n_py.field_res_config_settings__inventory_book_base_report_bs
 msgid "Base Report for Balance Sheet"
-msgstr ""
+msgstr "Informe Base para el Balance General"
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_res_company__inventory_book_base_report_is
@@ -340,11 +317,6 @@ msgid "Book Registration Report"
 msgstr "Informe con Rúbrica"
 
 #. module: l10n_py
-#: model:ir.model.fields.selection,name:l10n_py.selection__interfaces_rubrica_informe_rubrica__state__draft
-msgid "Borrador"
-msgstr ""
-
-#. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
 msgid "CANT."
 msgstr ""
@@ -360,8 +332,8 @@ msgid "CONDICIÓN DE VENTA:"
 msgstr ""
 
 #. module: l10n_py
-#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_cancel_form
 #: model_terms:ir.ui.view,arch_db:l10n_py.book_registration_report_form
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_cancel_form
 #: model_terms:ir.ui.view,arch_db:l10n_py.report_res90_form
 #: model_terms:ir.ui.view,arch_db:l10n_py.report_vat_purchase_wizard_form
 #: model_terms:ir.ui.view,arch_db:l10n_py.report_vat_sale_wizard_form
@@ -381,19 +353,9 @@ msgid "Cancellation Reason: %s"
 msgstr "Motivo de Anulación: %s"
 
 #. module: l10n_py
-#: model:ir.model.fields.selection,name:l10n_py.selection__interfaces_rubrica_informe_rubrica__state__cancel
-msgid "Cancelado"
-msgstr ""
-
-#. module: l10n_py
 #: model:ir.model.fields.selection,name:l10n_py.selection__book_registration_report__state__cancel
 msgid "Cancelled"
 msgstr "Cancelado"
-
-#. module: l10n_py
-#: model:ir.model.fields,field_description:l10n_py.field_interfaces_rubrica_informe_rubrica__page_qty
-msgid "Cantidad de Páginas"
-msgstr ""
 
 #. module: l10n_py
 #: model:ir.model.fields.selection,name:l10n_py.selection__account_journal__res90_type_receipt__112
@@ -421,9 +383,9 @@ msgid "Company"
 msgstr "Empresa"
 
 #. module: l10n_py
-#: model:ir.model.fields,field_description:l10n_py.field_interfaces_rubrica_informe_rubrica__company_id
-msgid "Compañía"
-msgstr ""
+#: model:ir.actions.server,name:l10n_py.nota_remision_campos_rg90_ir_actions_server
+msgid "Complete rg90 fields for delivery note"
+msgstr "Completar los campos rg90 para la Nota de Remisión"
 
 #. module: l10n_py
 #: model:ir.model,name:l10n_py.model_res_config_settings
@@ -453,7 +415,6 @@ msgstr "Pasar a Borrador"
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration__create_uid
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration_report__create_uid
-#: model:ir.model.fields,field_description:l10n_py.field_interfaces_rubrica_informe_rubrica__create_uid
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__create_uid
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_cancel__create_uid
 #: model:ir.model.fields,field_description:l10n_py.field_report_res90__create_uid
@@ -465,7 +426,6 @@ msgstr "Creado por"
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration__create_date
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration_report__create_date
-#: model:ir.model.fields,field_description:l10n_py.field_interfaces_rubrica_informe_rubrica__create_date
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__create_date
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_cancel__create_date
 #: model:ir.model.fields,field_description:l10n_py.field_report_res90__create_date
@@ -567,7 +527,6 @@ msgstr "Diplomático"
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration__display_name
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration_report__display_name
-#: model:ir.model.fields,field_description:l10n_py.field_interfaces_rubrica_informe_rubrica__display_name
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__display_name
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_cancel__display_name
 #: model:ir.model.fields,field_description:l10n_py.field_report_res90__display_name
@@ -621,6 +580,11 @@ msgid "Entrance to public shows"
 msgstr "Entrada a espectáculos públicos"
 
 #. module: l10n_py
+#: model:ir.actions.server,name:l10n_py.account_journal_entry_number_cron_ir_actions_server
+msgid "Enumerate journal entries"
+msgstr "Numerar asientos contables"
+
+#. module: l10n_py
 #. odoo-python
 #: code:addons/l10n_py/models/book_registration.py:0
 #: code:addons/l10n_py/models/book_registration.py:0
@@ -634,11 +598,6 @@ msgstr "Error al generar PDF"
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__establishment_number
 msgid "Establishment Number"
 msgstr "Código de Establecimiento"
-
-#. module: l10n_py
-#: model:ir.model.fields,field_description:l10n_py.field_interfaces_rubrica_informe_rubrica__state
-msgid "Estado"
-msgstr ""
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__exclude_res90
@@ -662,16 +621,6 @@ msgstr "Exportar a xlsx"
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
 msgid "FACTURA N°"
-msgstr ""
-
-#. module: l10n_py
-#: model:ir.model.fields,field_description:l10n_py.field_interfaces_rubrica_informe_rubrica__fecha_fin
-msgid "Fecha Fin"
-msgstr ""
-
-#. module: l10n_py
-#: model:ir.model.fields,field_description:l10n_py.field_interfaces_rubrica_informe_rubrica__fecha_inicio
-msgid "Fecha Inicio"
 msgstr ""
 
 #. module: l10n_py
@@ -733,7 +682,6 @@ msgstr "Generar Archivo"
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration__id
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration_report__id
-#: model:ir.model.fields,field_description:l10n_py.field_interfaces_rubrica_informe_rubrica__id
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__id
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_cancel__id
 #: model:ir.model.fields,field_description:l10n_py.field_report_res90__id
@@ -765,6 +713,11 @@ msgid "Identity card"
 msgstr "Cédula de identidad"
 
 #. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.view_account_form_inherit
+msgid "Import"
+msgstr "Importación"
+
+#. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__import_clearance
 #: model:ir.model.fields,field_description:l10n_py.field_account_move__import_clearance
 #: model:ir.model.fields,field_description:l10n_py.field_account_payment__import_clearance
@@ -786,11 +739,6 @@ msgid "Import clearance"
 msgstr "Despacho de Importación"
 
 #. module: l10n_py
-#: model:ir.model.fields.selection,name:l10n_py.selection__interfaces_rubrica_informe_rubrica__state__printed
-msgid "Impreso"
-msgstr ""
-
-#. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_account_journal__res90_imputes_irp_rsp_default
 msgid "Impute IRP/RSP by default"
 msgstr "Imputa al IRP/RSP por defecto"
@@ -801,11 +749,6 @@ msgstr "Imputa al IRP/RSP por defecto"
 #: model:ir.model.fields,field_description:l10n_py.field_account_payment__res90_imputes_vat
 msgid "Impute VAT"
 msgstr "Imputa al IVA"
-
-#. module: l10n_py
-#: model:ir.model.fields,field_description:l10n_py.field_interfaces_rubrica_informe_rubrica__detallado
-msgid "Informe Detallado"
-msgstr ""
 
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
@@ -880,6 +823,11 @@ msgid "Invoice Number"
 msgstr "Número de Factura"
 
 #. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.view_account_journal_form_inherited
+msgid "Invoices"
+msgstr "Facturas"
+
+#. module: l10n_py
 #: model:ir.model,name:l10n_py.model_account_journal
 msgid "Journal"
 msgstr "Diario"
@@ -890,6 +838,13 @@ msgid "Journal Entry"
 msgstr "Asiento contable"
 
 #. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__journal_entry_number
+#: model:ir.model.fields,field_description:l10n_py.field_account_move__journal_entry_number
+#: model:ir.model.fields,field_description:l10n_py.field_account_payment__journal_entry_number
+msgid "Journal Entry Number"
+msgstr "Número de Asiento Contable"
+
+#. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
 msgid "LIQUIDACIÓN DEL IVA:"
 msgstr ""
@@ -897,7 +852,6 @@ msgstr ""
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration__write_uid
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration_report__write_uid
-#: model:ir.model.fields,field_description:l10n_py.field_interfaces_rubrica_informe_rubrica__write_uid
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__write_uid
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_cancel__write_uid
 #: model:ir.model.fields,field_description:l10n_py.field_report_res90__write_uid
@@ -909,7 +863,6 @@ msgstr "Última actualización por"
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration__write_date
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration_report__write_date
-#: model:ir.model.fields,field_description:l10n_py.field_interfaces_rubrica_informe_rubrica__write_date
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__write_date
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_cancel__write_date
 #: model:ir.model.fields,field_description:l10n_py.field_report_res90__write_date
@@ -925,45 +878,6 @@ msgid "Legalized proof of foreign residence"
 msgstr "Comprobante del exterior legalizado"
 
 #. module: l10n_py
-#: model:ir.model.fields.selection,name:l10n_py.selection__account_rubric__type__diario
-#: model:ir.model.fields.selection,name:l10n_py.selection__interfaces_rubrica_informe_rubrica__type__diario
-msgid "Libro Diario"
-msgstr ""
-
-#. module: l10n_py
-#: model:ir.model.fields.selection,name:l10n_py.selection__interfaces_rubrica_informe_rubrica__type__diario_resumido_dia
-msgid "Libro Diario resumido - por día"
-msgstr ""
-
-#. module: l10n_py
-#: model:ir.model.fields.selection,name:l10n_py.selection__interfaces_rubrica_informe_rubrica__type__diario_resumido_mensual
-msgid "Libro Diario resumido - por mes"
-msgstr ""
-
-#. module: l10n_py
-#: model:ir.model.fields.selection,name:l10n_py.selection__account_rubric__type__inventario
-#: model:ir.model.fields.selection,name:l10n_py.selection__interfaces_rubrica_informe_rubrica__type__inventario
-msgid "Libro Inventario"
-msgstr ""
-
-#. module: l10n_py
-#: model:ir.model.fields.selection,name:l10n_py.selection__account_rubric__type__mayor
-#: model:ir.model.fields.selection,name:l10n_py.selection__interfaces_rubrica_informe_rubrica__type__mayor
-msgid "Libro Mayor"
-msgstr ""
-
-#. module: l10n_py
-#: model:ir.model.fields.selection,name:l10n_py.selection__account_rubric__type__compra
-#: model:ir.model.fields.selection,name:l10n_py.selection__interfaces_rubrica_informe_rubrica__type__compra
-msgid "Libro de Compra"
-msgstr ""
-
-#. module: l10n_py
-#: model:ir.model.fields.selection,name:l10n_py.selection__interfaces_rubrica_informe_rubrica__type__venta
-msgid "Libro de Venta"
-msgstr ""
-
-#. module: l10n_py
 #: model:ir.model.fields.selection,name:l10n_py.selection__account_journal__res90_type_receipt__105
 #: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_type_receipt__105
 msgid "Lottery Tickets, Games of Chance"
@@ -973,6 +887,11 @@ msgstr "Boletos de Loterías, Juegos de Azar"
 #: model:ir.model.fields,field_description:l10n_py.field_account_journal__max_lines
 msgid "Maximum printable lines on the invoice"
 msgstr "Máximo de líneas imprimibles en la factura"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_ir_ui_menu
+msgid "Menu"
+msgstr "Menú"
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_report_res90__month
@@ -988,32 +907,14 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration__name
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration_report__name
 msgid "Name"
-msgstr ""
+msgstr "Nombre"
 
 #. module: l10n_py
-#: model:ir.model.fields,field_description:l10n_py.field_interfaces_rubrica_informe_rubrica__name
-msgid "Nombre"
-msgstr ""
-
-#. module: l10n_py
-#: model:ir.model.fields,field_description:l10n_py.field_interfaces_rubrica_informe_rubrica__archivo_nombre
-msgid "Nombre de Archivo"
-msgstr ""
-
-#. module: l10n_py
-#: model:ir.model.fields,field_description:l10n_py.field_interfaces_rubrica_informe_rubrica__nro_rub_act
-msgid "Nro. Actual"
-msgstr ""
-
-#. module: l10n_py
-#: model:ir.model.fields,field_description:l10n_py.field_interfaces_rubrica_informe_rubrica__nro_rub_fin
-msgid "Nro. Final"
-msgstr ""
-
-#. module: l10n_py
-#: model:ir.model.fields,field_description:l10n_py.field_interfaces_rubrica_informe_rubrica__nro_rub_ini
-msgid "Nro. Inicio"
-msgstr ""
+#. odoo-python
+#: code:addons/l10n_py/models/account_move.py:0
+#, python-format
+msgid "Only customer invoices can be printed"
+msgstr "Solo se pueden imprimir facturas de clientes"
 
 #. module: l10n_py
 #. odoo-python
@@ -1043,6 +944,19 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration_report__page_quantity
 msgid "Page Quantity"
 msgstr "Cantidad de Páginas"
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.view_account_form_inherit
+#: model_terms:ir.ui.view,arch_db:l10n_py.view_account_journal_form_inherited
+#: model_terms:ir.ui.view,arch_db:l10n_py.view_move_form_inherited
+#: model_terms:ir.ui.view,arch_db:l10n_py.view_partner_form_inherit
+msgid "Paraguay"
+msgstr ""
+
+#. module: l10n_py
+#: model:res.groups,name:l10n_py.l10n_py_security_group
+msgid "Paraguay Localization"
+msgstr "Localización de Paraguay"
 
 #. module: l10n_py
 #: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_identification_type__13
@@ -1100,9 +1014,15 @@ msgid "QR Code"
 msgstr "Código QR"
 
 #. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.view_account_journal_form_inherited
+#: model_terms:ir.ui.view,arch_db:l10n_py.view_move_form_inherited
+msgid "R.G. 90"
+msgstr ""
+
+#. module: l10n_py
 #: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_identification_type__11
 msgid "RUC"
-msgstr "RUC"
+msgstr ""
 
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
@@ -1110,9 +1030,9 @@ msgid "RUC:"
 msgstr ""
 
 #. module: l10n_py
-#: model:ir.model.fields,field_description:l10n_py.field_interfaces_rubrica_informe_rubrica__activo
-msgid "Registro Activo"
-msgstr ""
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_cancel__reason
+msgid "Reason"
+msgstr "Motivo"
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__related_invoice_number
@@ -1137,7 +1057,8 @@ msgid ""
 "Report structure to be used for the Balance Sheet in the Inventory Book "
 "report"
 msgstr ""
-"Estructura de reporte que se utilizará para el Balance General en el reporte de Libro Inventario."
+"Estructura de reporte que se utilizará para el Balance General en el reporte"
+" de Libro Inventario."
 
 #. module: l10n_py
 #: model:ir.model.fields,help:l10n_py.field_res_config_settings__inventory_book_base_report_is
@@ -1145,7 +1066,8 @@ msgid ""
 "Report structure to be used for the Income Statement in the Inventory Book "
 "report"
 msgstr ""
-"Estructura de reporte que se utilizará para el Estado de Resultados en el reporte de Libro Inventario."
+"Estructura de reporte que se utilizará para el Estado de Resultados en el "
+"reporte de Libro Inventario."
 
 #. module: l10n_py
 #: model:ir.model,name:l10n_py.model_report_res90
@@ -1176,18 +1098,7 @@ msgstr "Boleta Resimple"
 #. module: l10n_py
 #: model:ir.actions.act_window,name:l10n_py.report_res90_action
 #: model:ir.ui.menu,name:l10n_py.report_res90_menu
-#: model_terms:ir.ui.view,arch_db:l10n_py.view_move_form_inherited
 msgid "Resolución 90"
-msgstr ""
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_rubric
-msgid "Rubric"
-msgstr ""
-
-#. module: l10n_py
-#: model:ir.model.fields,field_description:l10n_py.field_interfaces_rubrica_informe_rubrica__rubrica_id
-msgid "Rúbrica"
 msgstr ""
 
 #. module: l10n_py
@@ -1207,6 +1118,11 @@ msgstr "Libro Ventas"
 #: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_type_receipt__103
 msgid "Sales Invoice"
 msgstr "Boleta de Venta"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_report_l10n_py_invoice_report_template
+msgid "Self-Printable Invoice Report"
+msgstr "Factura Autoimpresor"
 
 #. module: l10n_py
 #: model:ir.model.fields.selection,name:l10n_py.selection__account_journal__res90_type_receipt__101
@@ -1230,14 +1146,11 @@ msgid "Self-printer Authorization Number"
 msgstr "Autorización de Autoimpresor"
 
 #. module: l10n_py
-#: model_terms:ir.ui.view,arch_db:l10n_py.view_account_journal_form_inherited
-msgid "Self-printer parameters"
-msgstr "Configuración de Autoimpresor"
-
-#. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.res_config_settings_view_form_inherit
 msgid "Settings of the Report Structures used for the Inventory Book."
-msgstr "Configuraciones de las Estructuras de Reportes utilizadas para el Libro Inventario."
+msgstr ""
+"Configuraciones de las Estructuras de Reportes utilizadas para el Libro "
+"Inventario."
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_res_company__show_inventory_book_base_report_bs_details
@@ -1460,11 +1373,6 @@ msgid "Ticket or air transportation ticket"
 msgstr "Boleto o ticket de Transporte aéreo"
 
 #. module: l10n_py
-#: model:ir.model.fields,field_description:l10n_py.field_interfaces_rubrica_informe_rubrica__type
-msgid "Tipo"
-msgstr ""
-
-#. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_report_res90__obligation_type
 msgid "Tipo de obligación"
 msgstr ""
@@ -1485,6 +1393,11 @@ msgstr "Tipo"
 #: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_identification_type__15
 msgid "Unnamed"
 msgstr "Sin nombre"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_res_users
+msgid "User"
+msgstr "Usuario"
 
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
@@ -1543,11 +1456,13 @@ msgid "Web:"
 msgstr ""
 
 #. module: l10n_py
+#. odoo-python
+#: code:addons/l10n_py/reports/invoice_report.py:0
+#, python-format
+msgid "You cannot print this invoice because it is not a customer invoice."
+msgstr "No se puede imprimir esta factura porque no es una factura de cliente."
+
+#. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.view_move_form_inherited
 msgid "e.g.: 001-001-0000001"
 msgstr "Por ej.: 001-001-0000001"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_interfaces_rubrica_informe_rubrica
-msgid "interfaces_rubrica.informe_rubrica"
-msgstr ""

@@ -18,3 +18,6 @@ class ResCompany(models.Model):
         string='Show Account Details',
         default=True
     )
+
+    def in_paraguay(self):
+        return self.env.company.country_code == 'PY'

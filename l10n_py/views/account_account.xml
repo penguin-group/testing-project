@@ -6,8 +6,13 @@
             <field name="inherit_id" ref="account.view_account_form"/>
             <field name="arch" type="xml">
 
-                <xpath expr="//notebook/page[@name='accounting']/group/group/field[@name='company_id']/.." position="inside">
-                    <field name="vat_import"/>
+                <xpath expr="//notebook" position="inside">
+                    <page name="l10n_py_page" string="Paraguay" groups="l10n_py.l10n_py_security_group" 
+                        invisible="not context.get('in_paraguay')">
+                        <group name="paraguay" string="Import">
+                            <field name="vat_import" />
+                        </group>
+                    </page>
                 </xpath>
 
             </field>

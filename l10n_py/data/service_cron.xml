@@ -9,4 +9,31 @@
         <field name="numbercall">-1</field>
         <field name="code">model.set_journal_entry_numbers()</field>
     </record>
+
+    <record id="nota_remision_campos_rg90" model="ir.cron">
+            <field name="name">Complete rg90 fields for delivery note</field>
+            <field eval="False" name="active" />
+            <field name="user_id" ref="base.user_root" />
+            <field name="interval_number">12</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field ref="account.model_account_move" name="model_id"/>
+            <field name="state">code</field>
+            <field name="code">
+model.rg90_remission_fields()
+            </field>
+        </record>
+
+    <record id="ir_cron_add_users_to_group" model="ir.cron">
+        <field name="name">Add Users to l10n_py Security Group Job</field>
+        <field name="model_id" ref="base.model_res_users"/>
+        <field name="state">code</field>
+        <field name="code">model.add_users_to_l10n_py_security_group()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">hours</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+    </record>
+
+    
 </odoo>
