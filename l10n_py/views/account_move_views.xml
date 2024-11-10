@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
 
                 <xpath expr="//group[@id='header_right_group']" position="after">
-                    <div groups="l10n_py.l10n_py_security_group" invisible="not context.get('in_paraguay')">
+                    <div invisible="not context.get('in_paraguay')">
                         <group name="paraguay_group" string="Paraguay">
                             <field name="supplier_invoice_authorization_id" invisible="move_type not in ['in_invoice', 'in_refund']"/>
                             <label for="delivery_note_number"/>
@@ -30,26 +30,26 @@
                 </xpath>
 
                 <xpath expr="//label[@for='ref']" position="attributes">
-                    <div groups="l10n_py.l10n_py_security_group" invisible="not context.get('in_paraguay')">
+                    <div invisible="not context.get('in_paraguay')">
                         <attribute name="string">Invoice Number</attribute>
                     </div>
                 </xpath>
 
                 <xpath expr="//field[@name='ref']" position="attributes">
-                    <div groups="l10n_py.l10n_py_security_group" invisible="not context.get('in_paraguay')">
+                    <div invisible="not context.get('in_paraguay')">
                         <attribute name="string">Invoice Number</attribute>
                         <attribute name="placeholder">e.g.: 001-001-0000001</attribute>
                     </div>
                 </xpath>
 
                 <xpath expr="//button[@name='button_cancel'][2]" position="attributes">
-                    <div groups="l10n_py.l10n_py_security_group" invisible="not context.get('in_paraguay')">
+                    <div invisible="not context.get('in_paraguay')">
                         <attribute name="invisible">not id or state != 'draft' or move_type in ['out_invoice', 'out_refund', 'entry']</attribute>
                     </div>
                 </xpath>
 
                 <xpath expr="//header" position="inside">
-                    <div groups="l10n_py.l10n_py_security_group" invisible="not context.get('in_paraguay')">
+                    <div invisible="not context.get('in_paraguay')">
                         <button name="button_cancel_invoice" 
                             string="Cancel Invoice" type="object" 
                             groups="account.group_account_invoice" 
@@ -60,7 +60,7 @@
                 </xpath>
 
                 <xpath expr="//notebook" position="inside">
-                        <page name="page_res90" string="R.G. 90" groups="l10n_py.l10n_py_security_group" invisible="not context.get('in_paraguay')">
+                        <page name="page_res90" string="R.G. 90" invisible="not context.get('in_paraguay')">
                             <group>
                                 <group>
                                     <field name="res90_identification_type" readonly="state not in ['draft']"/>

@@ -9,7 +9,7 @@
             <field name="arch" type="xml">
 
                 <xpath expr="//block[@id='account_digitalization']" position="after">
-                    <div groups="l10n_py.l10n_py_security_group" invisible="not context.get('in_paraguay')">
+                    <div invisible="not context.get('in_paraguay')">
                         <block title="Inventory Book Report">
                             <setting string="Settings of the Report Structures used for the Inventory Book.">
                                 <div class="content-group">
