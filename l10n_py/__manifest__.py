@@ -24,6 +24,7 @@
     'data': [
         'security/ir.model.access.csv',
         'security/book_registration_security.xml',
+        'security/ir_ui_menu_security.xml',
         'views/res_partner.xml',
         'views/account_journal_views.xml',
         'views/account_move_views.xml',

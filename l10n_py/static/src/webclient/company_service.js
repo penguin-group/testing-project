@@ -17,6 +17,9 @@ baseCompanyService.start = async function(env, { user, router, action }) {
 
     // Update the context with the awaited result
     user.updateContext({ in_paraguay: in_paraguay });
+    
+    // Reload the menu  
+    env.services.menu.reload();
 
     return result;
 };
