@@ -7,8 +7,12 @@
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
 
-                <xpath expr="//page[@name='sales_purchases']/group/group[@name='purchase']" position="inside">
-                    <field name="foreign_default_supplier"/>
+                <xpath expr="//page[@name='sales_purchases']" position="inside">
+                    <div invisible="not context.get('in_paraguay')">
+                        <group name="paraguay_data" string="Paraguay">
+                            <field name="foreign_default_supplier"/>
+                        </group>
+                    </div>
                 </xpath>
 
             </field>
