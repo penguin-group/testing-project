@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-09 15:17+0000\n"
-"PO-Revision-Date: 2024-11-09 15:17+0000\n"
+"POT-Creation-Date: 2024-11-12 18:24+0000\n"
+"PO-Revision-Date: 2024-11-12 18:24+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -190,9 +190,9 @@ msgid ""
 "set. Please go to the accounting settings to establish the necessary "
 "parameters."
 msgstr ""
-"Un informe base para el Estado de Resultados del informe del Libro de Inventarios no está " 
-"establecido. Por favor, vaya a la configuración contable para establecer los " 
-"parámetros necesarios."
+"Un informe base para el Estado de Resultados del informe del Libro de "
+"Inventarios no está establecido. Por favor, vaya a la configuración contable"
+" para establecer los parámetros necesarios."
 
 #. module: l10n_py
 #. odoo-python
@@ -242,11 +242,6 @@ msgstr "Informe contable"
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__active
 msgid "Active"
 msgstr "Activo"
-
-#. module: l10n_py
-#: model:ir.actions.server,name:l10n_py.ir_cron_add_users_to_group_ir_actions_server
-msgid "Add Users to l10n_py Security Group Job"
-msgstr "Agregar usuarios al grupo de seguridad l10n_py"
 
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_cancel_form
@@ -670,6 +665,11 @@ msgid "General Ledger"
 msgstr "Libro Mayor"
 
 #. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.view_move_form_inherited
+msgid "General Resolution 90"
+msgstr "R.G. 90"
+
+#. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.book_registration_report_form
 msgid "Generate PDF File"
 msgstr "Generar Archivo PDF"
@@ -783,6 +783,7 @@ msgstr "Informe de Libro Inventario"
 #: model:ir.model.fields,field_description:l10n_py.field_account_journal__invoice_authorization_id
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_authorization_view_form
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_authorization_view_tree
+#: model_terms:ir.ui.view,arch_db:l10n_py.view_move_form_inherited
 msgid "Invoice Authorization"
 msgstr "Timbrado"
 
@@ -948,15 +949,14 @@ msgstr "Cantidad de Páginas"
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.view_account_form_inherit
 #: model_terms:ir.ui.view,arch_db:l10n_py.view_account_journal_form_inherited
-#: model_terms:ir.ui.view,arch_db:l10n_py.view_move_form_inherited
 #: model_terms:ir.ui.view,arch_db:l10n_py.view_partner_form_inherit
 msgid "Paraguay"
 msgstr ""
 
 #. module: l10n_py
-#: model:res.groups,name:l10n_py.l10n_py_security_group
-msgid "Paraguay Localization"
-msgstr "Localización de Paraguay"
+#: model_terms:ir.ui.view,arch_db:l10n_py.view_move_form_inherited
+msgid "Paraguayan Legal Compliance"
+msgstr "Cumplimiento Legal Paraguayo"
 
 #. module: l10n_py
 #: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_identification_type__13
@@ -1015,7 +1015,6 @@ msgstr "Código QR"
 
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.view_account_journal_form_inherited
-#: model_terms:ir.ui.view,arch_db:l10n_py.view_move_form_inherited
 msgid "R.G. 90"
 msgstr ""
 
@@ -1157,6 +1156,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_py.field_res_config_settings__show_inventory_book_base_report_bs_details
 msgid "Show Account Details"
 msgstr "Mostrar Detalles de Cuentas"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_ir_ui_menu__show
+msgid "Show Menu Item"
+msgstr ""
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration__signature_image
@@ -1395,11 +1399,6 @@ msgid "Unnamed"
 msgstr "Sin nombre"
 
 #. module: l10n_py
-#: model:ir.model,name:l10n_py.model_res_users
-msgid "User"
-msgstr "Usuario"
-
-#. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
 msgid "VALOR DE VENTA"
 msgstr ""
@@ -1460,7 +1459,8 @@ msgstr ""
 #: code:addons/l10n_py/reports/invoice_report.py:0
 #, python-format
 msgid "You cannot print this invoice because it is not a customer invoice."
-msgstr "No se puede imprimir esta factura porque no es una factura de cliente."
+msgstr ""
+"No se puede imprimir esta factura porque no es una factura de cliente."
 
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.view_move_form_inherited
