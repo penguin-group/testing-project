@@ -293,7 +293,7 @@ msgstr "Informe Base para el Balance General"
 #: model:ir.model.fields,field_description:l10n_py.field_res_company__inventory_book_base_report_is
 #: model:ir.model.fields,field_description:l10n_py.field_res_config_settings__inventory_book_base_report_is
 msgid "Base Report for Income Statement"
-msgstr "Reporte Base para el Balance General"
+msgstr "Reporte Base para el Estado de Resultados"
 
 #. module: l10n_py
 #: model:ir.model.fields.selection,name:l10n_py.selection__account_journal__res90_type_receipt__109
