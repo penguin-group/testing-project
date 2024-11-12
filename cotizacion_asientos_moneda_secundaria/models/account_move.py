@@ -17,8 +17,8 @@ class AccountMoveLine(models.Model):
                 return
 
             if self.move_id.currency_id == secondary_currency_id:
-                debit_ms = abs(self.amount_currency) if self.debit else 0
-                credit_ms = abs(self.amount_currency) if self.credit else 0
+                debit_ms = abs(self.amount_currency) if self.amount_currency > 0 else 0
+                credit_ms = abs(self.amount_currency) if self.amount_currency < 0 else 0
                 balance_ms = self.amount_currency
             else: 
                 if self.move_id.freeze_currency_rate:
