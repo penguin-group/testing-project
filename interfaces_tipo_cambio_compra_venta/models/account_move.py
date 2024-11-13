@@ -43,7 +43,7 @@ class AccountMove(models.Model):
         if release.major_version in ['17.0']:
             for this in self:
                 for line in this.invoice_line_ids:
-                    line.balance = line.company_id.currency_id.round(line.amount_currency / line.currency_rate)
+                    line.balance = line.company_id.currency_id.round(line.amount_currency / line.secondary_currency_rate)
         if release.major_version in ['15.0']:
             result = True
             for this in self.filtered(lambda x: x.state not in ['posted', 'cancel']):

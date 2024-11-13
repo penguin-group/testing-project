@@ -12,7 +12,7 @@ class AccountMoveLine(models.Model):
             if line.move_id.currency_rate:
                 if line.currency_id == line.move_id.currency_id:
                     old_quanity = line.quantity
-                    line.currency_rate = 1 / line.move_id.currency_rate
+                    line.secondary_currency_rate = 1 / line.move_id.currency_rate
                     line.quantity = old_quanity
         return result
         

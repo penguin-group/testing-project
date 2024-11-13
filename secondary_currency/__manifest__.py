@@ -18,6 +18,8 @@
     'depends': ['base', 'account'],
 
     'data': [
+        'views/res_company_views.xml',
+        'views/account_move_views.xml',
     ],
     'demo': [
     ],
