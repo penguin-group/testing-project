@@ -25,12 +25,14 @@ class AccountMove(models.Model):
             dif = suma_debito - suma_credito
             if dif != 0 and dif > 0:
                 lines = move.line_ids.filtered(lambda x: x.credit > 0)
-                lines[0].write({'credit_cs': lines[0].credit_cs + dif, 'credit_ms': lines[0].credit_ms + dif, 'balance_cs': lines[0].balance_cs - dif,
-                                'balance_ms': lines[0].balance_ms - dif})
+                if lines:
+                    lines[0].write({'credit_cs': lines[0].credit_cs + dif, 'credit_ms': lines[0].credit_ms + dif, 'balance_cs': lines[0].balance_cs - dif,
+                                    'balance_ms': lines[0].balance_ms - dif})
             elif dif != 0 and dif < 0:
                 lines = move.line_ids.filtered(lambda x: x.debit > 0)
-                lines[0].write({'debit_cs': lines[0].debit_cs - dif, 'debit_ms': lines[0].debit_ms - dif, 'balance_cs': lines[0].balance_cs + (dif * -1),
-                                'balance_ms': lines[0].balance_ms + + (dif * -1)})
+                if lines:
+                    lines[0].write({'debit_cs': lines[0].debit_cs - dif, 'debit_ms': lines[0].debit_ms - dif, 'balance_cs': lines[0].balance_cs + (dif * -1),
+                                    'balance_ms': lines[0].balance_ms + (dif * -1)})
 
 
 class AccountMoveLine(models.Model):
