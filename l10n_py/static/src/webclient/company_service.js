@@ -10,7 +10,7 @@ baseCompanyService.start = async function(env, { user, router, action }) {
     
     // Fetch in_paraguay result
     try {
-        var in_paraguay = await env.services.orm.call("res.company", "in_paraguay", [false]);
+        in_paraguay = await env.services.orm.call("res.company", "in_paraguay", [false]);
     } catch (error) {
         console.error("Error fetching in_paraguay result:", error);
     }
