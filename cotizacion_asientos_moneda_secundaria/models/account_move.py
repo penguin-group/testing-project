@@ -9,7 +9,7 @@ class AccountMoveLine(models.Model):
     
     
     def compute_secondary_values(self):
-        if not self.display_type:
+        if self.display_type not in ['line_note', 'line_section']:
             company_currency_id = self.env.company.currency_id
             secondary_currency_id = self.env.company.secondary_currency_id
 
@@ -17,8 +17,8 @@ class AccountMoveLine(models.Model):
                 return
 
             if self.move_id.currency_id == secondary_currency_id:
-                debit_ms = abs(self.amount_currency) if self.debit else 0
-                credit_ms = abs(self.amount_currency) if self.credit else 0
+                debit_ms = abs(self.amount_currency) if self.amount_currency > 0 else 0
+                credit_ms = abs(self.amount_currency) if self.amount_currency < 0 else 0
                 balance_ms = self.amount_currency
             else: 
                 if self.move_id.freeze_currency_rate:
@@ -35,7 +35,7 @@ class AccountMoveLine(models.Model):
                 'credit_ms': credit_ms,
                 'balance_ms': balance_ms,
                 'secondary_currency_id': secondary_currency_id.id,
-                'tipo_cambio': abs(balance_ms) / abs(self.balance),
+                'tipo_cambio': abs(balance_ms) / abs(self.balance) if abs(self.balance) > 0 else 0,
             })
 
     def _apply_price_difference(self):

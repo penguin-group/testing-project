@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='amount']/.." position="after">
                     <field force_save="True" name="currency_rate" readonly="freeze_currency_rate == False or state not in ['draft']" required="True"/>
-                    <field invisible="state not in ['draft']" name="freeze_currency_rate"/>
+                    <field readonly="state not in ['draft']" name="freeze_currency_rate"/>
                 </xpath></field>
         </record>
     </data>
