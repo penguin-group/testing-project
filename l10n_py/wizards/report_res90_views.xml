@@ -33,8 +33,6 @@
             <field name="target">new</field>
         </record>
 
-        <menuitem id="report_res90_menu" name="Resolución 90" parent="account.menu_finance_reports" action="report_res90_action" sequence="100"/>
-
     </data>
 
 

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main menu -->
+    <menuitem id="menu_py_legal_compliance"
+              name="Paraguayan Legal Compliance"
+              parent="account.menu_finance_entries"
+              sequence="100"/>
+
+    <!-- VAT Purchase Book -->
+    <menuitem id="report_vat_purchase_wizard_menu"
+              name="VAT Purchase Book"
+              parent="menu_py_legal_compliance"
+              action="report_vat_purchase_wizard_action"
+              sequence="20"/>
+
+    <!-- VAT Sale Book -->
+    <menuitem id="report_vat_sale_wizard_menu"
+              name="VAT Sale Book"
+              parent="menu_py_legal_compliance"
+              action="report_vat_sale_wizard_action"
+              sequence="30"/>
+
+    <!-- Resolucion 90 -->
+    <menuitem id="report_res90_menu"
+              name="Resolución 90"
+              parent="menu_py_legal_compliance"
+              action="report_res90_action"
+              sequence="30"/>
+
+    <!-- Book Registration -->
+    <menuitem id="book_registration_menu"
+              name="Book Registration"
+              parent="menu_py_legal_compliance"
+              action="book_registration_action"
+              sequence="40"/>
+    
+    <!-- Book Registration Report -->
+    <menuitem id="book_registration_report_menu"
+              name="Book Registration Report"
+              parent="menu_py_legal_compliance"
+              action="book_registration_report_action"
+              sequence="50"/>
+</odoo>
+
+        

@@ -39,7 +39,8 @@
         'wizards/report_vat_sale_views.xml',
         'wizards/report_res90_views.xml',
         'wizards/invoice_cancel_views.xml',
-        'data/service_cron.xml'
+        'data/service_cron.xml',
+        'views/menu_item.xml',
     ],
 
     'demo': [
