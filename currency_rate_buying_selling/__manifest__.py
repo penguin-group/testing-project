@@ -10,11 +10,10 @@
     'category': 'Base',
     'version': '17.0.1.1.1',
 
-    'depends': ['base', 'account'],
+    'depends': ['base', 'account', 'invoice_currency_rate'],
 
     'data': [
         'views/res_currency_views.xml',
-        'views/account_move_views.xml',
     ],
 }
 
