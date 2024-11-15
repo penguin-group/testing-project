@@ -19,7 +19,7 @@
     'version': '17.0.1.1.1',
     'license': "OPL-1",
 
-    'depends': ['base', 'account', 'report_xlsx', 'web'],
+    'depends': ['base', 'account', 'invoice_currency_rate', 'report_xlsx', 'web'],
 
     'data': [
         'security/ir.model.access.csv',
@@ -39,6 +39,7 @@
         'wizards/report_vat_sale_views.xml',
         'wizards/report_res90_views.xml',
         'wizards/invoice_cancel_views.xml',
+        'wizards/invoice_edit_currency_rate_views.xml',
         'data/service_cron.xml',
         'views/menu_item.xml',
     ],

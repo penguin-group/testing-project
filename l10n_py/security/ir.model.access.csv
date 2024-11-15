@@ -6,3 +6,4 @@ access_accountant_invoice_authorization,access.accountant.invoice.authorization,
 access_invoice_cancel,access.invoice.cancel,model_invoice_cancel,account.group_account_manager,1,1,1,1
 access_book_registration,access.book.registration,model_book_registration,account.group_account_manager,1,1,1,1
 access_book_registration_report,access.book.registration.report,model_book_registration_report,account.group_account_manager,1,1,1,1
+access_invoice_edit_currency_rate,access.invoice.edit.currency.rate,model_invoice_edit_currency_rate,account.group_account_manager,1,1,1,1
