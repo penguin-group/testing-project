@@ -1,0 +1,78 @@
+<odoo>
+    <data>
+
+        <record id="view_move_form_inherited" model="ir.ui.view">
+            <field name="name">view.move.form.inherited</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//notebook" position="inside">
+                        <page name="page_paraguay" string="Paraguayan Legal Compliance" invisible="not context.get('in_paraguay')">
+                            <group>
+                                <group name="rg90_group" string="General Resolution 90">
+                                    <field name="res90_identification_type" readonly="state not in ['draft']"/>
+                                    <field name="res90_type_receipt" readonly="state not in ['draft']"/>
+                                    <field name="res90_number_invoice_authorization" readonly="state not in ['draft']"/>
+                                    <field name="res90_imputes_vat" readonly="state not in ['draft']"/>
+                                    <field name="res90_imputes_ire" readonly="state not in ['draft']"/>
+                                    <field name="res90_imputes_irp_rsp" readonly="state not in ['draft']"/>
+                                    <field name="res90_not_imputes" readonly="state not in ['draft']"/>
+                                    <field name="exclude_res90" readonly="state not in ['draft']"/>
+                                    <field name="res90_associated_voucher_number" readonly="state not in ['draft']"/>
+                                    <field name="res90_associated_receipt_stamping" readonly="state not in ['draft']"/>
+                                </group>
+                                <group name="invoice_authorization_group" string="Invoice Authorization">
+                                    <field name="supplier_invoice_authorization_id" invisible="move_type not in ['in_invoice', 'in_refund']"/>
+                                    <label for="delivery_note_number"/>
+                                    <div>
+                                        <field name="delivery_note_number"/>
+                                    </div>
+                                    <label for="related_invoice_number" invisible="move_type not in ['out_refund', 'in_refund']"/>
+                                    <div>
+                                        <field name="related_invoice_number" invisible="move_type not in ['out_refund', 'in_refund']"/>
+                                    </div>
+                                </group>
+                                <group name="import_invoices_group" string="Import Invoices" invisible="move_type not in ['in_invoice']" >
+                                    <field invisible="import_clearance == True" name="foreign_invoice" readonly="state != 'draft'"/>
+                                    <field invisible="foreign_invoice == True" name="import_clearance" readonly="state != 'draft'"/>
+                                    <field invisible="import_clearance == False" name="import_invoice_ids" readonly="state != 'draft'" required="import_clearance == True" widget="many2many_tags"/>
+                                </group>
+                            </group>
+                        </page>                    
+                </xpath>
+
+                <xpath expr="//label[@for='ref']" position="attributes">
+                    <div invisible="not context.get('in_paraguay')">
+                        <attribute name="string">Invoice Number</attribute>
+                    </div>
+                </xpath>
+
+                <xpath expr="//field[@name='ref']" position="attributes">
+                    <div invisible="not context.get('in_paraguay')">
+                        <attribute name="string">Invoice Number</attribute>
+                        <attribute name="placeholder">e.g.: 001-001-0000001</attribute>
+                    </div>
+                </xpath>
+
+                <xpath expr="//button[@name='button_cancel'][2]" position="attributes">
+                    <div invisible="not context.get('in_paraguay')">
+                        <attribute name="invisible">not id or state != 'draft' or move_type in ['out_invoice', 'out_refund', 'entry']</attribute>
+                    </div>
+                </xpath>
+
+                <xpath expr="//header" position="inside">
+                    <div invisible="not context.get('in_paraguay')">
+                        <button name="button_cancel_invoice" 
+                            string="Cancel Invoice" type="object" 
+                            groups="account.group_account_invoice" 
+                            invisible="not id or state == 'cancel' or move_type not in ['out_invoice', 'out_refund']" 
+                        />
+                    </div>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

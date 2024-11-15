@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+    
+        <record id="view_account_journal_form_inherited" model="ir.ui.view">
+            <field name="name">view.account.journal.form.inherited</field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="account.view_account_journal_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//notebook" position="inside">
+                    <page name="l10n_py_page" string="Paraguay" invisible="not context.get('in_paraguay')">
+                        <group name="invoice_authorization_group" string="Invoices">
+                            <field name="invoice_authorization_id" groups="account.group_account_manager"/>
+                            <field name="max_lines" invisible="type != 'sale'" groups="account.group_account_manager"/>
+                            <field name="invoice_footer" options="{'codeview': true}" widget="html"/>
+                        </group>
+                        <group name="res90_group" string="R.G. 90">
+                            <field invisible="type not in ['sale', 'purchase']" name="res90_type_receipt"/>
+                            <field name="res90_imputes_irp_rsp_default"/>
+                            <field name="exclude_res90"/>
+                        </group>
+                        
+                    </page>
+                </xpath>
+
+            </field>
+        </record>
+    
+    </data>
+    
+
+</odoo>

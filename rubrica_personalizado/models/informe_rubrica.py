@@ -808,7 +808,7 @@ class InformesRubricas(models.Model):
         if not account_financial_report_bg_l10n_py:
             raise exceptions.ValidationError(
                 'No está establecido un reporte base para el Balance General del reporte Libro Inventario, vaya a la configuración de contabilidad para establecer los parámetros necesarios')
-        account_financial_report_bg_l10n_py_report_informations = account_financial_report_bg_l10n_py.get_report_informations(previous_options=previous_options)
+        account_financial_report_bg_l10n_py_report_informations = account_financial_report_bg_l10n_py.get_report_information(previous_options=previous_options)
         account_financial_report_bg_l10n_py_report_informations = account_financial_report_bg_l10n_py_report_informations.get('column_groups_totals')
         account_financial_report_bg_l10n_py_report_informations = account_financial_report_bg_l10n_py_report_informations.get(
             list(account_financial_report_bg_l10n_py_report_informations.keys())[0]
