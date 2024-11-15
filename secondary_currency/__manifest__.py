@@ -15,7 +15,7 @@
     'category': 'Accounting',
     'version': '17.0.0.1',
 
-    'depends': ['base', 'account'],
+    'depends': ['base', 'account', 'invoice_currency_rate'],
 
     'data': [
         'views/res_company_views.xml',
