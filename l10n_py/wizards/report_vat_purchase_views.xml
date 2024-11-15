@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <data noupdate="1">
+    <data>
     
         <record model="ir.ui.view" id="report_vat_purchase_wizard_form">
             <field name="name">report.vat.purchase.wizard.form</field>
@@ -32,9 +32,6 @@
             <field name="view_mode">form</field>
             <field name="target">new</field>
         </record>
-
-        <menuitem id="report_vat_purchase_wizard_menu" parent="account.menu_finance_payables" name="VAT Purchase Book" sequence="10"
-                action="report_vat_purchase_wizard_action"/>
 
         <record id="report_vat_purchase_report" model="ir.actions.report">
                 <field name="name">VAT Purchase Book</field>
