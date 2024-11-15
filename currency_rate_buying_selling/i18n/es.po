@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-09 20:47+0000\n"
-"PO-Revision-Date: 2024-10-09 20:47+0000\n"
+"POT-Creation-Date: 2024-11-14 19:54+0000\n"
+"PO-Revision-Date: 2024-11-14 19:54+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,9 +16,29 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: currency_rate_buying_selling
-#: model:ir.model.fields.selection,name:currency_rate_buying_selling.selection__res_currency_rate__rate_type__buying
-msgid "Buying"
-msgstr "Compra"
+#: model:ir.model.fields,field_description:currency_rate_buying_selling.field_res_currency_rate__buying_company_rate
+msgid "Buying Company Rate"
+msgstr "Tipo de Cambio Compra"
+
+#. module: currency_rate_buying_selling
+#: model:ir.model.fields,field_description:currency_rate_buying_selling.field_res_currency_rate__buying_inverse_company_rate
+msgid "Buying Inverse Company Rate"
+msgstr "Tipo de Cambio Compra Inverso"
+
+#. module: currency_rate_buying_selling
+#: model:ir.model.fields,field_description:currency_rate_buying_selling.field_res_currency__buying_inverse_rate
+msgid "Buying Inverse Rate"
+msgstr "Tipo de Cambio Compra Inverso"
+
+#. module: currency_rate_buying_selling
+#: model:ir.model.fields,field_description:currency_rate_buying_selling.field_res_currency__buying_rate_string
+msgid "Buying Rate String"
+msgstr "Tipo de Cambio Compra Letras"
+
+#. module: currency_rate_buying_selling
+#: model:ir.model.fields,field_description:currency_rate_buying_selling.field_res_currency_rate__buying_rate
+msgid "Buying Technical Rate"
+msgstr "Tipo de Cambio Compra Técnico"
 
 #. module: currency_rate_buying_selling
 #: model:ir.model,name:currency_rate_buying_selling.model_res_currency
@@ -31,21 +51,36 @@ msgid "Currency Rate"
 msgstr "Tipo de cambio"
 
 #. module: currency_rate_buying_selling
-#: model:ir.model,name:currency_rate_buying_selling.model_account_move_line
-msgid "Journal Item"
-msgstr "Apunte contable"
+#: model:ir.model.fields,field_description:currency_rate_buying_selling.field_res_currency__buying_rate
+msgid "Current Buying Rate"
+msgstr "Tipo de Cambio Compra Actual"
 
 #. module: currency_rate_buying_selling
-#: model:ir.model.constraint,message:currency_rate_buying_selling.constraint_res_currency_rate_unique_name_per_day
-msgid "Only one currency rate per day allowed!"
-msgstr "Solo se permite una cotización por día."
+#: model:ir.model,name:currency_rate_buying_selling.model_account_move
+msgid "Journal Entry"
+msgstr "Asiento contable"
 
 #. module: currency_rate_buying_selling
-#: model:ir.model.fields,field_description:currency_rate_buying_selling.field_res_currency_rate__rate_type
-msgid "Rate Type"
-msgstr "Tipo de Cotización"
+#: model:ir.model.fields,help:currency_rate_buying_selling.field_res_currency_rate__buying_company_rate
+msgid "The buying currency of rate 1 to the rate of the currency."
+msgstr "La moneda del tipo de cambio 1 al tipo de cambio compra de la moneda."
 
 #. module: currency_rate_buying_selling
-#: model:ir.model.fields.selection,name:currency_rate_buying_selling.selection__res_currency_rate__rate_type__selling
-msgid "Selling"
-msgstr "Venta"
+#: model:ir.model.fields,help:currency_rate_buying_selling.field_res_currency_rate__buying_rate
+msgid "The buying rate of the currency to the currency of rate 1"
+msgstr "El tipo de cambio compra de la moneda respecto a la moneda del tipo de cambio 1"
+
+#. module: currency_rate_buying_selling
+#: model:ir.model.fields,help:currency_rate_buying_selling.field_res_currency_rate__buying_inverse_company_rate
+msgid "The buying rate of the currency to the currency of rate 1 "
+msgstr "El tipo de cambio compra de la moneda respecto a la moneda del tipo de cambio 1"
+
+#. module: currency_rate_buying_selling
+#: model:ir.model.fields,help:currency_rate_buying_selling.field_res_currency__buying_rate
+msgid "The buying rate of the currency to the currency of rate 1."
+msgstr "El tipo de cambio compra de la moneda respecto a la moneda del tipo de cambio 1."
+
+#. module: currency_rate_buying_selling
+#: model:ir.model.fields,help:currency_rate_buying_selling.field_res_currency__buying_inverse_rate
+msgid "The currency of rate 1 to the buying rate of the currency."
+msgstr "La moneda del tipo de cambio 1 al tipo de cambio compra de la moneda."
