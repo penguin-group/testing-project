@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-12 18:24+0000\n"
-"PO-Revision-Date: 2024-11-12 18:24+0000\n"
+"POT-Creation-Date: 2024-11-16 10:29+0000\n"
+"PO-Revision-Date: 2024-11-16 10:29+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -245,6 +245,7 @@ msgstr "Activo"
 
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_cancel_form
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_edit_currency_rate_view_form
 msgid "Apply"
 msgstr "Aplicar"
 
@@ -329,6 +330,7 @@ msgstr ""
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.book_registration_report_form
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_cancel_form
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_edit_currency_rate_view_form
 #: model_terms:ir.ui.view,arch_db:l10n_py.report_res90_form
 #: model_terms:ir.ui.view,arch_db:l10n_py.report_vat_purchase_wizard_form
 #: model_terms:ir.ui.view,arch_db:l10n_py.report_vat_sale_wizard_form
@@ -412,6 +414,7 @@ msgstr "Pasar a Borrador"
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration_report__create_uid
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__create_uid
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_cancel__create_uid
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_edit_currency_rate__create_uid
 #: model:ir.model.fields,field_description:l10n_py.field_report_res90__create_uid
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_purchase_wizard__create_uid
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_sale_wizard__create_uid
@@ -423,6 +426,7 @@ msgstr "Creado por"
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration_report__create_date
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__create_date
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_cancel__create_date
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_edit_currency_rate__create_date
 #: model:ir.model.fields,field_description:l10n_py.field_report_res90__create_date
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_purchase_wizard__create_date
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_sale_wizard__create_date
@@ -444,6 +448,18 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
 msgid "Crédito (X)"
 msgstr ""
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_edit_currency_rate__currency_rate
+msgid "Currency Rate"
+msgstr "Tipo de Cambio"
+
+#. module: l10n_py
+#: model:ir.model.fields,help:l10n_py.field_account_bank_statement_line__invoice_currency_rate
+#: model:ir.model.fields,help:l10n_py.field_account_move__invoice_currency_rate
+#: model:ir.model.fields,help:l10n_py.field_account_payment__invoice_currency_rate
+msgid "Currency rate from company currency to document currency."
+msgstr "Tipo de cambio de la moneda de la compañía a la moneda del documento."
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration__current_number
@@ -524,6 +540,7 @@ msgstr "Diplomático"
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration_report__display_name
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__display_name
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_cancel__display_name
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_edit_currency_rate__display_name
 #: model:ir.model.fields,field_description:l10n_py.field_report_res90__display_name
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_purchase_wizard__display_name
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_sale_wizard__display_name
@@ -556,6 +573,14 @@ msgstr "Borrador"
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
 msgid "EXENTA"
 msgstr ""
+
+#. module: l10n_py
+#: model:ir.actions.act_window,name:l10n_py.invoice_edit_currency_rate_action
+#: model:ir.model,name:l10n_py.model_invoice_edit_currency_rate
+#: model_terms:ir.ui.view,arch_db:l10n_py.invoice_edit_currency_rate_view_form
+#: model_terms:ir.ui.view,arch_db:l10n_py.view_move_form_inherited
+msgid "Edit Currency Rate"
+msgstr "Editar Tipo de Cambio"
 
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
@@ -684,6 +709,7 @@ msgstr "Generar Archivo"
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration_report__id
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__id
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_cancel__id
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_edit_currency_rate__id
 #: model:ir.model.fields,field_description:l10n_py.field_report_res90__id
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_purchase_wizard__id
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_sale_wizard__id
@@ -814,6 +840,13 @@ msgid "Invoice Cancellation Wizard"
 msgstr "Diálogo de Anulación de Factura"
 
 #. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__invoice_currency_rate
+#: model:ir.model.fields,field_description:l10n_py.field_account_move__invoice_currency_rate
+#: model:ir.model.fields,field_description:l10n_py.field_account_payment__invoice_currency_rate
+msgid "Invoice Currency Rate"
+msgstr "Tipo de Cambio de Factura"
+
+#. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_account_journal__invoice_footer
 msgid "Invoice Footer"
 msgstr "Pie de la Factura"
@@ -855,6 +888,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration_report__write_uid
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__write_uid
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_cancel__write_uid
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_edit_currency_rate__write_uid
 #: model:ir.model.fields,field_description:l10n_py.field_report_res90__write_uid
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_purchase_wizard__write_uid
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_sale_wizard__write_uid
@@ -866,6 +900,7 @@ msgstr "Última actualización por"
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration_report__write_date
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__write_date
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_cancel__write_date
+#: model:ir.model.fields,field_description:l10n_py.field_invoice_edit_currency_rate__write_date
 #: model:ir.model.fields,field_description:l10n_py.field_report_res90__write_date
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_purchase_wizard__write_date
 #: model:ir.model.fields,field_description:l10n_py.field_report_vat_sale_wizard__write_date
@@ -954,6 +989,7 @@ msgid "Paraguay"
 msgstr ""
 
 #. module: l10n_py
+#: model:ir.ui.menu,name:l10n_py.menu_py_legal_compliance
 #: model_terms:ir.ui.view,arch_db:l10n_py.view_move_form_inherited
 msgid "Paraguayan Legal Compliance"
 msgstr "Cumplimiento Legal Paraguayo"
