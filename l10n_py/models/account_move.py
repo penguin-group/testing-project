@@ -357,68 +357,29 @@ class AccountMove(models.Model):
             return ''
 
     def get_amount10(self):
-        amount10 = sum(self.invoice_line_ids.filtered(lambda x: 10 in x.tax_ids.mapped('amount')).mapped('price_total'))
-        if self.currency_id != self.env.company.currency_id:
-            balance = abs(
-                sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped('balance')))
-            amount_currency = abs(
-                sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped(
-                    'amount_currency')))
-            if balance > 0 and amount_currency > 0:
-                currency_rate = balance / amount_currency
-            else:
-                currency_rate = 1
-            amount10 = amount10 * currency_rate
+        amount10 = sum(l.get_exempt_5_10()[0] + l.get_exempt_5_10()[1] for l in self.invoice_line_ids)
         if self.import_clearance:
-            result = 11 * sum(line.price_subtotal for line in self.invoice_line_ids.filtered(lambda x: x.account_id.vat_import))
+            amount10 = 11 * sum(line.price_subtotal for line in self.invoice_line_ids.filtered(lambda x: x.account_id.vat_import))
         return round(amount10)
 
     def get_amount5(self):
-        monto5 = sum(self.invoice_line_ids.filtered(lambda x: 5 in x.tax_ids.mapped('amount')).mapped('price_total'))
-        if self.currency_id != self.env.company.currency_id:
-            balance = abs(
-                sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped('balance')))
-            amount_currency = abs(
-                sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped(
-                    'amount_currency')))
-            if balance > 0 and amount_currency > 0:
-                currency_rate = balance / amount_currency
-            else:
-                currency_rate = 1
-            monto5 = monto5 * currency_rate
-        return round(monto5)
+        amount5 = sum(l.get_exempt_5_10()[2] + l.get_exempt_5_10()[3] for l in self.invoice_line_ids)
+        return round(amount5)
 
     def get_exempt_amount(self):
-        amount0 = sum(self.invoice_line_ids.filtered(lambda x: not x.tax_ids or 0 in x.tax_ids.mapped('amount')).mapped(
-            'price_total'))
-        if self.currency_id != self.env.company.currency_id:
-            balance = abs(
-                sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped('balance')))
-            amount_currency = abs(
-                sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped(
-                    'amount_currency')))
-            if balance > 0 and amount_currency > 0:
-                currency_rate = balance / amount_currency
-            else:
-                currency_rate = 1
-            amount0 = amount0 * currency_rate
+        amount0 = sum(l.get_exempt_5_10()[4] for l in self.invoice_line_ids)
         if self.import_clearance:
             amount0 = 0
         return round(amount0)
 
-    def get_total_amount(self):
-        amount = abs(sum(self.invoice_line_ids.mapped('price_total')))
-        if self.currency_id != self.env.company.currency_id:
-            balance = abs(
-                sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped('balance')))
-            amount_currency = abs(
-                sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped(
-                    'amount_currency')))
-            if balance > 0 and amount_currency > 0:
-                currency_rate = balance / amount_currency
-            else:
-                currency_rate = 1
-            amount = amount * currency_rate
+    def get_total_amount(self):       
+        amount = sum(
+            l.get_exempt_5_10()[2] + 
+            l.get_exempt_5_10()[3] +
+            l.get_exempt_5_10()[0] +
+            l.get_exempt_5_10()[1] +
+            l.get_exempt_5_10()[4]
+            for l in self.invoice_line_ids)
         if self.import_clearance:
             amount = self.get_amount10()
         return round(amount)

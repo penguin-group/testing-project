@@ -27,7 +27,6 @@ class ReportVatPurchase(models.AbstractModel):
     _inherit = 'report.report_xlsx.abstract'
     _description = "VAT Purchase Report"
 
-
     def get_purchase_invoices(self, date_start, date_end):
         return self.env['account.move'].search([
             ('move_type', '=', 'in_invoice'),
@@ -37,42 +36,6 @@ class ReportVatPurchase(models.AbstractModel):
             ('company_id', '=', self.env.company.id),
             ('line_ids.tax_ids', '!=', False),
         ]).filtered(lambda x: not x.foreign_invoice)
-
-    def get_vat_amounts(self, invoice_line):
-        pyg = self.env.ref('base.PYG')
-            
-        def get_line_amount(line):
-            if line.currency_id.id == pyg.id:
-                amount = line.price_total
-            else:
-                amount = line.currency_id._convert(line.price_total, pyg, line.company_id, line.date)
-            return amount
-        
-        base10 = 0
-        iva10 = 0
-        base5 = 0
-        iva5 = 0
-        exempt = 0
-        taxable_imports = 0
-
-        if invoice_line.tax_ids and invoice_line.tax_ids[0].amount == 10:
-            base10 += get_line_amount(invoice_line) / 1.1
-            iva10 += get_line_amount(invoice_line) / 11
-        if invoice_line.tax_ids and invoice_line.tax_ids[0].amount == 5:
-            base5 += get_line_amount(invoice_line) / 1.05
-            iva5 += get_line_amount(invoice_line) / 21
-        if (invoice_line.tax_ids and invoice_line.tax_ids[0].amount == 0) or not invoice_line.tax_ids:
-            exempt += get_line_amount(invoice_line)
-        
-        # Handle import clearance invoices
-        if invoice_line.move_id.import_clearance:
-            if invoice_line.account_id.vat_import:
-                vat10 = exempt
-                base10 = vat10 * 10
-                taxable_imports = base10
-            exempt = 0
-
-        return base10, iva10, base5, iva5, exempt, taxable_imports
 
     def get_supplier(self, invoice, field_name):
         if invoice.import_clearance:
@@ -188,7 +151,7 @@ class ReportVatPurchase(models.AbstractModel):
             exempt = 0
             taxable_imports = 0
             for t in i.filtered(lambda x: x.state != 'cancel').invoice_line_ids:
-                values = self.get_vat_amounts(t)
+                values = t.get_exempt_5_10()
                 base10 += values[0]
                 vat10 += values[1]
                 base5 += values[2]
@@ -274,7 +237,7 @@ class ReportVatPurchase(models.AbstractModel):
             vat5 = 0
             exempt = 0
             for t in i.filtered(lambda x: x.state != 'cancel').invoice_line_ids:
-                values = self.get_vat_amounts(t)
+                values = t.get_exempt_5_10()
                 base10 += values[0]
                 vat10 += values[1]
                 base5 += values[2]
