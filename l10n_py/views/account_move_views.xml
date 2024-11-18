@@ -68,6 +68,11 @@
                             groups="account.group_account_invoice" 
                             invisible="not id or state == 'cancel' or move_type not in ['out_invoice', 'out_refund']" 
                         />
+                        <button string="Edit Currency Rate" 
+                            name="edit_currency_rate" 
+                            type="object" 
+                            groups="account.group_account_manager" 
+                        />
                     </div>
                 </xpath>
 

@@ -11,6 +11,14 @@ import math
 class AccountMove(models.Model):
     _inherit = 'account.move'
 
+    invoice_currency_rate = fields.Float(
+        string='Invoice Currency Rate',
+        compute='_compute_invoice_currency_rate', store=True, precompute=True,
+        copy=False,
+        digits=0,
+        tracking=True,
+        help="Currency rate from company currency to document currency.",
+    )
     supplier_invoice_authorization_id = fields.Many2one(
         'invoice.authorization',
         string='Supplier Invoice Authorization',
@@ -70,6 +78,16 @@ class AccountMove(models.Model):
                                    help="The records of this journal will not be included in resolution 90")
     journal_entry_number = fields.Integer(string='Journal Entry Number', index=True)
 
+
+    def edit_currency_rate(self):
+        return {
+                'type': 'ir.actions.act_window',
+                'res_model': 'invoice.edit.currency.rate',
+                'view_mode': 'form',         
+                'view_id': self.env.ref('l10n_py.invoice_edit_currency_rate_view_form').id,      
+                'target': 'new',
+                'context': {'active_id': self.id}
+            }
 
     def button_cancel_invoice(self):
         return {
