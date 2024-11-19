@@ -273,11 +273,11 @@ class BookRegistrationReport(models.Model):
                 total_invoice = i.get_total_amount()
 
             total_gral_total += total_invoice
-            total_gral_base10 += sum(l.get_exempt_5_10()[0] for l in i.invoice_line_ids)
-            total_gral_base5 += sum(l.get_exempt_5_10()[2] for l in i.invoice_line_ids)
-            total_gral_vat10 += sum(l.get_exempt_5_10()[1] for l in i.invoice_line_ids)
-            total_gral_vat5 += sum(l.get_exempt_5_10()[3] for l in i.invoice_line_ids)
-            total_gral_exempt += sum(l.get_exempt_5_10()[4] for l in i.invoice_line_ids)
+            total_gral_base10 += i.amount_base10
+            total_gral_base5 += i.amount_base5
+            total_gral_vat10 += i.amount_vat10
+            total_gral_vat5 += i.amount_vat5
+            total_gral_exempt += i.amount_exempt
 
             def _get_type_doc(invo):
                 type = "Anulado"
@@ -451,11 +451,11 @@ class BookRegistrationReport(models.Model):
                 total_invoice = i.get_total_amount()
 
             total_gral_total += total_invoice
-            total_gral_base10 += sum(l.get_exempt_5_10()[0] for l in i.invoice_line_ids)
-            total_gral_base5 += sum(l.get_exempt_5_10()[2] for l in i.invoice_line_ids)
-            total_gral_vat10 += sum(l.get_exempt_5_10()[1] for l in i.invoice_line_ids)
-            total_gral_vat5 += sum(l.get_exempt_5_10()[3] for l in i.invoice_line_ids)
-            total_gral_exempt += sum(l.get_exempt_5_10()[4] for l in i.invoice_line_ids)
+            total_gral_base10 += i.amount_base10
+            total_gral_base5 += i.amount_base5
+            total_gral_vat10 += i.amount_vat10
+            total_gral_vat5 += i.amount_vat5
+            total_gral_exempt += i.amount_exempt
 
             def _get_type_doc(invoice):
                 type = " "
@@ -471,15 +471,15 @@ class BookRegistrationReport(models.Model):
                     str(i.partner_id.vat).strip(),
                     _get_type_doc(i),
                     str(i.name),
-                    '{0:,.0f}'.format(int(base10)).replace(
+                    '{0:,.0f}'.format(int(i.amount_base10)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(vat10)).replace(
+                    '{0:,.0f}'.format(int(i.amount_vat10)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(base5)).replace(
+                    '{0:,.0f}'.format(int(i.amount_base5)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(vat5)).replace(
+                    '{0:,.0f}'.format(int(i.amount_vat5)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(exempt)).replace(
+                    '{0:,.0f}'.format(int(i.amount_exempt)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
                     '{0:,.0f}'.format(int(total_invoice)).replace(
                         ',', '.') if i.state != 'cancel' else "0"
@@ -494,15 +494,15 @@ class BookRegistrationReport(models.Model):
                     _get_type_doc(i),
                     i.supplier_invoice_authorization_id.name if i.supplier_invoice_authorization_id else ' ',
                     str(i.ref),
-                    '{0:,.0f}'.format(int(base10)).replace(
+                    '{0:,.0f}'.format(int(i.amount_base10)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(vat10)).replace(
+                    '{0:,.0f}'.format(int(i.amount_vat10)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(base5)).replace(
+                    '{0:,.0f}'.format(int(i.amount_base5)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(vat5)).replace(
+                    '{0:,.0f}'.format(int(i.amount_vat5)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(exempt)).replace(
+                    '{0:,.0f}'.format(int(i.amount_exempt)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
                     '{0:,.0f}'.format(int(total_invoice)).replace(
                         ',', '.') if i.state != 'cancel' else "0"

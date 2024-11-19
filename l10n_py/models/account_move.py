@@ -11,6 +11,8 @@ import math
 class AccountMove(models.Model):
     _inherit = 'account.move'
 
+    
+
     invoice_currency_rate = fields.Float(
         string='Invoice Currency Rate',
         compute='_compute_invoice_currency_rate', store=True, precompute=True,
@@ -78,6 +80,41 @@ class AccountMove(models.Model):
                                    help="The records of this journal will not be included in resolution 90")
     journal_entry_number = fields.Integer(string='Journal Entry Number', index=True)
 
+    # === Fields por PY Reports === #
+    amount_exempt = fields.Monetary(
+        string='Exempt amount',
+        compute='_compute_fields_for_py_reports',
+    )
+    amount_base10 = fields.Monetary(
+        string='Base VAT 10% amount',
+        compute='_compute_fields_for_py_reports',
+    )
+    amount_vat10 = fields.Monetary(
+        string='VAT 10% amount',
+        compute='_compute_fields_for_py_reports',
+    )
+    amount_base5 = fields.Monetary(
+        string='Base VAT 5% amount',
+        compute='_compute_fields_for_py_reports',
+    )
+    amount_vat5 = fields.Monetary(
+        string='VAT 5% amount',
+        compute='_compute_fields_for_py_reports',
+    )
+    amount_taxable_imports = fields.Monetary(
+        string='Taxable imports amount',
+        compute='_compute_fields_for_py_reports',
+    )
+
+
+    def _compute_fields_for_py_reports(self):
+        for record in self:
+            record.amount_base10 = sum(record.line_ids.mapped('amount_base10'))
+            record.amount_vat10 = sum(record.line_ids.mapped('amount_vat10'))
+            record.amount_base5 = sum(record.line_ids.mapped('amount_base5'))
+            record.amount_vat5 = sum(record.line_ids.mapped('amount_vat5'))
+            record.amount_exempt = sum(record.line_ids.mapped('amount_exempt'))
+            record.amount_taxable_imports = sum(record.line_ids.mapped('amount_taxable_imports'))
 
     def edit_currency_rate(self):
         return {
@@ -357,29 +394,23 @@ class AccountMove(models.Model):
             return ''
 
     def get_amount10(self):
-        amount10 = sum(l.get_exempt_5_10()[0] + l.get_exempt_5_10()[1] for l in self.invoice_line_ids)
+        amount10 = self.amount_base10 + self.amount_vat10
         if self.import_clearance:
-            amount10 = 11 * sum(line.price_subtotal for line in self.invoice_line_ids.filtered(lambda x: x.account_id.vat_import))
+            amount10 = 11 * self.amount_vat10
         return round(amount10)
 
     def get_amount5(self):
-        amount5 = sum(l.get_exempt_5_10()[2] + l.get_exempt_5_10()[3] for l in self.invoice_line_ids)
+        amount5 = self.amount_base5 + self.amount_vat5
         return round(amount5)
 
     def get_exempt_amount(self):
-        amount0 = sum(l.get_exempt_5_10()[4] for l in self.invoice_line_ids)
+        amount0 = self.amount_exempt
         if self.import_clearance:
             amount0 = 0
         return round(amount0)
 
     def get_total_amount(self):       
-        amount = sum(
-            l.get_exempt_5_10()[2] + 
-            l.get_exempt_5_10()[3] +
-            l.get_exempt_5_10()[0] +
-            l.get_exempt_5_10()[1] +
-            l.get_exempt_5_10()[4]
-            for l in self.invoice_line_ids)
+        amount = abs(self.amount_total_signed)
         if self.import_clearance:
             amount = self.get_amount10()
         return round(amount)

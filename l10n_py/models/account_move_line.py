@@ -3,43 +3,49 @@ from odoo import models, fields, _
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
-    def get_exempt_5_10(self):
-        self.ensure_one()
-        pyg = self.env.ref('base.PYG')
-        
-        def convert_amount(amount):
-            amount = round(amount, 2)
-            if self.currency_id == pyg:
-                return amount
-            elif self.currency_id != pyg and self.company_id.currency_id == pyg:
-                return amount / self.move_id.invoice_currency_rate
-            else:
-                return self.currency_id._convert(amount, pyg, self.company_id, self.date)
-        
-        base10 = 0
-        vat10 = 0
-        base5 = 0
-        vat5 = 0
-        exempt = 0
-        taxable_imports = 0
-        
-        price_total = self.price_total
-        
-        if self.tax_ids and self.tax_ids[0].amount == 10:
-            base10 += convert_amount(price_total / 1.1)
-            vat10 += convert_amount(price_total / 11)
-        if self.tax_ids and self.tax_ids[0].amount == 5:
-            base5 += convert_amount(price_total / 1.05)
-            vat5 += convert_amount(price_total / 21)
-        if (self.tax_ids and self.tax_ids[0].amount == 0) or not self.tax_ids:
-            exempt += convert_amount(price_total)
+    amount_exempt = fields.Monetary(
+        string='Exempt amount',
+        compute='_compute_fields_for_py_reports',
+    )
+    amount_base10 = fields.Monetary(
+        string='Base VAT 10% amount',
+        compute='_compute_fields_for_py_reports',
+    )
+    amount_vat10 = fields.Monetary(
+        string='VAT 10% amount',
+        compute='_compute_fields_for_py_reports',
+    )
+    amount_base5 = fields.Monetary(
+        string='Base VAT 5% amount',
+        compute='_compute_fields_for_py_reports',
+    )
+    amount_vat5 = fields.Monetary(
+        string='VAT 5% amount',
+        compute='_compute_fields_for_py_reports',
+    )
+    amount_taxable_imports = fields.Monetary(
+        string='Taxable imports amount',
+        compute='_compute_fields_for_py_reports',
+    )
 
-        # Handle import clearance invoices
-        if self.move_id.move_type == "out_invoice" and self.move_id.import_clearance:
-            if self.account_id.vat_import:
-                vat10 = exempt
-                base10 = vat10 * 10
-                taxable_imports = base10
-            exempt = 0
+    def _compute_fields_for_py_reports(self):
+        for record in self:
+            record.amount_base10 = record.amount_vat10 = record.amount_base5 = record.amount_vat5 = record.amount_exempt = record.amount_taxable_imports = 0
+            
+            if any([tax.amount == 0 for tax in record.tax_ids]):
+                record.amount_exempt = abs(record.balance)
+            elif record.tax_line_id and record.tax_line_id.amount == 10:
+                record.amount_base10 = record.tax_base_amount
+                record.amount_vat10 = abs(record.balance)
+            elif record.tax_line_id and record.tax_line_id.amount == 5:
+                record.amount_base5 = record.tax_base_amount
+                record.amount_vat5 = abs(record.balance)
 
-        return base10, vat10, base5, vat5, exempt, taxable_imports
+            # Handle import clearance invoices
+            if record.move_id.move_type == "out_invoice" and record.move_id.import_clearance:
+                if record.account_id.vat_import:
+                    record.amount_vat10 = exempt
+                    record.amount_base10 = record.amount_vat10 * 10
+                    record.amount_taxable_imports = record.amount_base10
+                exempt = 0
+            

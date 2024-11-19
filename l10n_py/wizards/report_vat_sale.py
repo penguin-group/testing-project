@@ -124,28 +124,12 @@ class ReportVatSale(models.AbstractModel):
         amount_total_vat5 = 0
         amount_total_exempt = 0
         for i in invoices.sorted(key=lambda x: x.name):
-            cnt += 1
-            base10 = 0
-            vat10 = 0
-            base5 = 0
-            vat5 = 0
-            exempt = 0
-            for t in i.filtered(lambda x: x.state != 'cancel').invoice_line_ids:
-                values = t.get_exempt_5_10()
-                base10 += values[0]
-                vat10 += values[1]
-                base5 += values[2]
-                vat5 += values[3]
-                exempt += values[4]
-
-            amount_total_invoice = base10 + vat10 + base5 + vat5 + exempt
-
-            amount_total_base10 += base10
-            amount_total_vat10 += vat10
-            amount_total_base5 += base5
-            amount_total_vat5 += vat5
-            amount_total_exempt += exempt
-            amount_total_all += amount_total_invoice
+            amount_total_base10 += i.amount_base10
+            amount_total_vat10 += i.amount_vat10
+            amount_total_base5 += i.amount_base5
+            amount_total_vat5 += i.amount_vat5
+            amount_total_exempt += i.amount_exempt
+            amount_total_all += abs(i.amount_total_signed)
 
             breakAndWrite(cnt)
             if i.state != 'cancel':
@@ -171,27 +155,27 @@ class ReportVatSale(models.AbstractModel):
             rightAndWrite(i.name)
 
             if i.state != 'cancel':
-                rightAndWrite(base10, f_number)
+                rightAndWrite(i.amount_base10, f_number)
             else:
                 rightAndWrite(0)
             if i.state != 'cancel':
-                rightAndWrite(vat10, f_number)
+                rightAndWrite(i.amount_vat10, f_number)
             else:
                 rightAndWrite(0)
             if i.state != 'cancel':
-                rightAndWrite(base5, f_number)
+                rightAndWrite(i.amount_base5, f_number)
             else:
                 rightAndWrite(0)
             if i.state != 'cancel':
-                rightAndWrite(vat5, f_number)
+                rightAndWrite(i.amount_vat5, f_number)
             else:
                 rightAndWrite(0)
             if i.state != 'cancel':
-                rightAndWrite(exempt, f_number)
+                rightAndWrite(i.amount_exempt, f_number)
             else:
                 rightAndWrite(0)
             if i.state != 'cancel':
-                rightAndWrite(amount_total_invoice, f_number)
+                rightAndWrite(abs(i.amount_total_signed), f_number)
             else:
                 rightAndWrite(0)
 
@@ -236,27 +220,12 @@ class ReportVatSale(models.AbstractModel):
         amount_total_exempt = 0
         for i in credit_notes.sorted(key=lambda x: x.invoice_date):
             cnt += 1
-            base10 = 0
-            vat10 = 0
-            base5 = 0
-            vat5 = 0
-            exempt = 0
-            for t in i.filtered(lambda x: x.state != 'cancel').invoice_line_ids:
-                values = t.get_exempt_5_10()
-                base10 += values[0]
-                vat10 += values[1]
-                base5 += values[2]
-                vat5 += values[3]
-                exempt += values[4]
-            
-            amount_total_invoice = base10 + vat10 + base5 + vat5 + exempt
-
-            amount_total_all += amount_total_invoice
-            amount_total_base10 += base10
-            amount_total_base5 += base5
-            amount_total_vat10 += vat10
-            amount_total_vat5 += vat5
-            amount_total_exempt += exempt
+            amount_total_all += abs(i.amount_total_signed)
+            amount_total_base10 += i.amount_base10
+            amount_total_base5 += i.amount_base5
+            amount_total_vat10 += i.amount_vat10
+            amount_total_vat5 += i.amount_vat5 
+            amount_total_exempt += i.amount_exempt
 
             breakAndWrite(cnt)
             if i.state != 'cancel':
@@ -280,27 +249,27 @@ class ReportVatSale(models.AbstractModel):
             rightAndWrite(i.ref)
 
             if i.state != 'cancel':
-                rightAndWrite(base10, f_number)
+                rightAndWrite(i.amount_base10, f_number)
             else:
                 rightAndWrite(0)
             if i.state != 'cancel':
-                rightAndWrite(vat10, f_number)
+                rightAndWrite(i.amount_vat10, f_number)
             else:
                 rightAndWrite(0)
             if i.state != 'cancel':
-                rightAndWrite(base5, f_number)
+                rightAndWrite(i.amount_base5, f_number)
             else:
                 rightAndWrite(0)
             if i.state != 'cancel':
-                rightAndWrite(vat5, f_number)
+                rightAndWrite(i.amount_vat5, f_number)
             else:
                 rightAndWrite(0)
             if i.state != 'cancel':
-                rightAndWrite(exempt, f_number)
+                rightAndWrite(i.amount_exempt, f_number)
             else:
                 rightAndWrite(0)
             if i.state != 'cancel':
-                rightAndWrite(amount_total_invoice, f_number)
+                rightAndWrite(abs(i.amount_total_signed), f_number)
             else:
                 rightAndWrite(0)
 
