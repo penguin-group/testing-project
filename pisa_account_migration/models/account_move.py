@@ -182,10 +182,10 @@ class AccountMove(models.Model):
                         _logger.info(f"invoice.authorization {inv_auth.name} existente.")
                 else:
                     _logger.info(
-                        "El timbrado no tiene el formato correcto. No se pudo registrar.")
+                        f"El timbrado {timbrado.name or 'Sin número'} del proveedor {timbrado.partner_id.name or 'Sin nombre'} no tiene el formato correcto. No se pudo registrar.")
             return True
         except Exception as e:
-            _logger.error(str(e))
+            _logger.error(f"Error al procesar timbrado {timbrado.name or 'Sin número'} del proveedor {timbrado.partner_id.name or 'Sin nombre'}: {str(e)}")
             return False
 
     def migrate_autoimpresor(self, company):
