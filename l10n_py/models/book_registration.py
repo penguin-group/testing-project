@@ -177,14 +177,16 @@ class BookRegistrationReport(models.Model):
         if self.type == 'purchase':
             try:
                 self.purchase_sale_pdf(type='purchase')
-            except:
+            except Exception as ex:
+                _logger.error(ex)
                 raise UserError(_("Error generating PDF."))
             self.purchase_sale_pdf(type='purchase')
 
         if self.type == 'sale':
             try:
                 self.purchase_sale_pdf(type='sale')
-            except:
+            except Exception as ex:
+                _logger.error(ex)
                 raise UserError(_("Error generating PDF."))
 
         if self.type == 'inventario':
@@ -296,15 +298,15 @@ class BookRegistrationReport(models.Model):
                     str(i.supplier_invoice_authorization_id.name) if i.supplier_invoice_authorization_id else ' ',
                     str(i.ref) if i.ref else '',
 
-                    '{0:,.0f}'.format(int(base10)).replace(
+                    '{0:,.0f}'.format(int(total_gral_base10)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(vat10)).replace(
+                    '{0:,.0f}'.format(int(total_gral_vat10)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(base5)).replace(
+                    '{0:,.0f}'.format(int(total_gral_base5)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(vat5)).replace(
+                    '{0:,.0f}'.format(int(total_gral_vat5)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(exempt)).replace(
+                    '{0:,.0f}'.format(int(total_gral_exempt)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
                     '{0:,.0f}'.format(int(total_invoice)).replace(
                         ',', '.') if i.state != 'cancel' else "0"
@@ -318,15 +320,15 @@ class BookRegistrationReport(models.Model):
                     _get_type_doc(i),
                     str(i.name),
 
-                    '{0:,.0f}'.format(int(base10)).replace(
+                    '{0:,.0f}'.format(int(total_gral_base10)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(vat10)).replace(
+                    '{0:,.0f}'.format(int(total_gral_vat10)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(base5)).replace(
+                    '{0:,.0f}'.format(int(total_gral_base5)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(vat5)).replace(
+                    '{0:,.0f}'.format(int(total_gral_vat5)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(exempt)).replace(
+                    '{0:,.0f}'.format(int(total_gral_exempt)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
                     '{0:,.0f}'.format(int(total_invoice)).replace(
                         ',', '.') if i.state != 'cancel' else "0"
@@ -2010,3 +2012,5 @@ class CustomPDF(FPDF):
         self.cell(0, 20, self.title, align="C", ln=True)
         if self.subtitle:
             self.cell(0, 10, self.subtitle, align="C", ln=True)
+
+        
