@@ -27,7 +27,6 @@ class ReportVatPurchase(models.AbstractModel):
     _inherit = 'report.report_xlsx.abstract'
     _description = "VAT Purchase Report"
 
-
     def get_purchase_invoices(self, date_start, date_end):
         return self.env['account.move'].search([
             ('move_type', '=', 'in_invoice'),
@@ -37,42 +36,6 @@ class ReportVatPurchase(models.AbstractModel):
             ('company_id', '=', self.env.company.id),
             ('line_ids.tax_ids', '!=', False),
         ]).filtered(lambda x: not x.foreign_invoice)
-
-    def get_vat_amounts(self, invoice_line):
-        pyg = self.env.ref('base.PYG')
-            
-        def get_line_amount(line):
-            if line.currency_id.id == pyg.id:
-                amount = line.price_total
-            else:
-                amount = line.currency_id._convert(line.price_total, pyg, line.company_id, line.date)
-            return amount
-        
-        base10 = 0
-        iva10 = 0
-        base5 = 0
-        iva5 = 0
-        exempt = 0
-        taxable_imports = 0
-
-        if invoice_line.tax_ids and invoice_line.tax_ids[0].amount == 10:
-            base10 += get_line_amount(invoice_line) / 1.1
-            iva10 += get_line_amount(invoice_line) / 11
-        if invoice_line.tax_ids and invoice_line.tax_ids[0].amount == 5:
-            base5 += get_line_amount(invoice_line) / 1.05
-            iva5 += get_line_amount(invoice_line) / 21
-        if (invoice_line.tax_ids and invoice_line.tax_ids[0].amount == 0) or not invoice_line.tax_ids:
-            exempt += get_line_amount(invoice_line)
-        
-        # Handle import clearance invoices
-        if invoice_line.move_id.import_clearance:
-            if invoice_line.account_id.vat_import:
-                vat10 = exempt
-                base10 = vat10 * 10
-                taxable_imports = base10
-            exempt = 0
-
-        return base10, iva10, base5, iva5, exempt, taxable_imports
 
     def get_supplier(self, invoice, field_name):
         if invoice.import_clearance:
@@ -181,30 +144,13 @@ class ReportVatPurchase(models.AbstractModel):
         
         for i in invoices.sorted(key=lambda r: r.invoice_date):
             cnt += 1
-            base10 = 0
-            vat10 = 0
-            base5 = 0
-            vat5 = 0
-            exempt = 0
-            taxable_imports = 0
-            for t in i.filtered(lambda x: x.state != 'cancel').invoice_line_ids:
-                values = self.get_vat_amounts(t)
-                base10 += values[0]
-                vat10 += values[1]
-                base5 += values[2]
-                vat5 += values[3]
-                exempt += values[4]
-                taxable_imports += 0
-
-            amount_total_invoice = base10 + vat10 + base5 + vat5 + exempt
-
-            amount_total_base10 += base10
-            amount_total_vat10 += vat10
-            amount_total_base5 += base5
-            amount_total_vat5 += vat5
-            amount_total_exempt += exempt
-            amount_total_all += amount_total_invoice
-            amount_total_imports += taxable_imports
+            amount_total_all += abs(i.amount_total_signed)
+            amount_total_base10 += i.amount_base10
+            amount_total_base5 += i.amount_base5
+            amount_total_vat10 += i.amount_vat10
+            amount_total_vat5 += i.amount_vat5 
+            amount_total_exempt += i.amount_exempt
+            amount_total_imports += i.amount_taxable_imports
 
             breakAndWrite(cnt)
             rightAndWrite(i.invoice_date.strftime("%d/%m/%Y"))
@@ -217,13 +163,13 @@ class ReportVatPurchase(models.AbstractModel):
                 rightAndWrite("Contado")
             rightAndWrite(i.ref)
             rightAndWrite(i.supplier_invoice_authorization_id.name if i.supplier_invoice_authorization_id else '')
-            rightAndWrite(base10, f_number)
-            rightAndWrite(vat10, f_number)
-            rightAndWrite(base5, f_number)
-            rightAndWrite(vat5, f_number)
-            rightAndWrite(exempt, f_number)
-            rightAndWrite(amount_total_invoice, f_number)
-            rightAndWrite(taxable_imports, f_number)
+            rightAndWrite(i.amount_base10, f_number)
+            rightAndWrite(i.amount_vat10, f_number)
+            rightAndWrite(i.amount_base5, f_number)
+            rightAndWrite(i.amount_vat5, f_number)
+            rightAndWrite(i.amount_exempt, f_number)
+            rightAndWrite(abs(i.amount_total_signed), f_number)
+            rightAndWrite(i.amount_taxable_imports, f_number)
 
         addBreak()
         addRight()
@@ -268,27 +214,13 @@ class ReportVatPurchase(models.AbstractModel):
         amount_total_exempt = 0
         for i in credit_notes.sorted(key=lambda x: x.name):
             cnt += 1
-            base10 = 0
-            vat10 = 0
-            base5 = 0
-            vat5 = 0
-            exempt = 0
-            for t in i.filtered(lambda x: x.state != 'cancel').invoice_line_ids:
-                values = self.get_vat_amounts(t)
-                base10 += values[0]
-                vat10 += values[1]
-                base5 += values[2]
-                vat5 += values[3]
-                exempt += values[4]
             
-            amount_total_invoice = base10 + vat10 + base5 + vat5 + exempt
-
-            amount_total_all += amount_total_invoice
-            amount_total_base10 += base10
-            amount_total_base5 += base5
-            amount_total_vat10 += vat10
-            amount_total_vat5 += vat5
-            amount_total_exempt += exempt
+            amount_total_all += abs(i.amount_total_signed)
+            amount_total_base10 += i.amount_base10
+            amount_total_base5 += i.amount_base5
+            amount_total_vat10 += i.amount_vat10
+            amount_total_vat5 += i.amount_vat5 
+            amount_total_exempt += i.amount_exempt
 
             breakAndWrite(cnt)
             if i.state != 'cancel':
@@ -311,27 +243,27 @@ class ReportVatPurchase(models.AbstractModel):
                 rightAndWrite("")
             rightAndWrite(i.name)
             if i.state != 'cancel':
-                rightAndWrite(base10, f_number)
+                rightAndWrite(i.amount_base10, f_number)
             else:
                 rightAndWrite(0)
             if i.state != 'cancel':
-                rightAndWrite(vat10, f_number)
+                rightAndWrite(i.amount_vat10, f_number)
             else:
                 rightAndWrite(0)
             if i.state != 'cancel':
-                rightAndWrite(base5, f_number)
+                rightAndWrite(i.amount_base5, f_number)
             else:
                 rightAndWrite(0)
             if i.state != 'cancel':
-                rightAndWrite(vat5, f_number)
+                rightAndWrite(i.amount_vat5, f_number)
             else:
                 rightAndWrite(0)
             if i.state != 'cancel':
-                rightAndWrite(exempt, f_number)
+                rightAndWrite(i.amount_exempt, f_number)
             else:
                 rightAndWrite(0)
             if i.state != 'cancel':
-                rightAndWrite(amount_total_invoice, f_number)
+                rightAndWrite(abs(i.amount_total_signed), f_number)
             else:
                 rightAndWrite(0)
         addBreak()
@@ -346,4 +278,3 @@ class ReportVatPurchase(models.AbstractModel):
         rightAndWrite(amount_total_vat5, f_number_total)
         rightAndWrite(amount_total_exempt, f_number_total)
         rightAndWrite(amount_total_all, f_number_total)
-

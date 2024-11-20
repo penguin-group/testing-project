@@ -177,14 +177,16 @@ class BookRegistrationReport(models.Model):
         if self.type == 'purchase':
             try:
                 self.purchase_sale_pdf(type='purchase')
-            except:
+            except Exception as ex:
+                _logger.error(ex)
                 raise UserError(_("Error generating PDF."))
             self.purchase_sale_pdf(type='purchase')
 
         if self.type == 'sale':
             try:
                 self.purchase_sale_pdf(type='sale')
-            except:
+            except Exception as ex:
+                _logger.error(ex)
                 raise UserError(_("Error generating PDF."))
 
         if self.type == 'inventario':
@@ -268,41 +270,14 @@ class BookRegistrationReport(models.Model):
             cnt += 1
             total_invoice = 0
             if i.state != 'cancel':
-                total_invoice = abs(i.amount_total_signed)
-            base10 = 0
-            base5 = 0
-            exempt = 0
-            vat10 = 0
-            vat5 = 0
-
-            for t in i.filtered(lambda x: x.state != 'cancel').invoice_line_ids:
-                if t.tax_ids and t.tax_ids[0].amount == 10:
-                    base10 += t.price_total / 1.1
-                    vat10 += t.price_total / 11
-                if t.tax_ids and t.tax_ids[0].amount == 5:
-                    base5 += t.price_total / 1.05
-                    vat5 += t.price_total / 21
-                if (t.tax_ids and t.tax_ids[0].amount == 0) or not t.tax_ids:
-                    exempt += t.price_total
-
-            if i.currency_id != self.company_id.currency_id:
-                base10 = i.currency_id._convert(
-                    base10, self.company_id.currency_id, self.company_id, i.invoice_date)
-                vat10 = i.currency_id._convert(
-                    vat10, self.company_id.currency_id, self.company_id, i.invoice_date)
-                base5 = i.currency_id._convert(
-                    base5, self.company_id.currency_id, self.company_id, i.invoice_date)
-                vat5 = i.currency_id._convert(
-                    vat5, self.company_id.currency_id, self.company_id, i.invoice_date)
-                exempt = i.currency_id._convert(
-                    exempt, self.company_id.currency_id, self.company_id, i.invoice_date)
+                total_invoice = i.get_total_amount()
 
             total_gral_total += total_invoice
-            total_gral_base10 += base10
-            total_gral_base5 += base5
-            total_gral_vat10 += vat10
-            total_gral_vat5 += vat5
-            total_gral_exempt += exempt
+            total_gral_base10 += i.amount_base10
+            total_gral_base5 += i.amount_base5
+            total_gral_vat10 += i.amount_vat10
+            total_gral_vat5 += i.amount_vat5
+            total_gral_exempt += i.amount_exempt
 
             def _get_type_doc(invo):
                 type = "Anulado"
@@ -323,15 +298,15 @@ class BookRegistrationReport(models.Model):
                     str(i.supplier_invoice_authorization_id.name) if i.supplier_invoice_authorization_id else ' ',
                     str(i.ref) if i.ref else '',
 
-                    '{0:,.0f}'.format(int(base10)).replace(
+                    '{0:,.0f}'.format(int(total_gral_base10)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(vat10)).replace(
+                    '{0:,.0f}'.format(int(total_gral_vat10)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(base5)).replace(
+                    '{0:,.0f}'.format(int(total_gral_base5)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(vat5)).replace(
+                    '{0:,.0f}'.format(int(total_gral_vat5)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(exempt)).replace(
+                    '{0:,.0f}'.format(int(total_gral_exempt)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
                     '{0:,.0f}'.format(int(total_invoice)).replace(
                         ',', '.') if i.state != 'cancel' else "0"
@@ -345,15 +320,15 @@ class BookRegistrationReport(models.Model):
                     _get_type_doc(i),
                     str(i.name),
 
-                    '{0:,.0f}'.format(int(base10)).replace(
+                    '{0:,.0f}'.format(int(total_gral_base10)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(vat10)).replace(
+                    '{0:,.0f}'.format(int(total_gral_vat10)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(base5)).replace(
+                    '{0:,.0f}'.format(int(total_gral_base5)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(vat5)).replace(
+                    '{0:,.0f}'.format(int(total_gral_vat5)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(exempt)).replace(
+                    '{0:,.0f}'.format(int(total_gral_exempt)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
                     '{0:,.0f}'.format(int(total_invoice)).replace(
                         ',', '.') if i.state != 'cancel' else "0"
@@ -473,42 +448,14 @@ class BookRegistrationReport(models.Model):
             cnt += 1
             total_invoice = 0
             if i.state != 'cancel':
-                total_invoice = i.amount_total
-            base10 = 0
-            base5 = 0
-            exempt = 0
-            vat10 = 0
-            vat5 = 0
-            for t in i.filtered(lambda x: x.state != 'cancel').invoice_line_ids:
-                if t.tax_ids and t.tax_ids[0].amount == 10:
-                    base10 += t.price_total / 1.1
-                    vat10 += t.price_total / 11
-                if t.tax_ids and t.tax_ids[0].amount == 5:
-                    base5 += t.price_total / 1.05
-                    vat5 += t.price_total / 21
-                if (t.tax_ids and t.tax_ids[0].amount == 0) or not t.tax_ids:
-                    exempt += t.price_total
-
-            if i.currency_id != self.company_id.currency_id:
-                base10 = i.currency_id._convert(
-                    base10, self.company_id.currency_id, self.company_id, i.invoice_date)
-                vat10 = i.currency_id._convert(
-                    vat10, self.company_id.currency_id, self.company_id, i.invoice_date)
-                base5 = i.currency_id._convert(
-                    base5, self.company_id.currency_id, self.company_id, i.invoice_date)
-                vat5 = i.currency_id._convert(
-                    vat5, self.company_id.currency_id, self.company_id, i.invoice_date)
-                exempt = i.currency_id._convert(
-                    exempt, self.company_id.currency_id, self.company_id, i.invoice_date)
-                total_invoice = i.currency_id._convert(
-                    total_invoice, self.company_id.currency_id, self.company_id, i.invoice_date)
+                total_invoice = i.get_total_amount()
 
             total_gral_total += total_invoice
-            total_gral_base10 += base10
-            total_gral_base5 += base5
-            total_gral_vat10 += vat10
-            total_gral_vat5 += vat5
-            total_gral_exempt += exempt
+            total_gral_base10 += i.amount_base10
+            total_gral_base5 += i.amount_base5
+            total_gral_vat10 += i.amount_vat10
+            total_gral_vat5 += i.amount_vat5
+            total_gral_exempt += i.amount_exempt
 
             def _get_type_doc(invoice):
                 type = " "
@@ -524,15 +471,15 @@ class BookRegistrationReport(models.Model):
                     str(i.partner_id.vat).strip(),
                     _get_type_doc(i),
                     str(i.name),
-                    '{0:,.0f}'.format(int(base10)).replace(
+                    '{0:,.0f}'.format(int(i.amount_base10)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(vat10)).replace(
+                    '{0:,.0f}'.format(int(i.amount_vat10)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(base5)).replace(
+                    '{0:,.0f}'.format(int(i.amount_base5)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(vat5)).replace(
+                    '{0:,.0f}'.format(int(i.amount_vat5)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(exempt)).replace(
+                    '{0:,.0f}'.format(int(i.amount_exempt)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
                     '{0:,.0f}'.format(int(total_invoice)).replace(
                         ',', '.') if i.state != 'cancel' else "0"
@@ -547,15 +494,15 @@ class BookRegistrationReport(models.Model):
                     _get_type_doc(i),
                     i.supplier_invoice_authorization_id.name if i.supplier_invoice_authorization_id else ' ',
                     str(i.ref),
-                    '{0:,.0f}'.format(int(base10)).replace(
+                    '{0:,.0f}'.format(int(i.amount_base10)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(vat10)).replace(
+                    '{0:,.0f}'.format(int(i.amount_vat10)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(base5)).replace(
+                    '{0:,.0f}'.format(int(i.amount_base5)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(vat5)).replace(
+                    '{0:,.0f}'.format(int(i.amount_vat5)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(exempt)).replace(
+                    '{0:,.0f}'.format(int(i.amount_exempt)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
                     '{0:,.0f}'.format(int(total_invoice)).replace(
                         ',', '.') if i.state != 'cancel' else "0"
@@ -2065,3 +2012,5 @@ class CustomPDF(FPDF):
         self.cell(0, 20, self.title, align="C", ln=True)
         if self.subtitle:
             self.cell(0, 10, self.subtitle, align="C", ln=True)
+
+        
