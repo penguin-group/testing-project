@@ -11,11 +11,11 @@ class EditSecondaryCurrencyRate(models.TransientModel):
     
     def default_get(self, fields_list):
         res = super(EditSecondaryCurrencyRate, self).default_get(fields_list)
-        res['secondary_currency_rate'] = self._get_invoice().secondary_currency_rate
+        res['secondary_currency_rate'] = self._get_invoice().invoice_secondary_currency_rate
         return res
 
-    def apply_currency_rate(self):
+    def apply_secondary_currency_rate(self):
         self.ensure_one()
         inv = self._get_invoice()
-        inv.invoice_currency_rate = self.currency_rate
+        inv.invoice_secondary_currency_rate = self.secondary_currency_rate
         return {'type': 'ir.actions.act_window_close'}

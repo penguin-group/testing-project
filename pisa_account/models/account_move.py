@@ -1,4 +1,4 @@
-from odoo import fields, models, _
+from odoo import fields, models, _, api
 from odoo.exceptions import ValidationError
 import hashlib
 import qrcode
@@ -64,4 +64,30 @@ class AccountMove(models.Model):
                     raise ValidationError(_('The total invoice amount cannot be zero or negative.'))
         return super(AccountMove, self).action_post()
 
+    def edit_secondary_currency_rate(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'edit.secondary.currency.rate',
+            'view_mode': 'form',         
+            'view_id': self.env.ref('pisa_account.edit_secondary_currency_rate_view_form').id,      
+            'target': 'new',
+            'context': {'active_id': self.id}
+        }
+
+    @api.depends('currency_id', 'company_secondary_currency_id', 'company_id', 'invoice_date')
+    def _compute_invoice_secondary_currency_rate(self):
+        if self.company_secondary_currency_id and self.company_id.country_code == "PY":
+            for move in self:
+                if move.currency_id != move.company_secondary_currency_id:
+                    conversion_method = self.env['res.currency']._get_buying_conversion_rate if move.move_type == 'out_invoice' and move.currency_id == move.company_currency_id else self.env['res.currency']._get_conversion_rate
+                    move.invoice_secondary_currency_rate = conversion_method(
+                        from_currency=move.company_secondary_currency_id,
+                        to_currency=move.currency_id,
+                        company=move.company_id,
+                        date=move.invoice_date or fields.Date.context_today(move),
+                    )
+                else:
+                    move.invoice_secondary_currency_rate = 1
+        else:
+            super(AccountMove, self)._compute_invoice_secondary_currency_rate()
 
