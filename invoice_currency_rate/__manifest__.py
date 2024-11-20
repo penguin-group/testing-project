@@ -13,6 +13,7 @@
 
     'category': 'Accounting',
     'version': '17.0.0.1',
+    'license': "OPL-1",
 
     'depends': ['base', 'account'],
 
