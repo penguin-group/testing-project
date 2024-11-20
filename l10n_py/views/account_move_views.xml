@@ -72,6 +72,7 @@
                             name="edit_currency_rate" 
                             type="object" 
                             groups="account.group_account_manager" 
+                            invisible="move_type != 'in_invoice'"
                         />
                     </div>
                 </xpath>
