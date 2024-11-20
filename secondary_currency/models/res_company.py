@@ -6,7 +6,6 @@ class ResCompany(models.Model):
     sec_currency_id = fields.Many2one(
         'res.currency', 
         string='Secondary Currency', 
-        required=True, 
         default=lambda self: self._default_currency_id(), 
         help='Currency used for secondary accounting'
     )

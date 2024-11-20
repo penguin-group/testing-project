@@ -55,7 +55,7 @@
                 <xpath expr="//div[@name='currency_conversion_div']" position="after">
                     <div name="currency_conversion_div"
                             class="d-flex text-muted float-start"
-                            invisible="currency_id == company_secondary_currency_id">
+                            invisible="(currency_id == company_secondary_currency_id) or not company_secondary_currency_id">
                         <span>1 </span>
                         <field name="company_secondary_currency_id" readonly="True" options="{'no_open': True}"/>
                         <span> = </span>

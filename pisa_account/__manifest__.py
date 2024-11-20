@@ -16,13 +16,15 @@
     'version': '17.0.1.1.1',
     'license': "OPL-1",
 
-    'depends': ['base', 'l10n_py'],
+    'depends': ['base', 'l10n_py', 'secondary_currency', 'currency_rate_buying_selling'],
 
     'data': [
+        'security/ir.model.access.csv',
         'security/account_security.xml',
         'views/account_journal_views.xml',
         'views/account_move_views.xml',
         'reports/invoice_report.xml',
+        'wizards/edit_secondary_currency_rate_views.xml'
     ],
 
     'demo': [
