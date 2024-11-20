@@ -1,0 +1,73 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* secondary_currency
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-11-13 20:58+0000\n"
+"PO-Revision-Date: 2024-11-13 20:58+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: secondary_currency
+#: model:ir.model,name:secondary_currency.model_res_company
+msgid "Companies"
+msgstr "Compañías"
+
+#. module: secondary_currency
+#: model:ir.model.fields,field_description:secondary_currency.field_account_bank_statement_line__company_secondary_currency_id
+#: model:ir.model.fields,field_description:secondary_currency.field_account_move__company_secondary_currency_id
+#: model:ir.model.fields,field_description:secondary_currency.field_account_move_line__company_secondary_currency_id
+#: model:ir.model.fields,field_description:secondary_currency.field_account_payment__company_secondary_currency_id
+msgid "Company Secondary Currency"
+msgstr "Moneda Secundaria de la Compañía"
+
+#. module: secondary_currency
+#: model:ir.model.fields,help:secondary_currency.field_account_move_line__secondary_currency_rate
+msgid "Currency rate from company secondary currency to document currency."
+msgstr "Tipo de cambio de la moneda secundaria de la compañía a la moneda del documento."
+
+#. module: secondary_currency
+#: model:ir.model.fields,help:secondary_currency.field_account_bank_statement_line__company_secondary_currency_id
+#: model:ir.model.fields,help:secondary_currency.field_account_move__company_secondary_currency_id
+#: model:ir.model.fields,help:secondary_currency.field_account_move_line__company_secondary_currency_id
+#: model:ir.model.fields,help:secondary_currency.field_account_payment__company_secondary_currency_id
+#: model:ir.model.fields,help:secondary_currency.field_res_company__secondary_currency_id
+msgid "Currency used for secondary accounting"
+msgstr "Moneda utilizada para la contabilidad secundaria"
+
+#. module: secondary_currency
+#: model:ir.model,name:secondary_currency.model_account_move
+msgid "Journal Entry"
+msgstr "Asiento contable"
+
+#. module: secondary_currency
+#: model:ir.model,name:secondary_currency.model_account_move_line
+msgid "Journal Item"
+msgstr "Apunte contable"
+
+#. module: secondary_currency
+#: model:ir.model.fields,field_description:secondary_currency.field_account_move_line__secondary_balance
+msgid "Secondary Balance"
+msgstr "Saldo Secundario"
+
+#. module: secondary_currency
+#: model:ir.model.fields,field_description:secondary_currency.field_res_company__secondary_currency_id
+msgid "Secondary Currency"
+msgstr "Moneda Secundaria"
+
+#. module: secondary_currency
+#: model:ir.model.fields,field_description:secondary_currency.field_account_move_line__secondary_currency_rate
+msgid "Secondary Currency Rate"
+msgstr "Tipo de Cambio Moneda Secundaria"
+
+#. module: secondary_currency
+#: model_terms:ir.ui.view,arch_db:secondary_currency.view_move_line_tree_inherit
+msgid "Total Secondary Balance"
+msgstr "Saldo Secundario Total"
