@@ -9,9 +9,7 @@ import re
 import math
 
 class AccountMove(models.Model):
-    _inherit = 'account.move'
-
-    
+    _inherit = 'account.move'   
 
     invoice_currency_rate = fields.Float(
         string='Invoice Currency Rate',
@@ -106,15 +104,23 @@ class AccountMove(models.Model):
         compute='_compute_fields_for_py_reports',
     )
 
-
     def _compute_fields_for_py_reports(self):
         for record in self:
-            record.amount_base10 = sum(record.line_ids.mapped('amount_base10'))
-            record.amount_vat10 = sum(record.line_ids.mapped('amount_vat10'))
-            record.amount_base5 = sum(record.line_ids.mapped('amount_base5'))
-            record.amount_vat5 = sum(record.line_ids.mapped('amount_vat5'))
-            record.amount_exempt = sum(record.line_ids.mapped('amount_exempt'))
-            record.amount_taxable_imports = sum(record.line_ids.mapped('amount_taxable_imports'))
+            if record.move_type == "in_invoice" and record.import_clearance:
+                # Handle import clearance invoices
+                record.amount_vat10 = sum(record.line_ids.filtered(lambda l: l.display_type =='product' and l.account_id.vat_import and 0 in l.tax_ids.mapped('amount')).mapped("balance"))
+                record.amount_base10 = record.amount_vat10 * 10
+                record.amount_base5 = 0
+                record.amount_vat5 = 0
+                record.amount_exempt = 0
+                record.amount_taxable_imports = record.amount_base10
+            else:
+                record.amount_base10 = sum(record.line_ids.filtered(lambda l: l.display_type =='product' and 10 in l.tax_ids.mapped('amount')).mapped("balance"))
+                record.amount_vat10 = sum(record.line_ids.filtered(lambda l: l.display_type =='tax' and l.tax_line_id and l.tax_line_id.amount == 10).mapped("balance"))
+                record.amount_base5 = sum(record.line_ids.filtered(lambda l: l.display_type =='product' and 5 in l.tax_ids.mapped('amount')).mapped("balance"))
+                record.amount_vat5 = sum(record.line_ids.filtered(lambda l: l.display_type =='tax' and l.tax_line_id and l.tax_line_id.amount == 5).mapped("balance"))
+                record.amount_exempt = sum(record.line_ids.filtered(lambda l: l.display_type =='product' and 0 in l.tax_ids.mapped('amount')).mapped("balance"))
+                record.amount_taxable_imports = 0 
 
     def edit_currency_rate(self):
         return {

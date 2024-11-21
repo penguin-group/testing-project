@@ -10,4 +10,3 @@ from . import account_move_reversal
 from . import account_report
 from . import book_registration
 from . import ir_ui_menu
-from . import account_move_line
