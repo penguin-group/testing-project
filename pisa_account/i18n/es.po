@@ -27,6 +27,7 @@ msgstr ""
 "Un informe base para el Estado de Resultados del Libro de Inventarios no está configurado." 
 "Por favor, vaya a la configuración de contabilidad para establecer los parámetros necesarios."
 
+#. module: pisa_account
 #: model_terms:ir.ui.view,arch_db:pisa_account.edit_secondary_currency_rate_view_form
 msgid "Apply"
 msgstr "Aplicar"
