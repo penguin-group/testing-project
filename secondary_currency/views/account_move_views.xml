@@ -42,7 +42,8 @@
             <field name="inherit_id" ref="account.view_move_form"/>
             <field name="arch" type="xml">
                 <field name="balance" position="after">
-                    <field name="secondary_balance" column_invisible="True"/>
+                    <field name="balance" optional="hide"/>
+                    <field name="secondary_balance" optional="hide"/>
                 </field>
             </field>
         </record>
