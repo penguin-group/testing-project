@@ -104,13 +104,12 @@ class AccountMove(models.Model):
         compute='_compute_fields_for_py_reports',
     )
 
-
     def _compute_fields_for_py_reports(self):
         for record in self:
             if record.move_type == "in_invoice" and record.import_clearance:
                 # Handle import clearance invoices
-                record.amount_base10 = sum(record.line_ids.filtered(lambda l: l.display_type =='product' and 0 in l.tax_ids.mapped('amount')).mapped("balance")) * 10
-                record.amount_vat10 = sum(record.line_ids.filtered(lambda l: l.display_type =='product' and 0 in l.tax_ids.mapped('amount')).mapped("balance"))
+                record.amount_vat10 = sum(record.line_ids.filtered(lambda l: l.display_type =='product' and l.account_id.vat_import and 0 in l.tax_ids.mapped('amount')).mapped("balance"))
+                record.amount_base10 = record.amount_vat10 * 10
                 record.amount_base5 = 0
                 record.amount_vat5 = 0
                 record.amount_exempt = 0
