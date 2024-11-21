@@ -31,6 +31,7 @@
             <field name="inherit_id" ref="account.view_move_line_tree"/>
             <field name="arch" type="xml">
                 <field name="balance" position="after">
+                    <field name="company_secondary_currency_id" column_invisible="True"/>
                     <field name="secondary_balance" sum="Total Secondary Balance" optional="hide" readonly="1"/>
                 </field>
             </field>
@@ -42,7 +43,10 @@
             <field name="inherit_id" ref="account.view_move_form"/>
             <field name="arch" type="xml">
                 <field name="balance" position="after">
-                    <field name="secondary_balance" column_invisible="True"/>
+                    <field name="company_currency_id" column_invisible="True"/>
+                    <field name="balance" optional="hide" sum="Total Balance"/>
+                    <field name="company_secondary_currency_id" column_invisible="True"/>
+                    <field name="secondary_balance" optional="hide" sum="Total Secondary Balance"/>
                 </field>
             </field>
         </record>

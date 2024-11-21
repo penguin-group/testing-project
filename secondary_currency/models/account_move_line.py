@@ -43,8 +43,8 @@ class AccountMoveLine(models.Model):
                 if line.display_type in ('line_section', 'line_note'):
                     line.secondary_balance = False
                 elif line.currency_id == line.company_secondary_currency_id:
-                    line.secondary_balance = line.amount_currency
+                    line.secondary_balance = line.company_secondary_currency_id.round(line.amount_currency)
                 else:
-                    line.secondary_balance = line.balance / line.secondary_currency_rate
+                    line.secondary_balance = line.company_secondary_currency_id.round(line.balance / line.secondary_currency_rate)
             else:
                 line.secondary_balance = 0
