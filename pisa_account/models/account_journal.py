@@ -7,4 +7,3 @@ class AccountJournal(models.Model):
         string="Payment info", 
         help="Payment info for customers. This data will appear in the QR code of the self-printed invoice."
     )
-    local_suppliers = fields.Boolean(string="Local Suppliers")
