@@ -133,7 +133,9 @@ class AccountMove(models.Model):
                                                             ('document_type', 'in', ['in_invoice', 'in_refund']), 
                                                             ('partner_id', '=', self.partner_id.id),
                                                             ('active', '=', True)
-                                                        ])
+                                                        ], order="end_date", limit=1)
+        else:
+            self.supplier_invoice_authorization_id = False
         return super()._onchange_partner_id()
     
     def edit_currency_rate(self):
