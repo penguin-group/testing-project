@@ -23,7 +23,11 @@
                                     <field name="res90_associated_receipt_stamping" readonly="state not in ['draft']"/>
                                 </group>
                                 <group name="invoice_authorization_group" string="Invoice Authorization">
-                                    <field name="supplier_invoice_authorization_id" invisible="move_type not in ['in_invoice', 'in_refund']"/>
+                                    <field name="is_local_supplier" invisible="True" />
+                                    <field name="supplier_invoice_authorization_id" 
+                                        invisible="move_type not in ['in_invoice', 'in_refund']"
+                                        required="move_type in ['in_invoice', 'in_refund'] and is_local_supplier"
+                                    />
                                     <label for="delivery_note_number"/>
                                     <div>
                                         <field name="delivery_note_number"/>

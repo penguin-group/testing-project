@@ -9,6 +9,7 @@ class AccountJournal(models.Model):
         string='Invoice Authorization',
         domain="[('document_type', 'in', ['out_invoice', 'out_refund'])]"
     )
+    local_suppliers = fields.Boolean(string="Local Suppliers")
     max_lines = fields.Integer(
         string="Maximum printable lines on the invoice",
         default=0,
