@@ -43,7 +43,7 @@ class AccountMove(models.Model):
             
             
             try:
-                _logger.info("Migrating balance...")
+                _logger.info("Migrating balance...invoice_secondary_currency_rate")
                 self.env.cr.execute("""
                     UPDATE account_move_line
                     SET
