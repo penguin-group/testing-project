@@ -1,3 +1,4 @@
+import logging
 from odoo import api, fields, models, _
 from odoo.tools import index_exists
 from odoo.exceptions import ValidationError, UserError
@@ -7,6 +8,8 @@ from io import BytesIO
 import base64
 import re
 import math
+
+_logger = logging.getLogger(__name__)
 
 class AccountMove(models.Model):
     _inherit = 'account.move'   
@@ -529,7 +532,10 @@ class AccountMove(models.Model):
                     journal_entry_number, account_move_id, journal_entry_number
                 )
                 journal_entry_number += 1
-            self.env.cr.execute(sql_querys)
+            if sql_querys:
+                self.env.cr.execute(sql_querys)
+            else:
+                _logger.info(f"Te company {company.name} has no journal entries. Skipped.")
 
     def action_print(self):
         for record in self:
