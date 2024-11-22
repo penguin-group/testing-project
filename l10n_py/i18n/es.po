@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-16 10:29+0000\n"
-"PO-Revision-Date: 2024-11-16 10:29+0000\n"
+"POT-Creation-Date: 2024-11-22 14:42+0000\n"
+"PO-Revision-Date: 2024-11-22 14:42+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -211,7 +211,7 @@ msgstr "Cuenta"
 #. module: l10n_py
 #: model:ir.model,name:l10n_py.model_account_move_reversal
 msgid "Account Move Reversal"
-msgstr "Reversión de movimiento de cuenta"
+msgstr "Revocación de movimiento en cuenta"
 
 #. module: l10n_py
 #: model:ir.model.fields.selection,name:l10n_py.selection__account_journal__res90_type_receipt__205
@@ -290,6 +290,20 @@ msgstr "Informe Base para el Balance General"
 #: model:ir.model.fields,field_description:l10n_py.field_res_config_settings__inventory_book_base_report_is
 msgid "Base Report for Income Statement"
 msgstr "Reporte Base para el Estado de Resultados"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__amount_base10
+#: model:ir.model.fields,field_description:l10n_py.field_account_move__amount_base10
+#: model:ir.model.fields,field_description:l10n_py.field_account_payment__amount_base10
+msgid "Base VAT 10% amount"
+msgstr "Monto Base IVA 10%"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__amount_base5
+#: model:ir.model.fields,field_description:l10n_py.field_account_move__amount_base5
+#: model:ir.model.fields,field_description:l10n_py.field_account_payment__amount_base5
+msgid "Base VAT 5% amount"
+msgstr "Monto Base IVA 5%"
 
 #. module: l10n_py
 #: model:ir.model.fields.selection,name:l10n_py.selection__account_journal__res90_type_receipt__109
@@ -628,6 +642,13 @@ msgid "Exclude from Resolution 90"
 msgstr "Excluir de Resolucion 90"
 
 #. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__amount_exempt
+#: model:ir.model.fields,field_description:l10n_py.field_account_move__amount_exempt
+#: model:ir.model.fields,field_description:l10n_py.field_account_payment__amount_exempt
+msgid "Exempt amount"
+msgstr "Monto Exentas"
+
+#. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__expedition_point_number
 msgid "Expedition Point Number"
 msgstr "Código de Punto de Expedición"
@@ -844,7 +865,7 @@ msgstr "Diálogo de Anulación de Factura"
 #: model:ir.model.fields,field_description:l10n_py.field_account_move__invoice_currency_rate
 #: model:ir.model.fields,field_description:l10n_py.field_account_payment__invoice_currency_rate
 msgid "Invoice Currency Rate"
-msgstr "Tipo de Cambio de Factura"
+msgstr "Tipo de cambio de la factura"
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_account_journal__invoice_footer
@@ -912,6 +933,18 @@ msgstr "Última actualización el"
 #: model:ir.model.fields.selection,name:l10n_py.selection__account_move__res90_type_receipt__202
 msgid "Legalized proof of foreign residence"
 msgstr "Comprobante del exterior legalizado"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__is_local_supplier
+#: model:ir.model.fields,field_description:l10n_py.field_account_move__is_local_supplier
+#: model:ir.model.fields,field_description:l10n_py.field_account_payment__is_local_supplier
+msgid "Local Supplier"
+msgstr "Proveedor Local"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_journal__local_suppliers
+msgid "Local Suppliers"
+msgstr "Proveedores Locales"
 
 #. module: l10n_py
 #: model:ir.model.fields.selection,name:l10n_py.selection__account_journal__res90_type_receipt__105
@@ -1254,6 +1287,13 @@ msgid "Tax ID"
 msgstr "NIF"
 
 #. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__amount_taxable_imports
+#: model:ir.model.fields,field_description:l10n_py.field_account_move__amount_taxable_imports
+#: model:ir.model.fields,field_description:l10n_py.field_account_payment__amount_taxable_imports
+msgid "Taxable imports amount"
+msgstr "Monto de Importaciones Imponibles"
+
+#. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
 msgid "Tel:"
 msgstr ""
@@ -1438,6 +1478,20 @@ msgstr "Sin nombre"
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
 msgid "VALOR DE VENTA"
 msgstr ""
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__amount_vat10
+#: model:ir.model.fields,field_description:l10n_py.field_account_move__amount_vat10
+#: model:ir.model.fields,field_description:l10n_py.field_account_payment__amount_vat10
+msgid "VAT 10% amount"
+msgstr "Monto IVA 10%"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__amount_vat5
+#: model:ir.model.fields,field_description:l10n_py.field_account_move__amount_vat5
+#: model:ir.model.fields,field_description:l10n_py.field_account_payment__amount_vat5
+msgid "VAT 5% amount"
+msgstr "Monto IVA 5%"
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_account_account__vat_import
