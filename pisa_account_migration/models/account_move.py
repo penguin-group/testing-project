@@ -322,3 +322,7 @@ class AccountMove(models.Model):
             _logger.info("El proceso de migración se completó exitosamente.")
         else:
             _logger.error("Hubo errores en el proceso. Revisar el Log.")
+
+    def validate_authorization_format(self, name):
+        # Deactivate this validation while the module secondary_currency_migration is installed
+        pass
