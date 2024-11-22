@@ -22,7 +22,7 @@
                         name="edit_secondary_currency_rate" 
                         type="object" 
                         groups="account.group_account_manager" 
-                        invisible="(not company_secondary_currency_id and company_id.country_code != 'PY') or move_type != 'in_invoice'"
+                        invisible="(not company_secondary_currency_id and company_id.country_code != 'PY') or move_type != 'in_invoice' or state != 'draft'"
                     />
                 </xpath>
 
