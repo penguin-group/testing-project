@@ -27,6 +27,7 @@ class AccountMove(models.Model):
         string='Supplier Invoice Authorization',
         domain="[('document_type', 'in', ['in_invoice', 'in_refund'])]"
     )
+    is_local_supplier = fields.Boolean(string="Local Supplier", related="journal_id.local_suppliers")
     qr_code = fields.Binary(string="QR Code", compute="generate_qr_code")
     delivery_note_number = fields.Char(string="Delivery Note Number")
     related_invoice_number = fields.Char(string="Related Invoice Number")
@@ -125,6 +126,16 @@ class AccountMove(models.Model):
                 record.amount_exempt = sum(record.line_ids.filtered(lambda l: l.display_type =='product' and 0 in l.tax_ids.mapped('amount')).mapped("balance"))
                 record.amount_taxable_imports = 0 
 
+    @api.onchange('partner_id')
+    def _onchange_partner_id(self):
+        if self.partner_id and self.move_type in ['in_invoice', 'in_refund'] and self.is_local_supplier:
+            self.supplier_invoice_authorization_id =  self.env['invoice.authorization'].search([
+                                                            ('document_type', 'in', ['in_invoice', 'in_refund']), 
+                                                            ('partner_id', '=', self.partner_id.id),
+                                                            ('active', '=', True)
+                                                        ])
+        return super()._onchange_partner_id()
+    
     def edit_currency_rate(self):
         return {
                 'type': 'ir.actions.act_window',
@@ -205,11 +216,12 @@ class AccountMove(models.Model):
         return
 
     def validate_supplier_invoice_number(self):
-        pattern = re.compile(r'^(\d{3}-){2}\d{7}$')
-        if not pattern.match(self.ref):
-            raise ValidationError(
-                _('The invoice number does not have the correct format (xxx-xxx-xxxxxxx)')
-            )
+        if self.ref and self.is_local_supplier:
+            pattern = re.compile(r'^(\d{3}-){2}\d{7}$')
+            if not pattern.match(self.ref):
+                raise ValidationError(
+                    _('The invoice number does not have the correct format (xxx-xxx-xxxxxxx)')
+                )
 
     def generate_token(self):
         secret_phrase = str(self.id) + "amakakeruriunohirameki"

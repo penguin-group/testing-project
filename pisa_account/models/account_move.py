@@ -43,13 +43,6 @@ class AccountMove(models.Model):
             qr_image = base64.b64encode(temp.getvalue())
             record.payment_info_qr_code = qr_image
     
-    # Override validation for supplier invoice number field (ref).
-    # It only validates when the journal is for local suppliers of type 2.
-    # For other types, it will not consider the invoice number format.
-    def validate_supplier_invoice_number(self):
-        if self.ref and self.journal_id.local_suppliers:
-            super(AccountMove, self).validate_supplier_invoice_number()
-
     def action_post(self):
         for record in self:
             # Check invoice confirmation permission

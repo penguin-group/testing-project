@@ -101,11 +101,6 @@ msgid "Last Updated on"
 msgstr "Última actualización el"
 
 #. module: pisa_account
-#: model:ir.model.fields,field_description:pisa_account.field_account_journal__local_suppliers
-msgid "Local Suppliers"
-msgstr "Proveedores Locales"
-
-#. module: pisa_account
 #: model_terms:ir.ui.view,arch_db:pisa_account.view_account_journal_form_inherited
 msgid "Payment Info"
 msgstr "Información de Pagos"

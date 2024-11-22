@@ -9,10 +9,6 @@
             <field name="inherit_id" ref="account.view_account_journal_form"/>
             <field name="arch" type="xml">
 
-                <xpath expr="//field[@name='type']" position="after">
-                    <field name="local_suppliers" invisible="type != 'purchase'" widget="boolean"/>
-                </xpath>
-                
                 <xpath expr="//notebook" position="inside">
                     <page string="Payment Info" invisible="type != 'sale'">
                         <group>
