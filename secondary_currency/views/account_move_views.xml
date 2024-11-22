@@ -29,7 +29,6 @@
                     <field name="secondary_balance" 
                         optional="hide" 
                         sum="Total Secondary Balance" 
-                        column_invisible="not parent.company_secondary_currency_id"
                     />    
                 </field>
             </field>
