@@ -27,6 +27,7 @@
                                     <field name="supplier_invoice_authorization_id" 
                                         invisible="move_type not in ['in_invoice', 'in_refund']"
                                         required="move_type in ['in_invoice', 'in_refund'] and is_local_supplier"
+                                        domain="[('partner_id', '=', partner_id)]"
                                     />
                                     <label for="delivery_note_number"/>
                                     <div>
