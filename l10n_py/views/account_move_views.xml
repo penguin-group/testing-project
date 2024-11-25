@@ -77,7 +77,7 @@
                             name="edit_currency_rate" 
                             type="object" 
                             groups="account.group_account_manager" 
-                            invisible="move_type != 'in_invoice' or state != 'draft'"
+                            invisible="move_type != 'in_invoice' or currency_id == company_currency_id or state != 'draft'"
                         />
                     </div>
                 </xpath>
