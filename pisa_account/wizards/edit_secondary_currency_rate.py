@@ -18,4 +18,5 @@ class EditSecondaryCurrencyRate(models.TransientModel):
         self.ensure_one()
         inv = self._get_invoice()
         inv.invoice_secondary_currency_rate = self.secondary_currency_rate
+        inv.line_ids._compute_secondary_balance()
         return {'type': 'ir.actions.act_window_close'}
