@@ -18,4 +18,5 @@ class InvoiceEditCurrencyRate(models.TransientModel):
         self.ensure_one()
         inv = self._get_invoice()
         inv.invoice_currency_rate = self.currency_rate
+        inv.line_ids._compute_totals()
         return {'type': 'ir.actions.act_window_close'}
