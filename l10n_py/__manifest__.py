@@ -42,6 +42,7 @@
         'wizards/invoice_edit_currency_rate_views.xml',
         'data/service_cron.xml',
         'views/menu_item.xml',
+        'views/res_currency_views.xml',
     ],
 
     'demo': [
