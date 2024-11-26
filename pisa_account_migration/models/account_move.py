@@ -157,8 +157,7 @@ class AccountMove(models.Model):
             for timbrado in timbrados:
                 cnt += 1
                 _logger.info(f"{int(cnt/len(timbrados)*100)}%. Timbrado de proveedor {timbrado.name} {cnt}/{len(timbrados)}")
-                # only set relation to inv auth with the correct format
-                if timbrado.name and len(timbrado.name) == 8:
+                if timbrado.name:
                     inv_auth = self.env['invoice.authorization'].sudo().search(
                         [('name', '=', timbrado.name)])
                     if not inv_auth:
@@ -322,7 +321,3 @@ class AccountMove(models.Model):
             _logger.info("El proceso de migración se completó exitosamente.")
         else:
             _logger.error("Hubo errores en el proceso. Revisar el Log.")
-
-    def validate_authorization_format(self, name):
-        # Deactivate this validation while the module secondary_currency_migration is installed
-        pass
