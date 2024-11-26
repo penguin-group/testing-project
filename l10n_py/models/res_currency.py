@@ -56,6 +56,38 @@ class Currency(models.Model):
         company = company or self.env.company
         date = date or fields.Date.context_today(self)
         return from_currency.with_company(company).with_context(to_currency=to_currency.id, date=str(date)).buying_inverse_rate
+
+    @api.model
+    def _get_conversion_rate(self, from_currency, to_currency, rate_type='sell', company=None, date=None):
+        if from_currency == to_currency:
+            return 1
+        company = company or self.env.company
+        date = date or fields.Date.context_today(self)
+        if rate_type == 'sell':
+            return from_currency.with_company(company).with_context(to_currency=to_currency.id, date=str(date)).inverse_rate
+        if rate_type == 'buy':
+            return from_currency.with_company(company).with_context(to_currency=to_currency.id, date=str(date)).buying_inverse_rate
+
+    def _convert(self, from_amount, to_currency, company=None, date=None, round=True, rate_type='sell'):  # noqa: A002 builtin-argument-shadowing
+        """Returns the converted amount of ``from_amount``` from the currency
+           ``self`` to the currency ``to_currency`` for the given ``date`` and
+           company.
+
+           :param company: The company from which we retrieve the convertion rate
+           :param date: The nearest date from which we retriev the conversion rate.
+           :param round: Round the result or not
+        """
+        self, to_currency = self or to_currency, to_currency or self
+        assert self, "convert amount from unknown currency"
+        assert to_currency, "convert amount to unknown currency"
+        # apply conversion rate
+        if from_amount:
+            to_amount = from_amount * self._get_conversion_rate(self, to_currency, rate_type, company, date)
+        else:
+            return 0.0
+
+        # apply rounding
+        return to_currency.round(to_amount) if round else to_amount
     
 
 class CurrencyRate(models.Model):
