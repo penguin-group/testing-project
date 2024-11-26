@@ -4,8 +4,9 @@ class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'  
 
     company_secondary_currency_id = fields.Many2one(
+        "res.currency",
         string='Company Secondary Currency',
-        related='move_id.company_secondary_currency_id', readonly=True, store=True, precompute=True,
+        compute='_compute_company_secondary_currency_id', readonly=True, store=True, precompute=True,
     )
     secondary_currency_rate = fields.Float(
         compute='_compute_secondary_currency_rate',
@@ -17,6 +18,10 @@ class AccountMoveLine(models.Model):
         currency_field='company_secondary_currency_id',
         tracking=True,
     )
+
+    def _compute_company_secondary_currency_id(self):
+        for line in self:
+            line.company_secondary_currency_id = line.move_id.company_id.sec_currency_id
 
     @api.depends('currency_id', 'company_id', 'move_id.invoice_currency_rate', 'move_id.date')
     def _compute_secondary_currency_rate(self):

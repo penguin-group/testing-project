@@ -13,6 +13,7 @@ class AccountMoveLine(models.Model):
         # Override the original method from the secondary_currency module to modify the rounding, 
         # which should be 0 decimal places, although the rounding field in the currency settings is set to two decimal places.
         for line in self:
+            line._compute_company_secondary_currency_id()
             if line.company_secondary_currency_id:
                 if line.display_type in ('line_section', 'line_note'):
                     line.secondary_balance = False
