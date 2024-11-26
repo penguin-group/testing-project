@@ -1556,3 +1556,73 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_py.view_move_form_inherited
 msgid "e.g.: 001-001-0000001"
 msgstr "Por ej.: 001-001-0000001"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_res_currency_rate__buying_company_rate
+msgid "Buying Company Rate"
+msgstr "Tipo de Cambio Compra"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_res_currency_rate__buying_inverse_company_rate
+msgid "Buying Inverse Company Rate"
+msgstr "Tipo de Cambio Compra Inverso"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_res_currency__buying_inverse_rate
+msgid "Buying Inverse Rate"
+msgstr "Tipo de Cambio Compra Inverso"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_res_currency__buying_rate_string
+msgid "Buying Rate String"
+msgstr "Tipo de Cambio Compra Letras"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_res_currency_rate__buying_rate
+msgid "Buying Technical Rate"
+msgstr "Tipo de Cambio Compra Técnico"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_res_currency
+msgid "Currency"
+msgstr "Moneda"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_res_currency_rate
+msgid "Currency Rate"
+msgstr "Tipo de cambio"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_res_currency__buying_rate
+msgid "Current Buying Rate"
+msgstr "Tipo de Cambio Compra Actual"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_move
+msgid "Journal Entry"
+msgstr "Asiento contable"
+
+#. module: l10n_py
+#: model:ir.model.fields,help:l10n_py.field_res_currency_rate__buying_company_rate
+msgid "The buying currency of rate 1 to the rate of the currency."
+msgstr "La moneda del tipo de cambio 1 al tipo de cambio compra de la moneda."
+
+#. module: l10n_py
+#: model:ir.model.fields,help:l10n_py.field_res_currency_rate__buying_rate
+msgid "The buying rate of the currency to the currency of rate 1"
+msgstr "El tipo de cambio compra de la moneda respecto a la moneda del tipo de cambio 1"
+
+#. module: l10n_py
+#: model:ir.model.fields,help:l10n_py.field_res_currency_rate__buying_inverse_company_rate
+msgid "The buying rate of the currency to the currency of rate 1 "
+msgstr "El tipo de cambio compra de la moneda respecto a la moneda del tipo de cambio 1"
+
+#. module: l10n_py
+#: model:ir.model.fields,help:l10n_py.field_res_currency__buying_rate
+msgid "The buying rate of the currency to the currency of rate 1."
+msgstr "El tipo de cambio compra de la moneda respecto a la moneda del tipo de cambio 1."
+
+#. module: l10n_py
+#: model:ir.model.fields,help:l10n_py.field_res_currency__buying_inverse_rate
+msgid "The currency of rate 1 to the buying rate of the currency."
+msgstr "La moneda del tipo de cambio 1 al tipo de cambio compra de la moneda."

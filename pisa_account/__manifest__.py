@@ -16,7 +16,7 @@
     'version': '17.0.1.1.1',
     'license': "OPL-1",
 
-    'depends': ['base', 'l10n_py', 'secondary_currency', 'currency_rate_buying_selling'],
+    'depends': ['base', 'l10n_py', 'secondary_currency'],
 
     'data': [
         'security/ir.model.access.csv',
