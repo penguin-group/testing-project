@@ -18,6 +18,7 @@
                 </xpath>
 
                 <xpath expr="//header" position="inside">
+                    <field name="company_secondary_currency_id" invisible="1"/>
                     <button string="Edit Secondary Currency Rate" 
                         name="edit_secondary_currency_rate" 
                         type="object" 
