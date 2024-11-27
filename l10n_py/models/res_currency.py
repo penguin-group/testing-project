@@ -68,7 +68,7 @@ class Currency(models.Model):
         if rate_type == 'buy':
             return from_currency.with_company(company).with_context(to_currency=to_currency.id, date=str(date)).buying_inverse_rate
 
-    def _convert(self, from_amount, to_currency, company=None, date=None, round=True, rate_type='sell'):  # noqa: A002 builtin-argument-shadowing
+    def _convert(self, from_amount, to_currency, company=None, date=None, round=True, rate_type='sell'):
         """Returns the converted amount of ``from_amount``` from the currency
            ``self`` to the currency ``to_currency`` for the given ``date`` and
            company.
