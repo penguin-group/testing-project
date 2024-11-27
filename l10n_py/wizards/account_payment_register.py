@@ -1,6 +1,6 @@
 from odoo import models, api
 
-class AccountPaymentRegister(models.Model):
+class AccountPaymentRegister(models.TransientModel):
     _inherit = 'account.payment.register'
 
     def _create_payment_vals_from_wizard(self, batch_result):
@@ -64,4 +64,53 @@ class AccountPaymentRegister(models.Model):
                     })
 
         return payment_vals
+
+    def _get_total_amount_in_wizard_currency_to_full_reconcile(self, batch_result, early_payment_discount=True):
+        rate_type = 'buy' if self.payment_type == 'inbound' else 'sell'
+        """ Compute the total amount needed in the currency of the wizard to fully reconcile the batch of journal
+        items passed as parameter.
+
+        :param batch_result:    A batch returned by '_get_batches'.
+        :return:                An amount in the currency of the wizard.
+        """
+        self.ensure_one()
+
+        comp_curr = self.company_id.currency_id
+        if self.source_currency_id == self.currency_id:
+            # Same currency (manage the early payment discount).
+            return self._get_total_amount_using_same_currency(batch_result, early_payment_discount=early_payment_discount)
+        elif self.source_currency_id != comp_curr and self.currency_id == comp_curr:
+            # Foreign currency on source line but the company currency one on the opposite line.
+            return self.source_currency_id._convert(
+                self.source_amount_currency,
+                comp_curr,
+                self.company_id,
+                self.payment_date,
+                rate_type=rate_type,
+            ), False
+        elif self.source_currency_id == comp_curr and self.currency_id != comp_curr:
+            # Company currency on source line but a foreign currency one on the opposite line.
+            residual_amount = 0.0
+            for aml in batch_result['lines']:
+                if not aml.move_id.payment_id and not aml.move_id.statement_line_id:
+                    conversion_date = self.payment_date
+                else:
+                    conversion_date = aml.date
+                residual_amount += comp_curr._convert(
+                    aml.amount_residual,
+                    self.currency_id,
+                    self.company_id,
+                    conversion_date,
+                    rate_type=rate_type,
+                )
+            return abs(residual_amount), False
+        else:
+            # Foreign currency on payment different than the one set on the journal entries.
+            return comp_curr._convert(
+                self.source_amount,
+                self.currency_id,
+                self.company_id,
+                self.payment_date,
+                rate_type=rate_type,
+            ), False
     
