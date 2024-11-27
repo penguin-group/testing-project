@@ -66,13 +66,40 @@ class AccountMove(models.Model):
             _logger.error("There was an error during the migration. Check the logs for more information.")
 
     def compute_sec_currency_rates_with_zero_vals(self):
-        records = self.search([('invoice_secondary_currency_rate', '=', False), ('state', 'not in', ['draft'])])
+        records = self.search([('freeze_currency_rate', '=', False), ('state', 'not in', ['draft'])])
         index = 0
         records_count = len(records)
         for record in records:
             index += 1
-            record._compute_invoice_secondary_currency_rate()
+            record.compute_sec_currency_rate_sql()
             percentage_complete = index / records_count * 100
-            _logger.info(f'Processing {record.name}... {percentage_complete:.2f}% complete')
+            _logger.info(f'{percentage_complete:.2f}% complete')
+
+    def compute_sec_currency_rate_sql(self):
+        self.ensure_one()
+        if not self.company_id.sec_currency_id:
+            _logger.warning(f"No secondary currency set for company {self.company_id.name}")
+            return
+
+        try:
+            query = """
+                        UPDATE account_move am
+                        SET invoice_secondary_currency_rate = (
+                            SELECT rate 
+                            FROM res_currency_rate rcr
+                            WHERE rcr.currency_id = %s
+                              AND rcr.name <= %s
+                              AND rcr.company_id = %s
+                            ORDER BY rcr.name DESC
+                            LIMIT 1
+                        )
+                        WHERE am.id = %s;
+                    """
+            self.env.cr.execute(query, (self.company_id.sec_currency_id.id, self.date, self.company_id.id, self.id))
+            _logger.info(f"Successfully computed secondary currency rate for account move {self.name}")
+        except Exception as e:
+            _logger.error(f"Error while computing secondary currency rate for account move {self.name}: {str(e)}")
+
+
             
             
