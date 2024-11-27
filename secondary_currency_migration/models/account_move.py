@@ -64,3 +64,15 @@ class AccountMove(models.Model):
             _logger.info("Migration completed successfully.")
         else:
             _logger.error("There was an error during the migration. Check the logs for more information.")
+
+    def compute_sec_currency_rates_with_zero_vals(self):
+        records = self.search([('invoice_secondary_currency_rate', '=', False), ('state', 'not in', ['draft'])])
+        index = 0
+        records_count = len(records)
+        for record in records:
+            index += 1
+            record._compute_invoice_secondary_currency_rate()
+            percentage_complete = index / records_count * 100
+            _logger.info(f'Processing {record.name}... {percentage_complete:.2f}% complete')
+            
+            
