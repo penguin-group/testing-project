@@ -15,16 +15,15 @@ class AccountMove(models.Model):
         help="Currency rate from company secondary currency to document currency.",
     )
 
-    @api.depends('currency_id', 'company_secondary_currency_id', 'company_id', 'invoice_date')
+    @api.depends('currency_id', 'company_secondary_currency_id', 'company_id', 'invoice_date', 'date')
     def _compute_invoice_secondary_currency_rate(self):
         for move in self:
-            if move.is_invoice(include_receipts=True):
-                if move.company_currency_id != move.company_secondary_currency_id:
-                    move.invoice_secondary_currency_rate = self.env['res.currency']._get_conversion_rate(
-                        from_currency=move.company_secondary_currency_id,
-                        to_currency=move.company_currency_id,
-                        company=move.company_id,
-                        date=move.invoice_date or fields.Date.context_today(move),
-                    )
-                else:
-                    move.invoice_secondary_currency_rate = 1
+            if move.company_currency_id != move.company_secondary_currency_id:
+                move.invoice_secondary_currency_rate = self.env['res.currency']._get_conversion_rate(
+                    from_currency=move.company_secondary_currency_id,
+                    to_currency=move.company_currency_id,
+                    company=move.company_id,
+                    date=move.invoice_date or fields.Date.context_today(move),
+                )
+            else:
+                move.invoice_secondary_currency_rate = 1
