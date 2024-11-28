@@ -27,8 +27,10 @@
                                     <field name="supplier_invoice_authorization_id" 
                                         invisible="move_type not in ['in_invoice', 'in_refund']"
                                         required="move_type in ['in_invoice', 'in_refund'] and is_local_supplier"
-                                        domain="[('partner_id', '=', partner_id)]"
+                                        domain="[('partner_id', '=', partner_id), ('end_date', '>=', invoice_date)]"
                                     />
+                                    <field name="supplier_invoice_authorization_start_date" readonly="1"/>
+                                    <field name="supplier_invoice_authorization_end_date" readonly="1"/>
                                     <label for="delivery_note_number"/>
                                     <div>
                                         <field name="delivery_note_number"/>
