@@ -13,7 +13,10 @@
                                 <group name="rg90_group" string="General Resolution 90">
                                     <field name="res90_identification_type" readonly="state not in ['draft']"/>
                                     <field name="res90_type_receipt" readonly="state not in ['draft']"/>
-                                    <field name="res90_number_invoice_authorization" readonly="state not in ['draft']"/>
+                                    <field name="res90_number_invoice_authorization" 
+                                        readonly="state not in ['draft']"
+                                        invisible="move_type in ['in_invoice', 'in_refund']"
+                                    />
                                     <field name="res90_imputes_vat" readonly="state not in ['draft']"/>
                                     <field name="res90_imputes_ire" readonly="state not in ['draft']"/>
                                     <field name="res90_imputes_irp_rsp" readonly="state not in ['draft']"/>
