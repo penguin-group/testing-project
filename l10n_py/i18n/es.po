@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-22 14:42+0000\n"
-"PO-Revision-Date: 2024-11-22 14:42+0000\n"
+"POT-Creation-Date: 2024-11-28 17:40+0000\n"
+"PO-Revision-Date: 2024-11-28 17:40+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -121,9 +121,27 @@ msgid ""
 msgstr ""
 
 #. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.view_move_form_currency_rate
+msgid ""
+"<span class=\"o_form_label mx-3 oe_edit_only\" groups=\"account.group_account_readonly\" invisible=\"move_type == 'entry'\">\n"
+"                            <span groups=\"base.group_multi_currency\">in </span>\n"
+"                        </span>"
+msgstr ""
+
+#. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invalid_token
 msgid "<span style=\"font-size:20px\">Invalid Token</span>"
 msgstr "<span style=\"font-size:20px\">Token Inválido</span>"
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.view_move_form_currency_rate
+msgid "<span> = </span>"
+msgstr ""
+
+#. module: l10n_py
+#: model_terms:ir.ui.view,arch_db:l10n_py.view_move_form_currency_rate
+msgid "<span>1 </span>"
+msgstr ""
 
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
@@ -211,7 +229,7 @@ msgstr "Cuenta"
 #. module: l10n_py
 #: model:ir.model,name:l10n_py.model_account_move_reversal
 msgid "Account Move Reversal"
-msgstr "Revocación de movimiento en cuenta"
+msgstr "Reversión de movimiento de cuenta"
 
 #. module: l10n_py
 #: model:ir.model.fields.selection,name:l10n_py.selection__account_journal__res90_type_receipt__205
@@ -325,6 +343,31 @@ msgstr "Rúbrica"
 #: model:ir.ui.menu,name:l10n_py.book_registration_report_menu
 msgid "Book Registration Report"
 msgstr "Informe con Rúbrica"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_res_currency_rate__buying_company_rate
+msgid "Buying Company Rate"
+msgstr "Tipo de Cambio Compra"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_res_currency_rate__buying_inverse_company_rate
+msgid "Buying Inverse Company Rate"
+msgstr "Tipo de Cambio Compra Inverso"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_res_currency__buying_inverse_rate
+msgid "Buying Inverse Rate"
+msgstr "Tipo de Cambio Compra Inverso"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_res_currency__buying_rate_string
+msgid "Buying Rate String"
+msgstr "Tipo de Cambio Compra Letras"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_res_currency_rate__buying_rate
+msgid "Buying Technical Rate"
+msgstr "Tipo de Cambio Compra Técnico"
 
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
@@ -464,9 +507,15 @@ msgid "Crédito (X)"
 msgstr ""
 
 #. module: l10n_py
+#: model:ir.model,name:l10n_py.model_res_currency
+msgid "Currency"
+msgstr "Moneda"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_res_currency_rate
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_edit_currency_rate__currency_rate
 msgid "Currency Rate"
-msgstr "Tipo de Cambio"
+msgstr "Tipo de cambio"
 
 #. module: l10n_py
 #: model:ir.model.fields,help:l10n_py.field_account_bank_statement_line__invoice_currency_rate
@@ -474,6 +523,11 @@ msgstr "Tipo de Cambio"
 #: model:ir.model.fields,help:l10n_py.field_account_payment__invoice_currency_rate
 msgid "Currency rate from company currency to document currency."
 msgstr "Tipo de cambio de la moneda de la compañía a la moneda del documento."
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_res_currency__buying_rate
+msgid "Current Buying Rate"
+msgstr "Tipo de Cambio Compra Actual"
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_book_registration__current_number
@@ -865,7 +919,7 @@ msgstr "Diálogo de Anulación de Factura"
 #: model:ir.model.fields,field_description:l10n_py.field_account_move__invoice_currency_rate
 #: model:ir.model.fields,field_description:l10n_py.field_account_payment__invoice_currency_rate
 msgid "Invoice Currency Rate"
-msgstr "Tipo de cambio de la factura"
+msgstr "Tipo de Cambio de Factura"
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_account_journal__invoice_footer
@@ -898,6 +952,11 @@ msgstr "Asiento contable"
 #: model:ir.model.fields,field_description:l10n_py.field_account_payment__journal_entry_number
 msgid "Journal Entry Number"
 msgstr "Número de Asiento Contable"
+
+#. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_move_line
+msgid "Journal Item"
+msgstr "Apunte contable"
 
 #. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
@@ -1103,6 +1162,11 @@ msgid "Reason"
 msgstr "Motivo"
 
 #. module: l10n_py
+#: model:ir.model,name:l10n_py.model_account_payment_register
+msgid "Register Payment"
+msgstr "Registrar pago"
+
+#. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__related_invoice_number
 #: model:ir.model.fields,field_description:l10n_py.field_account_move__related_invoice_number
 #: model:ir.model.fields,field_description:l10n_py.field_account_payment__related_invoice_number
@@ -1270,6 +1334,20 @@ msgid "Supplier Invoice Authorization"
 msgstr "Timbrado de Proveedor"
 
 #. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__supplier_invoice_authorization_end_date
+#: model:ir.model.fields,field_description:l10n_py.field_account_move__supplier_invoice_authorization_end_date
+#: model:ir.model.fields,field_description:l10n_py.field_account_payment__supplier_invoice_authorization_end_date
+msgid "Supplier Invoice Authorization End Date"
+msgstr "Fecha Final del Timbrado de Proveedor"
+
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_bank_statement_line__supplier_invoice_authorization_start_date
+#: model:ir.model.fields,field_description:l10n_py.field_account_move__supplier_invoice_authorization_start_date
+#: model:ir.model.fields,field_description:l10n_py.field_account_payment__supplier_invoice_authorization_start_date
+msgid "Supplier Invoice Authorization Start Date"
+msgstr "Fecha de Inicio del Timbrado de Proveedor"
+
+#. module: l10n_py
 #: model_terms:ir.ui.view,arch_db:l10n_py.invoice_document
 msgid "TIMBRADO N°"
 msgstr ""
@@ -1330,6 +1408,37 @@ msgstr "El RUC %s no es válido."
 #, python-format
 msgid "The active invoice authorization has reached its invoice final number."
 msgstr "El timbrado activo alcanzó su número de factura final."
+
+#. module: l10n_py
+#: model:ir.model.fields,help:l10n_py.field_res_currency_rate__buying_company_rate
+msgid "The buying currency of rate 1 to the rate of the currency."
+msgstr "La moneda del tipo de cambio 1 al tipo de cambio compra de la moneda."
+
+#. module: l10n_py
+#: model:ir.model.fields,help:l10n_py.field_res_currency_rate__buying_rate
+msgid "The buying rate of the currency to the currency of rate 1"
+msgstr ""
+"El tipo de cambio compra de la moneda respecto a la moneda del tipo de "
+"cambio 1"
+
+#. module: l10n_py
+#: model:ir.model.fields,help:l10n_py.field_res_currency_rate__buying_inverse_company_rate
+msgid "The buying rate of the currency to the currency of rate 1 "
+msgstr ""
+"El tipo de cambio compra de la moneda respecto a la moneda del tipo de "
+"cambio 1"
+
+#. module: l10n_py
+#: model:ir.model.fields,help:l10n_py.field_res_currency__buying_rate
+msgid "The buying rate of the currency to the currency of rate 1."
+msgstr ""
+"El tipo de cambio compra de la moneda respecto a la moneda del tipo de "
+"cambio 1."
+
+#. module: l10n_py
+#: model:ir.model.fields,help:l10n_py.field_res_currency__buying_inverse_rate
+msgid "The currency of rate 1 to the buying rate of the currency."
+msgstr "La moneda del tipo de cambio 1 al tipo de cambio compra de la moneda."
 
 #. module: l10n_py
 #. odoo-python
@@ -1556,73 +1665,3 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_py.view_move_form_inherited
 msgid "e.g.: 001-001-0000001"
 msgstr "Por ej.: 001-001-0000001"
-
-#. module: l10n_py
-#: model:ir.model.fields,field_description:l10n_py.field_res_currency_rate__buying_company_rate
-msgid "Buying Company Rate"
-msgstr "Tipo de Cambio Compra"
-
-#. module: l10n_py
-#: model:ir.model.fields,field_description:l10n_py.field_res_currency_rate__buying_inverse_company_rate
-msgid "Buying Inverse Company Rate"
-msgstr "Tipo de Cambio Compra Inverso"
-
-#. module: l10n_py
-#: model:ir.model.fields,field_description:l10n_py.field_res_currency__buying_inverse_rate
-msgid "Buying Inverse Rate"
-msgstr "Tipo de Cambio Compra Inverso"
-
-#. module: l10n_py
-#: model:ir.model.fields,field_description:l10n_py.field_res_currency__buying_rate_string
-msgid "Buying Rate String"
-msgstr "Tipo de Cambio Compra Letras"
-
-#. module: l10n_py
-#: model:ir.model.fields,field_description:l10n_py.field_res_currency_rate__buying_rate
-msgid "Buying Technical Rate"
-msgstr "Tipo de Cambio Compra Técnico"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_res_currency
-msgid "Currency"
-msgstr "Moneda"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_res_currency_rate
-msgid "Currency Rate"
-msgstr "Tipo de cambio"
-
-#. module: l10n_py
-#: model:ir.model.fields,field_description:l10n_py.field_res_currency__buying_rate
-msgid "Current Buying Rate"
-msgstr "Tipo de Cambio Compra Actual"
-
-#. module: l10n_py
-#: model:ir.model,name:l10n_py.model_account_move
-msgid "Journal Entry"
-msgstr "Asiento contable"
-
-#. module: l10n_py
-#: model:ir.model.fields,help:l10n_py.field_res_currency_rate__buying_company_rate
-msgid "The buying currency of rate 1 to the rate of the currency."
-msgstr "La moneda del tipo de cambio 1 al tipo de cambio compra de la moneda."
-
-#. module: l10n_py
-#: model:ir.model.fields,help:l10n_py.field_res_currency_rate__buying_rate
-msgid "The buying rate of the currency to the currency of rate 1"
-msgstr "El tipo de cambio compra de la moneda respecto a la moneda del tipo de cambio 1"
-
-#. module: l10n_py
-#: model:ir.model.fields,help:l10n_py.field_res_currency_rate__buying_inverse_company_rate
-msgid "The buying rate of the currency to the currency of rate 1 "
-msgstr "El tipo de cambio compra de la moneda respecto a la moneda del tipo de cambio 1"
-
-#. module: l10n_py
-#: model:ir.model.fields,help:l10n_py.field_res_currency__buying_rate
-msgid "The buying rate of the currency to the currency of rate 1."
-msgstr "El tipo de cambio compra de la moneda respecto a la moneda del tipo de cambio 1."
-
-#. module: l10n_py
-#: model:ir.model.fields,help:l10n_py.field_res_currency__buying_inverse_rate
-msgid "The currency of rate 1 to the buying rate of the currency."
-msgstr "La moneda del tipo de cambio 1 al tipo de cambio compra de la moneda."

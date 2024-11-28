@@ -27,6 +27,16 @@ class AccountMove(models.Model):
         string='Supplier Invoice Authorization',
         domain="[('document_type', 'in', ['in_invoice', 'in_refund'])]"
     )
+    supplier_invoice_authorization_start_date = fields.Date(
+        related='supplier_invoice_authorization_id.start_date',
+        string='Supplier Invoice Authorization Start Date',
+        readonly=True,
+    )
+    supplier_invoice_authorization_end_date = fields.Date(
+        related='supplier_invoice_authorization_id.end_date',
+        string='Supplier Invoice Authorization End Date',
+        readonly=True,
+    )
     is_local_supplier = fields.Boolean(string="Local Supplier", related="journal_id.local_suppliers")
     qr_code = fields.Binary(string="QR Code", compute="generate_qr_code")
     delivery_note_number = fields.Char(string="Delivery Note Number")
@@ -144,15 +154,24 @@ class AccountMove(models.Model):
 
     @api.onchange('partner_id')
     def _onchange_partner_id(self):
-        if self.partner_id and self.move_type in ['in_invoice', 'in_refund'] and self.is_local_supplier:
-            self.supplier_invoice_authorization_id =  self.env['invoice.authorization'].search([
-                                                            ('document_type', 'in', ['in_invoice', 'in_refund']), 
-                                                            ('partner_id', '=', self.partner_id.id),
-                                                            ('active', '=', True)
-                                                        ], order="end_date", limit=1)
-        else:
-            self.supplier_invoice_authorization_id = False
+        self._get_supplier_invoice_authorization()
         return super()._onchange_partner_id()
+
+    @api.onchange('invoice_date')
+    def _onchange_invoice_date(self):
+        self._get_supplier_invoice_authorization()
+
+    def _get_supplier_invoice_authorization(self):
+        for record in self:
+            if record.move_type in ['in_invoice', 'in_refund'] and record.is_local_supplier and record.invoice_date:
+                record.supplier_invoice_authorization_id =  self.env['invoice.authorization'].search([
+                                                                ('document_type', 'in', ['in_invoice', 'in_refund']), 
+                                                                ('partner_id', '=', record.partner_id.id),
+                                                                ('active', '=', True),
+                                                                ('end_date', '>=', record.invoice_date)
+                                                            ], order="end_date", limit=1)
+            else:
+                record.supplier_invoice_authorization_id = False
     
     def edit_currency_rate(self):
         return {
@@ -572,3 +591,5 @@ class AccountMove(models.Model):
             if not record.move_type in ['out_invoice', 'out_refund']:
                 raise ValidationError(_("Only customer invoices can be printed"))
         return super(AccountMove, self).action_print()
+
+
