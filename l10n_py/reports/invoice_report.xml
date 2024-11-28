@@ -22,7 +22,7 @@
         </template>
 
         <template id="invoice_document">
-            <link rel='stylesheet' href="/l10n_py/static/src/css/style.css"/>
+            <link rel='stylesheet' href="/l10n_py/static/src/css/invoice_report.css"/>
             <div class="page">
                 <t t-set="inv_auth" t-value="o.journal_id.invoice_authorization_id"/>
                 <div class="col-xs-6" style="margin-left:2mm;">
