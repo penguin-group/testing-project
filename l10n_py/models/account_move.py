@@ -109,17 +109,28 @@ class AccountMove(models.Model):
     )
 
     @api.depends('currency_id', 'company_currency_id', 'company_id', 'invoice_date')
-    def _compute_invoice_currency_rate(self):
         # Override to include buying/selling rates
+    def _compute_invoice_currency_rate(self):
+        buy = ['out_invoice',
+               'out_refund',
+               'out_receipt',
+               ]
+        sell = ['entry',
+               'in_invoice',
+               'in_refund',
+               'in_receipt',
+               ]
         for move in self:
+            rate_type = 'buy' if move.move_type in buy else 'sell'
             if move.is_invoice(include_receipts=True):
                 if move.currency_id:
-                    conversion_method = self.env['res.currency']._get_buying_conversion_rate if move.move_type == 'out_invoice' else self.env['res.currency']._get_conversion_rate
+                    conversion_method = self.env['res.currency']._get_conversion_rate
                     move.invoice_currency_rate = conversion_method(
                         from_currency=move.company_currency_id,
                         to_currency=move.currency_id,
                         company=move.company_id,
                         date=move.invoice_date or fields.Date.context_today(move),
+                        rate_type=rate_type,
                     )
                 else:
                     move.invoice_currency_rate = 1
