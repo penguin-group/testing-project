@@ -1,3 +1,4 @@
+import logging
 from odoo import api, fields, models, _
 from odoo.tools import index_exists
 from odoo.exceptions import ValidationError, UserError
@@ -8,14 +9,25 @@ import base64
 import re
 import math
 
-class AccountMove(models.Model):
-    _inherit = 'account.move'
+_logger = logging.getLogger(__name__)
 
+class AccountMove(models.Model):
+    _inherit = 'account.move'   
+
+    invoice_currency_rate = fields.Float(
+        string='Invoice Currency Rate',
+        compute='_compute_invoice_currency_rate', store=True, precompute=True,
+        copy=False,
+        digits=0,
+        tracking=True,
+        help="Currency rate from company currency to document currency.",
+    )
     supplier_invoice_authorization_id = fields.Many2one(
         'invoice.authorization',
         string='Supplier Invoice Authorization',
         domain="[('document_type', 'in', ['in_invoice', 'in_refund'])]"
     )
+    is_local_supplier = fields.Boolean(string="Local Supplier", related="journal_id.local_suppliers")
     qr_code = fields.Binary(string="QR Code", compute="generate_qr_code")
     delivery_note_number = fields.Char(string="Delivery Note Number")
     related_invoice_number = fields.Char(string="Related Invoice Number")
@@ -68,7 +80,89 @@ class AccountMove(models.Model):
     res90_associated_receipt_stamping = fields.Char(string="Associated receipt stamp number")
     exclude_res90 = fields.Boolean(string="Exclude from Resolution 90",
                                    help="The records of this journal will not be included in resolution 90")
+    journal_entry_number = fields.Integer(string='Journal Entry Number', index=True)
 
+    # === Fields por PY Reports === #
+    amount_exempt = fields.Monetary(
+        string='Exempt amount',
+        compute='_compute_fields_for_py_reports',
+    )
+    amount_base10 = fields.Monetary(
+        string='Base VAT 10% amount',
+        compute='_compute_fields_for_py_reports',
+    )
+    amount_vat10 = fields.Monetary(
+        string='VAT 10% amount',
+        compute='_compute_fields_for_py_reports',
+    )
+    amount_base5 = fields.Monetary(
+        string='Base VAT 5% amount',
+        compute='_compute_fields_for_py_reports',
+    )
+    amount_vat5 = fields.Monetary(
+        string='VAT 5% amount',
+        compute='_compute_fields_for_py_reports',
+    )
+    amount_taxable_imports = fields.Monetary(
+        string='Taxable imports amount',
+        compute='_compute_fields_for_py_reports',
+    )
+
+    @api.depends('currency_id', 'company_currency_id', 'company_id', 'invoice_date')
+    def _compute_invoice_currency_rate(self):
+        # Override to include buying/selling rates
+        for move in self:
+            if move.is_invoice(include_receipts=True):
+                if move.currency_id:
+                    conversion_method = self.env['res.currency']._get_buying_conversion_rate if move.move_type == 'out_invoice' else self.env['res.currency']._get_conversion_rate
+                    move.invoice_currency_rate = conversion_method(
+                        from_currency=move.company_currency_id,
+                        to_currency=move.currency_id,
+                        company=move.company_id,
+                        date=move.invoice_date or fields.Date.context_today(move),
+                    )
+                else:
+                    move.invoice_currency_rate = 1
+
+    def _compute_fields_for_py_reports(self):
+        for record in self:
+            if record.move_type == "in_invoice" and record.import_clearance:
+                # Handle import clearance invoices
+                record.amount_vat10 = sum(record.line_ids.filtered(lambda l: l.display_type =='product' and l.account_id.vat_import and 0 in l.tax_ids.mapped('amount')).mapped("balance"))
+                record.amount_base10 = record.amount_vat10 * 10
+                record.amount_base5 = 0
+                record.amount_vat5 = 0
+                record.amount_exempt = 0
+                record.amount_taxable_imports = record.amount_base10
+            else:
+                record.amount_base10 = sum(record.line_ids.filtered(lambda l: l.display_type =='product' and 10 in l.tax_ids.mapped('amount')).mapped("balance"))
+                record.amount_vat10 = sum(record.line_ids.filtered(lambda l: l.display_type =='tax' and l.tax_line_id and l.tax_line_id.amount == 10).mapped("balance"))
+                record.amount_base5 = sum(record.line_ids.filtered(lambda l: l.display_type =='product' and 5 in l.tax_ids.mapped('amount')).mapped("balance"))
+                record.amount_vat5 = sum(record.line_ids.filtered(lambda l: l.display_type =='tax' and l.tax_line_id and l.tax_line_id.amount == 5).mapped("balance"))
+                record.amount_exempt = sum(record.line_ids.filtered(lambda l: l.display_type =='product' and 0 in l.tax_ids.mapped('amount')).mapped("balance"))
+                record.amount_taxable_imports = 0 
+
+    @api.onchange('partner_id')
+    def _onchange_partner_id(self):
+        if self.partner_id and self.move_type in ['in_invoice', 'in_refund'] and self.is_local_supplier:
+            self.supplier_invoice_authorization_id =  self.env['invoice.authorization'].search([
+                                                            ('document_type', 'in', ['in_invoice', 'in_refund']), 
+                                                            ('partner_id', '=', self.partner_id.id),
+                                                            ('active', '=', True)
+                                                        ], order="end_date", limit=1)
+        else:
+            self.supplier_invoice_authorization_id = False
+        return super()._onchange_partner_id()
+    
+    def edit_currency_rate(self):
+        return {
+                'type': 'ir.actions.act_window',
+                'res_model': 'invoice.edit.currency.rate',
+                'view_mode': 'form',         
+                'view_id': self.env.ref('l10n_py.invoice_edit_currency_rate_view_form').id,      
+                'target': 'new',
+                'context': {'active_id': self.id}
+            }
 
     def button_cancel_invoice(self):
         return {
@@ -140,11 +234,12 @@ class AccountMove(models.Model):
         return
 
     def validate_supplier_invoice_number(self):
-        pattern = re.compile(r'^(\d{3}-){2}\d{7}$')
-        if not pattern.match(self.ref):
-            raise ValidationError(
-                _('The invoice number does not have the correct format (xxx-xxx-xxxxxxx)')
-            )
+        if self.ref and self.is_local_supplier:
+            pattern = re.compile(r'^(\d{3}-){2}\d{7}$')
+            if not pattern.match(self.ref):
+                raise ValidationError(
+                    _('The invoice number does not have the correct format (xxx-xxx-xxxxxxx)')
+                )
 
     def generate_token(self):
         secret_phrase = str(self.id) + "amakakeruriunohirameki"
@@ -338,68 +433,23 @@ class AccountMove(models.Model):
             return ''
 
     def get_amount10(self):
-        amount10 = sum(self.invoice_line_ids.filtered(lambda x: 10 in x.tax_ids.mapped('amount')).mapped('price_total'))
-        if self.currency_id != self.env.company.currency_id:
-            balance = abs(
-                sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped('balance')))
-            amount_currency = abs(
-                sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped(
-                    'amount_currency')))
-            if balance > 0 and amount_currency > 0:
-                currency_rate = balance / amount_currency
-            else:
-                currency_rate = 1
-            amount10 = amount10 * currency_rate
+        amount10 = self.amount_base10 + self.amount_vat10
         if self.import_clearance:
-            result = 11 * sum(line.price_subtotal for line in self.invoice_line_ids.filtered(lambda x: x.account_id.vat_import))
+            amount10 = 11 * self.amount_vat10
         return round(amount10)
 
     def get_amount5(self):
-        monto5 = sum(self.invoice_line_ids.filtered(lambda x: 5 in x.tax_ids.mapped('amount')).mapped('price_total'))
-        if self.currency_id != self.env.company.currency_id:
-            balance = abs(
-                sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped('balance')))
-            amount_currency = abs(
-                sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped(
-                    'amount_currency')))
-            if balance > 0 and amount_currency > 0:
-                currency_rate = balance / amount_currency
-            else:
-                currency_rate = 1
-            monto5 = monto5 * currency_rate
-        return round(monto5)
+        amount5 = self.amount_base5 + self.amount_vat5
+        return round(amount5)
 
     def get_exempt_amount(self):
-        amount0 = sum(self.invoice_line_ids.filtered(lambda x: not x.tax_ids or 0 in x.tax_ids.mapped('amount')).mapped(
-            'price_total'))
-        if self.currency_id != self.env.company.currency_id:
-            balance = abs(
-                sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped('balance')))
-            amount_currency = abs(
-                sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped(
-                    'amount_currency')))
-            if balance > 0 and amount_currency > 0:
-                currency_rate = balance / amount_currency
-            else:
-                currency_rate = 1
-            amount0 = amount0 * currency_rate
+        amount0 = self.amount_exempt
         if self.import_clearance:
             amount0 = 0
         return round(amount0)
 
-    def get_total_amount(self):
-        amount = abs(sum(self.invoice_line_ids.mapped('price_total')))
-        if self.currency_id != self.env.company.currency_id:
-            balance = abs(
-                sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped('balance')))
-            amount_currency = abs(
-                sum(self.invoice_line_ids.filtered(lambda x: x.currency_id == self.currency_id).mapped(
-                    'amount_currency')))
-            if balance > 0 and amount_currency > 0:
-                currency_rate = balance / amount_currency
-            else:
-                currency_rate = 1
-            amount = amount * currency_rate
+    def get_total_amount(self):       
+        amount = abs(self.amount_total_signed)
         if self.import_clearance:
             amount = self.get_amount10()
         return round(amount)
@@ -500,6 +550,22 @@ class AccountMove(models.Model):
         if any(self.mapped('foreign_invoice')) and self.mapped('invoice_line_ids.tax_ids') and any(self.mapped('invoice_line_ids.tax_ids.amount')):
             raise ValidationError('A Foreign Invoice (Import) should only have Exempts as taxes')
         return res
+
+    def set_journal_entry_numbers(self):
+        for company in self.env['res.company'].sudo().search([]):
+            self.env.cr.execute("SELECT id FROM account_move WHERE company_id=%s AND state='posted' ORDER BY date,name,id" % company.id)
+            account_move_ids = [x[0] for x in self.env.cr.fetchall()]
+            sql_querys = ''
+            journal_entry_number = 1
+            for account_move_id in account_move_ids:
+                sql_querys += 'UPDATE account_move SET journal_entry_number=%s WHERE id=%s AND (journal_entry_number!=%s OR journal_entry_number IS NULL);' % (
+                    journal_entry_number, account_move_id, journal_entry_number
+                )
+                journal_entry_number += 1
+            if sql_querys:
+                self.env.cr.execute(sql_querys)
+            else:
+                _logger.info(f"Te company {company.name} has no journal entries. Skipped.")
 
     def action_print(self):
         for record in self:

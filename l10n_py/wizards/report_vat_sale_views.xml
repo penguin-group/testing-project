@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <data noupdate="1">
+    <data>
     
         <record model="ir.ui.view" id="report_vat_sale_wizard_form">
             <field name="name">report.vat.sale.wizard.form</field>
@@ -33,9 +33,6 @@
             <field name="target">new</field>
         </record>
 
-        <menuitem id="report_vat_sale_wizard_menu" parent="account.menu_finance_receivables" 
-            name="VAT Sale Book" sequence="11"
-            action="report_vat_sale_wizard_action"/>
 
         <record id="report_vat_sale_report" model="ir.actions.report">
                 <field name="name">VAT Sale Book</field>

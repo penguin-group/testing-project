@@ -1,0 +1,56 @@
+<odoo>
+    <data>
+        <record id="book_registration_tree" model="ir.ui.view" >
+            <field name="name">book.registration.tree</field>
+            <field name="model">book.registration</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" />
+                    <field name="company_id" />
+                    <field name="initial_number" />
+                    <field name="final_number" />
+                    <field name="type" />
+                    <field name="active" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="book_registration_form" model="ir.ui.view" >
+            <field name="name">book.registration.form</field>
+            <field name="model">book.registration</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" />
+                                <field name="active" required="1" />
+                                <field name="company_id" required="1" />
+                                <field name="initial_number" required="1"/>
+                                <field name="final_number" required="1"/>
+                                <field name="current_number" required="1"/>
+                                <field name="type" required="1" />
+                                <field name="signature_image" required="0" />
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="book_registration_action" model="ir.actions.act_window" >
+            <field name="name">Book Registration</field>
+            <field name="res_model">book.registration</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[("active", "in", [True, False])]</field>
+        </record>
+
+        <menuitem 
+            id="book_registration_menu" 
+            name="Book Registration" 
+            parent="account.menu_finance_entries" 
+            action="book_registration_action" 
+            sequence="100" 
+        />
+    </data>
+</odoo>

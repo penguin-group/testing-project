@@ -33,7 +33,7 @@ class InvoiceAuthorization(models.Model):
     initial_invoice_number = fields.Integer('Initial Invoice Number', required=True, default=1)
     final_invoice_number = fields.Integer('Final Invoice Number', required=True, default=9999999)
     self_printer_authorization = fields.Char('Self-printer Authorization Number')
-    active = fields.Boolean(string='Active', default=True)
+    active = fields.Boolean(string='Active', compute="_compute_active", store=True, precompute=True)
     company_id = fields.Many2one(
         'res.company', 
         string='Company', 
@@ -46,6 +46,16 @@ class InvoiceAuthorization(models.Model):
         if match is None:
             raise ValidationError(_('The invoice authorization number does not have the correct format (8 digits)'))
 
+    @api.onchange("end_date")
+    @api.depends("end_date")
+    def _compute_active(self):
+        for record in self:
+            if record.end_date and record.end_date < fields.Date.today():
+                record.active = False
+            else:
+                record.active = True
+
+    
     def create(self, vals):
         # Validate the invoice authorization format before creating the record
         if 'name' in vals:

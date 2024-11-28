@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+    
+        <record id="ir_cron_secondary_currency_migration" model="ir.cron">
+            <field name="name">Data Migration to secondary_currency module</field>
+            <field name="model_id" ref="account.model_account_move"/>
+            <field name="state">code</field>
+            <field name="active">0</field>
+            <field name="code">model.migrate_secondary_currency_data()</field>
+            <field name="interval_number">0</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+        </record>
+
+        <record id="ir_cron_secondary_currency_migration_checker" model="ir.cron">
+            <field name="name">Check Migration to Secondary Currency</field>
+            <field name="model_id" ref="account.model_account_move_line"/>
+            <field name="state">code</field>
+            <field name="active">0</field>
+            <field name="code">model.check_migration_to_secondary_currency_module()</field>
+            <field name="interval_number">0</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+        </record>
+
+        <record id="ir_cron_compute_secondary_currency_rates" model="ir.cron">
+            <field name="name">Compute Secondary Currency Rates</field>
+            <field name="model_id" ref="account.model_account_move"/>
+            <field name="state">code</field>
+            <field name="active">0</field>
+            <field name="code">model.compute_sec_currency_rates_with_zero_vals()</field>
+            <field name="interval_number">0</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+        </record>
+    
+    </data>
+    
+
+</odoo>
