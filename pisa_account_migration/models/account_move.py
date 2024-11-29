@@ -112,7 +112,7 @@ class AccountMove(models.Model):
                 ("nro_punto_expedicion", "expedition_point_number"),
                 ("rango_inicial", "initial_invoice_number"),
                 ("rango_final", "final_invoice_number"),
-                ("active", "active"),
+                ("active", "is_valid"),
                 ("nro_autorizacion", "self_printer_authorization"),
             ]
 
@@ -304,15 +304,15 @@ class AccountMove(models.Model):
 
     def migrate_data(self):
         result = []
-        result.append(self.migrate_timbrado_proveedores())
+        #result.append(self.migrate_timbrado_proveedores())
         for company in self.env['res.company'].sudo().search([]):
             _logger.info(f"MIGRANDO DATOS DE LA COMPAÑÍA {company.name}")
             result.append(self.migrate_timbrado(company))
-            result.append(self.migrate_autoimpresor(company))
-            result.append(self.migrate_rg90(company))
-            result.append(self.migrate_imports(company))
-            result.append(self.migrate_rubrica(company))
-            result.append(self.migrate_move_number(company))
+            # result.append(self.migrate_autoimpresor(company))
+            # result.append(self.migrate_rg90(company))
+            # result.append(self.migrate_imports(company))
+            # result.append(self.migrate_rubrica(company))
+            # result.append(self.migrate_move_number(company))
 
         if all(result):
             _logger.info("El proceso de migración se completó exitosamente.")
