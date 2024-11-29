@@ -33,7 +33,7 @@ class InvoiceAuthorization(models.Model):
     initial_invoice_number = fields.Integer('Initial Invoice Number', required=True, default=1)
     final_invoice_number = fields.Integer('Final Invoice Number', required=True, default=9999999)
     self_printer_authorization = fields.Char('Self-printer Authorization Number')
-    active = fields.Boolean(string='Active', compute="_compute_active", store=True, precompute=True)
+    is_valid = fields.Boolean(string='Is Valid', compute="_compute_is_valid", store=True, precompute=True)
     company_id = fields.Many2one(
         'res.company', 
         string='Company', 
@@ -48,12 +48,12 @@ class InvoiceAuthorization(models.Model):
 
     @api.onchange("end_date")
     @api.depends("end_date")
-    def _compute_active(self):
+    def _compute_is_valid(self):
         for record in self:
             if record.end_date and record.end_date < fields.Date.today():
-                record.active = False
+                record.is_valid = False
             else:
-                record.active = True
+                record.is_valid = True
 
     
     def create(self, vals):
