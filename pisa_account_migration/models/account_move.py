@@ -120,7 +120,7 @@ class AccountMove(models.Model):
                 [('company_id', '=', company.id)])
             for timbrado in timbrados:
                 inv_auth = self.env['invoice.authorization'].sudo().search(
-                    [('name', '=', timbrado.name)])
+                    [('name', '=', timbrado.name)], limit=1)
                 if not inv_auth:
                     d = {}
                     for f in timbrado_fields:
@@ -143,48 +143,45 @@ class AccountMove(models.Model):
             return False
 
     def migrate_timbrado_proveedores(self):
-        _logger.info("Timbrados de proveedores...")
+        _logger.info("Supplier invoice authorizations...")
 
         try:
-            supplier_timbrado_fields = [
-                ("name", "name"),
-                ("inicio_vigencia", "start_date"),
-                ("fin_vigencia", "end_date"),
-            ]
-            timbrados = self.env['proveedores_timbrado.timbrado'].sudo().search([
-            ])
+            timbrados = self.env['proveedores_timbrado.timbrado'].sudo().search([])
             cnt = 0
             for timbrado in timbrados:
                 cnt += 1
-                _logger.info(f"{int(cnt/len(timbrados)*100)}%. Timbrado de proveedor {timbrado.name} {cnt}/{len(timbrados)}")
+                _logger.info(f"{int(cnt/len(timbrados)*100)}%. Supplier invoice authorization {timbrado.name} {cnt}/{len(timbrados)}")
                 if timbrado.name:
-                    inv_auth = self.env['invoice.authorization'].sudo().search(
-                        [('name', '=', timbrado.name)])
+                    self.env.cr.execute("SELECT id FROM invoice_authorization WHERE name = %s", (timbrado.name,))
+                    inv_auth = self.env['invoice.authorization'].sudo().browse(self.env.cr.fetchone())
                     if not inv_auth:
-                        d = {}
-                        for f in supplier_timbrado_fields:
-                            d.update({f[1]: timbrado[f[0]]})
-                        d.update({'company_id': False, 'document_type': 'in_invoice',
-                                 'partner_id': timbrado.partner_id.id})
-                        inv_auth = self.env['invoice.authorization'].create(d)
+                        partner_id = timbrado.partner_id.id if timbrado.partner_id else None
+                        rango_inicial = int(timbrado.rango_inicial.split('-')[-1]) if '-' in (timbrado.rango_inicial or '') else int(''.join(filter(str.isdigit, timbrado.rango_inicial or '1')).lstrip('0') or '1')
+                        rango_final = int(timbrado.rango_final.split('-')[-1]) if '-' in (timbrado.rango_final or '') else int(''.join(filter(str.isdigit, timbrado.rango_final or '9999999')).lstrip('0') or '9999999')
+                        is_valid = timbrado.fin_vigencia >= fields.Date.today()
+                        self.env.cr.execute("""
+                            INSERT INTO invoice_authorization (name, start_date, end_date, document_type, partner_id, initial_invoice_number, final_invoice_number, establishment_number, expedition_point_number, is_valid)
+                            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        """, (timbrado.name, timbrado.inicio_vigencia, timbrado.fin_vigencia, 'in_invoice', partner_id, rango_inicial, rango_final, '001', '001', is_valid))
+                        self.env.cr.execute("SELECT lastval()")
+                        inv_auth = self.env['invoice.authorization'].browse(self.env.cr.fetchone()[0])
                         _logger.info(f"Creado invoice.authorization de proveedor {timbrado.partner_id.name} {inv_auth.id}/{inv_auth.name}")
                         # Set related field in account.move records
-                        all_company_ids = self.env['res.company'].search(
-                            []).ids
-                        invoices = self.env['account.move'].with_context(allowed_company_ids=all_company_ids).search(
-                            [('timbrado_id', '=', timbrado.id), ('move_type', 'in', ['in_invoice', 'in_refund']), ('es_factura_exterior', '=', False)])
-                        invoices.sudo().write(
-                            {'supplier_invoice_authorization_id': inv_auth.id})
-                        _logger.info(f"Relacionado con las facturas {', '.join(invoices.mapped(lambda r: r.ref or r.name or str(r.id)))}")
-                        self.env.cr.commit()
+                        self.env.cr.execute("""
+                            UPDATE account_move
+                            SET supplier_invoice_authorization_id = %s
+                            WHERE timbrado_id = %s
+                            AND move_type IN ('in_invoice', 'in_refund')
+                            AND es_factura_exterior = False
+                        """, (inv_auth.id, timbrado.id))
                     else:
-                        _logger.info(f"invoice.authorization {inv_auth.name} existente.")
+                        _logger.info(f"invoice.authorization {inv_auth.name} ({inv_auth.id}) already exists.")
                 else:
                     _logger.info(
-                        f"El timbrado {timbrado.name or 'Sin número'} del proveedor {timbrado.partner_id.name or 'Sin nombre'} no tiene el formato correcto. No se pudo registrar.")
+                        f"The invoice authorization {timbrado.name or 'No number'} from the supplier {timbrado.partner_id.name or 'No name'} does not have the correct format. Could not register.")
             return True
         except Exception as e:
-            _logger.error(f"Error al procesar timbrado {timbrado.name or 'Sin número'} del proveedor {timbrado.partner_id.name or 'Sin nombre'}: {str(e)}")
+            _logger.error(f"Error while processing authorization {timbrado.name or 'No number'} from supplier {timbrado.partner_id.name or 'No name'}: {str(e)}")
             return False
 
     def migrate_autoimpresor(self, company):
