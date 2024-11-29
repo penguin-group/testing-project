@@ -112,7 +112,7 @@ class AccountMove(models.Model):
                 ("nro_punto_expedicion", "expedition_point_number"),
                 ("rango_inicial", "initial_invoice_number"),
                 ("rango_final", "final_invoice_number"),
-                ("active", "active"),
+                ("active", "is_valid"),
                 ("nro_autorizacion", "self_printer_authorization"),
             ]
 
