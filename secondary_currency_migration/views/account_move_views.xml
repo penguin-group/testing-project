@@ -1,0 +1,14 @@
+<odoo>
+    <data>
+        <record id="compute_secondary_balance_action_server" model="ir.actions.server">
+            <field name="name">Compute Secondary Balance</field>
+            <field name="model_id" ref="account.model_account_move"/>
+            <field name="binding_model_id" ref="account.model_account_move"/>
+            <field name="binding_view_types">tree,form</field>
+            <field name="state">code</field>
+            <field name="code">
+                records.line_ids._compute_secondary_balance()
+            </field>
+        </record>
+    </data>
+</odoo>

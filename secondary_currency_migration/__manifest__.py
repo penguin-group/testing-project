@@ -19,6 +19,7 @@
     'data': [
         # 'security/ir.model.access.csv',
         'data/ir_cron.xml',
+        'views/account_move_views.xml',
     ],
 
 }
