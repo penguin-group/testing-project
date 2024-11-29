@@ -152,7 +152,7 @@ class AccountMove(models.Model):
                 cnt += 1
                 _logger.info(f"{int(cnt/len(timbrados)*100)}%. Supplier invoice authorization {timbrado.name} {cnt}/{len(timbrados)}")
                 if timbrado.name:
-                    self.env.cr.execute("SELECT id FROM invoice_authorization WHERE name = %s", (timbrado.name,))
+                    self.env.cr.execute("SELECT id FROM invoice_authorization WHERE proveedores_timbrado_id = %s", (timbrado.id,))
                     inv_auth = self.env['invoice.authorization'].sudo().browse(self.env.cr.fetchone())
                     if not inv_auth:
                         partner_id = timbrado.partner_id.id if timbrado.partner_id else None
@@ -160,9 +160,9 @@ class AccountMove(models.Model):
                         rango_final = int(timbrado.rango_final.split('-')[-1]) if '-' in (timbrado.rango_final or '') else int(''.join(filter(str.isdigit, timbrado.rango_final or '9999999')).lstrip('0') or '9999999')
                         is_valid = timbrado.fin_vigencia >= fields.Date.today()
                         self.env.cr.execute("""
-                            INSERT INTO invoice_authorization (name, start_date, end_date, document_type, partner_id, initial_invoice_number, final_invoice_number, establishment_number, expedition_point_number, is_valid)
-                            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                        """, (timbrado.name, timbrado.inicio_vigencia, timbrado.fin_vigencia, 'in_invoice', partner_id, rango_inicial, rango_final, '001', '001', is_valid))
+                            INSERT INTO invoice_authorization (name, start_date, end_date, document_type, partner_id, initial_invoice_number, final_invoice_number, establishment_number, expedition_point_number, is_valid, proveedores_timbrado_id)
+                            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                        """, (timbrado.name, timbrado.inicio_vigencia, timbrado.fin_vigencia, 'in_invoice', partner_id, rango_inicial, rango_final, '001', '001', is_valid, timbrado.id))
                         self.env.cr.execute("SELECT lastval()")
                         inv_auth = self.env['invoice.authorization'].browse(self.env.cr.fetchone()[0])
                         _logger.info(f"Creado invoice.authorization de proveedor {timbrado.partner_id.name} {inv_auth.id}/{inv_auth.name}")
@@ -179,6 +179,23 @@ class AccountMove(models.Model):
                 else:
                     _logger.info(
                         f"The invoice authorization {timbrado.name or 'No number'} from the supplier {timbrado.partner_id.name or 'No name'} does not have the correct format. Could not register.")
+            
+            _logger.info("Checking and updating vendor bills...")
+            self.env.cr.execute("""
+                UPDATE account_move
+                SET supplier_invoice_authorization_id = (
+                    SELECT id
+                    FROM invoice_authorization
+                    WHERE name = account_move.timbrado_proveedor
+                    AND document_type = 'in_invoice'
+                    AND partner_id = account_move.partner_id
+                    LIMIT 1
+                )
+                WHERE state = 'posted' 
+                    AND supplier_invoice_authorization_id IS NULL
+                    AND timbrado_proveedor IS NOT NULL
+                    AND move_type IN ('in_invoice', 'in_refund')
+            """)
             return True
         except Exception as e:
             _logger.error(f"Error while processing authorization {timbrado.name or 'No number'} from supplier {timbrado.partner_id.name or 'No name'}: {str(e)}")
