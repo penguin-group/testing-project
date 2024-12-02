@@ -67,17 +67,24 @@ class AccountMove(models.Model):
             'context': {'active_id': self.id}
         }
 
+    def is_inbound(self, include_receipts=True):
+        # Override this method to include inbound payments entries
+        result = super(AccountMove, self).is_inbound(include_receipts=include_receipts)
+        inbound_payment = self.payment_id and self.payment_id.payment_type == 'inbound'
+        return any([result, inbound_payment])
+    
     @api.depends('currency_id', 'company_secondary_currency_id', 'company_id', 'invoice_date')
     def _compute_invoice_secondary_currency_rate(self):
         if self.company_secondary_currency_id and self.company_id.country_code == "PY":
             for move in self:
                 if move.currency_id != move.company_secondary_currency_id:
-                    conversion_method = self.env['res.currency']._get_buying_conversion_rate if move.move_type == 'out_invoice' and move.currency_id == move.company_currency_id else self.env['res.currency']._get_conversion_rate
-                    move.invoice_secondary_currency_rate = conversion_method(
+                    rate_type = 'buy' if move.is_inbound() else 'sell'
+                    move.invoice_secondary_currency_rate = self.env['res.currency']._get_conversion_rate(
                         from_currency=move.company_secondary_currency_id,
                         to_currency=move.currency_id,
                         company=move.company_id,
                         date=move.invoice_date or fields.Date.context_today(move),
+                        rate_type=rate_type,
                     )
                 else:
                     move.invoice_secondary_currency_rate = 1
