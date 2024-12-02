@@ -30,6 +30,7 @@ class AccountMoveLine(models.Model):
 
     @api.depends('balance')
     def _compute_secondary_balance(self):
+        self._compute_company_secondary_currency_id()
         for line in self:
             if line.company_secondary_currency_id:
                 if line.display_type in ('line_section', 'line_note'):
