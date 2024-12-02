@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_accountant_report_vat_purchase,access.accountant.report.vat.purchase,model_report_vat_purchase_wizard,account.group_account_manager,1,1,1,1
+access_accountant_report_vat_sale,access.accountant.report.vat.sale,model_report_vat_sale_wizard,account.group_account_manager,1,1,1,1
+access_accountant_report_res90,access.accountant.report.res90,model_report_res90,account.group_account_manager,1,1,1,1
+access_accountant_invoice_authorization,access.accountant.invoice.authorization,model_invoice_authorization,account.group_account_manager,1,1,1,1
+access_invoice_cancel,access.invoice.cancel,model_invoice_cancel,account.group_account_manager,1,1,1,1
+access_book_registration,access.book.registration,model_book_registration,account.group_account_manager,1,1,1,1
+access_book_registration_report,access.book.registration.report,model_book_registration_report,account.group_account_manager,1,1,1,1
+access_invoice_edit_currency_rate,access.invoice.edit.currency.rate,model_invoice_edit_currency_rate,account.group_account_manager,1,1,1,1

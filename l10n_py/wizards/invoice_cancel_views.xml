@@ -1,0 +1,25 @@
+<odoo>
+    <record id="invoice_cancel_form" model="ir.ui.view">
+        <field name="name">invoice.cancel.form</field>
+        <field name="model">invoice.cancel</field>
+        <field name="arch" type="xml">
+            <form string="Invoice Cancellation Wizard">
+                <group>
+                    <field name="reason"/>
+                </group>
+                <footer>
+                    <button string="Apply" type="object" name="action_apply" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="invoice_cancel_action" model="ir.actions.act_window">
+        <field name="name">Invoice Cancellation Wizard</field>
+        <field name="res_model">invoice.cancel</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="invoice_cancel_form"/>
+        <field name="target">new</field>
+    </record>
+</odoo>
