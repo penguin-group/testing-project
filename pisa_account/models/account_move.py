@@ -102,7 +102,7 @@ class AccountMove(models.Model):
                     record.amount_vat10 = sum(record.line_ids.filtered(lambda l: l.display_type =='tax' and l.tax_line_id and l.tax_line_id.amount == 10).mapped("secondary_balance"))
                     record.amount_base5 = sum(record.line_ids.filtered(lambda l: l.display_type =='product' and 5 in l.tax_ids.mapped('amount')).mapped("secondary_balance"))
                     record.amount_vat5 = sum(record.line_ids.filtered(lambda l: l.display_type =='tax' and l.tax_line_id and l.tax_line_id.amount == 5).mapped("secondary_balance"))
-                    record.amount_exempt = sum(record.line_ids.filtered(lambda l: l.display_type =='product' and 0 in l.tax_ids.mapped('amount')).mapped("secondary_balance"))
+                    record.amount_exempt = sum(record.line_ids.filtered(lambda l: l.display_type =='product' and (0 in l.tax_ids.mapped('amount') or not l.tax_ids)).mapped("secondary_balance"))
                     record.amount_taxable_imports = 0 
         else:
             super(AccountMove, self)._compute_fields_for_py_reports()
