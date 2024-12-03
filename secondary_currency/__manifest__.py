@@ -16,12 +16,17 @@
     'version': '17.0.0.1',
     'license': "OPL-1",
 
-    'depends': ['base', 'account', 'invoice_currency_rate'],
+    'depends': ['base', 'account', 'account_reports', 'invoice_currency_rate'],
 
     'data': [
         'views/res_company_views.xml',
         'views/account_move_views.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            'secondary_currency/static/src/components/**/*',
+        ],
+    },
     'demo': [
     ],
 }

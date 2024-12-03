@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <templates>
     <!-- Extension Data -->
-    <t t-name="account_report_multi_currency.AccountReportFiltercurrencies_data">
+    <t t-name="account_report_multi_currency.AccountReportFilterCurrencies_data">
         <Dropdown togglerClass="'btn btn-secondary'">
             <t t-set-slot="toggler">
-                <i class="fa fa-money me-1"/>Currencies: <t t-esc="controller.options.currencies_selected_name"/>
+                <i class="fa fa-money me-1"/>Currency: <t t-esc="controller.options.currencies_selected_name"/>
             </t>
 
             <t t-foreach="controller.options.currencies" t-as="currency" t-key="currency_index">
