@@ -28,9 +28,8 @@ class AccountMoveLine(models.Model):
         for line in self:
             line.secondary_currency_rate = line.move_id.invoice_secondary_currency_rate
 
-    @api.depends('balance')
+    @api.depends('balance','company_secondary_currency_id','currency_id','secondary_currency_rate','display_type',)
     def _compute_secondary_balance(self):
-        self._compute_company_secondary_currency_id()
         for line in self:
             if line.company_secondary_currency_id:
                 if line.display_type in ('line_section', 'line_note'):
