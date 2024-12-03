@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates>
+    <!-- Extension Data -->
+    <t t-name="account_report_multi_currency.AccountReportFiltercurrencies_data">
+        <Dropdown togglerClass="'btn btn-secondary'">
+            <t t-set-slot="toggler">
+                <i class="fa fa-money me-1"/>Currencies: <t t-esc="controller.options.currencies_selected_name"/>
+            </t>
+
+            <t t-foreach="controller.options.currencies" t-as="currency" t-key="currency_index">
+                <DropdownItem
+                        class="{ 'selected': currency.selected, 'ps-4': true }"
+                        onSelected="() => this.filterCurrency(currency)"
+                    >
+                    <t t-esc="currency.name"/>
+                </DropdownItem> 
+            </t>
+        </Dropdown>
+    </t>
+    <t t-name="account_report_multi_currency.AccountReportFilterRoundingUnitextend">
+        <Dropdown togglerClass="'btn btn-secondary'">
+            <t t-set-slot="toggler">
+                <t t-out="roundingUnitName(this.controller.options['rounding_unit'])"/>
+            </t>
+
+            <t t-foreach="controller.options.rounding_unit_names" t-as="roundingUnitValue" t-key="roundingUnitValue_index">
+                <DropdownItem
+                    class="{ 'selected': (controller.options.rounding_unit == roundingUnitValue) }"
+                    onSelected="() => this.filterRoundingUnit(roundingUnitValue)"
+                >
+                    <t t-out="roundingUnitName(roundingUnitValue)"/>
+                </DropdownItem>
+            </t>
+        </Dropdown>
+    </t>
+</templates>
