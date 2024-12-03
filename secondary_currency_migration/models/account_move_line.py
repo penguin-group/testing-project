@@ -32,11 +32,20 @@ class AccountMoveLine(models.Model):
                 self.env.cr.rollback()
 
     def compute_secondary_currency_data(self):
-        records = self.search([('secondary_balance', '=', False), ('move_id.state', 'not in', ['posted'])])
-        index = 0
-        records_count = len(records)
-        for record in records:
-            index += 1
-            record._compute_secondary_balance()
-            percentage_complete = index / records_count * 100
-            _logger.info(f'{percentage_complete:.2f}% | Processing {record.name}...')
+        query = """
+            UPDATE account_move_line
+            SET secondary_balance = (
+                CASE
+                    WHEN aml.display_type IN ('line_section', 'line_note') THEN 0
+                    WHEN aml.currency_id = secondary_currency.id THEN ROUND(aml.amount_currency, secondary_currency.decimal_places)
+                    ELSE ROUND(aml.balance / am.invoice_secondary_currency_rate, secondary_currency.decimal_places)
+                END
+            )
+            FROM account_move_line aml
+            JOIN account_move am ON am.id = aml.move_id
+            JOIN res_company company ON company.id = am.company_id
+            JOIN res_currency secondary_currency ON secondary_currency.id = company.sec_currency_id
+            WHERE aml.id = account_move_line.id
+            AND am.state NOT IN ('posted')
+        """
+        self.env.cr.execute(query)

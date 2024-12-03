@@ -66,7 +66,7 @@ class AccountMove(models.Model):
             _logger.error("There was an error during the migration. Check the logs for more information.")
 
     def compute_sec_currency_rates_with_zero_vals(self):
-        records = self.search([('freeze_currency_rate', '=', False), ('state', 'not in', ['draft'])])
+        records = self.search([('freeze_currency_rate', '=', False)])
         index = 0
         records_count = len(records)
         for record in records:
@@ -85,7 +85,7 @@ class AccountMove(models.Model):
             query = """
                         UPDATE account_move am
                         SET invoice_secondary_currency_rate = (
-                            SELECT rate 
+                            SELECT 1 / rcr.rate 
                             FROM res_currency_rate rcr
                             WHERE rcr.currency_id = %s
                               AND rcr.name <= %s
