@@ -31,21 +31,3 @@ class AccountMoveLine(models.Model):
                 _logger.error("Error while checking migration data: " + str(e))
                 self.env.cr.rollback()
 
-    def compute_secondary_currency_data(self):
-        query = """
-            UPDATE account_move_line
-            SET secondary_balance = (
-                CASE
-                    WHEN aml.display_type IN ('line_section', 'line_note') THEN 0
-                    WHEN aml.currency_id = secondary_currency.id THEN ROUND(aml.amount_currency, secondary_currency.decimal_places)
-                    ELSE ROUND(aml.balance / am.invoice_secondary_currency_rate, secondary_currency.decimal_places)
-                END
-            )
-            FROM account_move_line aml
-            JOIN account_move am ON am.id = aml.move_id
-            JOIN res_company company ON company.id = am.company_id
-            JOIN res_currency secondary_currency ON secondary_currency.id = company.sec_currency_id
-            WHERE aml.id = account_move_line.id
-            AND am.state NOT IN ('posted')
-        """
-        self.env.cr.execute(query)
