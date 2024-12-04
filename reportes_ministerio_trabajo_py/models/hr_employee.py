@@ -8,7 +8,7 @@ import datetime
 class HrEmployeeBase(models.AbstractModel):
     _inherit = 'hr.employee.base'
 
-    nombre = fields.Char(string='Nombres', required=True)
+    nombre = fields.Char(string='Nombres')
     apellido = fields.Char(string='Apellidos')
 
     children_ids = fields.One2many('hr.employee.children', 'employee_id', string='Hijos')

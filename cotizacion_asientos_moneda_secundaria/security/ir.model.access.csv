@@ -1,2 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_cotizacion_importacion_cotizacion_importacion,cotizacion_importacion.cotizacion_importacion,model_cotizacion_importacion_cotizacion_importacion,base.group_user,1,1,1,1
