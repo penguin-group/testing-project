@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="view_partner_form_inherit" model="ir.ui.view">
+            <field name="name">view.partner.form.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//page[@name='sales_purchases']" position="inside">
+                    <div invisible="not context.get('in_paraguay')">
+                        <group name="paraguay_data" string="Paraguay">
+                            <field name="foreign_default_supplier"/>
+                        </group>
+                    </div>
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+</odoo>

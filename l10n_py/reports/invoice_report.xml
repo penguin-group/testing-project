@@ -1,0 +1,664 @@
+<odoo>
+    <data>
+
+        <template id="invoice_report_template">
+            <t t-call="web.basic_layout">
+                <t t-call="web.html_container">
+                    <t t-foreach="docs" t-as="o">
+                        <t t-set="invoice_copy" t-value="'ORIGINAL'"/>
+                        <t t-if="o.state=='cancel'">
+                            <t t-set="watermark_message" t-value="'FACTURA ANULADA'"/>
+                        </t>
+                        <t t-elif="o.state=='draft'">
+                            <t t-set="watermark_message" t-value="'BORRADOR - NO VÁLIDO PARA CRÉDITO FISCAL'"/>
+                        </t>
+                        <t t-else="">
+                            <t t-set="watermark_message" t-value=""/>
+                        </t>
+                        <t t-call="l10n_py.invoice_document"/>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <template id="invoice_document">
+            <link rel='stylesheet' href="/l10n_py/static/src/css/invoice_report.css"/>
+            <div class="page">
+                <t t-set="inv_auth" t-value="o.journal_id.invoice_authorization_id"/>
+                <div class="col-xs-6" style="margin-left:2mm;">
+                    
+                    <!-- Header -->
+                    <table class="tabla">
+                        <tr>
+                            <td style="border-right: 1px solid black">
+                                <table style="width:100%;border:0px" id="tabla_logo_factura">
+                                    <tr style="border: 0px !important" class="text-center">
+                                        <td style="border: 0px" id="logo_factura">
+                                            <t t-if='o.company_id.logo'>
+                                                <img t-att-src='image_data_uri(o.company_id.logo)'
+                                                 style="width:80mm;height:20mm"/>
+                                            </t>
+                                        </td>
+                                    </tr>
+                                    <tr class="text-center" style="border:none !important">
+                                        <td style="border:none !important">
+                                            <strong>
+                                                <t t-esc="o.company_id.name"/>
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                    <tr class="text-center" style="border:none !important">
+                                        <td style="font-size:10px; border:none !important">
+                                            <strong style="font-size:12px !important">
+                                                <t t-esc="o.company_id.street"/>
+                                            </strong>
+                                            <br/>
+
+                                            <strong style="font-size:12px !important">Tel:
+                                                <t t-esc="o.company_id.phone"/>
+                                            </strong>
+                                            <br/>
+                                            <strong style="font-size:12px !important">Email:
+                                                <t t-esc="o.company_id.email"/>
+                                            </strong>
+                                            <br/>
+                                            <strong style="font-size:12px !important">Web:
+                                                <t t-esc="o.company_id.website"/>
+                                            </strong>
+                                            <br/>
+
+                                            <strong style="font-size:12px !important">
+                                                <t t-esc="o.company_id.city"/>
+                                                -
+                                                <t t-esc="o.company_id.country_id.name"/>
+                                            </strong>
+                                            <br/>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </td>
+                            
+                            <td width="30%" class="text-center" style="font-size:12px;vertical-align:middle">
+                                <strong class="campos">TIMBRADO N°
+                                    <t t-if="inv_auth.active == 1 ">
+                                        <span t-field="inv_auth.name"/>
+                                    </t>
+                                </strong>
+                                <br/>
+                                <span class="campos">Inicio de vigencia:
+                                    <t t-if="inv_auth.active == 1 ">
+                                        <span t-esc="inv_auth.start_date.strftime('%d/%m/%Y')"/>
+                                    </t>
+                                </span>
+                                <br/>
+                                <span class="campos">Fin de vigencia:
+                                    <t t-if="inv_auth.active == 1 ">
+                                        <span t-esc="inv_auth.end_date.strftime('%d/%m/%Y')"/>
+                                    </t>
+                                </span>
+                                <p class="campos">RUC:
+                                    <t t-esc="o.company_id.vat"/>
+                                </p>
+                                <br></br>
+                                <t t-if="o.move_type=='out_invoice'">
+                                    <p class="campos">FACTURA N°</p>
+                                </t>
+                                <t t-elif="o.move_type=='out_refund'">
+                                    <p class="campos">NOTA DE CREDITO N°</p>
+                                </t>
+                                <p class="campos">
+                                    <span class="num_factura text-center" style="font-size:20px !important" t-field="o.name"/>
+                                </p>
+                                <p class="campos">
+                                    <span id="original_duplicado" class="text-center">
+                                        <t t-esc="invoice_copy"/>
+                                    </span>
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div style="position:absolute;opacity:0.20;z-index:1000;transform:rotate(310deg);-webkit-transform:rotate(310deg);width:50%;margin-left:150px;margin-top:300px">
+                        <p id="marca_agua" style="font-size:40px">
+                            <t t-esc="watermark_message"/>
+                        </p>
+                    </div>
+
+                    <!-- Condition of sale -->
+                    <t t-if="o.move_type=='out_invoice'">
+                        <table class="tabla">
+                            <tr>
+                                <td class="campos text-right">
+                                    CONDICIÓN DE VENTA:
+                                </td>
+
+                                <t t-if="o.invoice_date and o.invoice_date_due">
+                                    <t t-if="o.invoice_date==o.invoice_date_due">
+                                        <td class="w-30 fs-16 ">Contado (X)</td>
+                                        <td class="w-30 fs-16 ">Crédito ( )</td>
+                                    </t>
+                                    <t t-if="o.invoice_date!=o.invoice_date_due">
+                                        <td class="w-30 fs-16 ">Contado ( )</td>
+                                        <td class="w-30 fs-16 ">Crédito (X)</td>
+                                    </t>
+                                </t>
+
+
+                            </tr>
+                        </table>
+                    </t>
+
+                    <!-- Invoice data -->
+                    <table class="tabla" id="encabezado">
+                        <col style="width:72%;"/>
+                        <col style="width:14%;"/>
+                        <col style="width:14%;"/>
+                        <tr>
+                            <td class="fs-16 text-left" style="padding-left:5px;">
+                                <t t-if="o.invoice_date">
+                                    <t t-set="invoice_date" t-value="o.invoice_date.strftime('%d/%m/%Y')"/>
+                                </t>
+                                <t t-else="">
+                                    <t t-set="invoice_date" t-value="'&#160;'"/>
+                                </t>
+                                <span>
+                                    <strong>FECHA DE EMISION:</strong>
+                                    <t t-esc="'&#160;' + invoice_date"/>
+                                </span>
+                            </td>
+                            <td colspan="2" class="fs-16 text-left" style="border-right:1px solid black;">
+
+                                <t t-if="o.invoice_date and o.invoice_date_due">
+                                    <t t-if="o.invoice_date_due > o.invoice_date and o.move_type=='out_invoice'">
+                                        <t t-set="invoice_date_due" t-value="o.invoice_date_due.strftime('%d/%m/%Y')"/>
+                                        <span>
+                                            <strong>VENCIMIENTO:</strong>
+                                            <t t-esc="'&#160;' + invoice_date_due"/>
+                                        </span>
+                                    </t>
+                                </t>
+                                
+                                <t t-else="">
+                                    <span/>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="fs-16 text-left" style="padding-left:5px;">
+                                <t t-if="o.partner_id.parent_id">
+                                    <t t-set="partner_name" t-value="o.partner_id.parent_id.name"/>
+                                </t>
+                                <t t-if="not o.partner_id.parent_id">
+                                    <t t-set="partner_name" t-value="o.partner_id.name"/>
+                                </t>
+                                <span>
+                                    <strong>NOMBRE:</strong>
+                                    <t t-esc="'&#160;' + partner_name"/>
+                                </span>
+                            </td>
+                            <td colspan="2" class="fs-16 text-left" style="border-right:1px solid black;">
+                                <t t-if="o.partner_id.parent_id">
+                                    <t t-set="ruc" t-value="o.partner_id.parent_id.vat"/>
+                                </t>
+                                <t t-if="not o.partner_id.parent_id">
+                                    <t t-set="ruc" t-value="o.partner_id.vat"/>
+                                </t>
+                                <span>
+                                    <strong>RUC:</strong>
+                                    <t t-esc="'&#160;' + ruc"/>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <t t-if="o.move_type == 'out_refund'">
+                                <td class="fs-16 text-left" style="padding-left:5px;">
+                                    <t t-if="o.partner_id.street">
+                                        <t t-set="partner_street" t-value="o.partner_id.street"/>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-set="partner_street" t-value="'&#160;'"/>
+                                    </t>
+                                    <t t-if="o.partner_id.city">
+                                        <t t-set="partner_city" t-value="' - ' + o.partner_id.city"/>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-set="partner_city" t-value="'&#160;'"/>
+                                    </t>
+                                    <t t-if="o.partner_id.country_id.name">
+                                        <t t-set="partner_country" t-value="' - ' + o.partner_id.country_id.name"/>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-set="partner_country" t-value="'&#160;'"/>
+                                    </t>
+                                    <span>
+                                        <strong>DIRECCIÓN:</strong>
+                                        <t t-esc="'&#160;' + partner_street + partner_city + partner_country"/>
+                                    </span>
+                                </td>
+                                <td colspan="2" class="fs-16 text-left" style="border-right:1px solid black;">
+                                    <t t-if="o.reversed_entry_id">
+                                        <t t-set="reversed_ducument" t-value="o.reversed_entry_id.name"/>
+                                    </t>
+                                    <t t-if="o.related_invoice_number">
+                                        <t t-set="reversed_ducument" t-value="o.related_invoice_number"/>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-set="reversed_ducument" t-value="'&#160;'"/>
+                                    </t>
+                                    <span>
+                                        <strong>FACTURA:</strong>
+                                        <t t-esc="'&#160;' + reversed_ducument"/>
+                                    </span>
+                                </td>
+                            </t>
+                            <t t-else="">
+                                <td colspan="3" class="fs-16 text-left" style="padding-left:5px;border-right:1px solid black;">
+                                    <t t-if="o.partner_id.street">
+                                        <t t-set="partner_street" t-value="o.partner_id.street"/>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-set="partner_street" t-value="'&#160;'"/>
+                                    </t>
+                                    <t t-if="o.partner_id.city">
+                                        <t t-set="partner_city" t-value="' - ' + o.partner_id.city"/>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-set="partner_city" t-value="'&#160;'"/>
+                                    </t>
+                                    <t t-if="o.partner_id.country_id.name">
+                                        <t t-set="partner_country" t-value="' - ' + o.partner_id.country_id.name"/>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-set="partner_country" t-value="'&#160;'"/>
+                                    </t>
+                                    <span>
+                                        <strong>DIRECCIÓN:</strong>
+                                        <t t-esc="'&#160;' + partner_street + partner_city + partner_country"/>
+                                    </span>
+                                </td>
+                            </t>
+                        </tr>
+                        <tr>
+                            <td class="fs-16 text-left" style="padding-left:5px;">
+                                <t t-if="o.partner_id.email">
+                                    <t t-set="email" t-value="o.partner_id.email"/>
+                                </t>
+                                <t t-else="">
+                                    <t t-set="email" t-value="'&#160;'"/>
+                                </t>
+                                <span>
+                                    <strong>EMAIL:</strong>
+                                    <t t-esc="'&#160;' + email"/>
+                                </span>
+                            </td>
+                            <td colspan="2" class="fs-16 text-left" style="border-right:1px solid black;">
+                                <t t-if="o.partner_id.phone">
+                                    <t t-set="partner_phone" t-value="o.partner_id.phone"/>
+                                </t>
+                                <t t-else="">
+                                    <t t-set="partner_phone" t-value="'&#160;'"/>
+                                </t>
+                                <span>
+                                    <strong>TEL:</strong>
+                                    <t t-esc="'&#160;' + partner_phone"/>
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- Invoice lines -->
+                    <table class="tabla" id="tituloDetalle">
+                        <tr class="text-center">
+                            <th rowspan="2" class="w-10p mt-5">
+                                <p class="campos">COD.</p>
+                            </th>
+                            <th rowspan="2" class="w-10p mt-5">
+                                <p class="campos">CANT.</p>
+                            </th>
+                            <th rowspan="2" class="w-40p mt-5">
+                                <p class="campos">DESCRIPCION</p>
+                            </th>
+                            <th rowspan="2" class="w-10p">
+                                <p class="campos">PRECIO UNITARIO</p>
+                            </th>
+                            <th rowspan="1" class="w-30p" colspan="3">
+                                <p class="campos ">VALOR DE VENTA</p>
+                            </th>
+                        </tr>
+                        <tr class="text-center">
+                            <th class="w-10p">
+                                <p class="campos ">EXENTA</p>
+                            </th>
+                            <th class="w-10p">
+                                <p class="campos">IVA 5%</p>
+                            </th>
+                            <th class="w-10p">
+                                <p class="campos">IVA 10%</p>
+                            </th>
+                        </tr>
+                    </table>
+                    <t t-set="table_style" t-value="'t-detalle-qr'"/>
+                    <table t-att-class="table_style" id="tablaDetalle">
+                        <t t-set="max_line" t-value="0"/>
+                        <t t-set="subtotalExentas" t-value="0"/>
+                        <t t-set="subtotalCinco" t-value="0"/>
+                        <t t-set="subtotalDiez" t-value="0"/>
+                        <t t-foreach="o.invoice_line_ids" t-as="l">
+                            <t t-if="l.display_type == 'line_note' or l.display_type == 'line_section'">
+                                <tr class="fs-14" style="height:14px;line:height:14px;font-style:italic;">
+                                    <td class="w-10p no-border lineaDetalle text-center" style="word-break:break-all;">
+                                        <span></span>
+                                    </td>
+                                    <td class="w-10p no-border lineaDetalle text-center">
+                                        <span></span>
+                                    </td>
+                                    <td class="w-40p no-border lineaDetalle" style="text-align:left; !important">
+                                        <p>
+                                            <span t-esc="l.name"/>
+                                        </p>
+                                    </td>
+                                    <td class="w-10p no-border lineaDetalle">
+                                        <span></span>
+                                    </td>
+                                    <td class="w-10p lineaDetalle">
+                                        <span></span>
+                                    </td>
+                                    <td class="w-10p lineaDetalle">
+                                        <span></span>
+                                    </td>
+                                    <td class="w-10p lineaDetalle">
+                                        <span></span>
+                                    </td>
+                                </tr>
+                            </t>
+                            <t t-else="">  <!-- Linea de producto -->
+                                <tr class="fs-14" style="height:14px;line:height:14px">
+                                    <td class="w-10p fs-11 no-border lineaDetalle text-center"
+                                        style="word-break: break-all;">
+                                        <t t-if="l.product_id and l.product_id.default_code">
+                                            <span t-field="l.product_id.default_code"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span></span>
+                                        </t>
+                                    </td>
+                                    <td class="w-10p no-border lineaDetalle text-center">
+                                        <span t-esc="l.quantity"/>
+                                    </td>
+                                    <td class="w-40p no-border lineaDetalle"
+                                        style="text-align:left !important">
+                                        <t t-esc="l.name"/>
+                                    </td>
+                                    <td class="w-10p no-border lineaDetalle text-center">
+                                        <span
+                                                t-esc="o.format_amount(l.price_unit - (l.price_unit*l.discount/100))"/>
+                                    </td>
+                                    <t t-if="l.tax_ids.amount==0.0000">
+                                        <td class="w-10p lineaDetalle text-center" id="exentasCampo">
+                                            <t t-set="subtotal1"
+                                               t-value="(l.price_unit - (l.price_unit*l.discount/100)) * l.quantity"/>
+                                            <span t-esc="o.format_amount(subtotal1)"/>
+                                            <t t-set="subtotalExentas"
+                                               t-value="subtotalExentas+subtotal1"/>
+                                        </td>
+                                        <td class="w-10p lineaDetalle" id="cincoCampo">
+                                            <span></span>
+                                        </td>
+                                        <td class="w-10p lineaDetalle" id="diezCampo">
+                                            <span></span>
+                                        </td>
+                                    </t>
+                                    <t t-if="l.tax_ids.amount==5.0000">
+                                        <td class="w-10p lineaDetalle" id="exentasCampo">
+                                            <span></span>
+                                        </td>
+                                        <td class="w-10p lineaDetalle text-center" id="cincoCampo">
+                                            <t t-set="subtotal1"
+                                               t-value="(l.price_unit - (l.price_unit*l.discount/100)) * l.quantity"/>
+                                            <span t-esc="o.format_amount(subtotal1)"/>
+                                            <t t-set="subtotalCinco" t-value="subtotalCinco+subtotal1"/>
+                                        </td>
+                                        <td class="w-10p lineaDetalle" id="diezCampo">
+                                            <span></span>
+                                        </td>
+                                    </t>
+                                    <t t-if="l.tax_ids.amount==10.0000">
+                                        <td class="w-10p lineaDetalle" id="exentasCampo">
+                                            <span></span>
+                                        </td>
+                                        <td class="w-10p lineaDetalle" id="cincoCampo">
+                                            <span></span>
+                                        </td>
+                                        <td class="w-10p lineaDetalle text-center" id="diezCampo">
+                                            <t t-set="subtotal1"
+                                               t-value="(l.price_unit - (l.price_unit*l.discount/100)) * l.quantity"/>
+                                            <span t-esc="o.format_amount(subtotal1)"/>
+                                            <t t-set="subtotalDiez" t-value="subtotalDiez+subtotal1"/>
+                                        </td>
+                                    </t>
+                                </tr>
+                            </t>
+                        </t>
+                        <t t-if="o.journal_id.max_lines > 0">
+                            <t t-foreach="o.journal_id.max_lines-len(o.invoice_line_ids)"
+                               t-as="restante">
+                                <tr>
+                                    <td class="lineaDetalle"></td>
+                                    <td class="lineaDetalle"></td>
+                                    <td class="lineaDetalle"></td>
+                                    <td class="lineaDetalle"></td>
+                                    <td class="lineaDetalle"></td>
+                                    <td class="lineaDetalle"></td>
+                                    <td class="lineaDetalle"></td>
+                                </tr>
+                            </t>
+                        </t>
+                        <t t-else="">
+                            <t t-foreach="20-len(o.invoice_line_ids)"
+                               t-as="restante">
+                                <tr>
+                                    <td class="lineaDetalle"></td>
+                                    <td class="lineaDetalle"></td>
+                                    <td class="lineaDetalle"></td>
+                                    <td class="lineaDetalle"></td>
+                                    <td class="lineaDetalle"></td>
+                                    <td class="lineaDetalle"></td>
+                                    <td class="lineaDetalle"></td>
+                                </tr>
+                            </t>
+                        </t>
+                    </table>
+
+                    <!-- Sub-Total -->
+                    <table class="tabla" id="tablaImpuesto">
+                        <tr class="fs-14">
+                            <t t-set="subtotalExentas" t-value="0"/>
+                            <t t-set="subtotalCinco" t-value="0"/>
+                            <t t-set="subtotalDiez" t-value="0"/>
+                            <t t-set="ivaCinco" t-value="0"/>
+                            <t t-set="ivaDiez" t-value="0"/>
+                            <t t-foreach="o.invoice_line_ids" t-as="l">
+                                <t t-if="l.tax_ids.amount==0.0000">
+                                    <t t-set="subtotalEx" t-value="(l.price_unit - (l.price_unit*l.discount/100)) * l.quantity"/>
+                                    <t t-set="subtotalExentas" t-value="subtotalExentas+subtotalEx"/>
+                                </t>
+                                <t t-if="l.tax_ids.amount==5.0000">
+                                    <t t-set="subtotal5" t-value="(l.price_unit - (l.price_unit*l.discount/100)) * l.quantity"/>
+                                    <t t-set="ivaCinco" t-value="ivaCinco + ((l.price_unit - (l.price_unit*l.discount/100)) * l.quantity  / 21)"/>
+                                    <t t-set="subtotalCinco" t-value="subtotalCinco+subtotal5"/>
+                                </t>
+                                <t t-if="l.tax_ids.amount==10.0000">
+                                    <t t-set="subtotal10" t-value="(l.price_unit - (l.price_unit*l.discount/100)) * l.quantity"/>
+                                    <t t-set="ivaDiez" t-value="ivaDiez + ((l.price_unit - (l.price_unit*l.discount/100)) * l.quantity / 11)"/>
+                                    <t t-set="subtotalDiez" t-value="subtotalDiez+subtotal10"/>
+                                </t>
+                            </t>
+                            <td class="campos w-60p" colspan="4" style="border:1px solid black">
+                                <span class="campos" style="padding-top:10px;padding-bottom:10px;">SUB TOTALES:</span>
+                            </td>
+                            <td class="w-10p lineaDetalle" style="border:none !important">
+                            </td>
+                            <td class="w-10p lineaDetalle text-center" id="exentasCampo" style="border:1px solid black">
+                                <span t-esc="o.format_amount(subtotalExentas)"/>
+                            </td>
+                            <td class="w-10p lineaDetalle text-center" id="cincoCampo" style="border:1px solid black">
+                                <span t-esc="o.format_amount(subtotalCinco)"/>
+                            </td>
+                            <td class="w-10p lineaDetalle text-center" id="diezCampo" style="border:1px solid black">
+                                <span t-esc="o.format_amount(subtotalDiez)"/>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- Total -->
+                    <table class="tabla">
+                        <tr class="fs-14">
+                            <td class="campos w-20p">
+                                <span class="campos" style="padding-top:10px;padding-bottom:10px;">TOTAL
+                                    A PAGAR:
+                                </span>
+                            </td>
+                            <td class="w-60p">
+                                <span>
+                                    <t t-esc="o.currency_id.currency_unit_label"/>
+                                </span>
+                                <span></span>
+                                <span t-esc="o.amount_to_text(o.amount_total, o.currency_id)"/>
+                            </td>
+                            <td class="w-20p text-right totalPagar">
+                                <t t-set="totalPagarNumeros" t-value="o.amount_total"/>
+                                <span class="text-right" t-esc="o.format_amount(totalPagarNumeros)"/>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- Taxes -->
+                    <table class="tabla" id="IVA">
+                        <tr class="fs-14">
+                            <t t-set="totalIVA" t-value="0"/>
+                            <td class="text-left w-30p">
+                                <p class="campos">LIQUIDACIÓN DEL IVA:</p>
+                            </td>
+                            <td class="campos w-5p">
+                                5%:
+                            </td>
+                            <td id="ivaCincoCampo" class="w-10p">
+                                <span t-esc="o.format_amount(ivaCinco)"/>
+                                <t t-set="totalIVA" t-value="totalIVA+ivaCinco"/>
+                            </td>
+                            <td class="campos w-5p">
+                                10%:
+                            </td>
+                            <td id="ivaDiezCampo" class="w-10p">
+                                <span t-esc="o.format_amount(ivaDiez)"/>
+                                <t t-set="totalIVA" t-value="totalIVA+ivaDiez"/>
+                            </td>
+                            <td>
+                                <td class="campos w-20p;text-right">
+                                    TOTAL IVA:
+                                </td>
+                                <td class="w-25p text-right totalPagar">
+                                    <span t-esc="o.format_amount(totalIVA)"/>
+                                </td>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- QR Code -->
+                        <table class="tabla" id="qr_section_table">
+                            <tr height="160px">
+                                <td style="width:20%">
+                                    <div style="display:table-cell;vertical-align:middle;">
+                                        <img t-att-src="image_data_uri(o.qr_code)"
+                                             style="max-width:150px;max-height:150px;margin-left:15px"
+                                        />
+                                    </div>
+                                </td>
+                                <td style="font-size:10px;width:80%;padding:2px;color:black">
+                                    <div style="display:table-cell;vertical-align:top">
+                                        <t t-if="o.journal_id.invoice_footer">
+                                            <t t-raw="o.journal_id.invoice_footer"/>
+                                        </t>
+                                        <t t-else="">
+                                            <span></span>
+                                        </t>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                    <!-- Self-printable authorization number -->
+                    <table style="width:100%;border:1px solid black">
+                        <tr style="border:1px solid black">
+                            <td style="border:1px solid black;width:70%; font-size:12px;vertical-align:middle">
+                                <span>AUTORIZADO COMO AUTOIMPRESOR Y TIMBRADO DE DOCUMENTOS NRO:</span>
+                                <t t-if="inv_auth.active == 1 ">
+                                    <span t-field="inv_auth.self_printer_authorization"/>
+                                </t>
+                            </td>
+                            <td style="border:1px solid black;width:30%; font-size:12px">
+                                <span>Original: Cliente - Duplicado: Archivo Tributario</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </template>
+
+        <template id="invoice_report_template_duplicate">
+            <t t-call="web.basic_layout">
+                <t t-call="web.html_container">
+                    <t t-foreach="docs" t-as="o">
+                        <t t-set="invoice_copy" t-value="'DUPLICADO'"/>
+                        <t t-if="o.state=='cancel'">
+                            <t t-set="watermark_message" t-value="'FACTURA ANULADA'"/>
+                        </t>
+                        <t t-else="">
+                            <t t-set="watermark_message" t-value="'DUPLICADO'"/>
+                        </t>
+                        <t t-call="l10n_py.invoice_document"/>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <record id="paperformat_invoice" model="report.paperformat">
+            <field name="name">Facturas</field>
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">5</field>
+            <field name="margin_bottom">5</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">1</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <record id="invoice_report_action" model="ir.actions.report">
+            <field name="name">Self-printed Invoice (Original)</field>
+            <field name="model">account.move</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">l10n_py.invoice_report_template</field>
+            <field name="report_file">l10n_py.invoice_report_template</field>
+            <field name="print_report_name">(object.name)</field>
+            <field name="paperformat_id" ref="l10n_py.paperformat_invoice"/>
+            <field name="binding_model_id" ref="model_account_move"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <record id="invoice_duplicate_report_action" model="ir.actions.report">
+            <field name="name">Self-printed Invoice (Duplicate)</field>
+            <field name="model">account.move</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">l10n_py.invoice_report_template_duplicate</field>
+            <field name="report_file">l10n_py.invoice_report_template_duplicate</field>
+            <field name="print_report_name">(object.name)</field>
+            <field name="paperformat_id" ref="l10n_py.paperformat_invoice"/>
+            <field name="binding_model_id" ref="model_account_move"/>
+            <field name="binding_type">report</field>
+        </record>
+
+    </data>
+</odoo>

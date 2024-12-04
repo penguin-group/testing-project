@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+    
+        <record id="edit_secondary_currency_rate_view_form" model="ir.ui.view">
+            <field name="name">edit.secondary.currency.rate.view.form</field>
+            <field name="model">edit.secondary.currency.rate</field>
+            <field name="arch" type="xml">
+                <form string="Edit Secondary Currency Rate">
+                    <sheet>
+                        <group>
+                            <field name="secondary_currency_rate" />
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="apply_secondary_currency_rate" string="Apply" type="object" class="btn-primary"/>
+                        <button string="Cancel" type="object" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="edit_secondary_currency_rate_action" model="ir.actions.act_window">
+            <field name="name">Edit Secondary Currency Rate</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">edit.secondary.currency.rate</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    
+    </data>
+    
+
+</odoo>

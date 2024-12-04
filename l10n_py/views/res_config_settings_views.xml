@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+
+        <record id="res_config_settings_view_form_inherit" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="account.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//block[@id='account_digitalization']" position="after">
+                    <div invisible="not context.get('in_paraguay')">
+                        <block title="Inventory Book Report">
+                            <setting string="Settings of the Report Structures used for the Inventory Book.">
+                                <div class="content-group">
+                                    <div class="row mt16 ms-2">
+                                        <label for="inventory_book_base_report_bs" class="col-md-6 p-0 m-0 o_light_label"/>
+                                        <field name="inventory_book_base_report_bs" class="col-lg-6 p-0" required="True"/>
+                                    </div>
+                                    <div class="row mt16 ms-2">
+                                        <label for="show_inventory_book_base_report_bs_details" class="col-md-6 p-0 m-0 o_light_label"/>
+                                        <field name="show_inventory_book_base_report_bs_details" class="col-lg-6 p-0" required="True"/>
+                                    </div>
+                                    <div class="row mt16 ms-2">
+                                        <label for="inventory_book_base_report_is" class="col-md-6 p-0 m-0 o_light_label"/>
+                                        <field name="inventory_book_base_report_is" class="col-lg-6 p-0" required="True"/>
+                                    </div>
+                                </div>
+                            </setting>
+                        </block>
+                    </div>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>
