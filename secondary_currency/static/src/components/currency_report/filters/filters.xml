@@ -5,7 +5,7 @@
             <xpath expr="." position="inside">
                 <t t-if="'currencies' in controller.options">
                     <div id="filter_currencies">
-                        <t t-call="account_report_multi_currency.AccountReportFiltercurrencies_data"/>
+                        <t t-call="account_report_multi_currency.AccountReportFilterCurrencies_data"/>
                     </div>
                 </t>
             </xpath>
@@ -15,9 +15,8 @@
             <xpath expr="." position="inside">
                 <t t-if="'currencies' in controller.options">
                     <div id="filter_currencies">
-                        <t t-call="account_report_multi_currency.AccountReportFiltercurrencies_data"/>
+                        <t t-call="account_report_multi_currency.AccountReportFilterCurrencies_data"/>
                     </div>
-                    
                 </t>
             </xpath>    
         </t>
