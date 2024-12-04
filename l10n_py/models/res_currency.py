@@ -58,7 +58,7 @@ class Currency(models.Model):
         return from_currency.with_company(company).with_context(to_currency=to_currency.id, date=str(date)).buying_inverse_rate
 
     @api.model
-    def _get_conversion_rate(self, from_currency, to_currency, rate_type='sell', company=None, date=None):
+    def _get_conversion_rate(self, from_currency, to_currency, company=None, date=None, rate_type='sell'):
         if from_currency == to_currency:
             return 1
         company = company or self.env.company
