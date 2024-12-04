@@ -1,3 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_multicurrency_adjustment1,access_multicurrency_adjustment1,model_secondary_currency_adjustment,base.group_user,1,1,1,1
-access_multicurrency_adjustment2,access_multicurrency_adjustment2,model_secondary_currency_adjustment_line,base.group_user,1,1,1,1
