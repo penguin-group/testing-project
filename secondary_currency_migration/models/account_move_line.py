@@ -31,12 +31,3 @@ class AccountMoveLine(models.Model):
                 _logger.error("Error while checking migration data: " + str(e))
                 self.env.cr.rollback()
 
-    def compute_secondary_currency_data(self):
-        records = self.search([('secondary_balance', '=', False), ('move_id.state', 'not in', ['posted'])])
-        index = 0
-        records_count = len(records)
-        for record in records:
-            index += 1
-            record._compute_secondary_balance()
-            percentage_complete = index / records_count * 100
-            _logger.info(f'{percentage_complete:.2f}% | Processing {record.name}...')
