@@ -82,7 +82,7 @@ class Currency(models.Model):
         assert to_currency, "convert amount to unknown currency"
         # apply conversion rate
         if from_amount:
-            to_amount = from_amount * self._get_conversion_rate(self, to_currency, rate_type, company, date)
+            to_amount = from_amount * self._get_conversion_rate(self, to_currency, company, date, rate_type)
         else:
             return 0.0
 
