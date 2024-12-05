@@ -1,4 +1,4 @@
-name: Merge master into dev and staging on hotfix PR merge
+name: Merge master into qa and staging on hotfix PR merge
 
 on:
   pull_request:
@@ -36,12 +36,12 @@ jobs:
         git config --global user.name "GitHub Actions"
         git config --global user.email "actions@github.com"
 
-    - name: Merge master into dev
+    - name: Merge master into qa
       if: env.proceed == 'true'
       run: |
-        git checkout dev
-        git merge master || { echo "Merge conflict in dev, aborting"; exit 1; }
-        git push origin dev || { echo "Failed to push to dev"; exit 1; }
+        git checkout qa
+        git merge master || { echo "Merge conflict in qa, aborting"; exit 1; }
+        git push origin qa || { echo "Failed to push to qa"; exit 1; }
 
     - name: Merge master into staging
       if: env.proceed == 'true'
