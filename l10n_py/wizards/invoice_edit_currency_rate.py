@@ -5,25 +5,25 @@ class InvoiceEditCurrencyRate(models.TransientModel):
     _description = 'Edit Currency Rate'
 
     currency_rate = fields.Float(
-        string='Currency Rate', 
-        digits=0, 
-        compute='compute_currency_rate', 
-        inverse='inverse_currency_rate'
-        store=True, 
+        string='Currency Rate',
+        digits=(12,12),
+        store=True,
     )
     inverse_currency_rate = fields.Float(
         string='Inverse Currency Rate', 
-        digits=0, 
-        compute='inverse_currency_rate', 
-        inverse='compute_currency_rate',
+        digits=(12,12),
         store=True
     )
 
-    def compute_currency_rate(self):
-        self.currency_rate = 1 / self.inverse_currency_rate
+    @api.onchange('currency_rate')
+    def _onchange_currency_rate(self):
+        for record in self:
+            record.inverse_currency_rate = 1 / self.currency_rate
 
-    def inverse_currency_rate(self):
-        self.inverse_currency_rate = 1 / self.currency_rate
+    @api.onchange('inverse_currency_rate')
+    def _onchange_inverse_currency_rate(self):
+        for record in self:
+            record.currency_rate = 1 / self.inverse_currency_rate
 
     def _get_invoice(self):
         return self.env['account.move'].browse(self._context.get('active_id', False))
