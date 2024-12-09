@@ -81,19 +81,19 @@
                             
                             <td width="30%" class="text-center" style="font-size:12px;vertical-align:middle">
                                 <strong class="campos">TIMBRADO N°
-                                    <t t-if="inv_auth.active == 1 ">
+                                    <t t-if="inv_auth.is_valid == 1 ">
                                         <span t-field="inv_auth.name"/>
                                     </t>
                                 </strong>
                                 <br/>
                                 <span class="campos">Inicio de vigencia:
-                                    <t t-if="inv_auth.active == 1 ">
+                                    <t t-if="inv_auth.is_valid == 1 ">
                                         <span t-esc="inv_auth.start_date.strftime('%d/%m/%Y')"/>
                                     </t>
                                 </span>
                                 <br/>
                                 <span class="campos">Fin de vigencia:
-                                    <t t-if="inv_auth.active == 1 ">
+                                    <t t-if="inv_auth.is_valid == 1 ">
                                         <span t-esc="inv_auth.end_date.strftime('%d/%m/%Y')"/>
                                     </t>
                                 </span>
@@ -593,7 +593,7 @@
                         <tr style="border:1px solid black">
                             <td style="border:1px solid black;width:70%; font-size:12px;vertical-align:middle">
                                 <span>AUTORIZADO COMO AUTOIMPRESOR Y TIMBRADO DE DOCUMENTOS NRO:</span>
-                                <t t-if="inv_auth.active == 1 ">
+                                <t t-if="inv_auth.is_valid == 1 ">
                                     <span t-field="inv_auth.self_printer_authorization"/>
                                 </t>
                             </td>
