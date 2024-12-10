@@ -7,7 +7,7 @@ on:
       - master
 
 jobs:
-  merge_master_to_staging_and_dev:
+  merge_master_to_staging_and_qa:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
@@ -36,16 +36,18 @@ jobs:
         git config --global user.name "GitHub Actions"
         git config --global user.email "actions@github.com"
 
-    - name: Merge master into qa
-      if: env.proceed == 'true'
-      run: |
-        git checkout qa
-        git merge master || { echo "Merge conflict in qa, aborting"; exit 1; }
-        git push origin qa || { echo "Failed to push to qa"; exit 1; }
-
     - name: Merge master into staging
       if: env.proceed == 'true'
       run: |
+        git fetch origin
         git checkout staging
         git merge master || { echo "Merge conflict in staging, aborting"; exit 1; }
         git push origin staging || { echo "Failed to push to staging"; exit 1; }
+
+    - name: Merge master into qa
+      if: env.proceed == 'true'
+      run: |
+        git fetch origin
+        git checkout qa
+        git merge master || { echo "Merge conflict in qa, aborting"; exit 1; }
+        git push origin qa || { echo "Failed to push to qa"; exit 1; }
