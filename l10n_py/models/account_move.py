@@ -168,7 +168,7 @@ class AccountMove(models.Model):
                 record.supplier_invoice_authorization_id =  self.env['invoice.authorization'].search([
                                                                 ('document_type', 'in', ['in_invoice', 'in_refund']), 
                                                                 ('partner_id', '=', record.partner_id.id),
-                                                                ('active', '=', True),
+                                                                ('is_valid', '=', True),
                                                                 ('end_date', '>=', record.invoice_date)
                                                             ], order="end_date", limit=1)
             else:

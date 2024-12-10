@@ -13,7 +13,7 @@
             <field name="initial_invoice_number">1</field>
             <field name="final_invoice_number">9999999</field>
             <field name="self_printer_authorization">194852364</field>
-            <field name="active">True</field>
+            <field name="is_valid">True</field>
             <field name="company_id" ref="base.main_company"/>
         </record>
 
@@ -27,7 +27,7 @@
             <field name="expedition_point_number">005</field>
             <field name="initial_invoice_number">100</field>
             <field name="final_invoice_number">9999999</field>
-            <field name="active">True</field>
+            <field name="is_valid">True</field>
             <field name="company_id" ref="base.main_company"/>
         </record>
     
