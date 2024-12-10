@@ -15,7 +15,7 @@ class AccountAsset(models.Model):
             cnt += 1
             percentage_completed = (cnt / total) * 100
             _logger.info(f"{percentage_completed:.2f}% Completed")
-            depreciation_moves = asset.depreciation_move_ids.filtered(lambda m: m.date >= datetime.date(2024, 11, 1))
+            depreciation_moves = asset.depreciation_move_ids.filtered(lambda m: m.date >= datetime.date(2024, 12, 1))
             for move in depreciation_moves:
                 move.recompute_balance()
                 
