@@ -424,14 +424,17 @@ class AccountMove(models.Model):
         return result
 
     def get_receipt_type(self):
-        if self.res90_type_receipt:
-            return int(self.res90_type_receipt)
-        elif self.move_type in ['in_invoice', 'out_invoice']:
-            return 109
-        elif self.move_type in ['in_refund', 'out_refund']:
-            return 110
-        else:
-            return ''
+        try:
+            if self.res90_type_receipt:
+                return int(self.res90_type_receipt)  # Convert the string to an integer
+            elif self.move_type in ['in_invoice', 'out_invoice']:
+                return 109
+            elif self.move_type in ['in_refund', 'out_refund']:
+                return 110
+            else:
+                return ''
+        except ValueError:
+            return ''  # Return an empty string if conversion fails
 
     def get_receipt_date(self):
         return self.date.strftime('%d/%m/%Y')
