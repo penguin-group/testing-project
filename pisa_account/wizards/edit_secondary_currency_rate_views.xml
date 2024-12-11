@@ -11,6 +11,7 @@
                     <sheet>
                         <group>
                             <field name="secondary_currency_rate" />
+                            <field name="inverse_secondary_currency_rate" />
                         </group>
                     </sheet>
                     <footer>
