@@ -1,55 +1,39 @@
-name: Merge master into qa and staging on hotfix PR merge
+name: Merge Master to Staging and QA
 
 on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '**.md'
   pull_request:
     types: [closed]
     branches:
       - master
 
 jobs:
-  merge_master_to_staging_and_qa:
-    if: github.event.pull_request.merged == true
+  merge_to_staging_and_qa:
     runs-on: ubuntu-latest
-
+    if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'hotfix/')
     steps:
-    - name: Check if PR branch name starts with 'hotfix/'
-      id: branch_check
-      run: |
-        BRANCH_NAME=$(echo "${{ github.event.pull_request.head.ref }}")
-        if [[ "$BRANCH_NAME" == hotfix/* ]]; then
-          echo "Branch is a hotfix branch. Proceeding with merge."
-          echo "proceed=true" >> $GITHUB_ENV
-        else
-          echo "Branch is not a hotfix branch. Skipping merge."
-          echo "proceed=false" >> $GITHUB_ENV
-        fi
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
-    - name: Checkout repository
-      uses: actions/checkout@v3
-      if: env.proceed == 'true'
-      with:
-        ref: master
+      - name: Set up Git
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
 
-    - name: Set up Git
-      if: env.proceed == 'true'
-      run: |
-        git config --global user.name "GitHub Actions"
-        git config --global user.email "actions@github.com"
+      - name: Merge master to staging
+        run: |
+          git checkout staging
+          git merge --no-ff master -m "Merge master into staging [skip ci]"
+          git push origin staging
 
-    - name: Merge master into staging
-      if: env.proceed == 'true'
-      run: |
-        git fetch origin
-        git checkout staging
-        git pull origin staging
-        git pull origin master --rebase || { echo "Merge conflict in staging, aborting"; exit 1; }
-        git push origin staging || { echo "Failed to push to staging"; exit 1; }
-
-    - name: Merge master into qa
-      if: env.proceed == 'true'
-      run: |
-        git fetch origin
-        git checkout qa
-        git pull origin qa
-        git pull origin master --rebase || { echo "Merge conflict in qa, aborting"; exit 1; }
-        git push origin qa || { echo "Failed to push to qa"; exit 1; }
+      - name: Merge master to QA
+        run: |
+          git checkout qa
+          git merge --no-ff master -m "Merge master into QA [skip ci]"
+          git push origin qa
