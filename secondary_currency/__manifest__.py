@@ -13,10 +13,10 @@
     'website': "https://www.pengin.digital",
 
     'category': 'Accounting',
-    'version': '17.0.0.1',
+    'version': '18.0.0.1',
     'license': "OPL-1",
 
-    'depends': ['base', 'account', 'account_reports', 'invoice_currency_rate'],
+    'depends': ['base', 'account', 'account_reports'],
 
     'data': [
         'views/res_company_views.xml',

@@ -1,11 +1,12 @@
 /** @odoo-module **/
 
 import { companyService as baseCompanyService } from "@web/webclient/company_service"
+import { user } from "@web/core/user";
 
 const originalStart = baseCompanyService.start;
 
-baseCompanyService.start = async function(env, { user, router, action }) {
-    const result = originalStart.call(this, env, { user, router, action });
+baseCompanyService.start = async function(env, {router, action }) {
+    const result = originalStart.call(this, env, {router, action });
     var in_paraguay = false;
     
     // Fetch in_paraguay result
