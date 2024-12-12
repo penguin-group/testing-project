@@ -4,12 +4,12 @@
         <record id="book_registration_report_tree" model="ir.ui.view" >
             <field name="name">book.registration.report.tree</field>
             <field name="model">book.registration.report</field>
-            <field name="arch" type="xml">
-                <tree>
+            <field name="arch" type="xml"> 
+                <list>
                     <field name="name" />
                     <field name="page_quantity" />
                     <field name="company_id" />
-                </tree>
+                </list>
             </field>
         </record>
 
@@ -58,7 +58,7 @@
         <record id="book_registration_report_action" model="ir.actions.act_window" >
             <field name="name">Book Registration Report</field>
             <field name="res_model">book.registration.report</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>
             <field name="domain">[("active", "in", [True, False])]</field>
         </record>
 

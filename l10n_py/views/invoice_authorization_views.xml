@@ -38,7 +38,7 @@
             <field name="name">invoice.authorization.view.tree</field>
             <field name="model">invoice.authorization</field>
             <field name="arch" type="xml">
-                <tree string="Invoice Authorization">
+                <list string="Invoice Authorization">
                     <field name="document_type"/>
                     <field name="start_date"/>
                     <field name="end_date"/>
@@ -46,14 +46,14 @@
                     <field name="expedition_point_number"/>
                     <field name="initial_invoice_number" optional="hide"/>
                     <field name="final_invoice_number" optional="hide"/>
-                </tree>
+                </list>
             </field>
         </record>
 
         <record id="invoice_authorization_action" model="ir.actions.act_window">
             <field name="name">Invoice Authorization</field>
             <field name="res_model">invoice.authorization</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">list,form</field>
             <field name="domain">[]</field>
             <field name="context">{}</field>
         </record>
