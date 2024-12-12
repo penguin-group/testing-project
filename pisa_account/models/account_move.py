@@ -98,18 +98,18 @@ class AccountMove(models.Model):
             for record in self:
                 if record.move_type == "in_invoice" and record.import_clearance:
                     # Handle import clearance invoices
-                    record.amount_vat10 = sum(record.line_ids.filtered(lambda l: l.display_type =='product' and l.account_id.vat_import and 0 in l.tax_ids.mapped('amount')).mapped("secondary_balance"))
+                    record.amount_vat10 = abs(sum(record.line_ids.filtered(lambda l: l.display_type =='product' and l.account_id.vat_import and 0 in l.tax_ids.mapped('amount')).mapped("secondary_balance")))
                     record.amount_base10 = record.amount_vat10 * 10
                     record.amount_base5 = 0
                     record.amount_vat5 = 0
                     record.amount_exempt = 0
                     record.amount_taxable_imports = record.amount_base10
                 else:
-                    record.amount_base10 = sum(record.line_ids.filtered(lambda l: l.display_type =='product' and 10 in l.tax_ids.mapped('amount')).mapped("secondary_balance"))
-                    record.amount_vat10 = sum(record.line_ids.filtered(lambda l: l.display_type =='tax' and l.tax_line_id and l.tax_line_id.amount == 10).mapped("secondary_balance"))
-                    record.amount_base5 = sum(record.line_ids.filtered(lambda l: l.display_type =='product' and 5 in l.tax_ids.mapped('amount')).mapped("secondary_balance"))
-                    record.amount_vat5 = sum(record.line_ids.filtered(lambda l: l.display_type =='tax' and l.tax_line_id and l.tax_line_id.amount == 5).mapped("secondary_balance"))
-                    record.amount_exempt = sum(record.line_ids.filtered(lambda l: l.display_type =='product' and (0 in l.tax_ids.mapped('amount') or not l.tax_ids)).mapped("secondary_balance"))
+                    record.amount_base10 = abs(sum(record.line_ids.filtered(lambda l: l.display_type =='product' and 10 in l.tax_ids.mapped('amount')).mapped("secondary_balance")))
+                    record.amount_vat10 = abs(sum(record.line_ids.filtered(lambda l: l.display_type =='tax' and l.tax_line_id and l.tax_line_id.amount == 10).mapped("secondary_balance")))
+                    record.amount_base5 = abs(sum(record.line_ids.filtered(lambda l: l.display_type =='product' and 5 in l.tax_ids.mapped('amount')).mapped("secondary_balance")))
+                    record.amount_vat5 = abs(sum(record.line_ids.filtered(lambda l: l.display_type =='tax' and l.tax_line_id and l.tax_line_id.amount == 5).mapped("secondary_balance")))
+                    record.amount_exempt = abs(sum(record.line_ids.filtered(lambda l: l.display_type =='product' and (0 in l.tax_ids.mapped('amount') or not l.tax_ids)).mapped("secondary_balance")))
                     record.amount_taxable_imports = 0 
         else:
             super(AccountMove, self)._compute_fields_for_py_reports()
