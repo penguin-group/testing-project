@@ -32,16 +32,6 @@
             <field name="view_mode">form</field>
             <field name="target">new</field>
         </record>
-
-
-        <record id="report_vat_sale_report" model="ir.actions.report">
-                <field name="name">VAT Sale Book</field>
-                <field name="model">report.vat.sale.wizard</field>
-                <field name="report_type">xlsx</field>
-                <field name="report_name">l10n_py.report_vat_sale</field>
-                <field name="report_file">l10n_py.report_vat_sale</field>
-                <field name="print_report_name">'VAT Sale Book'</field>
-        </record>
     
     </data>
     
