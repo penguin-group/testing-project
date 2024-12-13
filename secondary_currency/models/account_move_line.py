@@ -31,7 +31,8 @@ class AccountMoveLine(models.Model):
     @api.depends('balance','company_secondary_currency_id','currency_id','secondary_currency_rate','display_type',)
     def _compute_secondary_balance(self):
         for line in self:
-            if line.company_secondary_currency_id:
+            if line.company_secondary_currency_id and line.company_id.currency_exchange_journal_id != line.move_id.journal_id:
+                # only process lines that are not in the currency exchange journal
                 if line.display_type in ('line_section', 'line_note'):
                     line.secondary_balance = False
                 elif line.currency_id == line.company_secondary_currency_id:
