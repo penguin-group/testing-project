@@ -70,7 +70,7 @@ class AccountMove(models.Model):
     def is_inbound(self, include_receipts=True):
         # Override this method to include inbound payments entries
         result = super(AccountMove, self).is_inbound(include_receipts=include_receipts)
-        inbound_payment = self.payment_id and self.payment_id.payment_type == 'inbound'
+        inbound_payment = self.origin_payment_id and self.origin_payment_id.payment_type == 'inbound'
         return any([result, inbound_payment])
     
     @api.depends('currency_id', 'company_secondary_currency_id', 'company_id', 'invoice_date')

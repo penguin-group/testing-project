@@ -1713,7 +1713,7 @@ class BookRegistrationReport(models.Model):
                     self.env.cr.execute("""
                                 SELECT SUM(""" + amount_field + """) AS amount_total_company
                                   FROM account_payment payment
-                                  JOIN account_move move ON move.payment_id = payment.id
+                                  JOIN account_move move ON move.original_payment_id = payment.id
                                  WHERE payment.is_matched IS NOT TRUE
                                    AND payment.payment_type = %s
                                    AND move.state = 'posted'
@@ -1894,7 +1894,7 @@ class BookRegistrationReport(models.Model):
                     self.env.cr.execute("""
                                 SELECT SUM(""" + amount_field + """) AS amount_total_company
                                   FROM account_payment payment
-                                  JOIN account_move move ON move.payment_id = payment.id
+                                  JOIN account_move move ON move.original_payment_id = payment.id
                                  WHERE payment.is_matched IS NOT TRUE
                                    AND payment.payment_type = %s
                                    AND move.state = 'posted'
