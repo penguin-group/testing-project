@@ -914,102 +914,100 @@ class BookRegistrationReport(models.Model):
 
             for expression_id in expression_ids:
                 expressions_totals[expression_id] = {}
-                aml_ids = eval(
-                    "self.env['account.move.line'].search(" + expression_id.formula + ")")
+                aml_ids = eval("self.env['account.move.line'].search(" + expression_id.formula + ")")
                 # Each expression to be processed has a domain to obtain the accounting entries, from which the accounts to be processed must be obtained.
                 for account_id in aml_ids.mapped('account_id').filtered(
-                        lambda x:
-                        x.account_type in [
-                            'asset_cash',
-                            'asset_receivable',
-                            'asset_current',
-                            'asset_non_current',
-                            'asset_fixed',
-                            'liability_payable',
-                            'liability_current',
-                            'liability_non_current',
-                            'equity',
-                        ]
-                        and x not in (
-                            x.company_id.account_journal_payment_debit_account_id,
-                            x.company_id.account_journal_payment_credit_account_id,
-                        )
-                ).sorted(key=lambda x: x.code):
+                    lambda x:
+                    x.account_type in [
+                        'asset_cash',
+                        'asset_receivable',
+                        'asset_current',
+                        'asset_non_current',
+                        'asset_fixed',
+                        'liability_payable',
+                        'liability_current',
+                        'liability_non_current',
+                        'equity',
+                    ]
+                    and x not in (
+                        x.company_id.account_journal_payment_debit_account_id,
+                        x.company_id.account_journal_payment_credit_account_id,
+                    )).sorted(key=lambda x: x.code):
 
-                # BALANCE AS OF DATE
-                account_move_line_ids = aml_ids.search(domain=[
-                    ('account_id', '=', account_id.id),
-                    ('parent_state', '=', 'posted'),
-                    ('date', '<=', previous_options['date']['date_to'])
-                ])
-                if account_move_line_ids:
-                    account_balance = sum(
-                        account_move_line_ids.mapped('balance'))
-                else:
-                    account_balance = 0
-                account_outbound = 0
-                account_inbound = 0
-                for move_type in ['outbound', 'inbound']:
-                    self.env.cr.execute("""
-                                SELECT SUM(amount_company_currency_signed) AS amount_total_company
-                                FROM account_payment payment
-                                JOIN account_move move ON move.payment_id = payment.id
-                                WHERE payment.is_matched IS NOT TRUE
-                                   AND payment.payment_type = %s
-                                   AND move.state = 'posted'
-                                   AND move.journal_id = ANY(%s)
-                                GROUP BY move.company_id, move.journal_id, move.currency_id
-                                    """, [move_type, self.env['account.journal'].search(
-                        [('default_account_id', '=', account_id.id)]).ids])  # Debemos obtener todos los saldos pendientes de conciliar para la cuenta
-                    query_result = self.env.cr.fetchall()
-                    amount_result = sum(sum(j for j in t)
-                                        for t in query_result)
-                    if move_type == 'outbound':
-                        account_outbound = -amount_result
-                    if move_type == 'inbound':
-                        account_inbound = amount_result
+                    # BALANCE AS OF DATE
+                    account_move_line_ids = aml_ids.search(domain=[
+                        ('account_id', '=', account_id.id),
+                        ('parent_state', '=', 'posted'),
+                        ('date', '<=', previous_options['date']['date_to'])
+                    ])
+                    if account_move_line_ids:
+                        account_balance = sum(
+                            account_move_line_ids.mapped('balance'))
+                    else:
+                        account_balance = 0
+                    account_outbound = 0
+                    account_inbound = 0
+                    for move_type in ['outbound', 'inbound']:
+                        self.env.cr.execute("""
+                                    SELECT SUM(amount_company_currency_signed) AS amount_total_company
+                                    FROM account_payment payment
+                                    JOIN account_move move ON move.payment_id = payment.id
+                                    WHERE payment.is_matched IS NOT TRUE
+                                    AND payment.payment_type = %s
+                                    AND move.state = 'posted'
+                                    AND move.journal_id = ANY(%s)
+                                    GROUP BY move.company_id, move.journal_id, move.currency_id
+                                        """, [move_type, self.env['account.journal'].search(
+                            [('default_account_id', '=', account_id.id)]).ids])  # Debemos obtener todos los saldos pendientes de conciliar para la cuenta
+                        query_result = self.env.cr.fetchall()
+                        amount_result = sum(sum(j for j in t)
+                                            for t in query_result)
+                        if move_type == 'outbound':
+                            account_outbound = -amount_result
+                        if move_type == 'inbound':
+                            account_inbound = amount_result
 
-                    # Determine the detail mode for the account.
-                    # In 'mode_account_balance' mode, the reconciled balance and outstanding reconciliation of incoming and outgoing are detailed.
-                    # In 'mode_account_partners' mode, the outstanding reconciliation balances are detailed but grouped by supplier or customer.
-                    # In 'mode_account_inventory' mode, the inventory valuation is detailed.
-                    # In 'mode_account_asset_fixed' mode, the valuation of fixed assets is detailed.
+                        # Determine the detail mode for the account.
+                        # In 'mode_account_balance' mode, the reconciled balance and outstanding reconciliation of incoming and outgoing are detailed.
+                        # In 'mode_account_partners' mode, the outstanding reconciliation balances are detailed but grouped by supplier or customer.
+                        # In 'mode_account_inventory' mode, the inventory valuation is detailed.
+                        # In 'mode_account_asset_fixed' mode, the valuation of fixed assets is detailed.
 
-                    show_account_detail_mode = False
+                        show_account_detail_mode = False
 
-                    if account_id.account_type == 'asset_cash' and not account_id.reconcile:
-                        show_account_detail_mode = 'mode_account_balance'
+                        if account_id.account_type == 'asset_cash' and not account_id.reconcile:
+                            show_account_detail_mode = 'mode_account_balance'
 
-                    elif (account_id.account_type == 'asset_receivable' and account_id.reconcile) or \
-                            (account_id.account_type == 'liability_payable' and account_id.reconcile):
-                        show_account_detail_mode = 'mode_account_partners'
+                        elif (account_id.account_type == 'asset_receivable' and account_id.reconcile) or \
+                                (account_id.account_type == 'liability_payable' and account_id.reconcile):
+                            show_account_detail_mode = 'mode_account_partners'
 
-                    elif account_id.account_type == 'asset_current' and not account_id.reconcile and account_id.create_asset in ['no']:
-                        show_account_detail_mode = 'mode_account_inventory'
+                        elif account_id.account_type == 'asset_current' and not account_id.reconcile and account_id.create_asset in ['no']:
+                            show_account_detail_mode = 'mode_account_inventory'
 
-                    elif (account_id.account_type == 'asset_fixed') or \
-                            (account_id.account_type == 'liability_current') or \
-                            (
-                        account_id.account_type == 'asset_current' and
-                        not account_id.reconcile and
-                        account_id.create_asset in ['draft', 'validate'] and
-                        account_id.asset_model
-                    ):
-                        show_account_detail_mode = 'mode_account_asset_fixed'
+                        elif (account_id.account_type == 'asset_fixed') or \
+                                (account_id.account_type == 'liability_current') or \
+                                (
+                            account_id.account_type == 'asset_current' and
+                            not account_id.reconcile and
+                            account_id.create_asset in ['draft', 'validate'] and
+                            account_id.asset_model
+                        ):
+                            show_account_detail_mode = 'mode_account_asset_fixed'
 
-                    if expression_id.subformula == '-sum':
-                        account_balance *= -1
-                        account_inbound *= -1
-                        account_outbound *= -1
+                        if expression_id.subformula == '-sum':
+                            account_balance *= -1
+                            account_inbound *= -1
+                            account_outbound *= -1
 
-                    expressions_totals[expression_id][account_id] = {
-                        'account_total': account_balance + account_inbound - account_outbound,
-                        'account_move_line_ids': account_move_line_ids,
-                        'account_balance': account_balance,
-                        'pending_outbound': account_outbound,
-                        'pending_inbound': account_inbound,
-                        'show_account_detail_mode': show_account_detail_mode,
-                    }
+                        expressions_totals[expression_id][account_id] = {
+                            'account_total': account_balance + account_inbound - account_outbound,
+                            'account_move_line_ids': account_move_line_ids,
+                            'account_balance': account_balance,
+                            'pending_outbound': account_outbound,
+                            'pending_inbound': account_inbound,
+                            'show_account_detail_mode': show_account_detail_mode,
+                        }
 
             print_report_lines(
                 env=self.env,
@@ -1069,59 +1067,59 @@ class BookRegistrationReport(models.Model):
                         )
                 ).sorted(key=lambda x: x.code):
 
-                # BALANCE AS OF DATE
-                account_move_line_ids = aml_ids.search(domain=[
-                    ('account_id', '=', account_id.id),
-                    ('parent_state', '=', 'posted'),
-                    ('date', '<=', previous_options['date']['date_to'])
-                ])
-                if account_move_line_ids:
-                    account_balance = sum(
-                        account_move_line_ids.mapped('balance'))
-                else:
-                    account_balance = 0
-                account_outbound = 0
-                account_inbound = 0
-                for move_type in ['outbound', 'inbound']:
-                    self.env.cr.execute("""
-                                SELECT SUM(amount_company_currency_signed) AS amount_total_company
-                                  FROM account_payment payment
-                                  JOIN account_move move ON move.original_payment_id = payment.id
-                                 WHERE payment.is_matched IS NOT TRUE
-                                   AND payment.payment_type = %s
-                                   AND move.state = 'posted'
-                                   AND move.journal_id = ANY(%s)
-                              GROUP BY move.company_id, move.journal_id, move.currency_id
-                            """, [move_type, self.env['account.journal'].search(
-                        [('default_account_id', '=', account_id.id)]).ids])  # Debemos obtener todos los saldos pendientes de conciliar para la cuenta
-                    query_result = self.env.cr.fetchall()
-                    amount_result = sum(sum(j for j in t)
-                                        for t in query_result)
-                    if move_type == 'outbound':
-                        account_outbound = -amount_result
-                    if move_type == 'inbound':
-                        account_inbound = amount_result
+                    # BALANCE AS OF DATE
+                    account_move_line_ids = aml_ids.search(domain=[
+                        ('account_id', '=', account_id.id),
+                        ('parent_state', '=', 'posted'),
+                        ('date', '<=', previous_options['date']['date_to'])
+                    ])
+                    if account_move_line_ids:
+                        account_balance = sum(
+                            account_move_line_ids.mapped('balance'))
+                    else:
+                        account_balance = 0
+                    account_outbound = 0
+                    account_inbound = 0
+                    for move_type in ['outbound', 'inbound']:
+                        self.env.cr.execute("""
+                                    SELECT SUM(amount_company_currency_signed) AS amount_total_company
+                                    FROM account_payment payment
+                                    JOIN account_move move ON move.original_payment_id = payment.id
+                                    WHERE payment.is_matched IS NOT TRUE
+                                    AND payment.payment_type = %s
+                                    AND move.state = 'posted'
+                                    AND move.journal_id = ANY(%s)
+                                GROUP BY move.company_id, move.journal_id, move.currency_id
+                                """, [move_type, self.env['account.journal'].search(
+                            [('default_account_id', '=', account_id.id)]).ids])  # Debemos obtener todos los saldos pendientes de conciliar para la cuenta
+                        query_result = self.env.cr.fetchall()
+                        amount_result = sum(sum(j for j in t)
+                                            for t in query_result)
+                        if move_type == 'outbound':
+                            account_outbound = -amount_result
+                        if move_type == 'inbound':
+                            account_inbound = amount_result
 
-                    # Determine the detail mode for the account.
-                    # In 'mode_account_balance' mode, the reconciled balance and the outstanding reconciliation of incoming and outgoing are detailed.
-                    # In 'mode_account_partners' mode, the outstanding reconciliation balances are detailed but grouped by supplier or customer.
-                    # In 'mode_account_inventory' mode, the inventory valuation is detailed.
-                    # In 'mode_account_asset_fixed' mode, the valuation of fixed assets is detailed.
-                    show_account_detail_mode = False
+                        # Determine the detail mode for the account.
+                        # In 'mode_account_balance' mode, the reconciled balance and the outstanding reconciliation of incoming and outgoing are detailed.
+                        # In 'mode_account_partners' mode, the outstanding reconciliation balances are detailed but grouped by supplier or customer.
+                        # In 'mode_account_inventory' mode, the inventory valuation is detailed.
+                        # In 'mode_account_asset_fixed' mode, the valuation of fixed assets is detailed.
+                        show_account_detail_mode = False
 
-                    if expression_id.subformula == '-sum':
-                        account_balance *= -1
-                        account_inbound *= -1
-                        account_outbound *= -1
+                        if expression_id.subformula == '-sum':
+                            account_balance *= -1
+                            account_inbound *= -1
+                            account_outbound *= -1
 
-                    expressions_totals[expression_id][account_id] = {
-                        'account_total': account_balance + account_inbound - account_outbound,
-                        'account_move_line_ids': account_move_line_ids,
-                        'account_balance': account_balance,
-                        'pending_outbound': account_outbound,
-                        'pending_inbound': account_inbound,
-                        'show_account_detail_mode': show_account_detail_mode,
-                    }
+                        expressions_totals[expression_id][account_id] = {
+                            'account_total': account_balance + account_inbound - account_outbound,
+                            'account_move_line_ids': account_move_line_ids,
+                            'account_balance': account_balance,
+                            'pending_outbound': account_outbound,
+                            'pending_inbound': account_inbound,
+                            'show_account_detail_mode': show_account_detail_mode,
+                        }
 
             print_report_lines(
                 env=self.env,
