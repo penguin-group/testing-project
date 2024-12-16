@@ -952,14 +952,14 @@ class BookRegistrationReport(models.Model):
                 for move_type in ['outbound', 'inbound']:
                     self.env.cr.execute("""
                                 SELECT SUM(amount_company_currency_signed) AS amount_total_company
-                                  FROM account_payment payment
-                                  JOIN account_move move ON move.original_payment_id = payment.id
-                                 WHERE payment.is_matched IS NOT TRUE
+                                FROM account_payment payment
+                                JOIN account_move move ON move.payment_id = payment.id
+                                WHERE payment.is_matched IS NOT TRUE
                                    AND payment.payment_type = %s
                                    AND move.state = 'posted'
                                    AND move.journal_id = ANY(%s)
-                              GROUP BY move.company_id, move.journal_id, move.currency_id
-                            """, [move_type, self.env['account.journal'].search(
+                                GROUP BY move.company_id, move.journal_id, move.currency_id
+                                    """, [move_type, self.env['account.journal'].search(
                         [('default_account_id', '=', account_id.id)]).ids])  # Debemos obtener todos los saldos pendientes de conciliar para la cuenta
                     query_result = self.env.cr.fetchall()
                     amount_result = sum(sum(j for j in t)
