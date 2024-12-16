@@ -19,7 +19,7 @@
     'version': '17.0.1.1.1',
     'license': "OPL-1",
 
-    'depends': ['base', 'account', 'invoice_currency_rate', 'report_xlsx', 'web'],
+    'depends': ['base', 'account', 'invoice_currency_rate', 'web'],
 
     'data': [
         'security/ir.model.access.csv',

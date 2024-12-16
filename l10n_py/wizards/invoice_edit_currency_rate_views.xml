@@ -10,7 +10,8 @@
                 <form string="Edit Currency Rate">
                     <sheet>
                         <group>
-                            <field name="currency_rate" />
+                            <field name="currency_rate"/>
+                            <field name="inverse_currency_rate"/>
                         </group>
                     </sheet>
                     <footer>

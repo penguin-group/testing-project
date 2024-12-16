@@ -2,40 +2,36 @@ from odoo import models, fields, api, release, _
 from odoo.exceptions import ValidationError
 import xlsxwriter
 import base64
+import tempfile
 
 
 class ReportVatSaleWizard(models.TransientModel):
     _name = 'report.vat.sale.wizard'
     _description = "VAT Sale Report Wizard"
 
-
     date_start = fields.Date(string='From', required=True)
     date_end = fields.Date(string='To', required=True)
+    excel_file = fields.Binary("Excel File", readonly=True)
+
 
     def print_report(self):
         if self.env.company.partner_id.country_id.code == 'PY':
-            datas = {
-                'date_start': self.date_start,
-                'date_end': self.date_end,
-            }
-
-            return self.env.ref('l10n_py.report_vat_sale_report').report_action(self, data=datas)
+            return self.generate_xlsx_report()
         else:
             raise ValidationError(_("This report is only for Paraguay-based companies."))
 
+    def generate_xlsx_report(self):
+        self.ensure_one()
 
-class ReportVatSale(models.AbstractModel):
-    _name = 'report.l10n_py.report_vat_sale'
-    _inherit = 'report.report_xlsx.abstract'
-    _description = "VAT Sale Report"  
-
-    def generate_xlsx_report(self, workbook, data, datas):
+        filename = 'vat_sale.xlsx'
+        fullpath = tempfile.gettempdir() + '/' + filename
+        workbook = xlsxwriter.Workbook(fullpath)
 
         invoices = self.env['account.move'].search(
             [('move_type', '=', 'out_invoice'), 
             ('state', 'in', ['posted', 'cancel']),
-            ('invoice_date', '>=', datas.date_start),
-            ('invoice_date', '<=', datas.date_end),
+            ('invoice_date', '>=', self.date_start),
+            ('invoice_date', '<=', self.date_end),
             ('company_id', '=', self.env.company.id)])
         global sheet
         global f_bold
@@ -97,7 +93,7 @@ class ReportVatSale(models.AbstractModel):
         sheet.merge_range('C2:D2', self.env.company.partner_id.vat)
         sheet.merge_range('A3:B3', 'Periodo', f_bold)
         sheet.merge_range('C3:D3', 
-            "De " + datas.date_start.strftime("%d/%m/%Y") + " a " + datas.date_end.strftime('%d/%m/%Y'))
+            "De " + self.date_start.strftime("%d/%m/%Y") + " a " + self.date_end.strftime('%d/%m/%Y'))
         sheet.merge_range('A4:L4', 'Libro de ventas - Ley 125/91', f_title)        
 
         position_x = 0
@@ -194,8 +190,8 @@ class ReportVatSale(models.AbstractModel):
 
         credit_notes = self.env['account.move'].search(
             [('move_type', '=', 'in_refund'), ('state', 'in', ['posted']),
-             ('invoice_date', '>=', datas.date_start),
-             ('invoice_date', '<=', datas.date_end)])
+             ('invoice_date', '>=', self.date_start),
+             ('invoice_date', '<=', self.date_end)])
 
         breakAndWrite('Notas de crédito recibidas', f_bold)
         breakAndWrite("Nro", f_bold)
@@ -285,3 +281,19 @@ class ReportVatSale(models.AbstractModel):
         rightAndWrite(amount_total_vat5, f_number_total)
         rightAndWrite(amount_total_exempt, f_number_total)
         rightAndWrite(amount_total_all, f_number_total)
+
+        workbook.close()
+        
+        with open(fullpath, "rb") as file:
+            file_base64 = base64.b64encode(file.read())
+        
+        self.write({
+            'excel_file': file_base64
+        })
+        
+        return {
+            'type': 'ir.actions.act_url',
+            'name': 'report_vat_sale',
+            'url': '/web/content/report.vat.sale.wizard/%s/excel_file/%s?download=true' %
+                    (self.id, filename),
+        }
