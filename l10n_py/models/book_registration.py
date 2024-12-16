@@ -17,10 +17,11 @@ characters_to_replace = ['\u200b', '\u201c']
 
 
 def remove_unwanted_characters(value):
-    allowed_characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzÁÉÍÓÚÑáéíóúñ 0123456789~!@#$%^&*()-=[]\;,./_+{}|:<>?'
-    for value_character in value:
-        if value_character not in allowed_characters:
-            value = value.replace(value_character, ' ')
+    if isinstance(value, str):
+        allowed_characters = r'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzÁÉÍÓÚÑáéíóúñ 0123456789~!@#$%^&*()-=[]\;,./_+{}|:<>?'
+        for value_character in value:
+            if value_character not in allowed_characters:
+                value = value.replace(value_character, ' ')
     return value
 
 
@@ -189,7 +190,7 @@ class BookRegistrationReport(models.Model):
                 _logger.error(ex)
                 raise UserError(_("Error generating PDF."))
 
-        if self.type == 'inventario':
+        if self.type == 'inventory':
             self.inventory_pdf()
 
     def purchase_sale_pdf(self, type=None):
@@ -248,7 +249,7 @@ class BookRegistrationReport(models.Model):
         pdf.company = self.company_id
         title = """
         Libro {0} - Ley 125/91 Periodo: Del {1} al {2}
-        """.format(type, self.start_date.strftime('%d/%m/%Y'), self.end_date.strftime('%d/%m/%Y'))
+        """.format("Ventas" if type == 'sale' else "Compras", self.start_date.strftime('%d/%m/%Y'), self.end_date.strftime('%d/%m/%Y'))
         pdf.title = title
         if self.registration_id.signature_image:
             pdf.signature_image = base64.b64decode(
@@ -298,15 +299,15 @@ class BookRegistrationReport(models.Model):
                     str(i.supplier_invoice_authorization_id.name) if i.supplier_invoice_authorization_id else ' ',
                     str(i.ref) if i.ref else '',
 
-                    '{0:,.0f}'.format(int(total_gral_base10)).replace(
+                    '{0:,.0f}'.format(int(i.amount_base10)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(total_gral_vat10)).replace(
+                    '{0:,.0f}'.format(int(i.amount_vat10)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(total_gral_base5)).replace(
+                    '{0:,.0f}'.format(int(i.amount_base5)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(total_gral_vat5)).replace(
+                    '{0:,.0f}'.format(int(i.amount_vat5)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(total_gral_exempt)).replace(
+                    '{0:,.0f}'.format(int(i.amount_exempt)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
                     '{0:,.0f}'.format(int(total_invoice)).replace(
                         ',', '.') if i.state != 'cancel' else "0"
@@ -320,15 +321,15 @@ class BookRegistrationReport(models.Model):
                     _get_type_doc(i),
                     str(i.name),
 
-                    '{0:,.0f}'.format(int(total_gral_base10)).replace(
+                    '{0:,.0f}'.format(int(i.amount_base10)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(total_gral_vat10)).replace(
+                    '{0:,.0f}'.format(int(i.amount_vat10)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(total_gral_base5)).replace(
+                    '{0:,.0f}'.format(int(i.amount_base5)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(total_gral_vat5)).replace(
+                    '{0:,.0f}'.format(int(i.amount_vat5)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
-                    '{0:,.0f}'.format(int(total_gral_exempt)).replace(
+                    '{0:,.0f}'.format(int(i.amount_exempt)).replace(
                         ',', '.') if i.state != 'cancel' else "0",
                     '{0:,.0f}'.format(int(total_invoice)).replace(
                         ',', '.') if i.state != 'cancel' else "0"
@@ -336,41 +337,41 @@ class BookRegistrationReport(models.Model):
 
         if type == 'purchase':
             TABLE_DATA_INVOICES.append([' ', ' ', 'Total', ' ', ' ', ' ', ' ',
-                                        '{0:,.0f}'.format(
-                                            int(total_gral_base10)).replace(',', '.'),
-                                        '{0:,.0f}'.format(
-                                            int(total_gral_vat10)).replace(',', '.'),
-                                        '{0:,.0f}'.format(
-                                            int(total_gral_base5)).replace(',', '.'),
-                                        '{0:,.0f}'.format(
-                                            int(total_gral_vat5)).replace(',', '.'),
-                                        '{0:,.0f}'.format(
-                                            int(total_gral_exempt)).replace(',', '.'),
-                                        '{0:,.0f}'.format(
-                                            int(total_gral_total)).replace(',', '.')
-                                        ])
+                '{0:,.0f}'.format(
+                    int(total_gral_base10)).replace(',', '.'),
+                '{0:,.0f}'.format(
+                    int(total_gral_vat10)).replace(',', '.'),
+                '{0:,.0f}'.format(
+                    int(total_gral_base5)).replace(',', '.'),
+                '{0:,.0f}'.format(
+                    int(total_gral_vat5)).replace(',', '.'),
+                '{0:,.0f}'.format(
+                    int(total_gral_exempt)).replace(',', '.'),
+                '{0:,.0f}'.format(
+                    int(total_gral_total)).replace(',', '.')
+            ])
 
         if type == 'sale':
             TABLE_DATA_INVOICES.append([' ', ' ', 'Total', ' ', ' ', ' ',
-                                        '{0:,.0f}'.format(
-                                            int(total_gral_base10)).replace(',', '.'),
-                                        '{0:,.0f}'.format(
-                                            int(total_gral_vat10)).replace(',', '.'),
-                                        '{0:,.0f}'.format(
-                                            int(total_gral_base5)).replace(',', '.'),
-                                        '{0:,.0f}'.format(
-                                            int(total_gral_vat5)).replace(',', '.'),
-                                        '{0:,.0f}'.format(
-                                            int(total_gral_exempt)).replace(',', '.'),
-                                        '{0:,.0f}'.format(
-                                            int(total_gral_total)).replace(',', '.')
-                                        ])
+                '{0:,.0f}'.format(
+                    int(total_gral_base10)).replace(',', '.'),
+                '{0:,.0f}'.format(
+                    int(total_gral_vat10)).replace(',', '.'),
+                '{0:,.0f}'.format(
+                    int(total_gral_base5)).replace(',', '.'),
+                '{0:,.0f}'.format(
+                    int(total_gral_vat5)).replace(',', '.'),
+                '{0:,.0f}'.format(
+                    int(total_gral_exempt)).replace(',', '.'),
+                '{0:,.0f}'.format(
+                    int(total_gral_total)).replace(',', '.')
+            ])
 
         pdf.set_font("Arial", "", 6)
         if type == 'purchase':
-            widths = (5, 8, 20, 10, 9, 10, 15, 10, 10, 10, 10, 10, 10)
+            widths = (4, 8, 20, 10, 9, 10, 15, 12, 11, 10, 10, 10, 12)
         if type == 'sale':
-            widths = (5, 8, 20, 10, 9, 15, 10, 10, 10, 10, 10, 10)
+            widths = (4, 8, 18, 10, 8, 13, 12, 11, 11, 11, 11, 12)
         with pdf.table(col_widths=widths) as table_invoices:
             for ir, data_row in enumerate(TABLE_DATA_INVOICES):
                 row = table_invoices.row()
@@ -510,35 +511,35 @@ class BookRegistrationReport(models.Model):
 
         if type == 'sale':
             TABLE_DATA_CREDIT_NOTES.append([' ', ' ', 'Total', ' ', ' ', ' ', ' ',
-                                            '{0:,.0f}'.format(
-                                                int(total_gral_base10)).replace(',', '.'),
-                                            '{0:,.0f}'.format(
-                                                int(total_gral_vat10)).replace(',', '.'),
-                                            '{0:,.0f}'.format(
-                                                int(total_gral_base5)).replace(',', '.'),
-                                            '{0:,.0f}'.format(
-                                                int(total_gral_vat5)).replace(',', '.'),
-                                            '{0:,.0f}'.format(
-                                                int(total_gral_exempt)).replace(',', '.'),
-                                            '{0:,.0f}'.format(
-                                                int(total_gral_total)).replace(',', '.')
-                                            ])
+                '{0:,.0f}'.format(
+                    int(total_gral_base10)).replace(',', '.'),
+                '{0:,.0f}'.format(
+                    int(total_gral_vat10)).replace(',', '.'),
+                '{0:,.0f}'.format(
+                    int(total_gral_base5)).replace(',', '.'),
+                '{0:,.0f}'.format(
+                    int(total_gral_vat5)).replace(',', '.'),
+                '{0:,.0f}'.format(
+                    int(total_gral_exempt)).replace(',', '.'),
+                '{0:,.0f}'.format(
+                    int(total_gral_total)).replace(',', '.')
+            ])
 
         if type == 'purchase':
             TABLE_DATA_CREDIT_NOTES.append([' ', ' ', 'Total', ' ', ' ', ' ',
-                                            '{0:,.0f}'.format(
-                                                int(total_gral_base10)).replace(',', '.'),
-                                            '{0:,.0f}'.format(
-                                                int(total_gral_vat10)).replace(',', '.'),
-                                            '{0:,.0f}'.format(
-                                                int(total_gral_base5)).replace(',', '.'),
-                                            '{0:,.0f}'.format(
-                                                int(total_gral_vat5)).replace(',', '.'),
-                                            '{0:,.0f}'.format(
-                                                int(total_gral_exempt)).replace(',', '.'),
-                                            '{0:,.0f}'.format(
-                                                int(total_gral_total)).replace(',', '.')
-                                            ])
+                '{0:,.0f}'.format(
+                    int(total_gral_base10)).replace(',', '.'),
+                '{0:,.0f}'.format(
+                    int(total_gral_vat10)).replace(',', '.'),
+                '{0:,.0f}'.format(
+                    int(total_gral_base5)).replace(',', '.'),
+                '{0:,.0f}'.format(
+                    int(total_gral_vat5)).replace(',', '.'),
+                '{0:,.0f}'.format(
+                    int(total_gral_exempt)).replace(',', '.'),
+                '{0:,.0f}'.format(
+                    int(total_gral_total)).replace(',', '.')
+            ])
         pdf.set_font("Arial", "", 6)
 
         if type == 'sale':
@@ -1004,7 +1005,7 @@ class BookRegistrationReport(models.Model):
 
     def daily_book_pdf(self):
         TABLE_DATA = [
-            ('Cuenta', 'Descripción', 'Detalle', 'Crédito', 'Débito')]
+            ('Cuenta', 'Descripción', 'Detalle', 'Débito', 'Crédito')]
         moves = self.env['account.move'].search(
             [('date', '>=', self.start_date), ('date', '<=', self.end_date), ('state', '=', 'posted')])
         if moves:
@@ -1256,6 +1257,8 @@ class BookRegistrationReport(models.Model):
             pdf.signature_image = base64.b64decode(
                 self.registration_id.signature_image)
         pdf.add_page()
+
+        TABLE_DATA = self.format_table_data(TABLE_DATA)
 
         with pdf.table(col_widths=(70, 15, 15)) as table:
             for ir, data_row in enumerate(TABLE_DATA):
