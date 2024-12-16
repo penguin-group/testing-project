@@ -1,0 +1,25 @@
+<odoo>
+    <record id="warehouse_on_rack" model="stock.warehouse">
+        <field name="name">On Rack</field>
+        <field name="code">ONR</field>
+        <field name="company_id" ref="base.main_company"/> 
+    </record>
+
+    <record id="warehouse_main" model="stock.warehouse">
+        <field name="name">Warehouse</field>
+        <field name="code">WRH</field>
+        <field name="company_id" ref="base.main_company"/> 
+    </record>
+
+    <record id="warehouse_lab" model="stock.warehouse">
+        <field name="name">Microelectronic Lab</field>
+        <field name="code">LAB</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+
+    <record id="warehouse_enmos" model="stock.warehouse">
+        <field name="name">Enmos Lab</field>
+        <field name="code">ENM</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+</odoo>

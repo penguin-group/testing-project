@@ -1,0 +1,17 @@
+<odoo>
+    <record id="view_stock_lot_form_inherited" model="ir.ui.view">
+        <field name="name">stock.lot.form.inherited</field>
+        <field name="model">stock.lot</field>
+        <field name="inherit_id" ref="stock.view_production_lot_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group" position="inside">
+                <group>
+                    <field name="customer"/>
+                    <field name="container"/>
+                    <field name="miner_waranty_expiration_date"/>
+                    <field name="status"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
