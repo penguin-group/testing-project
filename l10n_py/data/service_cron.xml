@@ -23,5 +23,16 @@
             <field name="code">model.rg90_remission_fields()</field>
         </record>
 
+        <record id="invoice_authorization_cron" model="ir.cron">
+            <field name="name">Invoice Authorization Is Valid</field>
+            <field name="model_id" ref="model_invoice_authorization"/>
+            <field name="interval_number">12</field>
+            <field name="interval_type">hours</field>
+            <field name="state">code</field>
+            <field name="code">
+                env['invoice.authorization'].search([])._compute_is_valid()
+            </field>
+        </record>
+
     </data>
 </odoo>
