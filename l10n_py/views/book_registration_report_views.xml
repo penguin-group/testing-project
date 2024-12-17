@@ -47,7 +47,7 @@
 
                             <group >
                                 <field name="report_file" nolabel="1" readonly="True" widget="pdf_viewer"
-                                    filename="report_file_name" style="width:700%" />
+                                    filename="report_file_name"/>
                             </group>
                         </group>
                     </sheet>
