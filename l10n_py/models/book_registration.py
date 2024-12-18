@@ -101,7 +101,7 @@ class BookRegistrationReport(models.Model):
             record.initial_registration_number = self.registration_id.initial_number
             record.final_registration_number = self.registration_id.final_number
 
-    @api.model
+    @api.model_create_multi
     def create(self, vals):
         res = super(BookRegistrationReport, self).create(vals)
         res.name = "{0} - {1}".format(res.type, fields.Date.today())
