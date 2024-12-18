@@ -13,7 +13,7 @@
     'website': "https://penguin.digital",
 
     'category': 'Accounting',
-    'version': '17.0.1.1.1',
+    'version': '18.0.1.0.0',
     'license': "OPL-1",
 
     'depends': ['base', 'l10n_py', 'secondary_currency'],

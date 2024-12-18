@@ -42,7 +42,7 @@ class ResCompanyValidateException(models.Model):
             if draft_entries and not valid_exception:
                 error_msg = _('There are still unposted entries in the period you want to lock. You should either post or delete them.')
                 action_error = {
-                    'view_mode': 'tree',
+                    'view_mode': 'list',
                     'name': _('Unposted Entries'),
                     'res_model': 'account.move',
                     'type': 'ir.actions.act_window',

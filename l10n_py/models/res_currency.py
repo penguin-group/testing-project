@@ -95,7 +95,7 @@ class CurrencyRate(models.Model):
 
     buying_rate = fields.Float(
         digits=0,
-        group_operator="avg",
+        aggregator="avg",
         help='The buying rate of the currency to the currency of rate 1',
         string='Buying Technical Rate'
     )
@@ -103,14 +103,14 @@ class CurrencyRate(models.Model):
         digits=0,
         compute="_compute_buying_company_rate",
         inverse="_inverse_buying_company_rate",
-        group_operator="avg",
+        aggregator="avg",
         help="The buying currency of rate 1 to the rate of the currency.",
     )
     buying_inverse_company_rate = fields.Float(
         digits=0,
         compute="_compute_buying_inverse_company_rate",
         inverse="_inverse_buying_inverse_company_rate",
-        group_operator="avg",
+        aggregator="avg",
         help="The buying rate of the currency to the currency of rate 1 ",
     )
 
