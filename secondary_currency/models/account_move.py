@@ -12,6 +12,7 @@ class AccountMove(models.Model):
         compute='_compute_invoice_secondary_currency_rate', store=True, precompute=True,
         copy=False,
         digits=0,
+        tracking=True,
         help="Currency rate from company secondary currency to document currency.",
     )
 
