@@ -5,12 +5,10 @@
     <record model="ir.ui.view" id="penguin_analytic_account.list">
       <field name="name">penguin_analytic_account list</field>
       <field name="model">penguin_analytic_account.penguin_analytic_account</field>
-      <field name="arch" type="xml">
-        <tree>
+      <field name="arch" type="xml"> list<
           <field name="name"/>
           <field name="value"/>
-          <field name="value2"/>
-        </tree>
+          <field name="value2"/><list/
       </field>
     </record>
 -->
@@ -20,7 +18,7 @@
     <record model="ir.actions.act_window" id="penguin_analytic_account.action_window">
       <field name="name">penguin_analytic_account window</field>
       <field name="res_model">penguin_analytic_account.penguin_analytic_account</field>
-      <field name="view_mode">tree,form</field>
+      <field name="view_mode">list,form</field>
     </record>
 -->
 
@@ -33,7 +31,7 @@
       <field name="code">
         action = {
           "type": "ir.actions.act_window",
-          "view_mode": "tree,form",
+          "view_mode": "list,form",
           "res_model": model._name,
         }
       </field>

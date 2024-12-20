@@ -34,7 +34,7 @@
             <field name="model">res.currency</field>
             <field name="inherit_id" ref="base.view_currency_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//sheet/notebook/page/field/tree/field[@name='rate']" position="after">
+                <xpath expr="//list/field[@name='rate']" position="after">
                     <field name="buying_company_rate" digits="[12,12]"/>
                     <field name="buying_inverse_company_rate" digits="[12,12]"/>
                     <field name="buying_rate" digits="[12,12]" optional="hide"/>

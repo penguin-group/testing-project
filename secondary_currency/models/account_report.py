@@ -3,10 +3,11 @@ from odoo import models, _,api
 from odoo.exceptions import UserError
 from ast import literal_eval
 from collections import defaultdict
-
-import datetime
+from odoo.tools import SQL
 
 NUMBER_FIGURE_TYPES = ('float', 'integer', 'monetary', 'percentage')
+CURRENCIES_USING_LAKH = {'AFN', 'BDT', 'INR', 'MMK', 'NPR', 'PKR', 'LKR'}
+
 
 class AccountReport(models.Model):
     _inherit = 'account.report'
@@ -36,6 +37,9 @@ class AccountReport(models.Model):
             acc_tag_name = "acc_tag.name->>'en_US'"
         else:
             acc_tag_name = 'acc_tag.name'
+
+        groupby_clause = f"SUBSTRING({acc_tag_name}, 2, LENGTH({acc_tag_name}) - 1){f', {groupby_sql}' if groupby_sql else ''}"
+
         sql = f"""
             SELECT
                 SUBSTRING({acc_tag_name}, 2, LENGTH({acc_tag_name}) - 1) AS formula,
@@ -58,8 +62,8 @@ class AccountReport(models.Model):
 
             WHERE {where_clause}
 
-            GROUP BY SUBSTRING({acc_tag_name}, 2, LENGTH({acc_tag_name}) - 1)
-                {f', {groupby_sql}' if groupby_sql else ''}
+            GROUP BY {groupby_clause}
+            ORDER BY {groupby_clause}
 
             {tail_query}
         """
@@ -115,8 +119,8 @@ class AccountReport(models.Model):
 
         self._check_groupby_fields((next_groupby.split(',') if next_groupby else []) + ([current_groupby] if current_groupby else []))
 
-        groupby_sql = f'account_move_line.{current_groupby}' if current_groupby else None
-        ct_query = self._get_query_currency_table(options)
+        groupby_sql = SQL.identifier('account_move_line', current_groupby) if current_groupby else None
+        ct_query = self._get_currency_table(options)
 
         rslt = {}
 
@@ -124,25 +128,42 @@ class AccountReport(models.Model):
             try:
                 line_domain = literal_eval(formula)
             except (ValueError, SyntaxError):
-                raise UserError(_("Invalid domain formula in expression %r of line %r: %s", expressions.label, expressions.report_line_id.name, formula))
-            tables, where_clause, where_params = self._query_get(options, date_scope, domain=line_domain)
+                raise UserError(_(
+                    'Invalid domain formula in expression "%(expression)s" of line "%(line)s": %(formula)s',
+                    expression=expressions.label,
+                    line=expressions.report_line_id.name,
+                    formula=formula,
+                ))
+            query = self._get_report_query(options, date_scope, domain=line_domain)
 
-            tail_query, tail_params = self._get_engine_query_tail(offset, limit)
-            query = f"""
+            tail_query = self._get_engine_query_tail(offset, limit)
+            query = SQL(
+                """
                 SELECT
-                    COALESCE(SUM(ROUND(account_move_line.{selected_balance} * currency_table.rate, currency_table.precision)), 0.0) AS sum,
-                    COUNT(DISTINCT account_move_line.{next_groupby.split(',')[0] if next_groupby else 'id'}) AS count_rows
-                    {f', {groupby_sql} AS grouping_key' if groupby_sql else ''}
-                FROM {tables}
-                JOIN {ct_query} ON currency_table.company_id = account_move_line.company_id
-                WHERE {where_clause}
-                {f' GROUP BY {groupby_sql}' if groupby_sql else ''}
-                {tail_query}
-            """
+                    COALESCE(SUM(%(balance_select)s), 0.0) AS sum,
+                    COUNT(DISTINCT account_move_line.%(select_count_field)s) AS count_rows
+                    %(select_groupby_sql)s
+                FROM %(table_references)s
+                %(currency_table_join)s
+                WHERE %(search_condition)s
+                %(group_by_groupby_sql)s
+                %(order_by_sql)s
+                %(tail_query)s
+                """,
+                select_count_field=SQL.identifier(next_groupby.split(',')[0] if next_groupby else 'id'),
+                select_groupby_sql=SQL(', %s AS grouping_key', groupby_sql) if groupby_sql else SQL(),
+                table_references=query.from_clause,
+                balance_select=self._currency_table_apply_rate(SQL(f"account_move_line.{selected_balance}")),
+                currency_table_join=self._currency_table_aml_join(options),
+                search_condition=query.where_clause,
+                group_by_groupby_sql=SQL('GROUP BY %s', groupby_sql) if groupby_sql else SQL(),
+                order_by_sql=SQL(' ORDER BY %s', groupby_sql) if groupby_sql else SQL(),
+                tail_query=tail_query,
+            )
 
             # Fetch the results.
             formula_rslt = []
-            self._cr.execute(query, where_params + tail_params)
+            self._cr.execute(query)
             all_query_res = self._cr.dictfetchall()
 
             total_sum = 0
@@ -227,7 +248,7 @@ class AccountReport(models.Model):
                     token_match = ACCOUNT_CODES_ENGINE_TERM_REGEX.match(token)
 
                     if not token_match:
-                        raise UserError(_("Invalid token '%s' in account_codes formula '%s'", token, formula))
+                        raise UserError(_("Invalid token '%(token)s' in account_codes formula '%(formula)s'", token=token, formula=formula))
 
                     parsed_token = token_match.groupdict()
 
@@ -246,8 +267,7 @@ class AccountReport(models.Model):
                     prefixes_to_compute.add((prefix, tuple(excluded_prefixes)))
 
         # Create the subquery for the WITH linking our prefixes with account.account entries
-        all_prefixes_queries = []
-        prefix_params = []
+        all_prefixes_queries: list[SQL] = []
         prefilter = self.env['account.account']._check_company_domain(self.get_report_company_ids(options))
         for prefix, excluded_prefixes in prefixes_to_compute:
             account_domain = [
@@ -275,51 +295,68 @@ class AccountReport(models.Model):
                 account_domain.append('!')
                 account_domain += osv.expression.OR(excluded_prefixes_domains)
 
-            prefix_tables, prefix_where_clause, prefix_where_params = self.env['account.account']._where_calc(account_domain).get_sql()
-
-            prefix_params.append(prefix)
-            for excluded_prefix in excluded_prefixes:
-                prefix_params.append(excluded_prefix)
-
-            prefix_select_query = ', '.join(['%s'] * (len(excluded_prefixes) + 1)) # +1 for prefix
-            prefix_select_query = f'ARRAY[{prefix_select_query}]'
-
-            all_prefixes_queries.append(f"""
-                SELECT
-                    {prefix_select_query} AS prefix,
-                    account_account.id AS account_id
-                FROM {prefix_tables}
-                WHERE {prefix_where_clause}
-            """)
-            prefix_params += prefix_where_params
+            prefix_query = self.env['account.account']._where_calc(account_domain)
+            all_prefixes_queries.append(prefix_query.select(
+                SQL("%s AS prefix", [prefix, *excluded_prefixes]),
+                SQL("account_account.id AS account_id"),
+            ))
 
         # Build a map to associate each account with the prefixes it matches
         accounts_prefix_map = defaultdict(list)
-        self._cr.execute(' UNION ALL '.join(all_prefixes_queries), prefix_params)
-        for prefix, account_id in self._cr.fetchall():
+        for prefix, account_id in self.env.execute_query(SQL(' UNION ALL ').join(all_prefixes_queries)):
             accounts_prefix_map[account_id].append(tuple(prefix))
 
         # Run main query
-        tables, where_clause, where_params = self._query_get(options, date_scope)
+        query = self._get_report_query(options, date_scope)
+        current_groupby_aml_sql = SQL.identifier('account_move_line', current_groupby) if current_groupby else SQL()
+        tail_query = self._get_engine_query_tail(offset, limit)
+        if current_groupby_aml_sql and tail_query:
+            tail_query_additional_groupby_where_sql = SQL(
+                """
+                AND %(current_groupby_aml_sql)s IN (
+                    SELECT DISTINCT %(current_groupby_aml_sql)s
+                    FROM account_move_line
+                    WHERE %(search_condition)s
+                    ORDER BY %(current_groupby_aml_sql)s
+                    %(tail_query)s
+                )
+                """,
+                current_groupby_aml_sql=current_groupby_aml_sql,
+                search_condition=query.where_clause,
+                tail_query=tail_query,
+            )
+        else:
+            tail_query_additional_groupby_where_sql = SQL()
 
-        currency_table_query = self._get_query_currency_table(options)
-        extra_groupby_sql = f', account_move_line.{current_groupby}' if current_groupby else ''
-        extra_select_sql = f', account_move_line.{current_groupby} AS grouping_key' if current_groupby else ''
-        tail_query, tail_params = self._get_engine_query_tail(offset, limit)
+        extra_groupby_sql =  SQL(", %s", current_groupby_aml_sql) if current_groupby_aml_sql else SQL()
+        extra_select_sql = SQL(", %s AS grouping_key", current_groupby_aml_sql) if current_groupby_aml_sql else SQL()
 
-        query = f"""
+        query = SQL(
+            """
             SELECT
                 account_move_line.account_id AS account_id,
-                SUM(ROUND(account_move_line.{selected_balance} * currency_table.rate, currency_table.precision)) AS sum,
+                SUM(%(balance_select)s) AS sum,
                 COUNT(account_move_line.id) AS aml_count
-                {extra_select_sql}
-            FROM {tables}
-            JOIN {currency_table_query} ON currency_table.company_id = account_move_line.company_id
-            WHERE {where_clause}
-            GROUP BY account_move_line.account_id{extra_groupby_sql}
-            {tail_query}
-        """
-        self._cr.execute(query, where_params + tail_params)
+                %(extra_select_sql)s
+            FROM %(table_references)s
+            %(currency_table_join)s
+            WHERE %(search_condition)s
+            %(tail_query_additional_groupby_where_sql)s
+            GROUP BY account_move_line.account_id%(extra_groupby_sql)s
+            %(order_by_sql)s
+            %(tail_query)s
+            """,
+            extra_select_sql=extra_select_sql,
+            table_references=query.from_clause,
+            balance_select=self._currency_table_apply_rate(SQL(f"account_move_line.{selected_balance}")),
+            currency_table_join=self._currency_table_aml_join(options),
+            search_condition=query.where_clause,
+            extra_groupby_sql=extra_groupby_sql,
+            tail_query_additional_groupby_where_sql=tail_query_additional_groupby_where_sql,
+            order_by_sql=SQL('ORDER BY %s', SQL.identifier('account_move_line', current_groupby)) if current_groupby else SQL(),
+            tail_query=tail_query if not tail_query_additional_groupby_where_sql else SQL(),
+        )
+        self._cr.execute(query)
 
         # Parse result
         rslt = {}
@@ -337,6 +374,7 @@ class AccountReport(models.Model):
         for formula, prefix_details in prefix_details_by_formula.items():
             rslt_key = (formula, formulas_dict[formula])
             rslt_destination = rslt.setdefault(rslt_key, [] if current_groupby else {'result': 0, 'has_sublines': False})
+            rslt_groups_by_grouping_keys = {}
             for multiplicator, prefix_key, balance_character in prefix_details:
                 res_by_account_id = res_by_prefix_account_id.get(prefix_key, {})
 
@@ -413,17 +451,15 @@ class AccountReport(models.Model):
             currency_symbol = currency_obj.symbol
         else:
             currency_symbol = self.env.company.currency_id.symbol
-
+        currency_name = self.env.company.currency_id.name
         rounding_unit_names = [
-            ('decimals', '.%s' % currency_symbol),
-            ('units', '%s' % currency_symbol),
-            ('thousands', 'K%s' % currency_symbol),
-            ('millions', 'M%s' % currency_symbol),
+            ('decimals', (f'.{currency_symbol}', '')),
+            ('units', (f'{currency_symbol}', '')),
+            ('thousands', (f'K{currency_symbol}', _('Amounts in Thousands'))),
+            ('millions', (f'M{currency_symbol}', _('Amounts in Millions'))),
         ]
 
-        # We want to add 'lakhs' for Indian Rupee
-        if (self.env.company.currency_id == self.env.ref('base.INR')):
-            # We want it between 'thousands' and 'millions'
-            rounding_unit_names.insert(3, ('lakhs', 'L%s' % currency_symbol))
+        if currency_name in CURRENCIES_USING_LAKH:
+            rounding_unit_names.insert(3, ('lakhs', (f'L{currency_symbol}', _('Amounts in Lakhs'))))
 
         return dict(rounding_unit_names)

@@ -16,10 +16,10 @@
     'author': "Penguin Infrastructure, José González",
     'website': "https://penguin.digital",
     'category': 'Accounting',
-    'version': '17.0.1.1.1',
+    'version': '18.0.1.0.0',
     'license': "OPL-1",
 
-    'depends': ['base', 'account', 'invoice_currency_rate', 'web'],
+    'depends': ['base', 'account', 'web'],
 
     'data': [
         'security/ir.model.access.csv',
