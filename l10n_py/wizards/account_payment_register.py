@@ -10,7 +10,7 @@ class AccountPaymentRegister(models.TransientModel):
             'amount': self.amount,
             'payment_type': self.payment_type,
             'partner_type': self.partner_type,
-            'ref': self.communication,
+            'memo': self.communication,
             'journal_id': self.journal_id.id,
             'company_id': self.company_id.id,
             'currency_id': self.currency_id.id,
@@ -92,7 +92,7 @@ class AccountPaymentRegister(models.TransientModel):
             # Company currency on source line but a foreign currency one on the opposite line.
             residual_amount = 0.0
             for aml in batch_result['lines']:
-                if not aml.move_id.payment_id and not aml.move_id.statement_line_id:
+                if not aml.move_id.original_payment_id and not aml.move_id.statement_line_id:
                     conversion_date = self.payment_date
                 else:
                     conversion_date = aml.date
