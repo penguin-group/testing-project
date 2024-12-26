@@ -14,8 +14,8 @@ class AccountMove(models.Model):
                             'id': partial_id.id,
                             'line_id': partial_id.debit_move_id.id if partial_id.debit_move_id else False,
                         })
-                    # Remove partial
-                    move.js_remove_outstanding_partial(partial_id.id)
+                        # Remove partial
+                        move.js_remove_outstanding_partial(partial_id.id)
                 # Compute invoice currency rate
                 if move.currency_id.name == "PYG" and move.company_id.currency_id.name == "USD" and move.invoice_currency_rate == 1:
                     print('Fixing invoice currency rate for move %s' % move.name)
