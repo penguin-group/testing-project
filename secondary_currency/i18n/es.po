@@ -4,16 +4,34 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 17.0+e\n"
+"Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-20 19:01+0000\n"
-"PO-Revision-Date: 2024-11-20 19:01+0000\n"
+"POT-Creation-Date: 2024-12-30 10:52+0000\n"
+"PO-Revision-Date: 2024-12-30 10:52+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: secondary_currency
+#. odoo-python
+#: code:addons/secondary_currency/models/account_move.py:0
+msgid ""
+"\n"
+"\n"
+"Secondary Balance in the move (%(move)s) is not balanced.\n"
+"The total of debits equals %(debit_total)s and the total of credits equals %(credit_total)s.\n"
+"The difference could be due to a rounding error in the secondary currency.\n"
+"Please adjust it manually.\n"
+msgstr ""
+"\n"
+"\n"
+"El Saldo Secundario en el Asiento (%(move)s) no está balanceado.\n"
+"El total del Debe es de %(debit_total)s y el total del Haber es de %(credit_total)s.\n"
+"La diferencia puede ser por redondeos en la moneda secundaria.\n"
+"Por favor, ajústelo de forma manual.\n"
 
 #. module: secondary_currency
 #: model_terms:ir.ui.view,arch_db:secondary_currency.view_move_form_currency_rate_inherit
@@ -26,6 +44,35 @@ msgid "<span>1 </span>"
 msgstr ""
 
 #. module: secondary_currency
+#: model:ir.model,name:secondary_currency.model_account_report
+msgid "Accounting Report"
+msgstr "Informe contable"
+
+#. module: secondary_currency
+#. odoo-python
+#: code:addons/secondary_currency/models/account_report.py:0
+msgid "Amounts in Lakhs"
+msgstr "Monto en Lakhs"
+
+#. module: secondary_currency
+#. odoo-python
+#: code:addons/secondary_currency/models/account_report.py:0
+msgid "Amounts in Millions"
+msgstr "Monto en Millones"
+
+#. module: secondary_currency
+#. odoo-python
+#: code:addons/secondary_currency/models/account_report.py:0
+msgid "Amounts in Thousands"
+msgstr "Monto en Miles"
+
+#. module: secondary_currency
+#. odoo-python
+#: code:addons/secondary_currency/models/account_move.py:0
+msgid "An error has occurred."
+msgstr "Ha ocurrido un error."
+
+#. module: secondary_currency
 #: model:ir.model,name:secondary_currency.model_res_company
 msgid "Companies"
 msgstr "Compañías"
@@ -34,15 +81,19 @@ msgstr "Compañías"
 #: model:ir.model.fields,field_description:secondary_currency.field_account_bank_statement_line__company_secondary_currency_id
 #: model:ir.model.fields,field_description:secondary_currency.field_account_move__company_secondary_currency_id
 #: model:ir.model.fields,field_description:secondary_currency.field_account_move_line__company_secondary_currency_id
-#: model:ir.model.fields,field_description:secondary_currency.field_account_payment__company_secondary_currency_id
 msgid "Company Secondary Currency"
 msgstr "Moneda Secundaria de la Compañía"
+
+#. module: secondary_currency
+#. odoo-python
+#: code:addons/secondary_currency/models/account_report.py:0
+msgid "Could not parse account_code formula from token '%s'"
+msgstr "No se puede obtener la fórmula de account_code desde el token '%s'"
 
 #. module: secondary_currency
 #: model:ir.model.fields,help:secondary_currency.field_account_bank_statement_line__invoice_secondary_currency_rate
 #: model:ir.model.fields,help:secondary_currency.field_account_move__invoice_secondary_currency_rate
 #: model:ir.model.fields,help:secondary_currency.field_account_move_line__secondary_currency_rate
-#: model:ir.model.fields,help:secondary_currency.field_account_payment__invoice_secondary_currency_rate
 msgid "Currency rate from company secondary currency to document currency."
 msgstr ""
 "Tipo de cambio de la moneda secundaria de la compañía a la moneda del "
@@ -51,16 +102,35 @@ msgstr ""
 #. module: secondary_currency
 #: model:ir.model.fields,help:secondary_currency.field_account_bank_statement_line__company_secondary_currency_id
 #: model:ir.model.fields,help:secondary_currency.field_account_move__company_secondary_currency_id
-#: model:ir.model.fields,help:secondary_currency.field_account_move_line__company_secondary_currency_id
-#: model:ir.model.fields,help:secondary_currency.field_account_payment__company_secondary_currency_id
 #: model:ir.model.fields,help:secondary_currency.field_res_company__sec_currency_id
 msgid "Currency used for secondary accounting"
 msgstr "Moneda utilizada para la contabilidad secundaria"
 
 #. module: secondary_currency
+#. odoo-javascript
+#: code:addons/secondary_currency/static/src/components/currency_report/filters/filter_currency.xml:0
+msgid "Currency:"
+msgstr "Moneda:"
+
+#. module: secondary_currency
+#. odoo-python
+#: code:addons/secondary_currency/models/account_report.py:0
+msgid ""
+"Invalid domain formula in expression \"%(expression)s\" of line "
+"\"%(line)s\": %(formula)s"
+msgstr ""
+"Fórmula de dominio inválida en la expresión \"%(expression)s\" de la línea "
+"\"%(line)s\": %(formula)s"
+
+#. module: secondary_currency
+#. odoo-python
+#: code:addons/secondary_currency/models/account_report.py:0
+msgid "Invalid token '%(token)s' in account_codes formula '%(formula)s'"
+msgstr "Token '%(token)s' inválido en la fórmula '%(formula)s' de account_codes"
+
+#. module: secondary_currency
 #: model:ir.model.fields,field_description:secondary_currency.field_account_bank_statement_line__invoice_secondary_currency_rate
 #: model:ir.model.fields,field_description:secondary_currency.field_account_move__invoice_secondary_currency_rate
-#: model:ir.model.fields,field_description:secondary_currency.field_account_payment__invoice_secondary_currency_rate
 msgid "Invoice Secondary Currency Rate"
 msgstr "Tipo de Cambio Secundario"
 
@@ -73,6 +143,11 @@ msgstr "Asiento contable"
 #: model:ir.model,name:secondary_currency.model_account_move_line
 msgid "Journal Item"
 msgstr "Apunte contable"
+
+#. module: secondary_currency
+#: model:ir.model,name:secondary_currency.model_mail_tracking_value
+msgid "Mail Tracking Value"
+msgstr "Valor de seguimiento de correo"
 
 #. module: secondary_currency
 #: model:ir.model.fields,field_description:secondary_currency.field_account_move_line__secondary_balance
@@ -90,6 +165,18 @@ msgid "Secondary Currency Rate"
 msgstr "Tipo de Cambio Moneda Secundaria"
 
 #. module: secondary_currency
+#: model_terms:ir.ui.view,arch_db:secondary_currency.view_move_form_inherit
+msgid "Total Balance"
+msgstr "Saldo Total"
+
+#. module: secondary_currency
+#: model_terms:ir.ui.view,arch_db:secondary_currency.view_move_form_inherit
 #: model_terms:ir.ui.view,arch_db:secondary_currency.view_move_line_tree_inherit
 msgid "Total Secondary Balance"
 msgstr "Saldo Secundario Total"
+
+#. module: secondary_currency
+#. odoo-python
+#: code:addons/secondary_currency/models/mail_tracking_value.py:0
+msgid "Unknown"
+msgstr "Desconocido"
