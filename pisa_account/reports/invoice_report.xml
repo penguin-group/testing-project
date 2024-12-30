@@ -2,7 +2,7 @@
   <data>
         
         <template id="invoice_document" 
-            inherit_id="l10n_py.invoice_document">
+            inherit_id="l10n_py_selfprinted_invoice.invoice_document">
            
             <xpath expr="//table[@id='qr_section_table']" position="replace">
                 <style>
