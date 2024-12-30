@@ -14,12 +14,12 @@ class AccountPayment(models.Model):
         :return: A list of python dictionary to be passed to the account.move.line's 'create' method.
         '''
         self.ensure_one()
-        write_off_line_vals = write_off_line_vals or {}
+        write_off_line_vals = write_off_line_vals or []
 
         if not self.outstanding_account_id:
             raise UserError(_(
-                "You can't create a new payment without an outstanding payments/receipts account set either on the company or the %s payment method in the %s journal.",
-                self.payment_method_line_id.name, self.journal_id.display_name))
+                "You can't create a new payment without an outstanding payments/receipts account set either on the company or the %(payment_method)s payment method in the %(journal)s journal.",
+                payment_method=self.payment_method_line_id.name, journal=self.journal_id.display_name))
 
         # Compute amounts.
         write_off_line_vals_list = write_off_line_vals or []
@@ -53,8 +53,8 @@ class AccountPayment(models.Model):
         currency_id = self.currency_id.id
 
         # Compute a default label to set on the journal items.
-        liquidity_line_name = ''.join(x[1] for x in self._get_liquidity_aml_display_name_list())
-        counterpart_line_name = ''.join(x[1] for x in self._get_counterpart_aml_display_name_list())
+        liquidity_line_name = ''.join(x[1] for x in self._get_aml_default_display_name_list())
+        counterpart_line_name = ''.join(x[1] for x in self._get_aml_default_display_name_list())
 
         line_vals_list = [
             # Liquidity line.
