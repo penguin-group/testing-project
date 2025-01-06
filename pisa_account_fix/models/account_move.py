@@ -19,10 +19,13 @@ class AccountMove(models.Model):
                 # Compute invoice currency rate
                 if move.currency_id.name == "PYG" and move.company_id.currency_id.name == "USD" and move.invoice_currency_rate == 1:
                     print('Fixing invoice currency rate for move %s' % move.name)
+                    amount_company_currency = abs(sum(move.line_ids.mapped('credit')))
                     move.button_draft()
-                    move._compute_invoice_currency_rate()
+                    currency_rate = round(move.amount_total / amount_company_currency, 2)
+                    move.invoice_currency_rate = currency_rate
                     move.action_post()
                 print('Fixing reconciliation for move %s' % move.name)
                 for partial in partials:
                     # Reconcile
-                    move.js_assign_outstanding_line(partial['line_id'])
+                    if move.amount_residual > 0:
+                        move.js_assign_outstanding_line(partial['line_id'])
