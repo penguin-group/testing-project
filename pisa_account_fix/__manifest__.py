@@ -14,6 +14,7 @@
     'license': "OPL-1",
     'depends': ['account'],
     'data': [
+        'data/cron.xml',
         'views/account_move_views.xml',
     ],
     'demo': [
