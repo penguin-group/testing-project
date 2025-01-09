@@ -1,20 +1,22 @@
-from odoo import models, fields, api
+from odoo import models, api
 from odoo.exceptions import ValidationError
+from odoo.tools.float_utils import float_is_zero
 
-class AccountMove(models.Model):
-    _inherit = 'account.move'
-
-    @api.constrains('line_ids')
-    def _check_analytic_accounts(self):
-        for move in self:
-            if move.is_invoice(include_receipts=True):  # Applies to both vendor and customer invoices
-                for line in move.line_ids:
-                    if not line.analytic_account_id:
-                        raise ValidationError(
-                            "All lines in the invoice must have an analytic account."
-                        )
 
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
-    analytic_account_id = fields.Many2one(required=True)  # Enforce requirement at field level
+    @api.constrains('analytic_distribution')
+    def _check_analytic_distribution(self):
+        for line in self:
+            if line.move_id.is_invoice(include_receipts=True) or line.move_id.move_type == 'entry':
+                if not line.analytic_distribution:
+                    raise ValidationError(
+                        "The analytic distribution is mandatory for all invoice and journal entry lines."
+                    )
+
+                # total_distribution = sum(line.analytic_distribution.values())
+                # if not float_is_zero(total_distribution - 1.0, precision_digits=2):
+                #     raise ValidationError(
+                #         "The analytic distribution must sum to 100% for all lines."
+                #     )
