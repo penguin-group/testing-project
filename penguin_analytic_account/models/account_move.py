@@ -14,9 +14,3 @@ class AccountMoveLine(models.Model):
                     raise ValidationError(
                         "The analytic distribution is mandatory for all invoice and journal entry lines."
                     )
-
-                # total_distribution = sum(line.analytic_distribution.values())
-                # if not float_is_zero(total_distribution - 1.0, precision_digits=2):
-                #     raise ValidationError(
-                #         "The analytic distribution must sum to 100% for all lines."
-                #     )
