@@ -22,8 +22,8 @@ class ResPartner(models.Model):
                 continue
             
             record._check_vat_unique()
-            if self.env.company.partner_id.country_id.code == 'PY':
-                # Validate VAT only if the company is in Paraguay
+            if self.env.company.partner_id.country_id.code == 'PY' and "-" in self.vat:
+                # Validate VAT only if the company is in Paraguay and have RUC
                 record._validate_vat()
     
     def _check_vat_unique(self):
