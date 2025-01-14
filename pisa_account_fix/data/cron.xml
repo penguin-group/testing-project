@@ -1,5 +1,5 @@
 <odoo>
-    <data noupdate="1">
+    <data>
         <record id="ir_cron_signed_amounts_fix" model="ir.cron">
             <field name="name">Fix Signed Amounts</field>
             <field name="model_id" ref="model_account_move"/>
@@ -9,5 +9,6 @@
             <field name="interval_type">days</field>
             <field name="active" eval="False"/>
         </record>
+
     </data>
 </odoo>
