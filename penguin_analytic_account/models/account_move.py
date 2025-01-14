@@ -9,8 +9,13 @@ class AccountMoveLine(models.Model):
     @api.constrains('analytic_distribution')
     def _check_analytic_distribution(self):
         for line in self:
-            if line.move_id.is_invoice(include_receipts=True) or line.move_id.move_type == 'entry':
+            if line.move_id.is_invoice(include_receipts=True) :
+                if not line.analytic_distribution and line.product_id:
+                    raise ValidationError(
+                        "The analytic distribution is mandatory for all invoice lines."
+                    )
+            if line.move_id.move_type == 'entry':
                 if not line.analytic_distribution:
                     raise ValidationError(
-                        "The analytic distribution is mandatory for all invoice and journal entry lines."
+                        "The analytic distribution is mandatory for all journal entry lines."
                     )
