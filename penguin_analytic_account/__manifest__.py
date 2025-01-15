@@ -16,10 +16,10 @@
     # Check https://github.com/odoo/odoo/blob/15.0/odoo/addons/base/data/ir_module_category_data.xml
     # for the full list
     'category': 'Accounting/Accounting',
-    'version': '18.0.1.0',
+    'version': '18.0.1.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','account','analytic'],
+    'depends': ['base','account','account_asset','analytic'],
 
     # always loaded
     'data': [
@@ -27,7 +27,8 @@
         'views/views.xml',
         'views/templates.xml',
         'views/account_move_views.xml',
-        
+        'views/inhe_view_account_asset_tree.xml',
+
     ],
     # only loaded in demonstration mode
     'demo': [
