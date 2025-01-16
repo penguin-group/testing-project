@@ -2,7 +2,6 @@ from odoo import models, api
 from odoo.exceptions import ValidationError
 from odoo.tools.float_utils import float_is_zero
 
-
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
