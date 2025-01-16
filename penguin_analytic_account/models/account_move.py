@@ -7,14 +7,16 @@ class AccountMoveLine(models.Model):
 
     @api.model
     def create(self, vals):
-        if not vals.get('analytic_distribution'):
-            raise ValidationError("You must provide a value for Analytic Distribution on the lines.")
-        return super(AccountMoveLine, self).create(vals)
+        if self.move_type == 'out_invoice' or self.move_type == 'in_invoice':
+            if not vals.get('analytic_distribution'):
+                raise ValidationError("You must provide a value for Analytic Distribution on the lines.")
+            return super(AccountMoveLine, self).create(vals)
 
     def write(self, vals):
-        if 'analytic_distribution' not in vals and not self.analytic_distribution:
-            raise ValidationError("You must provide a value for Analytic Distribution on the lines.")
-        return super(AccountMoveLine, self).write(vals)
+        if self.move_type == 'out_invoice' or self.move_type == 'in_invoice':
+            if 'analytic_distribution' not in vals and not self.analytic_distribution:
+                raise ValidationError("You must provide a value for Analytic Distribution on the lines.")
+            return super(AccountMoveLine, self).write(vals)
 
 
 class SaleOrderLine(models.Model):
