@@ -70,7 +70,7 @@ class AccountMove(models.Model):
                     _logger.info('Fixing reconciliation for move %s' % move.name)
                     for partial in partials:
                         # Reconcile
-                        if move.amount_residual > 0:
+                        if move.amount_residual > 0 and partial['line_id'].amount_residual > 0:
                             move.reset_me()
                             partial['line_id'].move_id.reset_me()
                             move.js_assign_outstanding_line(partial['line_id'].id)
