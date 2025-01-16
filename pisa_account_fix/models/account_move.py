@@ -51,7 +51,7 @@ class AccountMove(models.Model):
                     if not partial['is_exchange'] and partial_id.debit_move_id:
                         partials.append({
                             'id': partial_id.id,
-                            'line_id': partial_id.debit_move_id.id if partial_id.debit_move_id else False,
+                            'line_id': partial_id.debit_move_id if partial_id.debit_move_id else False,
                         })
                     if remove_partials:
                         self.js_remove_outstanding_partial(partial_id.id)
@@ -62,7 +62,7 @@ class AccountMove(models.Model):
         cnt = 0
         for move in self:
             cnt +=1 
-            if not move.asset_ids: # We cannot fix reconciliation for moves related to assets
+            if not move.asset_ids:
                 percentage = (cnt / record_len) * 100
                 _logger.info('Fixing reconciliation for move %s (%s/%s - %.2f%%)' % (move.name, cnt, record_len, percentage))
                 partials = move.get_partials(remove_partials=True)
@@ -72,10 +72,12 @@ class AccountMove(models.Model):
                         # Reconcile
                         if move.amount_residual > 0:
                             move.reset_me()
-                            move.reset_payment_entry(partial['line_id'])
-                            move.js_assign_outstanding_line(partial['line_id'])
+                            partial['line_id'].move_id.reset_me()
+                            move.js_assign_outstanding_line(partial['line_id'].id)
                             _logger.info('Reconciliation fixed for move %s' % move.name)
                 move.reconciliation_fixed = True
+            else:
+                _logger.warning('Cannot fix reconciliation for move %s because it is related to an asset' % move.name)
 
     def _fix_incorrect_amount_fields(self):
         """
@@ -149,13 +151,6 @@ class AccountMove(models.Model):
             self.env.cr.rollback()
             _logger.error('Error updating tax base amount for account move lines: %s', e)
 
-    def reset_payment_entry(self, line_id):
-        """
-        Reset the payment entry for the invoice.
-        """
-        line_id = self.env['account.move.line'].browse(line_id)
-        line_id.move_id.reset_me()
-
     def reset_me(self):
         """
         Reset the moves.
@@ -167,3 +162,7 @@ class AccountMove(models.Model):
             _logger.info('Move %s reset successfully', self.name)
         except Exception as e:
             _logger.error('Error resetting move %s: %s', self.name, e)
+
+    def mark_as_not_fixed(self):
+        for move in self:
+            move.write({'reconciliation_fixed': False})
