@@ -1,5 +1,6 @@
 import logging
 from odoo import models, fields, api, _
+from collections import Counter
 
 _logger = logging.getLogger(__name__)
 
@@ -44,24 +45,32 @@ class AccountMove(models.Model):
         """
         self.ensure_one()
         partials = []
-        bank_amls = self.env['account.move.line']
         if self.invoice_payments_widget:
             for partial in self.invoice_payments_widget['content']:
                 payment_id = self.env['account.payment'].browse(partial['account_payment_id'])
+                bank_amls = self.env['account.move.line']
                 if payment_id.journal_id.type == 'bank':
-                    transit_account_id = payment_id.journal_id.outbound_payment_method_line_ids.filtered(lambda p: p.payment_method_id.name == 'Manual').payment_account_id
-                    bank_amls |= payment_id.move_id.line_ids.filtered(lambda l: l.account_id == transit_account_id)
-                    bank_amls |= payment_id.reconciled_statement_line_ids.line_ids.filtered(lambda l: l.account_id == transit_account_id)
+                    # Get the bank statement lines that are reconciled with the payment
+                    all_line_ids = self.env['account.move.line']
+                    all_line_ids |= payment_id.move_id.line_ids
+                    all_line_ids |= payment_id.reconciled_statement_line_ids.line_ids
+                    matching_numbers = all_line_ids.mapped('matching_number')
+                    counts = Counter(matching_numbers)
+                    matching_number = [item for item, count in counts.items() if count > 1]
+                    if matching_number:
+                        bank_amls |= all_line_ids.filtered(lambda l: l.matching_number == matching_number[0])
                 partial_id = self.env['account.partial.reconcile'].browse(partial.get('partial_id'))
                 if partial_id.exists():
                     if not partial['is_exchange'] and partial_id.debit_move_id:
                         partials.append({
                             'id': partial_id.id,
                             'line_id': partial_id.debit_move_id if partial_id.debit_move_id else False,
+                            'bank_amls': bank_amls,
                         })
-                    if remove_partials:
-                        self.js_remove_outstanding_partial(partial_id.id)
-        return partials, bank_amls
+            if remove_partials:
+                for partial in partials:
+                    self.js_remove_outstanding_partial(partial['id'])
+        return partials
 
     def _fix_reconciliation(self):
         record_len = len(self)
@@ -71,7 +80,7 @@ class AccountMove(models.Model):
             if not move.asset_ids:
                 percentage = (cnt / record_len) * 100
                 _logger.info('Fixing reconciliation for move %s (%s/%s - %.2f%%)' % (move.name, cnt, record_len, percentage))
-                partials, bank_amls = move.get_partials(remove_partials=True)
+                partials = move.get_partials(remove_partials=True)
                 move.reset_me()
                 if partials:
                     for partial in partials:
@@ -80,8 +89,10 @@ class AccountMove(models.Model):
                         if move.amount_residual > 0 and partial['line_id'].amount_residual > 0:
                             move.js_assign_outstanding_line(partial['line_id'].id)
                             _logger.info('Reconciliation fixed for move %s' % move.name)
+                            bank_amls = partial['bank_amls']
+                            reconciled_bank_amls = bank_amls.filtered(lambda l: l.reconciled)
+                            bank_amls -= reconciled_bank_amls
                             if bank_amls:
-                                bank_amls -= bank_amls.filtered(lambda l: l.reconciled)
                                 bank_amls.action_reconcile()
                 move.reconciliation_fixed = True
             else:
