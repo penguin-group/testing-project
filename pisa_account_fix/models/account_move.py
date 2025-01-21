@@ -61,10 +61,11 @@ class AccountMove(models.Model):
                         bank_amls |= all_line_ids.filtered(lambda l: l.matching_number == matching_number[0])
                 partial_id = self.env['account.partial.reconcile'].browse(partial.get('partial_id'))
                 if partial_id.exists():
-                    if not partial['is_exchange'] and partial_id.debit_move_id:
+                    partial_move_id = partial_id.debit_move_id if self.move_type == 'in_invoice' else partial_id.credit_move_id
+                    if not partial['is_exchange'] and partial_move_id:
                         partials.append({
                             'id': partial_id.id,
-                            'line_id': partial_id.debit_move_id if partial_id.debit_move_id else False,
+                            'line_id': partial_move_id,
                             'bank_amls': bank_amls,
                         })
             if remove_partials:
@@ -86,7 +87,7 @@ class AccountMove(models.Model):
                     for partial in partials:
                         partial['line_id'].move_id.reset_me()
                         # Reconcile
-                        if move.amount_residual > 0 and partial['line_id'].amount_residual > 0:
+                        if move.amount_residual > 0 and abs(partial['line_id'].amount_residual) > 0:
                             move.js_assign_outstanding_line(partial['line_id'].id)
                             _logger.info('Reconciliation fixed for move %s' % move.name)
                             bank_amls = partial['bank_amls']
