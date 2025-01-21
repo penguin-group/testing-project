@@ -34,7 +34,8 @@ class AccountMove(models.Model):
     def _post(self, soft=True):
         ''' Override to check the secondary balance before posting the move.
         '''
-        self.line_ids._compute_secondary_balance()
+        if self.env.context.get('move_reverse_cancel'):
+            self.line_ids._compute_secondary_balance()
         self._check_secondary_balanced()
         return super(AccountMove, self)._post(soft)
     
