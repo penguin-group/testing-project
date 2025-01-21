@@ -1,6 +1,7 @@
 import logging
 from odoo import models, fields, api, _
 from collections import Counter
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -108,7 +109,8 @@ class AccountMove(models.Model):
             self.action_post()
             _logger.info('Move %s reset successfully', self.name)
         except Exception as e:
-            _logger.error('Error resetting move %s: %s', self.name, e)
+            raise UserError("Error resetting move %s: %s" % (self.name, e))
+            
 
     def mark_as_not_fixed(self):
         for move in self:
