@@ -106,6 +106,7 @@ class AccountMove(models.Model):
         self.ensure_one()
         try:
             self.button_draft()
+            self.line_ids._compute_secondary_balance()
             self.action_post()
             _logger.info('Move %s reset successfully', self.name)
         except Exception as e:
