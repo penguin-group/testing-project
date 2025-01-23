@@ -106,13 +106,37 @@ class AccountMove(models.Model):
         """
         self.ensure_one()
         try:
+            sec_balances = self.get_sec_balances()
             self.button_draft()
-            self.line_ids._compute_secondary_balance()
+            if not self.is_secondary_balanced():   
+                self.restore_sec_balances(sec_balances)
             self.action_post()
             _logger.info('Move %s reset successfully', self.name)
         except Exception as e:
             raise UserError("Error resetting move %s: %s" % (self.name, e))
-            
+
+    def get_sec_balances(self):
+        sec_balances = {}
+        for line in self.line_ids:
+            account_code = line.account_id.code
+            if account_code not in sec_balances:
+                sec_balances[account_code] = 0
+            sec_balances[account_code] += round(line.secondary_balance, 2)
+        return sec_balances
+
+    def restore_sec_balances(self, values):
+        for line in self.line_ids:
+            line.secondary_balance = 0
+        
+        for line in self.line_ids:
+            account_code = line.account_id.code
+            line.secondary_balance = values.get(account_code, 0)
+    
+    def is_secondary_balanced(self):
+        self.ensure_one()
+        debit = sum(self.line_ids.filtered(lambda l: l.debit != 0).mapped('secondary_balance'))
+        credit = sum(self.line_ids.filtered(lambda l: l.credit != 0).mapped('secondary_balance'))
+        return abs(debit) == abs(credit)
 
     def mark_as_not_fixed(self):
         for move in self:
