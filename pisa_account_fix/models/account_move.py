@@ -2,7 +2,7 @@ import logging
 from odoo import models, fields, api, _
 from collections import Counter
 from odoo.exceptions import UserError
-
+from odoo.tools import format_amount, SQL
 _logger = logging.getLogger(__name__)
 
 class AccountMove(models.Model):
@@ -106,38 +106,95 @@ class AccountMove(models.Model):
         """
         self.ensure_one()
         try:
+            unbalanced = self._get_secondary_unbalanced_moves()
             sec_balances = self.get_sec_balances()
             self.button_draft()
-            if not self.is_secondary_balanced():   
+            if not unbalanced:
                 self.restore_sec_balances(sec_balances)
+            else:
+                self.check_sec_balance()
             self.action_post()
             _logger.info('Move %s reset successfully', self.name)
         except Exception as e:
-            raise UserError("Error resetting move %s: %s" % (self.name, e))
+            raise UserError("Error resetting move %s: %s" % (self.name, e)) 
+
+    def check_sec_balance(self):
+        unbalanced = self._get_secondary_unbalanced_moves()
+        if unbalanced:
+            self.balance_move_lines(unbalanced[0])      
 
     def get_sec_balances(self):
-        sec_balances = {}
+        sec_balances = []
         for line in self.line_ids:
-            account_code = line.account_id.code
-            if account_code not in sec_balances:
-                sec_balances[account_code] = 0
-            sec_balances[account_code] += round(line.secondary_balance, 2)
+            sec_balances.append({
+                'account_id': line.account_id.id,
+                'balance': line.balance,
+                'secondary_balance': line.secondary_balance
+            })
         return sec_balances
 
     def restore_sec_balances(self, values):
         for line in self.line_ids:
-            line.secondary_balance = 0
-        
-        for line in self.line_ids:
-            account_code = line.account_id.code
-            line.secondary_balance = values.get(account_code, 0)
-    
-    def is_secondary_balanced(self):
-        self.ensure_one()
-        debit = sum(self.line_ids.filtered(lambda l: l.debit != 0).mapped('secondary_balance'))
-        credit = sum(self.line_ids.filtered(lambda l: l.credit != 0).mapped('secondary_balance'))
-        return abs(debit) == abs(credit)
+            saved_line = next((item for item in values if item['account_id'] == line.account_id.id and item['balance'] == line.balance), None)
+            if saved_line:
+                line.secondary_balance = saved_line['secondary_balance']
 
     def mark_as_not_fixed(self):
         for move in self:
             move.write({'reconciliation_fixed': False})
+
+    def balance_move_lines(self, unbalanced):
+        """
+        Balances the account.move.line by adjusting the secondary_balance field 
+        to ensure the total balance is zero.
+        """
+        move = self.browse(unbalanced[0])
+        total_balance = abs(unbalanced[1]) - abs(unbalanced[2])
+        
+        if total_balance == 0:
+            return  # No adjustment needed
+
+        lines = move.line_ids.filtered(lambda l: l.display_type not in ('line_section', 'line_note') and not l.reconciled)
+            
+        num_lines = len(lines)
+
+        if num_lines == 0:
+            raise ValueError("No lines to balance.")
+
+        adjustment_per_line = total_balance / num_lines
+
+        #Distribute the adjustment
+        for line in lines:
+            line.secondary_balance -= adjustment_per_line
+
+        #Handle rounding differences
+        unbalanced_moves = move._get_secondary_unbalanced_moves()
+        if unbalanced_moves:
+            unbalanced = unbalanced_moves[0]
+            final_balance = abs(unbalanced[1]) - abs(unbalanced[2])
+            if final_balance != 0:
+                # Adjust the first line for rounding issues
+                lines[0].secondary_balance -= final_balance
+
+    def _check_secondary_balanced(self):
+        ''' Assert the move is fully balanced on secondary balance.
+        An error is raised if it's not the case.
+        '''
+        unbalanced_moves = self._get_secondary_unbalanced_moves()
+        if unbalanced_moves:
+            if unbalanced_moves and unbalanced_moves[0][1] + unbalanced_moves[0][2] == 0:
+                return
+            error_msg = _("An error has occurred.")
+            for move_id, sum_debit, sum_credit in unbalanced_moves:
+                move = self.browse(move_id)
+                error_msg += _(
+                    "\n\n"
+                    "Secondary Balance in the move (%(move)s) is not balanced.\n"
+                    "The total of debits equals %(debit_total)s and the total of credits equals %(credit_total)s.\n"
+                    "The difference could be due to a rounding error in the secondary currency.\n"
+                    "Please adjust it manually.\n",
+                    move=move.display_name,
+                    debit_total=format_amount(self.env, sum_debit, move.company_id.sec_currency_id),
+                    credit_total=format_amount(self.env, sum_credit, move.company_id.sec_currency_id),
+                    journal=move.journal_id.name)
+            raise UserError(error_msg)
