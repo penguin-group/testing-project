@@ -12,7 +12,7 @@
     'category': 'Accounting',
     'version': '18.0.1.0',
     'license': "OPL-1",
-    'depends': ['account'],
+    'depends': ['pisa_account'],
     'data': [
         'data/cron.xml',
         'views/account_move_views.xml',
