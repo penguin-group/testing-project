@@ -1,30 +1,16 @@
 @font-face {
-    font-family: 'Inter-Medium';
+    font-family: 'Inter';
     src: url('/pisa_reports/static/src/fonts/inter/Inter-Medium.otf') format('opentype');
  }
 
- @font-face {
-    font-family: 'Inter-Regular';
-    src: url('/pisa_reports/static/src/fonts/inter/Inter-Regular.otf') format('opentype');
- }
-
- @font-face {
-    font-family: 'Inter-Light';
-    src: url('/pisa_reports/static/src/fonts/inter/Inter-Light-BETA.otf') format('opentype');
- }
-
- @font-face {
-    font-family: 'Inter-SemiBold';
-    src: url('/pisa_reports/static/src/fonts/inter/Inter-SemiBold.otf') format('opentype');
- }
-
-.pisa_report_pdf {   
-    font-family: 'Inter-Light', serif;
+.pisa_report_pdf {  
+    font-family: 'Inter', serif; 
     margin: 20px;
 
     header {
         width: 100%;
-        padding: 50px 20px;
+        padding: 50px 0px;
+        border: none;
         background-color: white;
 
         .o_header_font {
@@ -34,6 +20,8 @@
         .o_title {
             font-size: 2rem;
             margin-bottom: 15px;
+            text-align: left;
+            vertical-align: top;
         }
 
         .o_subtitle {
@@ -46,9 +34,10 @@
     }
 
     .o_table {
+        color: #4F4B81;
         width: 100%;
         direction: ltr;
-        font-size: 0.6rem;
+        font-size: 0.8rem;
         white-space: nowrap;
 
         thead, tbody, tfoot, tr, td, th { border-style: none }
@@ -71,15 +60,17 @@
         }
 
         > thead {
-            background-color: #4F4B81;
+            background-color: #ffffff;
+            font-family: 'Inter', serif;
 
-            tr > th:nth-child(3) {
-                width: 50%;
-                max-width: 50%;
+            > tr:not(:last-child) th:not(:first-child) {
+                border: 0;
+                text-align: center;
             }
         }
 
         > tbody {
+            font-family: 'Inter', serif;
 
             tr > td:nth-child(3) {
                 white-space: normal;
@@ -88,7 +79,15 @@
 
             tr:last-child {
                 font-weight: bold;
-                border-top: 1px solid $o-gray-200;
+            }
+
+            .o_line_level_0 {
+                background-color: #ffffff;
+                color: #4F4B81;
+                font-weight: bold;
+                border-bottom: 1px solid #4F4B81;
+
+                .o_line_name_level { padding-left: 8px }
             }
         }
     }

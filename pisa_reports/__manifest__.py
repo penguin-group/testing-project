@@ -18,7 +18,7 @@
     'depends': ['base', 'account_reports'],
 
     'data': [
-
+        'data/pdf_export_templates.xml',
     ],
 
     'assets': {
