@@ -4,64 +4,46 @@ from odoo.exceptions import UserError
 class AccountReport(models.Model):
     _inherit = 'account.report'
 
+    analytic_account_vertical = fields.Boolean('Analytic Account Vertical', help='If checked, the analytic accounts will be grouped vertically in the report.')
+
     def _get_lines(self, options, all_column_groups_expression_totals=None, warnings=None):
+        analytic_accounts = self.env['account.analytic.account'].browse(options.get('analytic_accounts_groupby'))
+        if self.analytic_account_vertical and self.root_report_id and analytic_accounts:
+            self._create_lines_with_analytic(analytic_accounts)
         lines = super(AccountReport, self)._get_lines(options, all_column_groups_expression_totals, warnings)
-        lines = self._create_analytic_hierarchy(lines, options)
         return lines
+    
+    def _create_lines_with_analytic(self, analytic_accounts):
+        self.line_ids.unlink()
 
+        seq = 0
+        line_cache = {}
+        for line in self.root_report_id.line_ids:
+            seq += 10
+            new_line = line.copy({'report_id': self.id, 'code': line.code + '_A', 'sequence': seq})
+            line_cache[line.id] = new_line.id
+            new_line.write({'parent_id': line_cache.get(line.parent_id.id)})
 
-    def _create_analytic_hierarchy(self, lines, options):
-        """Compute the hierarchy based on analytic accounts.
-
-        This method takes the lines resulting from _create_hierarchy and organizes them
-        into a hierarchy based on analytic accounts.
-        """
-        if not lines:
-            return lines
-
-        def create_analytic_hierarchy_line(analytic_account, column_totals, level, parent_id, cnt=0):
-            line_id = self._get_generic_line_id('account.analytic.account', analytic_account.id, cnt, parent_id)
-            unfolded = line_id in options.get('unfolded_lines') or options['unfold_all']
-            name = analytic_account.display_name if analytic_account else _('(No Analytic Account)')
-            columns = []
-            for column_total, column in zip(column_totals, options['columns']):
-                columns.append(self._build_column_dict(column_total, column, options=options))
-            return {
-                'id': line_id,
-                'name': name,
-                'title_hover': name,
-                'unfoldable': True,
-                'unfolded': unfolded,
-                'level': level,
-                'parent_id': parent_id,
-                'columns': columns,
-            }
-
-        zero_level_lines = []
-        other_lines = []
-        new_lines = []
-
-        # Adjust the levels of the existing lines
-        for line in lines:
-            if line['level'] > 0:
-                line['level'] += 1
-                other_lines.append(line)
-            else:
-                zero_level_lines.append(line)
-
-        olcnt = 0
-        for zero_level in zero_level_lines:
-            new_lines.append(zero_level)
-            cnt = 0
-            for analytic_account in self.env['account.analytic.account'].browse(options.get('analytic_accounts')):
-                cnt += 1
-                one_level_line = create_analytic_hierarchy_line(analytic_account, [0] * len(options['columns']), 1, zero_level['id'], cnt)
-                new_lines.append(one_level_line)
-                for line in other_lines:
-                    olcnt += 1
-                    line_copy = line.copy()
-                    line_copy['parent_id'] = one_level_line['id']
-                    line_copy['id'] = self._get_generic_line_id('account.report.line', None, olcnt, one_level_line['id'])
-                    new_lines.append(line_copy)
-
-        return new_lines
+            # Update level
+            if new_line.hierarchy_level != 0:
+                new_line.hierarchy_level += 1
+            
+            if 'domain' in line.expression_ids.mapped('engine'):
+                new_line.write({'groupby': False, 'user_groupby': False})
+                # Generate additional lines for analytic accounts
+                vals = []
+                for analytic_account in analytic_accounts:
+                    vals.append({
+                        'report_id': self.id,
+                        'name': analytic_account.display_name,
+                        'parent_id': new_line.id,
+                        'hierarchy_level': new_line.hierarchy_level + 2,
+                        'sequence': seq + 1,
+                        'foldable': True,
+                        'groupby': line.groupby,
+                        # 'expression_ids': [(0, 0, expr.copy_data()[0]) for expr in line.expression_ids]
+                    })
+                self.env['account.report.line'].create(vals)
+            # else:
+            #     for expr in line.expression_ids:
+            #         expr.copy({'report_line_id': new_line.id})
