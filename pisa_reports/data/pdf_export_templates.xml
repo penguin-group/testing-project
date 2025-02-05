@@ -2,33 +2,45 @@
 <odoo>
     <template id="pisa_pdf_export_main" inherit_id="account_reports.pdf_export_main">
 
-    <xpath expr="//div[1]" position="attributes">
-        <attribute name="t-att-class">'o_content pisa_report_pdf'</attribute>
-    </xpath>
+        <xpath expr="//div[1]" position="attributes">
+            <attribute name="t-att-class">'o_content pisa_report_pdf'</attribute>
+        </xpath>
 
-    <xpath expr="//header" position="replace">
-        <header>
-            <div class="row o_title">
-                <div class="col-8">
-                    <t t-if="report.filter_show_draft and options['all_entries']">[Draft]</t>
-                    <t t-out="report_title"/>
-                </div>
-                <div class="col-4">
-                    <t t-set="company" t-value="options['companies'][0]"/>
-                    <div style="text-align: right;">
-                        <img t-attf-src="/logo.png?company={{ company['id'] }}" style="padding: 0px; margin: 0px; height: auto; width: 240px;" t-att-alt="company['name']"/>
+        <xpath expr="//header" position="replace">
+            <header>
+                <div class="row o_title">
+                    <div class="col-8">
+                        <t t-if="report.filter_show_draft and options['all_entries']">[Draft]</t>
+                        <t t-out="report_title"/>
+                    </div>
+                    <div class="col-4">
+                        <t t-set="company" t-value="options['companies'][0]"/>
+                        <div style="text-align: right;">
+                            <img t-attf-src="/logo.png?company={{ company['id'] }}" style="padding: 0px; margin: 0px; height: auto; width: 240px;" t-att-alt="company['name']"/>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <t t-set="company_names" t-value="[company['name'] for company in options['companies']]"/>
-            <div class="row">
-                <div class="col-10" t-out="', '.join(company_names)"/>
-            </div>
-            <div class="row">
-                <address class="mb-0 o_text_muted" t-field="env.company.partner_id" t-options='{"widget": "contact", "fields": ["address"], "no_marker": True}'/>
-            </div>
-        </header>
-    </xpath>
+                <t t-set="company_names" t-value="[company['name'] for company in options['companies']]"/>
+                <div class="row o_header_font">
+                    <div class="col-10" t-out="', '.join(company_names)"/>
+                </div>
+                <div class="row o_header_font">
+                    <address class="mb-0" t-field="env.company.partner_id" t-options='{"widget": "contact", "fields": ["address"], "no_marker": True}'/>
+                </div>
+            </header>
+        </xpath>
 
+    </template>
+
+    <template id="pisa_pdf_export_cell" inherit_id="account_reports.pdf_export_cell">
+        <xpath expr="//span" position="replace">
+             
+             <t t-if="cell.get('figure_type', '') in ['float', 'integer', 'monetary']">
+                <span t-att-class="o_classes" t-out="cell.get('currency_symbol') + ' ' + cell.get('name')"/>
+            </t>
+            <t t-else="">
+                <span t-att-class="o_classes" t-out="cell.get('name')"/>
+            </t>
+        </xpath>
     </template>
 </odoo>
