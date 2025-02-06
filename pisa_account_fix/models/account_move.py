@@ -79,44 +79,42 @@ class AccountMove(models.Model):
         cnt = 0
         for move in self:
             cnt +=1 
-            if not move.asset_ids:
-                percentage = (cnt / record_len) * 100
-                _logger.info('Fixing reconciliation for move %s (%s/%s - %.2f%%)' % (move.name, cnt, record_len, percentage))
-                partials = move.get_partials(remove_partials=True)
-                move.reset_me()
-                if partials:
-                    for partial in partials:
-                        partial['line_id'].move_id.reset_me()
-                        # Reconcile
-                        if move.amount_residual > 0 and abs(partial['line_id'].amount_residual) > 0:
-                            move.js_assign_outstanding_line(partial['line_id'].id)
-                            _logger.info('Reconciliation fixed for move %s' % move.name)
-                            bank_amls = partial['bank_amls']
-                            reconciled_bank_amls = bank_amls.filtered(lambda l: l.reconciled)
-                            bank_amls -= reconciled_bank_amls
-                            if bank_amls:
-                                bank_amls.action_reconcile()
-                move.reconciliation_fixed = True
-            else:
-                _logger.warning('Cannot fix reconciliation for move %s because it is related to an asset' % move.name)
+            percentage = (cnt / record_len) * 100
+            _logger.info('Fixing reconciliation for move %s (%s/%s - %.2f%%)' % (move.name, cnt, record_len, percentage))
+            partials = move.get_partials(remove_partials=True)
+            move.reset_me()
+            if partials:
+                for partial in partials:
+                    partial['line_id'].move_id.reset_me()
+                    # Reconcile
+                    if move.amount_residual > 0 and abs(partial['line_id'].amount_residual) > 0:
+                        move.js_assign_outstanding_line(partial['line_id'].id)
+                        _logger.info('Reconciliation fixed for move %s' % move.name)
+                        bank_amls = partial['bank_amls']
+                        reconciled_bank_amls = bank_amls.filtered(lambda l: l.reconciled)
+                        bank_amls -= reconciled_bank_amls
+                        if bank_amls:
+                            bank_amls.action_reconcile()
+            move.reconciliation_fixed = True
 
     def reset_me(self):
         """
         Reset the moves.
         """
         self.ensure_one()
-        try:
-            unbalanced = self._get_secondary_unbalanced_moves()
-            sec_balances = self.get_sec_balances()
-            self.button_draft()
-            if not unbalanced:
-                self.restore_sec_balances(sec_balances)
-            else:
-                self.check_sec_balance()
-            self.action_post()
-            _logger.info('Move %s reset successfully', self.name)
-        except Exception as e:
-            raise UserError("Error resetting move %s: %s" % (self.name, e)) 
+        if not self.asset_ids:
+            try:
+                unbalanced = self._get_secondary_unbalanced_moves()
+                sec_balances = self.get_sec_balances()
+                self.button_draft()
+                if not unbalanced:
+                    self.restore_sec_balances(sec_balances)
+                else:
+                    self.check_sec_balance()
+                self.action_post()
+                _logger.info('Move %s reset successfully', self.name)
+            except Exception as e:
+                raise UserError("Error resetting move %s: %s" % (self.name, e)) 
 
     def check_sec_balance(self):
         unbalanced = self._get_secondary_unbalanced_moves()
