@@ -46,7 +46,7 @@ class AccountMove(models.Model):
     def action_post(self):
         for record in self:
             # Check invoice confirmation permission
-            if record.is_invoice and not record.env.user.has_group('pisa_account.group_account_invoice_approver'):
+            if record.is_invoice and not record.env.user.has_group('account.group_account_invoice'):
                 raise ValidationError(_("You don't have permission to approve an invoice."))
             if record.move_type == 'in_invoice':
                 # Check if the "ref" field is blank
