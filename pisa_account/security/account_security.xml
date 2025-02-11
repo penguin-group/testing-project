@@ -83,17 +83,17 @@
             <field name="groups_id" eval="[(4, ref('pisa_account.group_account_sr_finance'))]"/>
         </record>
 
+        <record id="account.menu_finance_receivables" model="ir.ui.menu">
+            <field name="groups_id" eval="[(4, ref('pisa_account.group_account_sr_finance'))]"/>
+        </record>
+
         <record id="account.menu_account_customer" model="ir.ui.menu">
             <field name="groups_id" eval="[(4, ref('pisa_account.group_account_sr_finance'))]"/>
         </record>
 
-
-
         <record id="account.menu_action_account_payments_receivable" model="ir.ui.menu">
             <field name="groups_id" eval="[(4, ref('pisa_account.group_account_sr_finance'))]"/>
         </record>
-
-
 
         <record id="account_reports.menu_action_account_report_general_ledger" model="ir.ui.menu">
             <field name="groups_id" eval="[(4, ref('pisa_account.group_account_sr_finance'))]"/>
@@ -137,6 +137,10 @@
         </record>
 
         <record id="account.account_banks_menu" model="ir.ui.menu">
+            <field name="groups_id" eval="[(4, ref('pisa_account.group_account_head_finance'))]"/>
+        </record>
+
+        <record id="account.root_payment_menu" model="ir.ui.menu">
             <field name="groups_id" eval="[(4, ref('pisa_account.group_account_head_finance'))]"/>
         </record>
 
