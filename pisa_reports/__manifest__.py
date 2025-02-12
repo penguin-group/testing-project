@@ -19,6 +19,7 @@
 
     'data': [
         'data/pdf_export_templates.xml',
+        'views/account_report_views.xml',
     ],
 
     'assets': {
