@@ -17,11 +17,12 @@ class AccountReport(models.Model):
                 raise ValidationError(_('The field "Analytic Filter" must be selected when "Analytic Account Vertical" is selected.'))
 
     def get_report_information(self, options):
-        options_analytic_accounts = options.get('analytic_accounts')
-        if self.analytic_account_vertical and self.root_report_id and options_analytic_accounts:
+        if self.analytic_account_vertical and self.root_report_id:
             self.line_ids.unlink()
+            options_analytic_accounts = options.get('analytic_accounts')
             analytic_accounts = self.env['account.analytic.account'].browse(options_analytic_accounts)
-            self._create_lines_with_analytic(analytic_accounts)
+            if analytic_accounts:
+                self._create_lines_with_analytic(analytic_accounts)
         return super(AccountReport, self).get_report_information(options)
     
     def _create_lines_with_analytic(self, analytic_accounts):
