@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    
+    <data>
         <record id="view_move_form_inherited" model="ir.ui.view">
             <field name="name">view.move.form.inherited</field>
             <field name="model">account.move</field>
@@ -24,18 +24,33 @@
                         invisible="(not company_secondary_currency_id and company_id.country_code != 'PY') or move_type != 'in_invoice' or state != 'draft' or currency_id == company_secondary_currency_id"
                     />
                 </xpath>
-                <!--
+
                 <xpath expr="//label[@for='journal_id']" position="attributes">
                     <attribute name="groups">account.group_account_readonly,pisa_account.group_account_sr_finance</attribute>
                 </xpath>
-                -->
 
-                <xpath expr="//div[@name='journal_div']" position="attributes">
-                    <attribute name="groups">account.group_account_readonly,base.group_multi_currency,pisa_account.group_account_sr_finance</attribute>
+                <xpath expr="//label[@for='currency_id']" position="attributes">
+                    <attribute name="groups">!account.group_account_readonly,!pisa_account.group_account_sr_finance,base.group_multi_currency</attribute>
                 </xpath>
 
-                <xpath expr="//field[@name='journal_id']" position="attributes">
+                <xpath expr="//div[@name='journal_div']" position="attributes">
+                    <attribute name="groups">account.group_account_readonly,pisa_account.group_account_sr_finance,base.group_multi_currency</attribute>
+                </xpath>
+
+                <xpath expr="//div[@name='journal_div']/field[@name='journal_id']" position="attributes">
                     <attribute name="groups">account.group_account_readonly,pisa_account.group_account_sr_finance</attribute>
+                </xpath>
+
+                <xpath expr="//div[@name='journal_div']/span[1]" position="attributes">
+                    <attribute name="groups">account.group_account_readonly,pisa_account.group_account_sr_finance</attribute>
+                </xpath>
+
+                <xpath expr="//div[@name='journal_div']/span[1]/span" position="attributes">
+                    <attribute name="groups">account.group_account_readonly,pisa_account.group_account_sr_finance</attribute>
+                </xpath>
+
+                <xpath expr="//div[@name='currency_div']" position="attributes">
+                    <attribute name="groups">base.group_multi_currency,pisa_account.group_account_sr_finance</attribute>
                 </xpath>
                 
                 <xpath expr="//page[@id='aml_tab']" position="attributes">
@@ -44,7 +59,6 @@
 
             </field>
         </record>
-
 
 
         <record id="view_move_form_inherited_pisa" model="ir.ui.view">
@@ -59,6 +73,5 @@
 
             </field>
         </record>
-
-    
+    </data>
 </odoo>
