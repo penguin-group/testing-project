@@ -108,21 +108,21 @@
                 background-color: #ffffff;
                 color: #4F4B81;
                 font-weight: bold;
-                border-bottom: 0.5px solid #CACADD;
+                border-bottom: 1px solid #CACADD;
 
                 .o_line_name_level { padding-left: 0px }
             }
 
             @for $i from 2 through 3 {
                 .o_line_level_#{$i} {
-                    border-bottom: 0.5px solid #CACADD;
+                    border-bottom: 1px solid #CACADD;
                     .o_line_name_level { padding-left: 0px }
                 }
             }
 
             @for $i from 4 through 16 {
                 .o_line_level_#{$i} {
-                    border-bottom: 0.5px solid #CACADD;
+                    border-bottom: 1px solid #CACADD;
                     .o_line_name_level { padding-left: 0px }
                 }
             }

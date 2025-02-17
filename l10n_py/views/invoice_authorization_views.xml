@@ -63,6 +63,7 @@
             name="Invoice Authorizations"
             action="invoice_authorization_action"
             parent="account.account_account_menu"
+            groups="account.group_account_manager,account.group_account_invoice"
             sequence="4"/>
     
     </data>
