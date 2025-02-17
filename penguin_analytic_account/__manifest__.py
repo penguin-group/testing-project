@@ -28,7 +28,7 @@
         'views/templates.xml',
         'views/account_move_views.xml',
         'views/inhe_view_account_asset_tree.xml',
-
+        'views/product_template_views.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
