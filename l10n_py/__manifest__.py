@@ -22,6 +22,7 @@
     'depends': ['base', 'account', 'web'],
 
     'data': [
+        'security/account_security.xml',
         'security/ir.model.access.csv',
         'security/book_registration_security.xml',
         'security/ir_ui_menu_security.xml',
