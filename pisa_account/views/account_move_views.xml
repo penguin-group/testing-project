@@ -33,19 +33,15 @@
                     <attribute name="groups">!account.group_account_readonly,!pisa_account.group_account_sr_finance,base.group_multi_currency</attribute>
                 </xpath>
 
-                <xpath expr="//div[@name='journal_div']" position="attributes">
+                 <xpath expr="//div[@name='journal_div']" position="attributes">
                     <attribute name="groups">account.group_account_readonly,pisa_account.group_account_sr_finance,base.group_multi_currency</attribute>
                 </xpath>
-
+                
                 <xpath expr="//div[@name='journal_div']/field[@name='journal_id']" position="attributes">
                     <attribute name="groups">account.group_account_readonly,pisa_account.group_account_sr_finance</attribute>
                 </xpath>
 
                 <xpath expr="//div[@name='journal_div']/span[1]" position="attributes">
-                    <attribute name="groups">account.group_account_readonly,pisa_account.group_account_sr_finance</attribute>
-                </xpath>
-
-                <xpath expr="//div[@name='journal_div']/span[1]/span" position="attributes">
                     <attribute name="groups">account.group_account_readonly,pisa_account.group_account_sr_finance</attribute>
                 </xpath>
 
