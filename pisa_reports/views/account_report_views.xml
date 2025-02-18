@@ -18,9 +18,9 @@
                     If you select the Analytic Account Vertical option, the lines will be overwritten on report display.
                 </div>
                 <div class="alert alert-warning text-center" 
-                    invisible="not analytic_account_vertical or (analytic_account_vertical and root_report_id)" 
+                    invisible="not analytic_account_vertical or (analytic_account_vertical and source_report_id)" 
                     role="alert">
-                    If you select the Analytic Account Vertical option, you should select the root report.
+                    If you select the Analytic Account Vertical option, you should select the source report.
                 </div>
             </xpath>
         </field>
