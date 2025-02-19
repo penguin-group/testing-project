@@ -24,3 +24,4 @@ access_head_finance_payment_token,access.head.finance.payment.token,payment.mode
 access_head_finance_payment_transaction,access.head.finance.payment.transaction,account_payment.model_payment_transaction,pisa_account.group_account_head_finance,1,1,1,1
 access_cfo_account_lock_date,access.cfo.account.lock.date,account_accountant.model_account_change_lock_date,pisa_account.group_account_cfo,1,1,1,1
 access_cfo_budget_analytic,access.cfo.budget.analytic,account_budget.model_budget_analytic,pisa_account.group_account_cfo,1,1,1,1
+access_cfo_account_lock_exception,access.cfo.account.lock.exception,account.model_account_lock_exception,pisa_account.group_account_cfo,1,0,1,0
