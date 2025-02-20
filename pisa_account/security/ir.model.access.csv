@@ -17,6 +17,7 @@ access_sr_finance_account_report_column,access.sr.finance.account.report.column,
 access_sr_finance_account_report_expression,access.sr.finance.account.report.expression,account_reports.model_account_report_expression,pisa_account.group_account_sr_finance,1,0,0,0
 access_sr_finance_account_group,access.sr.finance.account.group,account.model_account_group,pisa_account.group_account_sr_finance,1,0,0,0
 access_sr_finance_account_fiscal_year,access.sr.finance.account.fiscal.year,account_accountant.model_account_fiscal_year,pisa_account.group_account_sr_finance,1,0,0,0
+access_sr_finance_account_reconcile_model,access.sr.finance.account.reconcile.model,account.model_account_reconcile_model,pisa_account.group_account_sr_finance,1,1,1,1
 access_head_finance_account_online_link,access.head.finance.account.online.link,account_online_synchronization.model_account_online_link,pisa_account.group_account_head_finance,1,1,1,1
 access_head_finance_payment_provider,access.head.finance.payment.provider,account_payment.model_payment_provider,pisa_account.group_account_head_finance,1,1,1,1
 access_head_finance_payment_method,access.head.finance.payment.method,payment.model_payment_method,pisa_account.group_account_head_finance,1,1,1,1

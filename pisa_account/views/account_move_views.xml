@@ -50,7 +50,7 @@
                 </xpath>
                 
                 <xpath expr="//page[@id='aml_tab']" position="attributes">
-                    <attribute name="groups">account.group_account_readonly,pisa_account.group_account_sr_finance</attribute>
+                    <attribute name="groups">account.group_account_readonly,pisa_account.group_account_jr_accountant,pisa_account.group_account_sr_finance</attribute>
                 </xpath>
 
             </field>
