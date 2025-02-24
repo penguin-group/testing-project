@@ -14,4 +14,10 @@ Accounting Reports
         
         'wizard/multicurrency_revaluation.xml',
     ],
+    'version': '18.0.0.1',
+    'assets': {
+        'web.assets_backend': [
+            'secondary_currency/static/src/components/**/*',
+        ],
+    },
 }
