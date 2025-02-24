@@ -1,6 +1,6 @@
 {
     'name': "PISA Sites",
-    'summary': "Manage electrical sites and related information",
+    'summary': "Manage sites and related information.",
     'description': """
         Site Management System
         =====================
@@ -11,8 +11,11 @@
         * Monitor capacity and voltage levels
         * Track project progress
     """,
+    'author': "Penguin Infrastructure, William Eckerleben",
+    'website': "https://penguin.digital",
     'category': 'Industries',
     'version': '18.0.1.0.0',
+    'license': "OPL-1",
     'depends': ['base', 'mail'],
     'data': [
         'security/site_security.xml',
@@ -23,5 +26,4 @@
     'application': True,
     'icon': '/pisa_sites/static/description/icon.png',
     'sequence': 1,
-    'license': 'LGPL-3',
 } 
