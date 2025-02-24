@@ -1,13 +1,14 @@
-# -*- coding: utf-8 -*-
-# Part of Odoo. See LICENSE file for full copyright and licensing details.
 {
-    'name' : 'Accounting Reports',
+    'name' : 'Secondary Currency Accounting Reports',
     'summary': 'View and create reports',
     'category': 'Accounting/Accounting',
     'description': """
-Accounting Reports
-==================
+Secondary Currency Accounting Reports
+====================================
     """,
+    'author': "Penguin Infrastructure, William Eckerleben",
+    'website': "https://penguin.digital",
+    'license': "OPL-1",
     'depends': ['secondary_currency'],
     'data': [
         'data/multicurrency_revaluation_report.xml',
