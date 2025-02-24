@@ -19,6 +19,7 @@
 
     'data': [
         'security/ir.model.access.csv',
+        'security/certificate_security.xml',
         'views/purchase_views.xml',
         'views/purchase_certificate_views.xml',
     ],

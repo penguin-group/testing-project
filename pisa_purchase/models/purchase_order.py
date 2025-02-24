@@ -4,18 +4,6 @@ class PurchaseOrder(models.Model):
     _inherit = "purchase.order"
 
     assignee_id = fields.Many2one('res.users', string='Assignee', help='User responsible for this RFQ')
-    state = fields.Selection(
-        selection_add=[
-            ('rfq_completed', 'RFQ Completed'),
-            ('technical_review', 'Technical Review'),
-            ('sourcing_strategy', 'Sourcing Strategy'),
-        ], 
-        string='Status', 
-        readonly=True, 
-        index=True, 
-        copy=False, 
-        default='draft', 
-        tracking=True)
     state = fields.Selection([
         ('draft', 'RFQ'),
         ('sent', 'RFQ Sent'),
