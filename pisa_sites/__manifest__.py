@@ -21,6 +21,7 @@
         'views/site_menus.xml',
     ],
     'application': True,
+    'icon': '/pisa_sites/static/description/icon.png',
     'sequence': 1,
     'license': 'LGPL-3',
 } 
