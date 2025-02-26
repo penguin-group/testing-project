@@ -15,13 +15,12 @@
     'version': '18.0.1.0.0',
     'license': "OPL-1",
 
-    'depends': ['base', 'purchase'],
+    'depends': ['base', 'project_purchase'],
 
     'data': [
-        'security/ir.model.access.csv',
-        'security/certificate_security.xml',
         'views/purchase_views.xml',
-        'views/purchase_certificate_views.xml',
+        'views/project_task_views.xml',
+        'views/project_milestone_views.xml',
     ],
 
     'demo': [
