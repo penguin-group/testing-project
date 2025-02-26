@@ -23,6 +23,7 @@
         'security/ir.model.access.csv',
         'views/account_journal_views.xml',
         'views/account_move_views.xml',
+        'views/account_payment_views.xml',
         'reports/invoice_report.xml',
         'wizards/edit_secondary_currency_rate_views.xml',
         'views/partner_view.xml',
