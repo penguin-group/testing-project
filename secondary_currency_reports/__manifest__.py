@@ -8,6 +8,7 @@ Secondary Currency Accounting Reports
     """,
     'author': "Penguin Infrastructure, William Eckerleben",
     'website': "https://penguin.digital",
+    'version': '18.0.0.1',
     'license': "OPL-1",
     'depends': ['accountant','secondary_currency'],
     'data': [
