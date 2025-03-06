@@ -35,3 +35,14 @@ class PurchaseOrder(models.Model):
     def _not_service_products(self):
         for order in self:
             return len(order.order_line.filtered(lambda line: line.product_id.type != 'service')) > 0
+
+
+class PurchaseOrderLine(models.Model):
+    _inherit = 'purchase.order.line'
+
+    @api.depends('product_id', 'product_id.type', 'order_id.use_certificate')
+    def _compute_qty_received_method(self):
+        super(PurchaseOrderLine, self)._compute_qty_received_method()
+        for line in self:
+            if line.order_id.use_certificate:
+                line.qty_received_method = False

@@ -18,6 +18,14 @@
                 <field name="invoice_status" position="before">
                     <field name="use_certificate" widget="boolean_toggle" readonly="state != 'draft'"/>
                 </field>
+
+                <xpath expr="//header/button[@name='action_create_invoice']" position="attributes">
+                    <attribute name="invisible">state not in ('purchase', 'done') or invoice_status in ('no', 'invoiced') or use_certificate</attribute>
+                </xpath>
+
+                <xpath expr="//header/button[12]" position="attributes">
+                    <attribute name="invisible">state not in ('purchase', 'done') or invoice_status in ('no', 'invoiced') or use_certificate</attribute>
+                </xpath>
                     
             </field>
         </record>
