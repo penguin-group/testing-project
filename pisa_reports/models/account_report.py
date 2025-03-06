@@ -21,19 +21,20 @@ class AccountReport(models.Model):
             report_line_id=report_line_id
         )
     analytic_account_vertical = fields.Boolean('Analytic Account Vertical', help='If checked, the analytic accounts will be grouped vertically in the report.')
+    source_report_id = fields.Many2one('account.report', string='Source Report', required=False, help='The report from which it will copy the lines.')
 
-    @api.constrains('filter_analytic_groupby', 'analytic_account_vertical', 'root_report_id', 'filter_analytic')
+    @api.constrains('filter_analytic_groupby', 'analytic_account_vertical', 'source_report_id', 'filter_analytic')
     def _check_filter_analytic_groupby(self):
         for record in self:
             if record.filter_analytic_groupby and record.analytic_account_vertical:
                 raise ValidationError(_('The fields "Analytic Group By" and "Analytic Account Vertical" cannot both be selected.'))
-            if record.analytic_account_vertical and not record.root_report_id:
-                raise ValidationError(_('The field "Root Report" is mandatory when "Analytic Account Vertical" is selected.'))
+            if record.analytic_account_vertical and not record.source_report_id:
+                raise ValidationError(_('The field "Source Report" is mandatory when "Analytic Account Vertical" is selected.'))
             if record.analytic_account_vertical and not record.filter_analytic:
                 raise ValidationError(_('The field "Analytic Filter" must be selected when "Analytic Account Vertical" is selected.'))
 
     def get_report_information(self, options):
-        if self.analytic_account_vertical and self.root_report_id:
+        if self.analytic_account_vertical and self.source_report_id:
             self.line_ids.unlink()
             options_analytic_accounts = options.get('analytic_accounts')
             analytic_accounts = self.env['account.analytic.account'].browse(options_analytic_accounts)
@@ -44,7 +45,7 @@ class AccountReport(models.Model):
     def _create_lines_with_analytic(self, analytic_accounts):
         seq = 0
         line_cache = {}
-        for line in self.root_report_id.line_ids:
+        for line in self.source_report_id.line_ids:
             seq += 10
             new_line = line.copy({'report_id': self.id, 'sequence': seq})
             line_cache[line.id] = new_line.id
