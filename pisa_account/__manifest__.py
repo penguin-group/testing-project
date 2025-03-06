@@ -19,8 +19,8 @@
     'depends': ['base', 'l10n_py', 'l10n_py_selfprinted_invoice', 'secondary_currency'],
 
     'data': [
-        'security/ir.model.access.csv',
         'security/account_security.xml',
+        'security/ir.model.access.csv',
         'views/account_journal_views.xml',
         'views/account_move_views.xml',
         'reports/invoice_report.xml',

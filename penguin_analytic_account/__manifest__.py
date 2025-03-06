@@ -19,7 +19,7 @@
     'version': '18.0.1.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','account','account_asset','analytic'],
+    'depends': ['base','account','account_asset','analytic', 'sale', 'purchase'],
 
     # always loaded
     'data': [
