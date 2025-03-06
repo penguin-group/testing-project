@@ -26,6 +26,22 @@
             </field>
         </record>
 
+        <!-- Filter View -->
+        <record id="view_certificate_filter" model="ir.ui.view">
+            <field name="name">view.certificate.filter</field>
+            <field name="model">certificate</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="purchase_order_id"/>
+                    <field name="partner_id"/>
+                    <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                    <filter string="Confirmed" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
+                </search>
+            </field>
+        </record>
+
         <!-- Form View -->
         <record id="view_certificate_form" model="ir.ui.view">
             <field name="name">view.certificate.form</field>
