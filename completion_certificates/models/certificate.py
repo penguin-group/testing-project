@@ -18,7 +18,7 @@ class Certificate(models.Model):
         ('confirmed', 'Confirmed'),
     ], string='State', default='draft')
     requester_id = fields.Many2one('res.users', string='Requester', default=lambda self: self.env.user, required=True)
-    requester_manager_id = fields.Many2one('res.users', string='Requester Manager', compute='_compute_requester_manager_id', store=True)
+    requester_manager_id = fields.Many2one('res.users', string='Requester Manager', compute='_compute_requester_manager_id')
     vendor_bill_id = fields.Many2one(
         'account.move',
         string='Vendor Bill',
