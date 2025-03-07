@@ -17,6 +17,8 @@ class Certificate(models.Model):
         ('draft', 'Draft'),
         ('confirmed', 'Confirmed'),
     ], string='State', default='draft')
+    requester_id = fields.Many2one('res.users', string='Requester', default=lambda self: self.env.user, required=True)
+    requester_manager_id = fields.Many2one('res.users', string='Requester Manager', compute='_compute_requester_manager_id', store=True)
     vendor_bill_id = fields.Many2one(
         'account.move',
         string='Vendor Bill',
@@ -30,6 +32,11 @@ class Certificate(models.Model):
         for record in self:
             record.total = sum(line.price_subtotal for line in record.line_ids)
 
+    @api.onchange("requester_id")
+    def _compute_requester_manager_id(self):
+        for certificate in self:
+            certificate.requester_manager_id = certificate.requester_id.employee_id.parent_id.user_id
+    
     def action_confirm(self):
         for record in self:
             record.state = 'confirmed'
