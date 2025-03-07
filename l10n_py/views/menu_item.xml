@@ -4,6 +4,7 @@
     <menuitem id="menu_py_legal_compliance"
               name="Paraguayan Legal Compliance"
               parent="account.menu_finance_entries"
+              groups="account.group_account_manager,account.group_account_invoice"
               sequence="100"/>
 
     <!-- VAT Purchase Book -->
