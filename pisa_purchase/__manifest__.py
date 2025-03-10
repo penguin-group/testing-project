@@ -8,7 +8,8 @@
         Customized features for PISA in the purchase application.
     """,
 
-    'author': "Penguin Infrastructure, José González",
+    'author': "Penguin Infrastructure S.A.",
+    'mantainers': ['José González'],
     'website': "https://penguin.digital",
 
     'category': 'Accounting',
@@ -19,13 +20,6 @@
 
     'data': [
         'views/purchase_views.xml',
-        'views/project_task_views.xml',
-        'views/project_milestone_views.xml',
     ],
-
-    'demo': [
-    ],
-
-    # 'i18n': ['i18n/es.po'],
 }
 
