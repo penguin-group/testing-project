@@ -328,6 +328,14 @@ class AccountMove(models.Model):
         return words
 
     def action_post(self):
+        for record in self:
+            if record.move_type in ['in_invoice', 'in_refund'] and record.partner_id.foreign_default_supplier == False:
+                pattern = re.compile(r'^(\d{3}-){2}\d{7}$')
+                if not pattern.match(record.ref):
+                    raise ValidationError(
+                        _('The invoice number does not have the correct format (xxx-xxx-xxxxxxx)')
+                    )
+
         if self.env.company.country_code == 'PY':
             for record in self:
                 if record.move_type in ['in_invoice', 'in_refund']:
