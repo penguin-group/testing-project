@@ -20,6 +20,7 @@
 
     'data': [
         'views/purchase_views.xml',
+        'views/purchase_request_views.xml',
     ],
 }
 

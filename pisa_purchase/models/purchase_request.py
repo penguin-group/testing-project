@@ -24,3 +24,11 @@ class PurchaseRequest(models.Model):
                 'mimetype': attachment.mimetype,
                 'datas': attachment.datas,  # This references the same file content
             })
+
+
+class PurchaseRequest(models.Model):
+    _inherit = 'purchase.request'
+
+    project_id = fields.Many2one('project.project', string='Project')
+    request_assistance = fields.Boolean(string='Request Assistance')
+    
