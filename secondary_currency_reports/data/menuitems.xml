@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem 
+        id="menu_action_secondary_currency_report_multicurrency_revaluation"
+        name="Unrealized Currency Gains/Losses - Secondary Currency"
+        parent="account.account_reports_management_menu"
+        action="action_secondary_currency_report_multicurrency_revaluation"
+        sequence="9"
+    />
+</odoo>

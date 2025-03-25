@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="action_secondary_currency_report_multicurrency_revaluation" model="ir.actions.client">
+            <field name="name">Unrealized Currency Gains/Losses - Secondary Currency</field>
+            <field name="tag">account_report</field>
+            <field name="context" eval="{'report_id': ref('secondary_currency_reports.secondary_currency_multicurrency_revaluation_report')}"/>
+        </record>
+    </data>
+</odoo>
