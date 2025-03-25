@@ -7,6 +7,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//group[@name='accounting_entries']" position="attributes">
                     <attribute name="invisible">0</attribute>
+                    <attribute name="groups">pisa_account.group_account_jr_accountant,pisa_account.group_account_sr_accountant,pisa_account.group_account_sr_finance</attribute>
                 </xpath>
             </field>
         </record>
