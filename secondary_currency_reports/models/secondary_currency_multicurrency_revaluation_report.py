@@ -16,7 +16,7 @@ class MulticurrencyRevaluationReportCustomHandler(models.AbstractModel):
     probable expense in reports (and revert it at the end of the period, to
     recon the real gain/loss.
     """
-    _name = 'account.multicurrency.revaluation.report.handler'
+    _name = 'secondary.currency.multicurrency.revaluation.report.handler'
     _inherit = 'account.report.custom.handler'
     _description = 'Multicurrency Revaluation Report Custom Handler'
 
@@ -37,28 +37,28 @@ class MulticurrencyRevaluationReportCustomHandler(models.AbstractModel):
             raise UserError(_("You need to activate more than one currency to access this report."))
         rates = active_currencies._get_rates(self.env.company, options.get('date').get('date_to'))
         # Normalize the rates to the company's currency
-        company_rate = rates[self.env.company.currency_id.id]
+        company_rate = rates[self.env.company.sec_currency_id.id]
         for key in rates.keys():
             rates[key] /= company_rate
 
         options['currency_rates'] = {
-            str(currency_id.id): {
-                'currency_id': currency_id.id,
-                'currency_name': currency_id.name,
-                'currency_main': self.env.company.currency_id.name,
-                'rate': (rates[currency_id.id]
-                         if not previous_options.get('currency_rates', {}).get(str(currency_id.id), {}).get('rate') else
-                         float(previous_options['currency_rates'][str(currency_id.id)]['rate'])),
-            } for currency_id in active_currencies
+            str(sec_currency_id.id): {
+                'sec_currency_id': sec_currency_id.id,
+                'currency_name': sec_currency_id.name,
+                'currency_main': self.env.company.sec_currency_id.name,
+                'rate': (rates[sec_currency_id.id]
+                         if not previous_options.get('currency_rates', {}).get(str(sec_currency_id.id), {}).get('rate') else
+                         float(previous_options['currency_rates'][str(sec_currency_id.id)]['rate'])),
+            } for sec_currency_id in active_currencies
         }
 
         for currency_rates in options['currency_rates'].values():
             if currency_rates['rate'] == 0:
                 raise UserError(_("The currency rate cannot be equal to zero"))
 
-        options['company_currency'] = options['currency_rates'].pop(str(self.env.company.currency_id.id))
+        options['company_currency'] = options['currency_rates'].pop(str(self.env.company.sec_currency_id.id))
         options['custom_rate'] = any(
-            not float_is_zero(cr['rate'] - rates[cr['currency_id']], 20)
+            not float_is_zero(cr['rate'] - rates[cr['sec_currency_id']], 20)
             for cr in options['currency_rates'].values()
         )
 
@@ -87,10 +87,10 @@ class MulticurrencyRevaluationReportCustomHandler(models.AbstractModel):
                 continue
 
             elif res_model_name == 'res.currency':
-                # Include the rate in the currency_id group lines
+                # Include the rate in the sec_currency_id group lines
                 line['name'] = '{for_cur} (1 {comp_cur} = {rate:.6} {for_cur})'.format(
                     for_cur=line['name'],
-                    comp_cur=self.env.company.currency_id.display_name,
+                    comp_cur=self.env.company.sec_currency_id.display_name,
                     rate=float(options['currency_rates'][str(res_id)]['rate']),
                 )
 
@@ -113,11 +113,11 @@ class MulticurrencyRevaluationReportCustomHandler(models.AbstractModel):
 
     def action_multi_currency_revaluation_open_revaluation_wizard(self, options):
         """Open the revaluation wizard."""
-        form = self.env.ref('account_reports.view_account_multicurrency_revaluation_wizard', False)
+        form = self.env.ref('secondary_currency_reports.view_secondary_currency_multicurrency_revaluation_wizard', False)
         return {
-            'name': _("Make Adjustment Entry"),
+            'name': _("Make Adjustment Entry for Secondary Currency"),
             'type': 'ir.actions.act_window',
-            'res_model': 'account.multicurrency.revaluation.wizard',
+            'res_model': 'secondary.currency.multicurrency.revaluation.wizard',
             'view_mode': 'form',
             'view_id': form.id,
             'views': [(form.id, 'form')],
@@ -125,7 +125,7 @@ class MulticurrencyRevaluationReportCustomHandler(models.AbstractModel):
             'target': 'new',
             'context': {
                 **self._context,
-                'multicurrency_revaluation_report_options': options,
+                'secondary_currency_multicurrency_revaluation_report_options': options,
             },
         }
 
@@ -150,10 +150,10 @@ class MulticurrencyRevaluationReportCustomHandler(models.AbstractModel):
         res_ids_map = self.env['account.report']._get_res_ids_from_line_id(params['line_id'], ['res.currency', 'account.account'])
         account = self.env['account.account'].browse(res_ids_map['account.account'])
         currency = self.env['res.currency'].browse(res_ids_map['res.currency'])
-        if currency in account.exclude_provision_currency_ids:
-            account.exclude_provision_currency_ids -= currency
+        if currency in account.exclude_provision_sec_currency_ids:
+            account.exclude_provision_sec_currency_ids -= currency
         else:
-            account.exclude_provision_currency_ids += currency
+            account.exclude_provision_sec_currency_ids += currency
         return {
             'type': 'ir.actions.client',
             'tag': 'reload',
@@ -161,14 +161,14 @@ class MulticurrencyRevaluationReportCustomHandler(models.AbstractModel):
 
     def action_multi_currency_revaluation_open_currency_rates(self, options, params=None):
         """ Open the currency rate list. """
-        currency_id = self.env['account.report']._get_res_id_from_line_id(params['line_id'], 'res.currency')
+        sec_currency_id = self.env['account.report']._get_res_id_from_line_id(params['line_id'], 'res.currency')
         return {
             'type': 'ir.actions.act_window',
-            'name': _('Currency Rates (%s)', self.env['res.currency'].browse(currency_id).display_name),
+            'name': _('Currency Rates (%s)', self.env['res.currency'].browse(sec_currency_id).display_name),
             'views': [(False, 'list')],
             'res_model': 'res.currency.rate',
-            'context': {**self.env.context, **{'default_currency_id': currency_id, 'active_id': currency_id}},
-            'domain': [('currency_id', '=', currency_id)],
+            'context': {**self.env.context, **{'default_sec_currency_id': sec_currency_id, 'active_id': sec_currency_id}},
+            'domain': [('sec_currency_id', '=', sec_currency_id)],
         }
 
     def _report_custom_engine_multi_currency_revaluation_to_adjust(self, expressions, options, date_scope, current_groupby, next_groupby, offset=0, limit=None, warnings=None):
@@ -180,10 +180,10 @@ class MulticurrencyRevaluationReportCustomHandler(models.AbstractModel):
     def _multi_currency_revaluation_get_custom_lines(self, options, line_code, current_groupby, next_groupby, offset=0, limit=None):
         def build_result_dict(report, query_res):
             return {
-                'balance_currency': query_res['balance_currency'] if len(query_res['currency_id']) == 1 else None,
-                'currency_id': query_res['currency_id'][0] if len(query_res['currency_id']) == 1 else None,
-                'balance_operation': query_res['balance_operation'],
-                'balance_current': query_res['balance_current'],
+                'secondary_balance_currency': query_res['secondary_balance_currency'] if len(query_res['sec_currency_id']) == 1 else None,
+                'sec_currency_id': query_res['sec_currency_id'][0] if len(query_res['sec_currency_id']) == 1 else None,
+                'secondary_balance_operation': query_res['secondary_balance_operation'],
+                'secondary_balance_current': query_res['secondary_balance_current'],
                 'adjustment': query_res['adjustment'],
                 'has_sublines': query_res['aml_count'] > 0,
             }
@@ -194,16 +194,16 @@ class MulticurrencyRevaluationReportCustomHandler(models.AbstractModel):
         # No need to run any SQL if we're computing the main line: it does not display any total
         if not current_groupby:
             return {
-                'balance_currency': None,
-                'currency_id': None,
-                'balance_operation': None,
-                'balance_current': None,
+                'secondary_balance_currency': None,
+                'sec_currency_id': None,
+                'secondary_balance_operation': None,
+                'secondary_balance_current': None,
                 'adjustment': None,
                 'has_sublines': False,
             }
 
         query = "(VALUES {})".format(', '.join("(%s, %s)" for rate in options['currency_rates']))
-        params = list(chain.from_iterable((cur['currency_id'], cur['rate']) for cur in options['currency_rates'].values()))
+        params = list(chain.from_iterable((cur['sec_currency_id'], cur['rate']) for cur in options['currency_rates'].values()))
         custom_currency_table_query = SQL(query, *params)
         date_to = options['date']['date_to']
         select_part_not_an_exchange_move_id = SQL(
@@ -222,7 +222,7 @@ class MulticurrencyRevaluationReportCustomHandler(models.AbstractModel):
         tail_query = report._get_engine_query_tail(offset, limit)
         full_query = SQL(
             """
-            WITH custom_currency_table(currency_id, rate) AS (%(custom_currency_table_query)s)
+            WITH custom_currency_table(sec_currency_id, rate) AS (%(custom_currency_table_query)s)
 
             -- Final select that gets the following lines:
             -- (where there is a change in the rates of currency between the creation of the move and the full payments)
@@ -230,25 +230,25 @@ class MulticurrencyRevaluationReportCustomHandler(models.AbstractModel):
             -- - Moves that have a partial but are not fully paid at a certain date
             SELECT
                    subquery.grouping_key,
-                   ARRAY_AGG(DISTINCT(subquery.currency_id)) AS currency_id,
-                   SUM(subquery.balance_currency) AS balance_currency,
-                   SUM(subquery.balance_operation) AS balance_operation,
-                   SUM(subquery.balance_current) AS balance_current,
+                   ARRAY_AGG(DISTINCT(subquery.sec_currency_id)) AS sec_currency_id,
+                   SUM(subquery.secondary_balance_currency) AS secondary_balance_currency,
+                   SUM(subquery.secondary_balance_operation) AS secondary_balance_operation,
+                   SUM(subquery.secondary_balance_current) AS secondary_balance_current,
                    SUM(subquery.adjustment) AS adjustment,
                    COUNT(subquery.aml_id) AS aml_count
               FROM (
                 -- Get moves that have at least one partial at a certain date and are not fully paid at that date
                 SELECT
                        """ + (f"account_move_line.{current_groupby} AS grouping_key," if current_groupby else '') + f"""
-                       ROUND(account_move_line.balance - SUM(ara.amount_debit) + SUM(ara.amount_credit), aml_comp_currency.decimal_places) AS balance_operation,
-                       ROUND(account_move_line.amount_currency - SUM(ara.amount_debit_currency) + SUM(ara.amount_credit_currency), aml_currency.decimal_places) AS balance_currency,
-                       ROUND(account_move_line.amount_currency - SUM(ara.amount_debit_currency) + SUM(ara.amount_credit_currency), aml_currency.decimal_places) / custom_currency_table.rate AS balance_current,
+                       ROUND(account_move_line.secondary_balance - SUM(ara.amount_debit) + SUM(ara.amount_credit), aml_comp_currency.decimal_places) AS secondary_balance_operation,
+                       ROUND(account_move_line.amount_currency - SUM(ara.amount_debit_currency) + SUM(ara.amount_credit_currency), aml_currency.decimal_places) AS secondary_balance_currency,
+                       ROUND(account_move_line.amount_currency - SUM(ara.amount_debit_currency) + SUM(ara.amount_credit_currency), aml_currency.decimal_places) / custom_currency_table.rate AS secondary_balance_current,
                        (
-                          -- adjustment is computed as: balance_current - balance_operation
+                          -- adjustment is computed as: secondary_balance_current - secondary_balance_operation
                           ROUND( account_move_line.amount_currency - SUM(ara.amount_debit_currency) + SUM(ara.amount_credit_currency), aml_currency.decimal_places) / custom_currency_table.rate
-                          - ROUND(account_move_line.balance - SUM(ara.amount_debit) + SUM(ara.amount_credit), aml_comp_currency.decimal_places)
+                          - ROUND(account_move_line.secondary_balance - SUM(ara.amount_debit) + SUM(ara.amount_credit), aml_comp_currency.decimal_places)
                        ) AS adjustment,
-                       account_move_line.currency_id AS currency_id,
+                       account_move_line.currency_id AS sec_currency_id,
                        account_move_line.id AS aml_id
                   FROM %(table_references)s,
                        account_account AS account,
@@ -269,7 +269,7 @@ class MulticurrencyRevaluationReportCustomHandler(models.AbstractModel):
                                       ) AS amount_debit_currency,
                                       0.0 AS amount_credit,
                                       0.0 AS amount_credit_currency,
-                                      account_move_line.currency_id AS currency_id,
+                                      account_move_line.currency_id AS sec_currency_id,
                                       account_move_line.id AS aml_id
                                  FROM account_partial_reconcile part
                                  JOIN res_currency curr ON curr.id = part.debit_currency_id
@@ -286,7 +286,7 @@ class MulticurrencyRevaluationReportCustomHandler(models.AbstractModel):
                                           SUM(part.credit_amount_currency),
                                           curr.decimal_places
                                       ) AS amount_credit_currency,
-                                      account_move_line.currency_id AS currency_id,
+                                      account_move_line.currency_id AS sec_currency_id,
                                       account_move_line.id AS aml_id
                                  FROM account_partial_reconcile part
                                  JOIN res_currency curr ON curr.id = part.credit_currency_id
@@ -298,14 +298,14 @@ class MulticurrencyRevaluationReportCustomHandler(models.AbstractModel):
                  WHERE %(search_condition)s
                    AND account_move_line.account_id = account.id
                    AND account_move_line.currency_id = aml_currency.id
-                   AND account_move_line.company_currency_id = aml_comp_currency.id
-                   AND account_move_line.currency_id = custom_currency_table.currency_id
-                   AND account.account_type NOT IN ('income', 'income_other', 'expense', 'expense_depreciation', 'expense_direct_cost', 'off_balance')
+                   AND account_move_line.company_secondary_currency_id = aml_comp_currency.id
+                   AND account_move_line.currency_id = custom_currency_table.sec_currency_id
+                   AND account.account_type NOT IN ('income', 'income_other', 'expense', 'expense_depreciation', 'expense_direct_cost', 'off_secondary_balance')
                    AND (
-                        account.currency_id != account_move_line.company_currency_id
+                        account.currency_id != account_move_line.company_secondary_currency_id
                         OR (
                             account.account_type IN ('asset_receivable', 'liability_payable')
-                            AND (account_move_line.currency_id != account_move_line.company_currency_id)
+                            AND (account_move_line.currency_id != account_move_line.company_secondary_currency_id)
                         )
                    )
                    AND {'NOT EXISTS' if line_code == 'to_adjust' else 'EXISTS'} (
@@ -316,29 +316,29 @@ class MulticurrencyRevaluationReportCustomHandler(models.AbstractModel):
                    )
                    AND (%(select_part_not_an_exchange_move_id)s)
               GROUP BY account_move_line.id, aml_comp_currency.decimal_places,  aml_currency.decimal_places, custom_currency_table.rate
-                HAVING ROUND(account_move_line.balance - SUM(ara.amount_debit) + SUM(ara.amount_credit), aml_comp_currency.decimal_places) != 0
+                HAVING ROUND(account_move_line.secondary_balance - SUM(ara.amount_debit) + SUM(ara.amount_credit), aml_comp_currency.decimal_places) != 0
                     OR ROUND(account_move_line.amount_currency - SUM(ara.amount_debit_currency) + SUM(ara.amount_credit_currency), aml_currency.decimal_places) != 0.0
 
                 UNION
                 -- Moves that don't have a payment yet at a certain date
                 SELECT
                        """ + (f"account_move_line.{current_groupby} AS grouping_key," if current_groupby else '') + f"""
-                       account_move_line.balance AS balance_operation,
-                       account_move_line.amount_currency AS balance_currency,
-                       account_move_line.amount_currency / custom_currency_table.rate AS balance_current,
-                       account_move_line.amount_currency / custom_currency_table.rate - account_move_line.balance AS adjustment,
-                       account_move_line.currency_id AS currency_id,
+                       account_move_line.secondary_balance AS secondary_balance_operation,
+                       account_move_line.amount_currency AS secondary_balance_currency,
+                       account_move_line.amount_currency / custom_currency_table.rate AS secondary_balance_current,
+                       account_move_line.amount_currency / custom_currency_table.rate - account_move_line.secondary_balance AS adjustment,
+                       account_move_line.currency_id AS sec_currency_id,
                        account_move_line.id AS aml_id
                   FROM %(table_references)s
                   JOIN account_account account ON account_move_line.account_id = account.id
-                  JOIN custom_currency_table ON custom_currency_table.currency_id = account_move_line.currency_id
+                  JOIN custom_currency_table ON custom_currency_table.sec_currency_id = account_move_line.currency_id
                  WHERE %(search_condition)s
-                   AND account.account_type NOT IN ('income', 'income_other', 'expense', 'expense_depreciation', 'expense_direct_cost', 'off_balance')
+                   AND account.account_type NOT IN ('income', 'income_other', 'expense', 'expense_depreciation', 'expense_direct_cost', 'off_secondary_balance')
                    AND (
-                        account.currency_id != account_move_line.company_currency_id
+                        account.currency_id != account_move_line.company_secondary_currency_id
                         OR (
                             account.account_type IN ('asset_receivable', 'liability_payable')
-                            AND (account_move_line.currency_id != account_move_line.company_currency_id)
+                            AND (account_move_line.currency_id != account_move_line.company_secondary_currency_id)
                         )
                    )
                    AND {'NOT EXISTS' if line_code == 'to_adjust' else 'EXISTS'} (
@@ -353,7 +353,7 @@ class MulticurrencyRevaluationReportCustomHandler(models.AbstractModel):
                         WHERE (part.debit_move_id = account_move_line.id OR part.credit_move_id = account_move_line.id)
                           AND part.max_date <= %(date_to)s
                    )
-                   AND (account_move_line.balance != 0.0 OR account_move_line.amount_currency != 0.0)
+                   AND (account_move_line.secondary_balance != 0.0 OR account_move_line.amount_currency != 0.0)
 
             ) subquery
 

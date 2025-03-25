@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pisa_site_user,Site User,model_pisa_site,base.group_user,1,1,1,1
+access_pisa_site_tag_user,Site Tag User,model_pisa_site_tag,base.group_user,1,1,1,1
+access_pisa_site_state_user,Site State User,model_pisa_site_state,base.group_user,1,1,1,1
