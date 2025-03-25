@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_secondary_currency_multicurrency_revaluation_wizard,access.secondary.currency.multicurrency.revaluation.wizard,model_secondary_currency_multicurrency_revaluation_wizard,account.group_account_user,1,1,1,0
