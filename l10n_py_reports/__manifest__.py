@@ -8,6 +8,7 @@
 Accounting Reports
 ==================
     """,
+    'license': 'LGPL-3',
     'depends': ['l10n_py'],
     'data': [
         'data/multicurrency_revaluation_report.xml',
