@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Site List View -->
+    <record id="view_site_list" model="ir.ui.view">
+        <field name="name">pisa.site.list</field>
+        <field name="model">pisa.site</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                <field name="state"/>
+                <field name="state_id"/>
+                <field name="country_id" optional="hide"/>
+                <field name="capacity" optional="hide"/>
+                <field name="probability" optional="hide"/>
+                <field name="voltage_level" optional="hide"/>
+            </list>#4e4b7c
+        </field>
+    </record>
+
+    <!-- Site Form View -->
+    <record id="view_site_form" model="ir.ui.view">
+        <field name="name">pisa.site.form</field>
+        <field name="model">pisa.site</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                            <field name="state"/>
+                            <field name="state_id"/>
+                        </group>
+                        <group>
+                            <field name="country_id"/>
+                            <field name="capacity"/>
+                            <field name="probability"/>
+                            <field name="voltage_level"/>
+                            <field name="priority"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Project Brief">
+                            <field name="project_brief"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Site Tag Views -->
+    <record id="view_site_tag_list" model="ir.ui.view">
+        <field name="name">pisa.site.tag.list</field>
+        <field name="model">pisa.site.tag</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="color_name"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Site State Views -->
+    <record id="view_site_state_list" model="ir.ui.view">
+        <field name="name">pisa.site.state.list</field>
+        <field name="model">pisa.site.state</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="color"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_site" model="ir.actions.act_window">
+        <field name="name">Sites</field>
+        <field name="res_model">pisa.site</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_site_tag" model="ir.actions.act_window">
+        <field name="name">Tags</field>
+        <field name="res_model">pisa.site.tag</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_site_state" model="ir.actions.act_window">
+        <field name="name">States</field>
+        <field name="res_model">pisa.site.state</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo> 
