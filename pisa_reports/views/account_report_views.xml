@@ -1,0 +1,28 @@
+<odoo>
+    <record id="view_account_report_form_inherit" model="ir.ui.view">
+        <field name="name">account.report.form.inherit</field>
+        <field name="model">account.report</field>
+        <field name="inherit_id" ref="account_reports.account_report_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='root_report_id']" position="after">
+                <field name="source_report_id" options="{'no_create': True, 'no_edit': True, 'no_create_edit': True}" invisible="not analytic_account_vertical"/>
+            </xpath>
+
+            <xpath expr="//field[@name='filter_analytic_groupby']" position="after">
+                <field name="analytic_account_vertical" groups="analytic.group_analytic_accounting"/>
+            </xpath>
+
+            <xpath expr="//div" position="after">
+                <div class="alert alert-warning text-center" invisible="not analytic_account_vertical" role="alert">
+                    If you select the Analytic Account Vertical option, the lines will be overwritten on report display.
+                </div>
+                <div class="alert alert-warning text-center" 
+                    invisible="not analytic_account_vertical or (analytic_account_vertical and source_report_id)" 
+                    role="alert">
+                    If you select the Analytic Account Vertical option, you should select the source report.
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
