@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record id="view_hr_expense_sheet_form_inherit" model="ir.ui.view">
+        <field name="name">hr.expense.sheet.form.inherit.inherit</field>
+        <field name="model">hr.expense.sheet</field>
+        <field name="inherit_id" ref="hr_expense.view_hr_expense_sheet_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//button[@name='action_sheet_move_post']" position="after">
+                <button name="action_create_invoice"
+                            string="Create Invoice"
+                            type="object"
+                            data-hotkey="y"
+                            class="oe_highlight o_expense_sheet_post"
+                            invisible="state != 'approve' or invoice_id != False"
+                            groups="account.group_account_invoice"
+                            />
+            </xpath>
+
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="invoice_id"/>
+            </xpath>
+
+
+        </field>
+    </record>
+</odoo>

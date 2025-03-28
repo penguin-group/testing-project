@@ -42,6 +42,8 @@
         'data/service_cron.xml',
         'views/menu_item.xml',
         'views/res_currency_views.xml',
+        'views/hr_expense_view_hr_expense_sheet_form_inhe.xml',
+
     ],
 
     'demo': [
