@@ -328,33 +328,20 @@ class AccountMove(models.Model):
         return words
 
     def action_post(self):
-        for record in self:
-            if record.move_type in ['in_invoice', 'in_refund'] and record.partner_id.foreign_default_supplier == False:
-                pattern = re.compile(r'^(\d{3}-){2}\d{7}$')
-                if not pattern.match(record.ref):
-                    raise ValidationError(
-                        _('The invoice number does not have the correct format (xxx-xxx-xxxxxxx)')
-                    )
-
         if self.env.company.country_code == 'PY':
             for record in self:
                 if record.move_type in ['in_invoice', 'in_refund']:
                     record.validate_supplier_invoice_number()
-        result = super(AccountMove, self).action_post()
-        if self.env.company.country_code == 'PY':
-            for record in self:
-                if record.move_type in ['out_invoice', 'out_refund']:
-                    if self.env.company.country_code == 'PY':
-                        record.validate_empty_vat()
-                        record.validate_invoice_authorization()
-                        record.validate_line_count()
-                if record.move_type in ['out_invoice', 'out_refund']:
-                    record.write({'res90_number_invoice_authorization': record.journal_id.invoice_authorization_id.name})
-                elif record.move_type in ['in_invoice', 'in_refund']:
                     supplier_invoice_authorization = False
                     if record.supplier_invoice_authorization_id:
                         supplier_invoice_authorization = record.supplier_invoice_authorization_id.name
                     record.write({'res90_number_invoice_authorization': supplier_invoice_authorization or ''})
+                if record.move_type in ['out_invoice', 'out_refund']:
+                    record.write({'res90_number_invoice_authorization': record.journal_id.invoice_authorization_id.name})
+                    record.validate_empty_vat()
+                    record.validate_invoice_authorization()
+                    record.validate_line_count()
+        result = super(AccountMove, self).action_post()          
         return result
 
     
