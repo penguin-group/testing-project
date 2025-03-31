@@ -10,6 +10,11 @@
                     <xpath expr="//div[@id='payment_mode']" position="after">
                         <field name="create_vendor_bill" invisible="payment_mode != 'company_account'" widget="boolean_toggle"/>
                     </xpath>
+
+                    <xpath expr="//field[@name='vendor_id']" position="attributes">
+                        <attribute name="required">payment_mode == 'company_account'</attribute>
+                    </xpath>
+
                 </field>
             </record>
 
