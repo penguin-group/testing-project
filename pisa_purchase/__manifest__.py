@@ -23,4 +23,3 @@
         'views/purchase_request_views.xml',
     ],
 }
-
