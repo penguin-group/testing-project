@@ -52,7 +52,7 @@ class PurchaseOrder(models.Model):
             for order in self:
                 old_pos = old_extra_cost_pos[order.id]
                 order._sync_extra_cost_pos(old_pos)
-        
+
         # Subscribe assignee to messages
         if 'assignee_id' in vals and vals['assignee_id']:
             for order in self:
