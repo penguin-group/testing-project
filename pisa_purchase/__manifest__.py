@@ -16,7 +16,7 @@
     'version': '18.0.1.0.0',
     'license': "OPL-1",
 
-    'depends': ['base', 'purchase_tier_validation', 'purchase_request_tier_validation', 'project'],
+    'depends': ['base', 'purchase_tier_validation', 'purchase_request_tier_validation', 'project', 'account'],
 
     'data': [
         'views/purchase_views.xml',
