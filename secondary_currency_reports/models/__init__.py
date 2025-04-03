@@ -1,1 +1,1 @@
-from . import account_multicurrency_revaluation_report
+from . import secondary_currency_multicurrency_revaluation_report
