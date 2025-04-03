@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main Menu -->
+    <menuitem
+        id="menu_site_root"
+        name="Sites"
+        sequence="10"/>
+
+    <!-- Sites Menu -->
+    <menuitem
+        id="menu_site_main"
+        name="Sites"
+        parent="menu_site_root"
+        action="action_site"
+        sequence="10"/>
+
+    <!-- Configuration Menu -->
+    <menuitem
+        id="menu_site_config"
+        name="Configuration"
+        parent="menu_site_root"
+        sequence="100"/>
+
+    <menuitem
+        id="menu_site_tags"
+        name="Tags"
+        parent="menu_site_config"
+        action="action_site_tag"
+        sequence="10"/>
+
+    <menuitem
+        id="menu_site_states"
+        name="States"
+        parent="menu_site_config"
+        action="action_site_state"
+        sequence="20"/>
+</odoo> 

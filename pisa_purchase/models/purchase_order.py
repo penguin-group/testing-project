@@ -32,6 +32,16 @@ class PurchaseOrder(models.Model):
                 'amount_total': amount_untaxed + amount_tax,
             })
 
+    @api.model_create_multi
+    def create(self, vals):
+        # Create the PO
+        order = super(PurchaseOrder, self).create(vals)
+        
+        # Subscribe assignee to messages
+        self.subscribe_assignee(order)
+        
+        return order
+    
     def write(self, vals):
         # Store the old extra cost POs before write
         old_extra_cost_pos = {order.id: order.extra_cost_po_ids for order in self}
@@ -42,7 +52,20 @@ class PurchaseOrder(models.Model):
             for order in self:
                 old_pos = old_extra_cost_pos[order.id]
                 order._sync_extra_cost_pos(old_pos)
+
+        # Subscribe assignee to messages
+        if 'assignee_id' in vals and vals['assignee_id']:
+            for order in self:
+                self.subscribe_assignee(order)
+        
         return result
+
+    def subscribe_assignee(self, record):
+        # Subscribe assignee to messages
+        partner_id = record.assignee_id.partner_id
+        subscribers = [partner_id.id] if partner_id and partner_id not in record.sudo().message_partner_ids else None
+        if subscribers:
+            record.message_subscribe(subscribers)
 
     def _sync_extra_cost_pos(self, old_extra_cost_pos=None):
         """Ensure reciprocal linking between main PO and its extra cost POs.
