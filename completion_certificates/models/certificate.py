@@ -10,7 +10,7 @@ class Certificate(models.Model):
     name = fields.Char(string='Number', required=True, default=lambda self: self.env['ir.sequence'].next_by_code('completion.certificate'))
     ref = fields.Char(string='Reference')
     partner_id = fields.Many2one('res.partner', string='Vendor', related='purchase_order_id.partner_id', store=True)
-    purchase_order_id = fields.Many2one('purchase.order', string='Purchase Order', required=True, domain=[('state', '=', 'purchase'), ('use_certificate', '=', True)])
+    purchase_order_id = fields.Many2one('purchase.order', string='Purchase Order', required=True, domain=[('state', 'in', ['purchase', 'done']), ('use_certificate', '=', True)])
     date = fields.Date(string='Date', required=True)
     total = fields.Float(string='Total', compute='_compute_total', store=True)
     state = fields.Selection([

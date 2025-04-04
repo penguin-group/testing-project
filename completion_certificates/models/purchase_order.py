@@ -20,9 +20,17 @@ class PurchaseOrder(models.Model):
                 'purchase_order_id': self.id,
                 'date': fields.Date.today(),
             })
-        action = self.env.ref('completion_certificates.action_certificate').read()[0]
-        action['domain'] = [('id', 'in', certificates.ids)]
-        return action
+        return {
+            'name': 'Certificates',
+            'type': 'ir.actions.act_window',
+            'res_model': 'certificate',
+            'view_mode': 'list,form',
+            'domain': [('id', 'in', certificates.ids)],
+            'context': {
+                'default_purchase_order_id': self.id,
+                'default_date': fields.Date.today(),
+            },
+        }
 
     @api.constrains('order_line', 'use_certificate')
     def _check_use_certificate(self):
