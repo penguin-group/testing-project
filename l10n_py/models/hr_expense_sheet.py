@@ -1,4 +1,5 @@
-from odoo import models, fields, api, _
+from itertools import groupby
+from odoo import models, Command, fields, api, _
 from odoo.exceptions import UserError
 from odoo.tools.misc import clean_context
 
@@ -9,25 +10,39 @@ class HrExpenseSheet(models.Model):
     def _do_create_moves(self):
         """
         Override original method to change the behavior of the "paid by the company" option. 
-        If the 'create_vendor_bill' field is checked, a vendor bill should be created.
+        If the 'create_vendor_bill' field is checked, a vendor bill should be created for each expense.
         """
 
         res = super(HrExpenseSheet, self)._do_create_moves()
         if any(self.expense_line_ids.mapped('create_vendor_bill')) and self.expense_line_ids.filtered(lambda l: l.payment_mode == 'company_account'):
-            # Create a vendor bill
+            # Create a vendor bill for each expense line that has the 'create_vendor_bill' field checked and is paid by the company
             vendor_bills = self.env['account.move']
             for sheet in self:
-                vals = sheet._prepare_bills_vals()
-                vals.update({
-                    'move_type': 'in_invoice',
-                    'partner_id': sheet.expense_line_ids[0].vendor_id.id,
-                    'invoice_date': sheet.accounting_date,
-                    'ref': None,
-                })
-                vendor_bill = self.env['account.move'].create(vals)
-                vendor_bills |= vendor_bill
+                # Filter expense lines that need vendor bills
+                expense_lines = sheet.expense_line_ids.sudo().filtered(
+                    lambda l: l.create_vendor_bill and l.payment_mode == 'company_account'
+                )
+                # Create a vendor bill for each expense
+                vals_list = []
+                for expense in expense_lines:
+                    move_line_vals = expense._prepare_move_lines_vals()
+                    if move_line_vals:
+                        vals_list.append({
+                            'name': '/',
+                            'invoice_date': sheet.accounting_date,
+                            'expense_sheet_id': self.id,
+                            'journal_id': self.journal_id.id,
+                            'move_type': 'in_invoice',
+                            'partner_id': expense.vendor_id.id,
+                            'commercial_partner_id': self.employee_id.user_partner_id.id,
+                            'currency_id': self.currency_id.id,
+                            'line_ids': [Command.create(move_line_vals)],
+                            'attachment_ids': [
+                                Command.create(attachment.copy_data({'res_model': 'account.move', 'res_id': False, 'raw': attachment.raw})[0])
+                                for attachment in expense.message_main_attachment_id]
+                        })
+                vendor_bills = self.env['account.move'].sudo().create(vals_list)
             res |= vendor_bills
-        
         return res
 
     def action_open_account_moves(self):
