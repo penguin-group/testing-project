@@ -202,12 +202,14 @@ class AccountMove(models.Model):
             invoice.button_cancel()
     
     def validate_invoice_authorization(self):
-        if self.move_type in ['out_invoice', 'out_refund'] and self.name and self.name != '/':
-            inv_auth = self.journal_id.invoice_authorization_id
+        self.ensure_one()
+        if self.is_vendor_bill_py() or self.is_customer_invoice():
+            inv_auth = self.journal_id.invoice_authorization_id if self.is_customer_invoice() else self.supplier_invoice_authorization_id
             if inv_auth:
-                number = int(self.name.split('-')[-1])
-                establishment_number = self.name.split('-')[0]
-                expedition_point_number = self.name.split('-')[1]
+                name = self.name if self.is_customer_invoice() else self.ref
+                number = int(name.split('-')[-1])
+                establishment_number = name.split('-')[0]
+                expedition_point_number = name.split('-')[1]
                 if expedition_point_number != inv_auth.expedition_point_number:
                     raise ValidationError(
                         _('The expedition point number does not match the active invoice authorization.')
@@ -234,14 +236,27 @@ class AccountMove(models.Model):
                 raise ValidationError(
                     _('There is no invoice authorization.')
                 )
-        else:
-            return
 
     def validate_empty_vat(self):
-        for record in self:
-            if not record.partner_id.vat:
-                raise ValidationError(_("The customer does not have an assigned VAT. Please add it."))
+        self.ensure_one()
+        if self.is_vendor_bill_py() or self.is_customer_invoice():
+            if not self.partner_id.vat:
+                raise ValidationError(_("The partner does not have an assigned VAT. Please add it."))
         return
+
+    def is_vendor_bill_py(self):
+        self.ensure_one()
+        if self.move_type in ['in_invoice', 'in_refund'] and self.is_local_supplier:
+            return True
+        else:
+            return False
+
+    def is_customer_invoice(self):
+        self.ensure_one()
+        if self.move_type in ['out_invoice', 'out_refund']:
+            return True
+        else:
+            return False
 
     @api.onchange('invoice_line_ids')
     @api.depends('invoice_line_ids', 'journal_id')
@@ -254,12 +269,12 @@ class AccountMove(models.Model):
         return
 
     def validate_supplier_invoice_number(self):
-        if self.ref and self.is_local_supplier:
-            pattern = re.compile(r'^(\d{3}-){2}\d{7}$')
-            if not pattern.match(self.ref):
-                raise ValidationError(
-                    _('The invoice number does not have the correct format (xxx-xxx-xxxxxxx)')
-                )
+        self.ensure_one()
+        pattern = re.compile(r'^(\d{3}-){2}\d{7}$')
+        if not pattern.match(self.ref):
+            raise ValidationError(
+                _('The invoice number does not have the correct format (xxx-xxx-xxxxxxx)')
+            )
 
     def generate_token(self):
         secret_phrase = str(self.id) + "amakakeruriunohirameki"
@@ -328,23 +343,26 @@ class AccountMove(models.Model):
         return words
 
     def action_post(self):
-        if self.env.company.country_code == 'PY':
-            for record in self:
-                if record.move_type in ['in_invoice', 'in_refund']:
+        for record in self:
+            if record.is_invoice() and record.env.company.country_code == 'PY':
+                if record.is_vendor_bill_py():
                     record.validate_supplier_invoice_number()
-                    supplier_invoice_authorization = False
-                    if record.supplier_invoice_authorization_id:
-                        supplier_invoice_authorization = record.supplier_invoice_authorization_id.name
-                    record.write({'res90_number_invoice_authorization': supplier_invoice_authorization or ''})
-                if record.move_type in ['out_invoice', 'out_refund']:
-                    record.write({'res90_number_invoice_authorization': record.journal_id.invoice_authorization_id.name})
-                    record.validate_empty_vat()
-                    record.validate_invoice_authorization()
-                    record.validate_line_count()
+                record.validate_invoice_authorization()
+                record.write({'res90_number_invoice_authorization': record._compute_invoice_authorization_name()})
+                record.validate_empty_vat()
+                record.validate_line_count()
         result = super(AccountMove, self).action_post()          
         return result
 
-    
+    def _compute_invoice_authorization_name(self):
+        self.ensure_one()
+        if self.is_vendor_bill_py():
+            return self.supplier_invoice_authorization_id.name
+        elif self.is_customer_invoice():
+            return self.journal_id.invoice_authorization_id.name
+        else:
+            return None
+
     @api.onchange('journal_id')
     @api.depends('journal_id')
     def onchangeCompany(self):
