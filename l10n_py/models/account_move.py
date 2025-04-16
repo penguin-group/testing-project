@@ -207,21 +207,22 @@ class AccountMove(models.Model):
             inv_auth = self.journal_id.invoice_authorization_id if self.is_customer_invoice() else self.supplier_invoice_authorization_id
             if inv_auth:
                 name = self.name if self.is_customer_invoice() else self.ref
-                number = int(name.split('-')[-1])
-                establishment_number = name.split('-')[0]
-                expedition_point_number = name.split('-')[1]
-                if expedition_point_number != inv_auth.expedition_point_number:
-                    raise ValidationError(
-                        _('The expedition point number does not match the active invoice authorization.')
-                    )
-                if establishment_number != inv_auth.establishment_number:
-                    raise ValidationError(
-                        _('The establishment number does not match the active invoice authorization.')
-                    )
-                if number > inv_auth.final_invoice_number:
-                    raise ValidationError(
-                        _('The active invoice authorization has reached its invoice final number.')
-                    )
+                if name:
+                    number = int(name.split('-')[-1])
+                    establishment_number = name.split('-')[0]
+                    expedition_point_number = name.split('-')[1]
+                    if expedition_point_number != inv_auth.expedition_point_number:
+                        raise ValidationError(
+                            _('The expedition point number does not match the active invoice authorization.')
+                        )
+                    if establishment_number != inv_auth.establishment_number:
+                        raise ValidationError(
+                            _('The establishment number does not match the active invoice authorization.')
+                        )
+                    if number > inv_auth.final_invoice_number:
+                        raise ValidationError(
+                            _('The active invoice authorization has reached its invoice final number.')
+                        )
                 date = self.invoice_date or fields.Date.today()
                 if date > inv_auth.end_date:
                     raise ValidationError(
