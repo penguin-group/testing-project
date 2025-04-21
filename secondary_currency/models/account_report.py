@@ -29,7 +29,7 @@ class AccountReport(models.Model):
             all_expressions |= expressions
         tags = all_expressions._get_matching_tags()
 
-        currency_table_query = self._get_query_currency_table(options)
+        currency_table_query = self._get_currency_table(options)
         groupby_sql = f'account_move_line.{current_groupby}' if current_groupby else None
         tables, where_clause, where_params = self._query_get(options, date_scope)
         tail_query, tail_params = self._get_engine_query_tail(offset, limit)
