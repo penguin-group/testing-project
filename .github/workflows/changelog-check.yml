@@ -1,0 +1,67 @@
+name: Changelog Check
+
+on:
+  pull_request:
+    branches:
+      - QA
+      - release/*
+      - master
+    paths:
+      - '**/*'
+      - '!.github/workflows/changelog-check.yml'
+
+jobs:
+  check-changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for CHANGELOG.md updates
+        id: changelog_check
+        run: |
+          # Get the list of changed files
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+          
+          # Check if CHANGELOG.md is in the list of changed files
+          if echo "$CHANGED_FILES" | grep -q "CHANGELOG.md"; then
+            echo "CHANGELOG.md has been updated"
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "CHANGELOG.md has not been updated"
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Comment on PR if changelog is missing
+        if: steps.changelog_check.outputs.has_changes == 'false'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const targetBranch = context.payload.pull_request.base.ref;
+            let message = '⚠️ **Changelog Update Required**\n\n';
+            
+            if (targetBranch === 'QA') {
+              message += 'This pull request to QA does not include changes to `CHANGELOG.md`. Please update the changelog to document your changes.\n\n';
+              message += 'You can add your changes under the [Unreleased] section at the top of the file.';
+            } else if (targetBranch.startsWith('release/')) {
+              message += 'This pull request to release branch does not include changes to `CHANGELOG.md`. Please ensure all changes from QA are properly documented.\n\n';
+              message += 'Make sure to move any [Unreleased] changes to the appropriate version section.';
+            } else if (targetBranch === 'master') {
+              message += 'This pull request to master does not include changes to `CHANGELOG.md`. Please ensure all changes are properly documented.\n\n';
+              message += 'Make sure to move any [Unreleased] changes to the appropriate version section.';
+            }
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.name,
+              body: message
+            });
+
+      - name: Fail if changelog not updated
+        if: steps.changelog_check.outputs.has_changes == 'false'
+        run: |
+          echo "❌ CHANGELOG.md update is required"
+          echo "Please update the changelog to document your changes"
+          exit 1 
