@@ -3,7 +3,7 @@ name: Changelog Check
 on:
   pull_request:
     branches:
-      - QA
+      - qa
       - release/*
       - master
     paths:
