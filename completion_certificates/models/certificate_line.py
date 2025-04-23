@@ -1,4 +1,6 @@
-from odoo import models, fields, api
+from odoo import models, fields, api, _
+from odoo.exceptions import ValidationError
+
 
 class CertificateLine(models.Model):
     _name = 'certificate.line'
@@ -14,7 +16,7 @@ class CertificateLine(models.Model):
     qty = fields.Float(string='Ordered Quantity', related='purchase_line_id.product_qty', readonly=True)
     qty_processed = fields.Float(string='Processed Quantity', compute='_compute_qty_processed', store=True)
     qty_received = fields.Float(string='Received Quantity')
-    price_unit = fields.Float(string='Unit Price', compute='_compute_price_unit', store=True)
+    price_unit = fields.Float(string='Unit Price', related='purchase_line_id.price_unit', readonly=True)
     tax_ids = fields.Many2many('account.tax', string='Taxes', related='purchase_line_id.taxes_id', readonly=True)
     price_subtotal = fields.Float(string='Subtotal', compute='_compute_price_subtotal', store=True)
     date_received = fields.Date(string='Date Received')
@@ -23,8 +25,6 @@ class CertificateLine(models.Model):
         ('unique_purchase_line', 'unique(certificate_id, purchase_line_id)', 'You cannot select the same purchase order line twice.')
     ]
 
-    @api.onchange('purchase_line_id')
-    @api.depends('certificate_id.state')
     def _compute_qty_processed(self):
         for line in self:
             confirmed_lines = self.search([
