@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 
 
 ### Fixed
-- 
+- Fix AttributeError in Tax Report for Bolivian Company (Digital Hub Empresa de Tecnología)
 
 ## [3.4.1] - 2025-04-24
 
