@@ -8,6 +8,7 @@
                 <field name="origin" position="after">
                     <field name="project_id" options="{'no_create': True, 'no_create_edit': True}"/>
                     <field name="request_assistance" string="Request Procurement Assistance" widget="boolean_toggle"/>
+                    <field name="off_budget" string="Off-Budget" widget="boolean_toggle" readonly="purchase_count > 0"/>
                 </field>
             </field>
         </record>
