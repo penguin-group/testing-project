@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 
 
 ### Fixed
-- 
+- Visibility logic of the button "Edit Secondary Currency Rate" in Vendor Bills
 
 ## [3.4.1] - 2025-04-24
 
