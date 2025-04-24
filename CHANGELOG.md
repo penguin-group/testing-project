@@ -8,13 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Product's purchase method validation for certificate lines
+- 
 
 ### Changed
 - 
 
 ### Fixed
 - 
+
+## [3.4.1] - 2025-04-24
+
+### Added
+- Product's purchase method validation for certificate lines
 
 ## [3.4.0.1] - 2025-04-21
 
