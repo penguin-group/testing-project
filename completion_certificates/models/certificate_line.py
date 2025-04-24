@@ -1,4 +1,6 @@
-from odoo import models, fields, api
+from odoo import models, fields, api, _
+from odoo.exceptions import ValidationError
+
 
 class CertificateLine(models.Model):
     _name = 'certificate.line'
@@ -36,3 +38,8 @@ class CertificateLine(models.Model):
         for line in self:
             line.price_subtotal = line.price_unit * line.qty_received
 
+    @api.constrains('purchase_line_id')
+    def _check_purchase_method(self):
+        for line in self:
+            if line.purchase_line_id.product_id.purchase_method != 'receive':
+                raise ValidationError(_('The Control Policy of the product must be "Receive" to create a certificate line.'))
