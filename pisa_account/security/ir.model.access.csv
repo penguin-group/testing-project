@@ -7,6 +7,7 @@ access_jr_accountant_account_report_column,access.jr.accountant.account.report.c
 access_jr_accountant_account_group,access.jr.accountant.account.group,account.model_account_group,pisa_account.group_account_jr_accountant,1,0,0,
 access_jr_accountant_account_fiscal_year,access.jr.accountant.account.fiscal.year,account_accountant.model_account_fiscal_year,pisa_account.group_account_jr_accountant,1,0,0,
 access_jr_accountant_account_asset,access.jr.accountant.account.asset,account_asset.model_account_asset,pisa_account.group_account_jr_accountant,1,1,1,1
+access_jr_accountant_account_asset_group,access.jr.accountant.account.asset.group,account_asset.model_account_asset_group,pisa_account.group_account_jr_accountant,1,1,1,1
 access_sr_accountant_account_account,access.sr.accountant.account.account,account.model_account_account,pisa_account.group_account_sr_accountant,1,1,1,1
 access_sr_accountant_res_currency,access.sr.accountant.res.currency,base.model_res_currency,pisa_account.group_account_sr_accountant,1,1,1,1
 access_sr_accountant_account_asset,access.sr.accountant.account.asset,account_asset.model_account_asset,pisa_account.group_account_sr_accountant,1,1,1,1
