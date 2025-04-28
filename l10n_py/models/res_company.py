@@ -60,7 +60,6 @@ class ResCompany(models.Model):
     Key features:
     - Supports PYG as main or secondary currency
     - Automatically populates both selling and buying rates
-    - Handles fallback in case of network or data issues
     - Notifies the finance team on failure via popup and email
     '''
 
@@ -72,13 +71,14 @@ class ResCompany(models.Model):
     )
 
     def _parse_bcp_cierre_data(self, available_currencies):
-        _logger.info("🚀 Executing _parse_bcp_cierre_data")
+        """Fetch and parse the daily exchange rate from BCP for companies with USD and PYG currencies."""
+        _logger.info("Executing _parse_bcp_cierre_data")
         result = {}
         currency_names = available_currencies.mapped('name')
         query_date = datetime.now() - timedelta(days=1)
         bcp_request_date = query_date.strftime('%d/%m/%Y')
         rate_application_date = datetime.now().date()
-
+        # Check if the date is a weekend
         try:
             url = "https://www.bcp.gov.py/webapps/web/cotizacion/referencial-fluctuante"
             payload = {'fecha': bcp_request_date}
@@ -122,7 +122,7 @@ class ResCompany(models.Model):
 
             base_currency = self.currency_id.name
             _logger.info("Company base currency: %s", base_currency)
-
+            # Check if the base currency is in the list of available currencies
             if base_currency == 'USD':
                 if 'PYG' in currency_names:
                     result['PYG'] = {
@@ -143,7 +143,7 @@ class ResCompany(models.Model):
                     'buying_inverse_company_rate': 1.0,
                     'date': rate_application_date,
                 }
-
+            # Check if the base currency is PYG
             elif base_currency == 'PYG':
                 if 'USD' in currency_names:
                     result['USD'] = {
@@ -178,10 +178,10 @@ class ResCompany(models.Model):
             return {}
 
     def _generate_currency_rates(self, parsed_data):
-        """Create or update currency rates from parsed exchange rate data."""
+        """update currency rates from parsed exchange rate data."""
         Currency = self.env['res.currency']
         CurrencyRate = self.env['res.currency.rate']
-
+        # Get the list of available currencies
         for company in self:
             company_currency = company.currency_id.name
             currency_info = parsed_data.get(company_currency)
@@ -241,7 +241,7 @@ class ResCompany(models.Model):
 
     def _notify_finance_team_error(self, error, provider="BCP"):
         """Send notification to accounting team when an error occurs during BCP rate update."""
-        _logger.warning(" Notifying Finance Team: %s", tools.ustr(error))
+        _logger.warning("Notificando error: %s", str(error))
         error_date = fields.Date.context_today(self)
 
         group = self.env.ref('account.group_account_user', raise_if_not_found=False)
@@ -250,16 +250,19 @@ class ResCompany(models.Model):
             return
 
         subject = f" Exchange rate update failed ({provider}) - {error_date.strftime('%d/%m/%Y')}"
+
+        # Generate the email body
         body_html = f"""
             <p><strong>Exchange rate update from {provider} failed</strong></p>
             <p><strong>Date:</strong> {error_date}</p>
             <p><strong>Provider:</strong> {provider}</p>
-            <p><strong>Error Details:</strong></p>
-            <pre>{tools.ustr(error)}</pre>
+            <p><strong>Error Details:</strong></p
+            <pre>{str(error)}</pre>
             <br>
             <p>This message was generated automatically by the system.</p>
         """
-
+        
+        # Notify the finance team
         for user in group.users:
             user.notify_info(
                 message="An error occurred while updating exchange rates. Please check your email for details.",
@@ -273,3 +276,5 @@ class ResCompany(models.Model):
                     'email_to': user.email,
                     'auto_delete': True,
                 }).send()
+
+
