@@ -49,7 +49,7 @@ class AccountReport(models.Model):
         This engine does not support any subformula.
         """
         # [ADDED] Start: selected_balance variable to select the balance of the correct currency
-        selected_balance = 'secondary_balance' if options['currencies_selected_name'] == self.env.user.company_id.sec_currency_id.name else 'balance'
+        selected_balance = 'secondary_balance' if options['currencies_selected_name'] == self.env.user.company_id.sec_currency_id.symbol else 'balance'
         # [ADDED] End
 
         self._check_groupby_fields((next_groupby.split(',') if next_groupby else []) + ([current_groupby] if current_groupby else []))
@@ -138,7 +138,7 @@ class AccountReport(models.Model):
                       then it will be the number of matching amls. If there is a groupby, it will be the number of distinct grouping
                       keys at the first level of this groupby (so, if groupby is 'partner_id, account_id', the number of partners).
         """
-        selected_balance = 'secondary_balance' if options['currencies_selected_name'] == self.env.user.company_id.sec_currency_id.name else 'balance'
+        selected_balance = 'secondary_balance' if options['currencies_selected_name'] == self.env.user.company_id.sec_currency_id.symbol else 'balance'
         def _format_result_depending_on_groupby(formula_rslt):
             if not current_groupby:
                 if formula_rslt:
@@ -276,7 +276,7 @@ class AccountReport(models.Model):
         """
         self._check_groupby_fields((next_groupby.split(',') if next_groupby else []) + ([current_groupby] if current_groupby else []))
 
-        selected_balance = 'secondary_balance' if options['currencies_selected_name'] == self.env.user.company_id.sec_currency_id.name else 'balance'
+        selected_balance = 'secondary_balance' if options['currencies_selected_name'] == self.env.user.company_id.sec_currency_id.symbol else 'balance'
         # Gather the account code prefixes to compute the total from
         prefix_details_by_formula = {}  # in the form {formula: [(1, prefix1), (-1, prefix2)]}
         prefixes_to_compute = set()
@@ -446,7 +446,8 @@ class AccountReport(models.Model):
         for currency in currency_id:
             currency_dict = {
                 'id':currency.id,
-                'name':_(currency.name)
+                'name':_(currency.name),
+                'symbol': currency.symbol,
             }
             currency_id_list.append(currency_dict)
 
@@ -455,11 +456,11 @@ class AccountReport(models.Model):
         old_currency_id = previous_options.get('currencies_selected_name', None)
 
         if currency_id:
-            options['currencies_selected_name'] = self.env['res.currency'].browse(currency_id).name
+            options['currencies_selected_name'] = self.env['res.currency'].browse(currency_id).symbol
         elif old_currency_id:
             options['currencies_selected_name'] = old_currency_id
         else:
-            options['currencies_selected_name'] = self.env.company.currency_id.name
+            options['currencies_selected_name'] = self.env.company.currency_id.symbol
 
 
     #Override base method
@@ -477,7 +478,7 @@ class AccountReport(models.Model):
         if currency_id:
             currency_obj = self.env['res.currency'].browse(currency_id)
         elif old_currency_id:
-            currency_obj = self.env['res.currency'].search([('name','=',old_currency_id)])
+            currency_obj = self.env['res.currency'].search([('symbol','=',old_currency_id)])
         else:
             currency_obj = self.env.company.currency_id
 
@@ -490,7 +491,7 @@ class AccountReport(models.Model):
             currency_symbol = currency_obj.symbol
         else:
             currency_symbol = self.env.company.currency_id.symbol
-        currency_name = self.env.company.currency_id.name
+        currency_name = self.env.company.currency_id.symbol
         rounding_unit_names = [
             ('decimals', (f'.{currency_symbol}', '')),
             ('units', (f'{currency_symbol}', '')),

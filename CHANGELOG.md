@@ -11,10 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 
 
 ### Changed
-- 
+- Update currency selection to use symbol instead of name in financial reports
 
 ### Fixed
 - Fix AttributeError in Tax Report for Bolivian Company (Digital Hub Empresa de Tecnología)
+- Visibility logic of the button "Edit Secondary Currency Rate" in Vendor Bills
 
 ## [3.4.1] - 2025-04-24
 
