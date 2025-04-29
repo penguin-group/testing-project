@@ -13,7 +13,7 @@
                             class="{ 'selected': currency.selected, 'ps-4': true }"
                             onSelected="() => this.filterCurrency(currency)"
                         >
-                        <t t-esc="currency.name"/>
+                        <t t-esc="currency.symbol"/>
                     </DropdownItem> 
                 </t>
             </t>
