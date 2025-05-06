@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from odoo.tools.translate import _
 from odoo import models, fields, api, release
 import logging
 from datetime import datetime, timedelta
@@ -7,6 +7,8 @@ from bs4 import BeautifulSoup
 import requests
 from odoo import fields, models, tools
 from odoo.exceptions import UserError
+
+
 
 _logger = logging.getLogger(__name__)
 
@@ -66,13 +68,13 @@ class ResCompany(models.Model):
 
     # Extend provider selection to include BCP
     currency_provider = fields.Selection(
-        selection_add=[('bcp_cierre', 'BCP')],
+        selection_add=[('bcp_closure', 'BCP')],
         string="Currency Provider"
     )
 
-    def _parse_bcp_cierre_data(self, available_currencies):
+    def _parse_bcp_closure_data(self, available_currencies):
         """Fetch and parse the daily exchange rate from BCP for companies with USD and PYG currencies."""
-        _logger.info("Executing _parse_bcp_cierre_data")
+        _logger.info("Executing _parse_bcp_closure_data")
         result = {}
         currency_names = available_currencies.mapped('name')
         query_date = datetime.now() - timedelta(days=1)
@@ -88,7 +90,7 @@ class ResCompany(models.Model):
             }
 
             response = requests.post(url, data=payload, headers=headers, timeout=15)
-            _logger.info("🛰️ BCP Response status: %s", response.status_code)
+            _logger.info("BCP Response status: %s", response.status_code)
             response.raise_for_status()
             soup = BeautifulSoup(response.content, 'html.parser')
 
@@ -239,42 +241,37 @@ class ResCompany(models.Model):
 
         _logger.info(" Extended currency rates generated successfully.")
 
-    def _notify_finance_team_error(self, error, provider="BCP"):
-        """Send notification to accounting team when an error occurs during BCP rate update."""
-        _logger.warning("Notificando error: %s", str(error))
-        error_date = fields.Date.context_today(self)
+    from odoo.tools.translate import _
 
+    def _notify_finance_team_error(self, error, provider="BCP"):
+        """Notify the finance team about an error in the exchange rate update process."""
         group = self.env.ref('account.group_account_user', raise_if_not_found=False)
         if not group:
-            _logger.warning(" Finance group not found.")
             return
 
-        subject = f" Exchange rate update failed ({provider}) - {error_date.strftime('%d/%m/%Y')}"
-
-        # Generate the email body
-        body_html = f"""
-            <p><strong>Exchange rate update from {provider} failed</strong></p>
-            <p><strong>Date:</strong> {error_date}</p>
-            <p><strong>Provider:</strong> {provider}</p>
-            <p><strong>Error Details:</strong></p
-            <pre>{str(error)}</pre>
-            <br>
-            <p>This message was generated automatically by the system.</p>
-        """
-        
-        # Notify the finance team
         for user in group.users:
-            user.notify_info(
-                message="An error occurred while updating exchange rates. Please check your email for details.",
-                title=" Currency Update Error",
-                sticky=True
-            )
-            if user.email:
-                self.env['mail.mail'].create({
-                    'subject': subject,
-                    'body_html': body_html,
-                    'email_to': user.email,
-                    'auto_delete': True,
-                }).send()
+            lang = user.partner_id.lang or 'en_US'
 
+            if lang.startswith('es'):
+                subject = f"Error en actualización de tipo de cambio ({provider})"
+                body_html = f"""
+                    <p><strong>Error generado automáticamente</strong></p>
+                    <p><strong>Proveedor:</strong> {provider}</p>
+                    <p><strong>Error:</strong> {error}</p>
+                """
+            else:
+                subject = f"Error in exchange rate update ({provider})"
+                body_html = f"""
+                    <p><strong>Automatically generated error</strong></p>
+                    <p><strong>Provider:</strong> {provider}</p>
+                    <p><strong>Error:</strong> {error}</p>
+                """
+
+            if user.partner_id:
+                user.sudo().message_notify(
+                    subject=subject,
+                    body=body_html,
+                    partner_ids=[user.partner_id.id],
+                    model_description=subject
+                )
 
