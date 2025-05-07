@@ -42,7 +42,7 @@ class PurchaseOrder(models.Model):
         self.subscribe_assignee(order)
 
         # Replicate off_budget value from PR
-        if self._context['active_model'] == 'purchase.request':
+        if 'active_model' in self._context and self._context['active_model'] == 'purchase.request':
             purchase_req = self.env['purchase.request'].search([('id', '=', self._context['active_id'])])
             order.off_budget = purchase_req.off_budget
 
