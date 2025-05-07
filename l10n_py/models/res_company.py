@@ -241,7 +241,6 @@ class ResCompany(models.Model):
 
         _logger.info(" Extended currency rates generated successfully.")
 
-    from odoo.tools.translate import _
 
     def _notify_finance_team_error(self, error, provider="BCP"):
         """Notify the finance team about an error in the exchange rate update process."""
@@ -250,28 +249,20 @@ class ResCompany(models.Model):
             return
 
         for user in group.users:
-            lang = user.partner_id.lang or 'en_US'
-
-            if lang.startswith('es'):
-                subject = f"Error en actualización de tipo de cambio ({provider})"
-                body_html = f"""
-                    <p><strong>Error generado automáticamente</strong></p>
-                    <p><strong>Proveedor:</strong> {provider}</p>
-                    <p><strong>Error:</strong> {error}</p>
-                """
-            else:
-                subject = f"Error in exchange rate update ({provider})"
-                body_html = f"""
-                    <p><strong>Automatically generated error</strong></p>
-                    <p><strong>Provider:</strong> {provider}</p>
-                    <p><strong>Error:</strong> {error}</p>
-                """
+            subject = _("Error in exchange rate update (%s)") % provider
+            body_html = _(
+                "<p><strong>Automatically generated error</strong></p>"
+                "<p><strong>Provider:</strong> %s</p>"
+                "<p><strong>Error:</strong> %s</p>"
+            ) % (provider, error)
 
             if user.partner_id:
                 user.sudo().message_notify(
                     subject=subject,
                     body=body_html,
                     partner_ids=[user.partner_id.id],
-                    model_description=subject
+                    model_description=subject,
+                    notif_layout='mail.mail_notification_light' 
                 )
+
 
