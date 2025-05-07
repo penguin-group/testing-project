@@ -104,3 +104,26 @@ class ResCompany(models.Model):
             _logger.exception(" Error retrieving BCP data: %s", e)
             self._notify_finance_team_error(e, provider="BCP")
             return {}
+    
+    def _notify_finance_team_error(self, error, provider="BCP"):
+        """Notify the finance team about an error in the BCP exchange rate update process"""
+        group = self.env.ref('account.group_account_user', raise_if_not_found=False)
+        if not group:
+            return
+
+        for user in group.users:
+            subject = ("Error in exchange rate update (%s)") % provider
+            body_html = (
+                "<p><strong>Automatically generated error</strong></p>"
+                "<p><strong>Provider:</strong> %s</p>"
+                "<p><strong>Error:</strong> %s</p>"
+            ) % (provider, error)
+
+            if user.partner_id:
+                user.sudo().message_notify(
+                    subject=subject,
+                    body=body_html,
+                    partner_ids=[user.partner_id.id],
+                    model_description=subject,
+                    notif_layout='mail.mail_notification_light'
+                )
