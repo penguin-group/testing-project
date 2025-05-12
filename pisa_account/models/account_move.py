@@ -16,6 +16,10 @@ class AccountMove(models.Model):
         compute="_generate_payment_info_qr_code"
     )
 
+    company_secondary_currency_name = fields.Char(
+        related='company_id.sec_currency_id.name', readonly=True,
+    )
+
     def _generate_payment_info_qr_code(self):
         for record in self:
             html_content = """

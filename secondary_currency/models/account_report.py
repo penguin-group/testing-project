@@ -2,7 +2,7 @@ from odoo import models, _,api
 from odoo.exceptions import UserError
 from ast import literal_eval
 from collections import defaultdict
-from odoo.tools import SQL
+from odoo.tools import get_lang, SQL
 import re
 
 NUMBER_FIGURE_TYPES = ('float', 'integer', 'monetary', 'percentage')
@@ -22,7 +22,24 @@ class AccountReport(models.Model):
     _inherit = 'account.report'
 
     def _compute_formula_batch_with_engine_tax_tags(self, options, date_scope, formulas_dict, current_groupby, next_groupby, offset=0, limit=None, warnings=None):
-        """ Report engine.
+        """ 
+        [OVERRIDE] Full override of `account.report._compute_formula_batch_with_engine_tax_tags` method.
+
+        Reason:
+        - super() could not be used because we should include a variable in the SQL query that is not present in the original method
+        - the value resulting from the SQL query should be compatible with the Currency Switch of the report
+
+        Original method:
+        - Location: `enterprise/account_reports/account_report.py`
+        - Method: `_compute_formula_batch_with_engine_tax_tags`
+        - Odoo Version: 18.0
+
+        Modifications summary:
+        - [ADDED] selected_balance variable to select the balance of the correct currency
+        - [ADDED] Use the previous variable in the sum
+        
+        
+        Report engine.
 
         The formulas made for this report simply consist of a tag label. When an expression using this engine is created, it also creates two
         account.account.tag objects, namely -tag and +tag, where tag is the chosen formula. The balance of the expressions using this engine is
@@ -31,54 +48,67 @@ class AccountReport(models.Model):
 
         This engine does not support any subformula.
         """
-        selected_balance = 'secondary_balance' if options['currencies_selected_name'] == self.env.user.company_id.sec_currency_id.name else 'balance'
+        # [ADDED] Start: selected_balance variable to select the balance of the correct currency
+        selected_balance = 'secondary_balance' if options['currencies_selected_name'] == self.env.user.company_id.sec_currency_id.symbol else 'balance'
+        # [ADDED] End
+
         self._check_groupby_fields((next_groupby.split(',') if next_groupby else []) + ([current_groupby] if current_groupby else []))
         all_expressions = self.env['account.report.expression']
         for expressions in formulas_dict.values():
             all_expressions |= expressions
         tags = all_expressions._get_matching_tags()
 
-        currency_table_query = self._get_currency_table(options)
-        groupby_sql = f'account_move_line.{current_groupby}' if current_groupby else None
-        tables, where_clause, where_params = self._query_get(options, date_scope)
-        tail_query, tail_params = self._get_engine_query_tail(offset, limit)
-        if self.pool['account.account.tag'].name.translate:
-            acc_tag_name = "acc_tag.name->>'en_US'"
-        else:
-            acc_tag_name = 'acc_tag.name'
-
-        groupby_clause = f"SUBSTRING({acc_tag_name}, 2, LENGTH({acc_tag_name}) - 1){f', {groupby_sql}' if groupby_sql else ''}"
-
-        sql = f"""
+        query = self._get_report_query(options, date_scope)
+        groupby_sql = self.env['account.move.line']._field_to_sql('account_move_line', current_groupby, query) if current_groupby else None
+        tail_query = self._get_engine_query_tail(offset, limit)
+        lang = get_lang(self.env, self.env.user.lang).code
+        acc_tag_name = self.with_context(lang='en_US').env['account.account.tag']._field_to_sql('acc_tag', 'name')
+        sql = SQL(
+            """
             SELECT
-                SUBSTRING({acc_tag_name}, 2, LENGTH({acc_tag_name}) - 1) AS formula,
-                SUM(ROUND(COALESCE(account_move_line.{selected_balance}, 0) * currency_table.rate, currency_table.precision)
+                SUBSTRING(%(acc_tag_name)s, 2, LENGTH(%(acc_tag_name)s) - 1) AS formula,
+                SUM(%(balance_select)s
                     * CASE WHEN acc_tag.tax_negate THEN -1 ELSE 1 END
                     * CASE WHEN account_move_line.tax_tag_invert THEN -1 ELSE 1 END
                 ) AS balance,
                 COUNT(account_move_line.id) AS aml_count
-                {f', {groupby_sql} AS grouping_key' if groupby_sql else ''}
+                %(select_groupby_sql)s
 
-            FROM {tables}
+            FROM %(table_references)s
 
             JOIN account_account_tag_account_move_line_rel aml_tag
                 ON aml_tag.account_move_line_id = account_move_line.id
             JOIN account_account_tag acc_tag
                 ON aml_tag.account_account_tag_id = acc_tag.id
-                AND acc_tag.id IN %s
-            JOIN {currency_table_query}
-                ON currency_table.company_id = account_move_line.company_id
+                AND acc_tag.id IN %(tag_ids)s
+            %(currency_table_join)s
 
-            WHERE {where_clause}
+            WHERE %(search_condition)s
 
-            GROUP BY {groupby_clause}
-            ORDER BY {groupby_clause}
+            GROUP BY %(groupby_clause)s
 
-            {tail_query}
-        """
+            ORDER BY %(groupby_clause)s
 
-        params = [tuple(tags.ids)] + where_params + tail_params
-        self._cr.execute(sql, params)
+            %(tail_query)s
+            """,
+            acc_tag_name=acc_tag_name,
+            select_groupby_sql=SQL(', %s AS grouping_key', groupby_sql) if groupby_sql else SQL(),
+            table_references=query.from_clause,
+            tag_ids=tuple(tags.ids),
+            # [ADDED] Start: Use the previous variable in the sum
+            balance_select=self._currency_table_apply_rate(SQL(f"account_move_line.{selected_balance}")),
+            # [ADDED] End
+            currency_table_join=self._currency_table_aml_join(options),
+            search_condition=query.where_clause,
+            groupby_clause=SQL(
+                "SUBSTRING(%(acc_tag_name)s, 2, LENGTH(%(acc_tag_name)s) - 1)%(groupby_sql)s",
+                acc_tag_name=acc_tag_name,
+                groupby_sql=SQL(', %s', groupby_sql) if groupby_sql else SQL(),
+            ),
+            tail_query=tail_query,
+        )
+
+        self._cr.execute(sql)
 
         rslt = {formula_expr: [] if current_groupby else {'result': 0, 'has_sublines': False} for formula_expr in formulas_dict.items()}
         for query_res in self._cr.dictfetchall():
@@ -108,7 +138,7 @@ class AccountReport(models.Model):
                       then it will be the number of matching amls. If there is a groupby, it will be the number of distinct grouping
                       keys at the first level of this groupby (so, if groupby is 'partner_id, account_id', the number of partners).
         """
-        selected_balance = 'secondary_balance' if options['currencies_selected_name'] == self.env.user.company_id.sec_currency_id.name else 'balance'
+        selected_balance = 'secondary_balance' if options['currencies_selected_name'] == self.env.user.company_id.sec_currency_id.symbol else 'balance'
         def _format_result_depending_on_groupby(formula_rslt):
             if not current_groupby:
                 if formula_rslt:
@@ -246,7 +276,7 @@ class AccountReport(models.Model):
         """
         self._check_groupby_fields((next_groupby.split(',') if next_groupby else []) + ([current_groupby] if current_groupby else []))
 
-        selected_balance = 'secondary_balance' if options['currencies_selected_name'] == self.env.user.company_id.sec_currency_id.name else 'balance'
+        selected_balance = 'secondary_balance' if options['currencies_selected_name'] == self.env.user.company_id.sec_currency_id.symbol else 'balance'
         # Gather the account code prefixes to compute the total from
         prefix_details_by_formula = {}  # in the form {formula: [(1, prefix1), (-1, prefix2)]}
         prefixes_to_compute = set()
@@ -416,7 +446,8 @@ class AccountReport(models.Model):
         for currency in currency_id:
             currency_dict = {
                 'id':currency.id,
-                'name':_(currency.name)
+                'name':_(currency.name),
+                'symbol': currency.symbol,
             }
             currency_id_list.append(currency_dict)
 
@@ -425,11 +456,11 @@ class AccountReport(models.Model):
         old_currency_id = previous_options.get('currencies_selected_name', None)
 
         if currency_id:
-            options['currencies_selected_name'] = self.env['res.currency'].browse(currency_id).name
+            options['currencies_selected_name'] = self.env['res.currency'].browse(currency_id).symbol
         elif old_currency_id:
             options['currencies_selected_name'] = old_currency_id
         else:
-            options['currencies_selected_name'] = self.env.company.currency_id.name
+            options['currencies_selected_name'] = self.env.company.currency_id.symbol
 
 
     #Override base method
@@ -447,7 +478,7 @@ class AccountReport(models.Model):
         if currency_id:
             currency_obj = self.env['res.currency'].browse(currency_id)
         elif old_currency_id:
-            currency_obj = self.env['res.currency'].search([('name','=',old_currency_id)])
+            currency_obj = self.env['res.currency'].search([('symbol','=',old_currency_id)])
         else:
             currency_obj = self.env.company.currency_id
 
@@ -460,7 +491,7 @@ class AccountReport(models.Model):
             currency_symbol = currency_obj.symbol
         else:
             currency_symbol = self.env.company.currency_id.symbol
-        currency_name = self.env.company.currency_id.name
+        currency_name = self.env.company.currency_id.symbol
         rounding_unit_names = [
             ('decimals', (f'.{currency_symbol}', '')),
             ('units', (f'{currency_symbol}', '')),
