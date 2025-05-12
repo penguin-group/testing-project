@@ -6,6 +6,7 @@ class PurchaseRequest(models.Model):
 
     project_id = fields.Many2one('project.project', string='Project')
     request_assistance = fields.Boolean(string='Request Assistance')
+    off_budget = fields.Boolean(string='Off-Budget', tracking=True)
 
     def _link_attachments_to_purchase_order(self, purchase_order):
         """

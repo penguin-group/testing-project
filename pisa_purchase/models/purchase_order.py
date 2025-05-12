@@ -6,6 +6,7 @@ class PurchaseOrder(models.Model):
     assignee_id = fields.Many2one('res.users', string='Assignee', help='User responsible for this RFQ')
     extra_cost_po_ids = fields.Many2many('purchase.order', 'purchase_extra_cost_rel', 'main_po_id', 'extra_cost_po_id',
         string='Extra Cost POs', help='Link extra cost POs (customs, shipping etc) to this PO for accurate cost tracking')
+    off_budget = fields.Boolean(string='Off-Budget', tracking=True)
 
     def _compute_next_review(self):
         # Override original method to change the next review string
@@ -39,7 +40,12 @@ class PurchaseOrder(models.Model):
         
         # Subscribe assignee to messages
         self.subscribe_assignee(order)
-        
+
+        # Replicate off_budget value from PR
+        if 'active_model' in self._context and self._context['active_model'] == 'purchase.request':
+            purchase_req = self.env['purchase.request'].search([('id', '=', self._context['active_id'])])
+            order.off_budget = purchase_req.off_budget
+
         return order
     
     def write(self, vals):
