@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="res_config_settings_view_form_inherit" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="10"/>
+            <field name="inherit_id" ref="hr_expense.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                
+                <xpath expr="//app[@name='hr_expense']/block[2]" position="inside">
+                    <setting company_dependent="1" help="Account for reimbursements for expenses."
+                                string="Reimbursements Account">
+                        <field name="expense_reimbursement_account_id"/>
+                    </setting>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>
