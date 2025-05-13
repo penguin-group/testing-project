@@ -155,12 +155,12 @@ class AccountMove(models.Model):
 
     @api.onchange('partner_id')
     def _onchange_partner_id(self):
-        self._get_supplier_invoice_authorization()
+        self.sudo()._get_supplier_invoice_authorization()
         return super()._onchange_partner_id()
 
     @api.onchange('invoice_date')
     def _onchange_invoice_date(self):
-        self._get_supplier_invoice_authorization()
+        self.sudo()._get_supplier_invoice_authorization()
 
     def _get_supplier_invoice_authorization(self):
         for record in self:
