@@ -8,6 +8,7 @@
 
             <xpath expr="//field[@name='user_id']" position="after">
                 <field name="assignee_id" domain="[('share', '=', False)]" widget="many2one_avatar_user"/>
+                <field name="off_budget" string="Off-Budget" widget="boolean_toggle" readonly="state not in ['draft', 'sent']"/>
             </xpath>
 
             <xpath expr="//field[@name='origin']" position="after">

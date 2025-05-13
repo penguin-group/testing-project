@@ -12,7 +12,7 @@ patch(AccountReportFilters.prototype, {
         // Update selected currency options if selected
         if (currency.selected) {
             this.controller.options.currencies_selected = parseInt(currency.id);
-            this.controller.options.currencies_selected_name = currency.name;
+            this.controller.options.currencies_selected_name = currency.symbol;
         }
 
         await this.controller.reload('currencies', this.controller.options);
