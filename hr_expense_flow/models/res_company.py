@@ -13,3 +13,11 @@ class ResCompany(models.Model):
         domain="[('account_type', '=', 'liability_payable'), ('reconcile', '=', True)]", 
         help="The account used to record the reimbursement to employee of expenses.",
     )
+
+    clearing_journal_id = fields.Many2one(
+        "account.journal",
+        string="Clearing Journal",
+        check_company=True,
+        domain="[('type', '=', 'general')]",
+        help="The company's default journal used when creating the clearing entry.",
+    )

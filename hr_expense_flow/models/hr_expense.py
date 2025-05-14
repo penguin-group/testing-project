@@ -4,13 +4,32 @@ from odoo import models, fields, api, Command
 class HrExpense(models.Model):
     _inherit = 'hr.expense'
 
+    outstanding_balance = fields.Monetary(
+        string='Outstanding Balance',
+        compute='_compute_outstanding_balance',
+        currency_field='currency_id',
+    )
+
+    @api.depends('employee_id')
+    def _compute_outstanding_balance(self):
+        for expense in self:
+            if not expense.employee_id:
+                expense.outstanding_balance = 0
+                continue
+            balance = self.env['account.move.line'].sudo().search([
+                ('account_id', '=', expense.company_id.expense_outstanding_account_id.id),
+                ('partner_id', '=', expense.employee_id.work_contact_id.id),
+                ('move_id.state', '=', 'posted')
+            ]).mapped('balance')
+            expense.outstanding_balance = sum(balance)
+
     def _create_vendor_bill(self):
         """Create a vendor bill for this expense."""
         self.ensure_one()
         invoice_vals = {
             'expense_sheet_id': self.sheet_id.id,
             'move_type': 'in_invoice',
-            'journal_id': self.sheet_id.journal_id.id, # The default value in this field should be the journal set in the expense settings page.
+            'journal_id': self.company_id.expense_journal_id.id,
             'partner_id': self.vendor_id.id,
             'currency_id': self.sheet_id.currency_id.id,
             'invoice_date': fields.Date.context_today(self),
@@ -38,15 +57,6 @@ class HrExpense(models.Model):
         self.ensure_one()
         line_ids = []
         if self.payment_mode == 'company_account':
-            
-            # Get the current balance of the outstanding account for this employee
-            balance = self.env['account.move.line'].sudo().search([
-                ('account_id', '=', self.company_id.expense_outstanding_account_id.id),
-                ('partner_id', '=', self.employee_id.work_contact_id.id),
-                ('move_id.state', '=', 'posted')
-            ]).mapped('balance')
-            outstanding_balance = sum(balance)
-
             # Create a debit line for the total amount of the expense
             # The account should be the expense reimbursement account
             line_ids.append(
@@ -59,17 +69,18 @@ class HrExpense(models.Model):
             
             # If the balance is less than the total amount, create an additional line to record the difference 
             # as a credit to the employee's account (reimbursement payable account)
-            if outstanding_balance < total_amount:
+            if self.outstanding_balance < total_amount:
                 line_ids.append(
                     Command.create({
-                        'credit': total_amount - outstanding_balance,
+                        'credit': total_amount - self.outstanding_balance,
                         'account_id': self.company_id.expense_reimbursement_account_id.id,
                         'partner_id': self.employee_id.work_contact_id.id,
                     })
                 )
-                credit = outstanding_balance
+                credit = self.outstanding_balance
             else:
                 credit = total_amount
+            
             # Create a credit line for the outstanding balance 
             line_ids.append(
                 Command.create({
@@ -83,7 +94,7 @@ class HrExpense(models.Model):
             'move_type': 'entry',
             'expense_sheet_id': self.sheet_id.id,
             'date': fields.Date.context_today(self),
-            'journal_id': self.sheet_id.journal_id.id,
+            'journal_id': self.company_id.clearing_journal_id.id,
             'ref': f'Clearing entry for expense {self.name}',
             'line_ids': line_ids
         }
