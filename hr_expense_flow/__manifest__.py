@@ -8,11 +8,19 @@
             - Expense Report generates a vendor bill (in draft) for each expense line 
               using the journal set in the expense settings page. The journal entry credits the
               reimbursement account (configured in the expense settings page).
-            - For each expense line, a journal entry is created and confirmed. It debits the reimbursement account
+            - For each expense line, a clearing journal entry is created and confirmed. 
+              It debits the reimbursement account
               and credits the Expense Outstanding Account (also configured in the expense settings page). 
               If the expense exceeds the amount available in the Expense Outstanding Account, 
               a separate line will be added to the journal entry for the reimbursement account 
               crediting the exceeded amount.
+        - Paid by Employee
+            - Expense Report generates a vendor bill (in draft) for each expense line
+              using the journal set in the expense settings page. The journal entry credits the
+              reimbursement account (configured in the expense settings page) to the Vendor.
+            - For each expense line, a clearing journal entry is created and confirmed. 
+              It debits the reimbursement account to the Vendor and credits the reimbursement 
+              account to the Employee.
     """,
     "author": "Penguin Infrastructure S.A.",
     "mantainers": ["José González"],

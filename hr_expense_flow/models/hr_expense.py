@@ -56,17 +56,18 @@ class HrExpense(models.Model):
     def _create_clearing_entry(self, total_amount):
         self.ensure_one()
         line_ids = []
+        
+        # Create a debit line for the total amount of the expense
+        # The account should be the expense reimbursement account (to Vendor)
+        line_ids.append(
+            Command.create({
+                'debit': total_amount,
+                'account_id': self.company_id.expense_reimbursement_account_id.id,
+                'partner_id': self.vendor_id.id,
+            }), 
+        )
+
         if self.payment_mode == 'company_account':
-            # Create a debit line for the total amount of the expense
-            # The account should be the expense reimbursement account
-            line_ids.append(
-                Command.create({
-                    'debit': total_amount,
-                    'account_id': self.company_id.expense_reimbursement_account_id.id,
-                    'partner_id': self.vendor_id.id,
-                }), 
-            )
-            
             # If the balance is less than the total amount, create an additional line to record the difference 
             # as a credit to the employee's account (reimbursement payable account)
             if self.outstanding_balance < total_amount:
@@ -86,6 +87,16 @@ class HrExpense(models.Model):
                 Command.create({
                     'credit': credit,
                     'account_id': self.company_id.expense_outstanding_account_id.id,
+                    'partner_id': self.employee_id.work_contact_id.id,
+                }),
+            )
+        else: # If the payment mode is 'employee_account'
+            # Create a credit line for the total amount of the expense
+            # The account should be the expense reimbursement account (to Employee)
+            line_ids.append(
+                Command.create({
+                    'credit': total_amount,
+                    'account_id': self.company_id.expense_reimbursement_account_id.id,
                     'partner_id': self.employee_id.work_contact_id.id,
                 }),
             )
