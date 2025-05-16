@@ -22,6 +22,7 @@
     'depends': ['base', 'account', 'web'],
 
     "data": [
+        'data/email_template.xml',
         "data/service_cron.xml",
         "security/account_security.xml",
         "security/book_registration_security.xml",
@@ -44,8 +45,10 @@
         "wizards/invoice_edit_currency_rate_views.xml",
         "wizards/report_res90_views.xml",
         "wizards/report_vat_purchase_views.xml",
-        "wizards/report_vat_sale_views.xml"
+        "wizards/report_vat_sale_views.xml",
+        "data/ir_config_parameter.xml",
     ],
+
 
     'demo': [
         'demo/res_partner_demo.xml',
