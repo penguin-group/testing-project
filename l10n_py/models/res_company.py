@@ -46,7 +46,7 @@ class ResCompany(models.Model):
             })
         else:
             py_menu_ids.sudo().write({
-               'show': False,
+            'show': False,
             })
         return in_paraguay
 
@@ -66,7 +66,6 @@ class ResCompany(models.Model):
     '''
 
 
-    # Extend provider selection to include BCP
     currency_provider = fields.Selection(
         selection_add=[('bcp_closure', 'BCP')],
         string="Currency Provider"
@@ -80,9 +79,13 @@ class ResCompany(models.Model):
         query_date = datetime.now() - timedelta(days=1)
         bcp_request_date = query_date.strftime('%d/%m/%Y')
         rate_application_date = datetime.now().date()
-        # Check if the date is a weekend
+
         try:
-            url = "https://www.bcp.gov.py/webapps/web/cotizacion/referencial-fluctuante"
+            # URL desde parámetro de sistema (con fallback a valor fijo por compatibilidad)
+            url = self.env['ir.config_parameter'].sudo().get_param(
+                'bcp.exchange.url',
+                default='https://www.bcp.gov.py/webapps/web/cotizacion/referencial-fluctuante'
+            )
             payload = {'fecha': bcp_request_date}
             headers = {
                 'User-Agent': 'Mozilla/5.0',
@@ -95,8 +98,20 @@ class ResCompany(models.Model):
             soup = BeautifulSoup(response.content, 'html.parser')
 
             table = soup.find('table', class_='table')
-            closing_row = None
+            if not table:
+                raise ValueError("Exchange table not found in BCP response.")
 
+            # Validar encabezados solo si están en <thead>, sin detener la ejecución
+            thead = table.find('thead')
+            if thead:
+                header_cells = thead.find_all('th')
+                if not any('Compra' in h.get_text() for h in header_cells) or not any('Venta' in h.get_text() for h in header_cells):
+                    _logger.warning("Table <thead> headers do not contain expected 'Compra' and 'Venta'. Proceeding with caution.")
+            else:
+                _logger.warning("Table <thead> not found. Skipping header validation.")
+
+            # Buscar la fila de cierre primero en <tfoot>, si no usar último válido de <tbody>
+            closing_row = None
             tfoot = table.find('tfoot')
             if tfoot:
                 closing_row = tfoot.find('tr')
@@ -104,7 +119,7 @@ class ResCompany(models.Model):
             else:
                 _logger.warning("<tfoot> not found. Using fallback last valid <tbody> row.")
                 tbody = table.find('tbody')
-                rows = tbody.find_all('tr')
+                rows = tbody.find_all('tr') if tbody else []
                 for row in reversed(rows):
                     cols = row.find_all('td')
                     if len(cols) >= 3 and cols[1].text.strip() and cols[2].text.strip():
@@ -124,7 +139,7 @@ class ResCompany(models.Model):
 
             base_currency = self.currency_id.name
             _logger.info("Company base currency: %s", base_currency)
-            # Check if the base currency is in the list of available currencies
+
             if base_currency == 'USD':
                 if 'PYG' in currency_names:
                     result['PYG'] = {
@@ -145,7 +160,7 @@ class ResCompany(models.Model):
                     'buying_inverse_company_rate': 1.0,
                     'date': rate_application_date,
                 }
-            # Check if the base currency is PYG
+
             elif base_currency == 'PYG':
                 if 'USD' in currency_names:
                     result['USD'] = {
@@ -166,12 +181,11 @@ class ResCompany(models.Model):
                     'buying_inverse_company_rate': 1.0,
                     'date': rate_application_date,
                 }
-
             else:
-                _logger.warning(" Unsupported base currency: %s", base_currency)
+                _logger.warning("Unsupported base currency: %s", base_currency)
                 return {}
 
-            _logger.info(" Final result returned to Odoo: %s", result)
+            _logger.info("Final result returned to Odoo: %s", result)
             return result
 
         except Exception as e:
@@ -179,71 +193,80 @@ class ResCompany(models.Model):
             self._notify_finance_team_error(e, provider="BCP")
             return {}
 
+
+
     def _generate_currency_rates(self, parsed_data):
-        """update currency rates from parsed exchange rate data."""
         Currency = self.env['res.currency']
         CurrencyRate = self.env['res.currency.rate']
-        # Get the list of available currencies
         for company in self:
-            company_currency = company.currency_id.name
-            currency_info = parsed_data.get(company_currency)
+            try:
+                company_currency = company.currency_id.name
+                currency_info = parsed_data.get(company_currency)
 
-            if not currency_info:
-                raise UserError(
-                    f"Base currency ({company_currency}) is missing from provider response."
+                if not currency_info:
+                    raise UserError(
+                        f"Base currency ({company_currency}) is missing from provider response."
+                    )
+
+                base_rate = (
+                    currency_info[0]
+                    if isinstance(currency_info, tuple)
+                    else currency_info.get('rate')
                 )
 
-            base_rate = (
-                currency_info[0]
-                if isinstance(currency_info, tuple)
-                else currency_info.get('rate')
-            )
+                for code, values in parsed_data.items():
+                    if isinstance(values, dict):
+                        rate = values.get('rate', 1.0)
+                        date = values.get('date')
+                        buying_company_rate = values.get('buying_company_rate')
+                        buying_inverse_company_rate = values.get('buying_inverse_company_rate')
+                    else:
+                        rate, date = values
+                        buying_company_rate = None
+                        buying_inverse_company_rate = None
 
-            for code, values in parsed_data.items():
-                if isinstance(values, dict):
-                    rate = values.get('rate', 1.0)
-                    date = values.get('date')
-                    buying_company_rate = values.get('buying_company_rate')
-                    buying_inverse_company_rate = values.get('buying_inverse_company_rate')
-                else:
-                    rate, date = values
-                    buying_company_rate = None
-                    buying_inverse_company_rate = None
+                    final_rate = rate / base_rate if base_rate else rate
 
-                final_rate = rate / base_rate if base_rate else rate
+                    currency = Currency.search([('name', '=', code)], limit=1)
+                    if not currency:
+                        continue
 
-                currency = Currency.search([('name', '=', code)], limit=1)
-                if not currency:
-                    continue
+                    existing = CurrencyRate.search([
+                        ('currency_id', '=', currency.id),
+                        ('company_id', '=', company.id),
+                        ('name', '=', date),
+                    ], limit=1)
 
-                existing = CurrencyRate.search([
-                    ('currency_id', '=', currency.id),
-                    ('company_id', '=', company.id),
-                    ('name', '=', date),
-                ], limit=1)
+                    rate_vals = {
+                        'currency_id': currency.id,
+                        'company_id': company.id,
+                        'name': date,
+                        'rate': final_rate,
+                    }
 
-                rate_vals = {
-                    'currency_id': currency.id,
-                    'company_id': company.id,
-                    'name': date,
-                    'rate': final_rate,
-                }
+                    if buying_company_rate:
+                        rate_vals['buying_company_rate'] = buying_company_rate
+                    if buying_inverse_company_rate:
+                        rate_vals['buying_inverse_company_rate'] = buying_inverse_company_rate
 
-                if buying_company_rate:
-                    rate_vals['buying_company_rate'] = buying_company_rate
-                if buying_inverse_company_rate:
-                    rate_vals['buying_inverse_company_rate'] = buying_inverse_company_rate
+                    if existing:
+                        existing.write(rate_vals)
+                    else:
+                        CurrencyRate.create(rate_vals)
 
-                if existing:
-                    existing.write(rate_vals)
-                else:
-                    CurrencyRate.create(rate_vals)
+                _logger.info("Extended currency rates generated successfully.")
 
-        _logger.info(" Extended currency rates generated successfully.")
-
+            except UserError as e:
+                _logger.exception("User error during currency rate generation: %s", e)
+                raise
+            except ValueError as e:
+                _logger.exception("Value error during currency rate generation: %s", e)
+                raise
+            except Exception as e:
+                _logger.exception("Unexpected error during currency rate generation: %s", e)
+                raise
 
     def _notify_finance_team_error(self, error, provider="BCP"):
-        """Notify the finance team about an error in the exchange rate update process."""
         group = self.env.ref('account.group_account_user', raise_if_not_found=False)
         if not group:
             return
@@ -256,13 +279,20 @@ class ResCompany(models.Model):
                 "<p><strong>Error:</strong> %s</p>"
             ) % (provider, error)
 
+            try:
+                template = self.env.ref('l10n_py.bcp_exchange_rate_error_notification_l10n')
+                template.with_context(
+                    provider=provider,
+                    error=error,
+                ).sudo().send_mail(self.id, force_send=True)
+            except Exception as email_err:
+                _logger.exception("Failed to send error email: %s", email_err)
+
             if user.partner_id:
                 user.sudo().message_notify(
                     subject=subject,
                     body=body_html,
                     partner_ids=[user.partner_id.id],
                     model_description=subject,
-                    notif_layout='mail.mail_notification_light' 
+                    notif_layout='mail.mail_notification_light'
                 )
-
-
