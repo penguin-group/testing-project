@@ -1,4 +1,5 @@
 from odoo import fields, models, api
+from odoo.exceptions import ValidationError
 
 
 class TierDefinition(models.Model):
@@ -15,6 +16,19 @@ class TierDefinition(models.Model):
         'hr.department',
         string='Department'
     )
+
+    @api.constrains('review_type', 'job_id', 'department_id')
+    def _check_employee_exists(self):
+        for record in self:
+            if record.review_type == 'job':
+                domain = [('job_id', '=', record.job_id.id)]
+                if record.department_id:
+                    domain.append(('department_id', '=', record.department_id.id))
+                employee_count = self.env['hr.employee'].search_count(domain)
+                if employee_count == 0:
+                    raise ValidationError(
+                        "No employee found for the selected role (and department)."
+                    )
 
     @api.onchange("review_type")
     def onchange_review_type(self):
