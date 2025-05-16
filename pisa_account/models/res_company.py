@@ -26,49 +26,52 @@ class ResCompany(models.Model):
     )
 
     def _parse_bcp_data(self, available_currencies):
-        '''
-        This method is called to parse the BCP data for the company.'''
-
-        _logger.info("Executing _parse_bcp_closure_data for pisa_account")
+        _logger.info("Executing _parse_bcp_data for pisa_account")
         result = {}
         currency_names = available_currencies.mapped('name')
-        date_post = (datetime.now() - timedelta(days=1)).strftime('%d/%m/%Y')
+        query_date = datetime.now() - timedelta(days=1)
+        bcp_request_date = query_date.strftime('%d/%m/%Y')
         today_date = datetime.now().date()
 
         try:
-            url = "https://www.bcp.gov.py/webapps/web/cotizacion/referencial-fluctuante"
-            payload = {'date': date_post}
+            url = self.env['ir.config_parameter'].sudo().get_param('bcp.exchange.url.pisa')
+            if not url:
+                raise ValueError("BCP exchange URL not configured in system parameters.")
+
+            payload = {'fecha': bcp_request_date}
             headers = {
                 'User-Agent': 'Mozilla/5.0',
                 'Content-Type': 'application/x-www-form-urlencoded',
             }
 
             response = requests.post(url, data=payload, headers=headers, timeout=15)
-            _logger.info("BCP response status: %s", response.status_code)
+            _logger.info("BCP Response status: %s", response.status_code)
             response.raise_for_status()
+
             soup = BeautifulSoup(response.content, 'html.parser')
             table = soup.find('table', class_='table')
+            if not table:
+                raise ValueError("Exchange table not found in BCP response.")
 
-            closure_row = table.find('tfoot').find('tr') if table.find('tfoot') else None
+            thead = table.find('thead')
+            if thead:
+                header_cells = thead.find_all('th')
+                if not any('Compra' in h.get_text() for h in header_cells) or not any('Venta' in h.get_text() for h in header_cells):
+                    _logger.warning("Table <thead> headers do not contain expected 'Compra' and 'Venta'. Proceeding with caution.")
+            else:
+                _logger.warning("Table <thead> not found. Skipping header validation.")
 
-            if not closure_row:
-                _logger.warning("<tfoot> not found. Trying <tbody> fallback.")
-                for row in reversed(table.find('tbody').find_all('tr')):
-                    cols = row.find_all('td')
-                    if len(cols) >= 3 and cols[1].text.strip() and cols[2].text.strip():
-                        closure_row = row
-                        break
+            tfoot = table.find('tfoot')
+            closing_row = tfoot.find('tr') if tfoot else None
+            if not closing_row:
+                raise ValueError("No valid closing row found. Only <tfoot> rates are accepted.")
 
-            if not closure_row:
-                raise ValueError("No valid closing row found.")
-
-            cols = closure_row.find_all(['th', 'td'])
+            cols = closing_row.find_all(['th', 'td'])
             buying = float(cols[1].get_text(strip=True).replace('.', '').replace(',', '.'))
             sale = float(cols[2].get_text(strip=True).replace('.', '').replace(',', '.'))
 
             if buying <= 0 or sale <= 0:
-                _logger.warning("Invalid exchange values: buying %s, sale %s", buying, sale)
-                return {}
+                raise ValueError(f"Invalid exchange rates: buy={buying}, sell={sale}")
 
             base_currency = self.currency_id.name
             _logger.info("Company base currency: %s", base_currency)
@@ -94,36 +97,51 @@ class ResCompany(models.Model):
                     'date': today_date,
                 }
             else:
-                _logger.warning(" Base currency %s not supported for pisa_account.", base_currency)
+                _logger.warning("Base currency %s not supported for pisa_account.", base_currency)
                 return {}
 
-            _logger.info(" Final exchange data sent to Odoo: %s", result)
+            _logger.info("Final exchange data sent to Odoo: %s", result)
             return result
 
-        except Exception as e:
-            _logger.exception(" Error retrieving BCP data: %s", e)
+        except requests.exceptions.RequestException as e:
+            _logger.exception("HTTP error fetching BCP rates: %s", e)
             self._notify_finance_team_error(e, provider="BCP")
-            return {}
-    
+        except ValueError as e:
+            _logger.exception("Value error parsing BCP response: %s", e)
+            self._notify_finance_team_error(e, provider="BCP")
+        except Exception as e:
+            _logger.exception("Unexpected error in BCP rate parser: %s", e)
+            self._notify_finance_team_error(e, provider="BCP")
+
+        return {}
+
     def _notify_finance_team_error(self, error, provider="BCP"):
-        """Notify the finance team about an error in the BCP exchange rate update process"""
-        group = self.env.ref('account.group_account_user', raise_if_not_found=False)
-        if not group:
-            return
+        try:
+            group = self.env.ref('account.group_account_user', raise_if_not_found=False)
+            if not group:
+                return
 
-        for user in group.users:
-            subject = ("Error in exchange rate update (%s)") % provider
-            body_html = (
-                "<p><strong>Automatically generated error</strong></p>"
-                "<p><strong>Provider:</strong> %s</p>"
-                "<p><strong>Error:</strong> %s</p>"
-            ) % (provider, error)
+            for user in group.users:
+                subject = ("Error in exchange rate update (%s)") % provider
+                body_html = (
+                    "<p><strong>Automatically generated error</strong></p>"
+                    "<p><strong>Provider:</strong> %s</p>"
+                    "<p><strong>Error:</strong> %s</p>"
+                ) % (provider, error)
 
-            if user.partner_id:
-                user.sudo().message_notify(
-                    subject=subject,
-                    body=body_html,
-                    partner_ids=[user.partner_id.id],
-                    model_description=subject,
-                    notif_layout='mail.mail_notification_light'
-                )
+                template = self.env.ref('pisa_account.bcp_exchange_rate_error_notification_pisa')
+                template.with_context(
+                    provider=provider,
+                    error=error,
+                ).sudo().send_mail(self.id, force_send=True)
+
+                if user.partner_id:
+                    user.sudo().message_notify(
+                        subject=subject,
+                        body=body_html,
+                        partner_ids=[user.partner_id.id],
+                        model_description=subject,
+                        notif_layout='mail.mail_notification_light'
+                    )
+        except Exception as notify_error:
+            _logger.exception("Error while notifying finance team: %s", notify_error)
