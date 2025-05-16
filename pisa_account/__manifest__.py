@@ -27,7 +27,10 @@
         'reports/invoice_report.xml',
         'wizards/edit_secondary_currency_rate_views.xml',
         'views/partner_view.xml',
+        'data/mail_template.xml',
+        'data/ir_config_parameter.xml',
     ],
+
     'assets': {
         'web.assets_backend': [
             'pisa_account/static/src/components/bank_reconciliation/*',
