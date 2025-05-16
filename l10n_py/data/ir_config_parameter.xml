@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="param_bcp_exchange_url_l10n" model="ir.config_parameter">
+        <field name="key">bcp.exchange.url</field>
+        <field name="value">https://www.bcp.gov.py/webapps/web/cotizacion/referencial-fluctuante</field>
+    </record>
+</odoo>
