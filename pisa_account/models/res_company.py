@@ -26,6 +26,11 @@ class ResCompany(models.Model):
     )
 
     def _parse_bcp_data(self, available_currencies):
+        """
+        Parse BCP exchange rate data for the company.
+        :param available_currencies: List of available currencies for the company.
+        :return: Dictionary with exchange rates.
+        """
         _logger.info("Executing _parse_bcp_data for pisa_account")
         result = {}
         currency_names = available_currencies.mapped('name')
@@ -116,6 +121,12 @@ class ResCompany(models.Model):
         return {}
 
     def _notify_finance_team_error(self, error, provider="BCP"):
+
+        """
+        Notify the finance team about an error in the exchange rate update.
+        :param error: The error message to notify.
+        :param provider: The currency provider where the error occurred.
+        """
         try:
             group = self.env.ref('account.group_account_user', raise_if_not_found=False)
             if not group:
