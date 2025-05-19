@@ -80,8 +80,8 @@ class ResCompany(models.Model):
         bcp_request_date = query_date.strftime('%d/%m/%Y')
         rate_application_date = datetime.now().date()
 
+        # Check if the company has a currency provider set to BCP
         try:
-            # URL desde parámetro de sistema (con fallback a valor fijo por compatibilidad)
             url = self.env['ir.config_parameter'].sudo().get_param(
                 'bcp.exchange.url',
                 default='https://www.bcp.gov.py/webapps/web/cotizacion/referencial-fluctuante'
@@ -101,7 +101,6 @@ class ResCompany(models.Model):
             if not table:
                 raise ValueError("Exchange table not found in BCP response.")
 
-            # Validar encabezados solo si están en <thead>, sin detener la ejecución
             thead = table.find('thead')
             if thead:
                 header_cells = thead.find_all('th')
@@ -110,7 +109,6 @@ class ResCompany(models.Model):
             else:
                 _logger.warning("Table <thead> not found. Skipping header validation.")
 
-            # Buscar la fila de cierre primero en <tfoot>, si no usar último válido de <tbody>
             closing_row = None
             tfoot = table.find('tfoot')
             if tfoot:
@@ -129,6 +127,7 @@ class ResCompany(models.Model):
             if not closing_row:
                 raise ValueError("Closing row not found in BCP table.")
 
+            # Extract the buying and selling rates from the closing row
             cols = closing_row.find_all(['th', 'td'])
             buying_rate = float(cols[1].get_text(strip=True).replace('.', '').replace(',', '.'))
             selling_rate = float(cols[2].get_text(strip=True).replace('.', '').replace(',', '.'))
@@ -196,9 +195,12 @@ class ResCompany(models.Model):
 
 
     def _generate_currency_rates(self, parsed_data):
+        """Generate currency rates for the company based on parsed data from BCP."""
         Currency = self.env['res.currency']
         CurrencyRate = self.env['res.currency.rate']
         for company in self:
+
+            # Check if the company has a currency provider set to BCP
             try:
                 company_currency = company.currency_id.name
                 currency_info = parsed_data.get(company_currency)
@@ -267,10 +269,13 @@ class ResCompany(models.Model):
                 raise
 
     def _notify_finance_team_error(self, error, provider="BCP"):
+        """Notify the finance team about an error in fetching exchange rates."""
+
         group = self.env.ref('account.group_account_user', raise_if_not_found=False)
         if not group:
             return
 
+        # Notify the finance team via email
         for user in group.users:
             subject = _("Error in exchange rate update (%s)") % provider
             body_html = _(
@@ -288,6 +293,7 @@ class ResCompany(models.Model):
             except Exception as email_err:
                 _logger.exception("Failed to send error email: %s", email_err)
 
+            # Fallback to sending a message in Odoo
             if user.partner_id:
                 user.sudo().message_notify(
                     subject=subject,
