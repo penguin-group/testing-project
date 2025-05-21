@@ -284,10 +284,7 @@ class ResCompany(models.Model):
             try:
 
                 template = self.env.ref('l10n_py.bcp_exchange_rate_error_notification_l10n')
-                template.with_context(
-                    provider=provider,
-                    error=error,
-                ).sudo().send_mail(self.id, force_send=True)
+                template.sudo().send_mail(template.id, force_send=True)
 
 
                 if user.partner_id:
