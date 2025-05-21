@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="tier_definition_view_form_inherit_hr" model="ir.ui.view">
+        <field name="name">tier.definition.form.inherit.hr</field>
+        <field name="model">tier.definition</field>
+        <field name="inherit_id" ref="base_tier_validation.tier_definition_view_form"/>
+        <field name="arch" type="xml">
+            <field name="reviewer_field_id" position="after">
+                <field name="job_id" invisible="review_type != 'job'" options="{'no_create': True}"/>
+                <field name="department_id" invisible="review_type != 'job'" options="{'no_create': True}"/>
+            </field>
+        </field>
+    </record>
+</odoo>
