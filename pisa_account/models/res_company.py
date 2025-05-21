@@ -2,6 +2,8 @@ from datetime import datetime, timedelta
 import logging
 import requests
 from bs4 import BeautifulSoup
+from odoo.tools.translate import _
+
 
 from odoo import models, fields, tools
 
@@ -39,7 +41,8 @@ class ResCompany(models.Model):
         today_date = datetime.now().date()
 
         try:
-            url = self.env['ir.config_parameter'].sudo().get_param('bcp.exchange.url.pisa')
+            url = self.env['ir.config_parameter'].sudo().get_param('bcp.exchange.url')
+
             if not url:
                 raise ValueError("BCP exchange URL not configured in system parameters.")
 
@@ -121,38 +124,30 @@ class ResCompany(models.Model):
         return {}
 
     def _notify_finance_team_error(self, error, provider="BCP"):
+        """Notify the finance team about an error in fetching exchange rates."""
 
-        """
-        Notify the finance team about an error in the exchange rate update.
-        :param error: The error message to notify.
-        :param provider: The currency provider where the error occurred.
-        """
-        try:
-            group = self.env.ref('account.group_account_user', raise_if_not_found=False)
-            if not group:
-                return
+        group = self.env.ref('account.group_account_user', raise_if_not_found=False)
+        if not group:
+            return
 
-            for user in group.users:
-                subject = ("Error in exchange rate update (%s)") % provider
-                body_html = (
-                    "<p><strong>Automatically generated error</strong></p>"
-                    "<p><strong>Provider:</strong> %s</p>"
-                    "<p><strong>Error:</strong> %s</p>"
-                ) % (provider, error)
+        for user in group.users:
+            try:
 
-                template = self.env.ref('pisa_account.bcp_exchange_rate_error_notification_pisa')
+                template = self.env.ref('l10n_py.bcp_exchange_rate_error_notification_l10n')
                 template.with_context(
                     provider=provider,
                     error=error,
                 ).sudo().send_mail(self.id, force_send=True)
 
+
                 if user.partner_id:
                     user.sudo().message_notify(
-                        subject=subject,
-                        body=body_html,
-                        partner_ids=[user.partner_id.id],
-                        model_description=subject,
-                        notif_layout='mail.mail_notification_light'
-                    )
-        except Exception as notify_error:
-            _logger.exception("Error while notifying finance team: %s", notify_error)
+                    subject=("Exchange Rate Error Notification"),
+                    body=("An error occurred while updating exchange rates. Please check your email for details."),
+                    partner_ids=[user.partner_id.id],
+                    model_description=("Exchange Rate Error"),
+                    notif_layout='mail.mail_notification_light'
+)
+
+            except Exception as notify_err:
+                _logger.exception("Failed to notify finance team: %s", notify_err)
