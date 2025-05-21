@@ -7,6 +7,8 @@ from bs4 import BeautifulSoup
 import requests
 from odoo import fields, models, tools
 from odoo.exceptions import UserError
+from odoo.tools.translate import _
+
 
 
 
@@ -82,10 +84,7 @@ class ResCompany(models.Model):
 
         # Check if the company has a currency provider set to BCP
         try:
-            url = self.env['ir.config_parameter'].sudo().get_param(
-                'bcp.exchange.url',
-                default='https://www.bcp.gov.py/webapps/web/cotizacion/referencial-fluctuante'
-            )
+            url = self.env['ir.config_parameter'].sudo().get_param('bcp.exchange.url')
             payload = {'fecha': bcp_request_date}
             headers = {
                 'User-Agent': 'Mozilla/5.0',
@@ -187,8 +186,14 @@ class ResCompany(models.Model):
             _logger.info("Final result returned to Odoo: %s", result)
             return result
 
+        except requests.exceptions.RequestException as e:
+            _logger.exception("HTTP error fetching BCP rates: %s", e)
+            self._notify_finance_team_error(e, provider="BCP")
+        except ValueError as e:
+            _logger.exception("Value error parsing BCP response: %s", e)
+            self._notify_finance_team_error(e, provider="BCP")
         except Exception as e:
-            _logger.exception("Error fetching BCP rates: %s", e)
+            _logger.exception("Unexpected error in BCP rate parser: %s", e)
             self._notify_finance_team_error(e, provider="BCP")
             return {}
 
@@ -275,30 +280,24 @@ class ResCompany(models.Model):
         if not group:
             return
 
-        # Notify the finance team via email
         for user in group.users:
-            subject = _("Error in exchange rate update (%s)") % provider
-            body_html = _(
-                "<p><strong>Automatically generated error</strong></p>"
-                "<p><strong>Provider:</strong> %s</p>"
-                "<p><strong>Error:</strong> %s</p>"
-            ) % (provider, error)
-
             try:
+
                 template = self.env.ref('l10n_py.bcp_exchange_rate_error_notification_l10n')
                 template.with_context(
                     provider=provider,
                     error=error,
                 ).sudo().send_mail(self.id, force_send=True)
-            except Exception as email_err:
-                _logger.exception("Failed to send error email: %s", email_err)
 
-            # Fallback to sending a message in Odoo
-            if user.partner_id:
-                user.sudo().message_notify(
-                    subject=subject,
-                    body=body_html,
-                    partner_ids=[user.partner_id.id],
-                    model_description=subject,
-                    notif_layout='mail.mail_notification_light'
-                )
+
+                if user.partner_id:
+                    user.sudo().message_notify(
+                        subject=_("Exchange Rate Error Notification"),
+                        body=_("An error occurred while updating exchange rates. Please check your email for details."),
+                        partner_ids=[user.partner_id.id],
+                        model_description=_("Exchange Rate Error"),
+                        notif_layout='mail.mail_notification_light'
+                    )
+
+            except Exception as notify_err:
+                _logger.exception("Failed to notify finance team: %s", notify_err)
