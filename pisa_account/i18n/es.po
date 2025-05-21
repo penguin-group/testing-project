@@ -151,23 +151,3 @@ msgstr "El monto total de la factura no puede ser cero o negativo."
 #, python-format
 msgid "You don't have permission to approve an invoice."
 msgstr "No tenés permiso para aprobar facturas."
-
-#. module: pisa_account
-#. odoo-python
-#, python-format
-#: code:addons/pisa_account/models/res_company.py:0
-msgid "Error in exchange rate update (%s)"
-msgstr "Error en actualización de tipo de cambio (%s)"
-
-#. module: pisa_account
-#. odoo-python
-#, python-format
-#: code:addons/pisa_account/models/res_company.py:0
-msgid ""
-"<p><strong>Automatically generated error</strong></p>"
-"<p><strong>Provider:</strong> %s</p>"
-"<p><strong>Error:</strong> %s</p>"
-msgstr ""
-"<p><strong>Error generado automáticamente</strong></p>"
-"<p><strong>Proveedor:</strong> %s</p>"
-"<p><strong>Error:</strong> %s</p>"
