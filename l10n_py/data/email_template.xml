@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <templates>
-        <template id="bcp_exchange_rate_error_notification_l10n" name="BCP Exchange Error">
-            <field name="model">res.company</field>
-            <field name="subject">Error in exchange rate update (${ctx.get('provider', 'BCP')})</field>
+    <data noupdate="1">
+        <record id="bcp_exchange_rate_error_notification_l10n" model="mail.template">
+            <field name="name">BCP Exchange Error</field>
+            <field name="model_id" ref="base.model_res_users"/>
+            <field name="email_from">{{ object.company_id.default_from_email }}</field>
+            <field name="subject">Error in exchange rate update {{object.company_id.currency_provider}}</field>
+            <field name="email_to">${object.email_formatted}</field>
             <field name="body_html" type="html">
-                <![CDATA[
-                    <html>
-                        <body>
-                            <p><strong>Automatically generated error</strong></p>
-                            <p><strong>Provider:</strong> ${ctx.get('provider', 'BCP')}</p>
-                            <p><strong>Error:</strong> ${ctx.get('error', 'Unknown error')}</p>
-                        </body>
-                    </html>
-                ]]>
+                <table border="0" cellpadding="0" cellspacing="0" style="width:100%; margin:0px auto;">
+                    <tbody>
+                        <tr>
+                        <td valign="top" style="text-align: left; font-size: 14px;">
+                            Dear Finance Team,<br/><br/>
+                            The automatic currency rate update has failed for today.<br/><br/>
+                            Please record the exchange rates manually in the system to ensure accurate financial operations.<br/><br/>
+                            If you need assistance, please contact the system administrator.<br/><br/>
+                            Best regards,<br/>
+                            Your Odoo System
+                        </td>
+                        </tr>
+                    </tbody>
+                </table>
             </field>
-        </template>
-    </templates>
+        </record>
+    </data>
 </odoo>
