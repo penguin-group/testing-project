@@ -29,11 +29,11 @@ After installation:
 
 ### Automatic Processing for Company-Paid Expenses
 
-When "Paid by Company" is selected:
 1. The system automatically generates:
     - A vendor bill
     - A clearing journal entry (acting as payment)
 2. The expense moves to "To Post" status
+
 
 ### Accounting Review Process
 
