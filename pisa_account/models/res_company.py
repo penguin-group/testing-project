@@ -22,11 +22,6 @@ _logger = logging.getLogger(__name__)
 class ResCompany(models.Model):
     _inherit = 'res.company'
 
-    currency_provider = fields.Selection(
-        selection_add=[('bcp', 'BCP')],
-        string="Currency Provider"
-    )
-
     def _parse_bcp_data(self, available_currencies):
         """
         Parse BCP exchange rate data for the company.
@@ -141,12 +136,11 @@ class ResCompany(models.Model):
 
 
                 if user.partner_id:
-                    user.sudo().message_notify(
+                    user.partner_id.sudo().message_notify(
                     subject=("Exchange Rate Error Notification"),
                     body=("An error occurred while updating exchange rates. Please check your email for details."),
                     partner_ids=[user.partner_id.id],
-                    model_description=("Exchange Rate Error"),
-                    notif_layout='mail.mail_notification_light'
+                    model_description=("Exchange Rate Error")
 )
 
             except Exception as notify_err:
