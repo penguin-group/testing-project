@@ -69,13 +69,13 @@ class ResCompany(models.Model):
 
 
     currency_provider = fields.Selection(
-        selection_add=[('bcp_closure', 'BCP')],
+        selection_add=[('bcp', '[PY] BCP')],
         string="Currency Provider"
     )
 
-    def _parse_bcp_closure_data(self, available_currencies):
+    def _parse_bcp_data(self, available_currencies):
         """Fetch and parse the daily exchange rate from BCP for companies with USD and PYG currencies."""
-        _logger.info("Executing _parse_bcp_closure_data")
+        _logger.info("Executing _parse_bcp_data")
         result = {}
         currency_names = available_currencies.mapped('name')
         query_date = datetime.now() - timedelta(days=1)
@@ -288,12 +288,11 @@ class ResCompany(models.Model):
 
 
                 if user.partner_id:
-                    user.sudo().message_notify(
+                    user.partner_id.sudo().message_notify(
                         subject=_("Exchange Rate Error Notification"),
                         body=_("An error occurred while updating exchange rates. Please check your email for details."),
                         partner_ids=[user.partner_id.id],
-                        model_description=_("Exchange Rate Error"),
-                        notif_layout='mail.mail_notification_light'
+                        model_description=_("Exchange Rate Error")
                     )
 
             except Exception as notify_err:
