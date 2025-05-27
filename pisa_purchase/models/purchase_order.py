@@ -16,23 +16,6 @@ class PurchaseOrder(models.Model):
             )[:1]
             rec.next_review = review.name if review else ""
 
-    @api.depends('order_line.price_total', 'extra_cost_po_ids.amount_total')
-    def _amount_all(self):
-        for order in self:
-            amount_untaxed = amount_tax = 0.0
-            for line in order.order_line:
-                line._compute_amount()
-                amount_untaxed += line.price_subtotal
-                amount_tax += line.price_tax
-            for extra_cost_po in order.extra_cost_po_ids:
-                amount_untaxed += extra_cost_po.amount_untaxed
-                amount_tax += extra_cost_po.amount_tax
-            order.update({
-                'amount_untaxed': amount_untaxed,
-                'amount_tax': amount_tax,
-                'amount_total': amount_untaxed + amount_tax,
-            })
-
     @api.model_create_multi
     def create(self, vals):
         # Create the PO
