@@ -1,0 +1,1 @@
+from . import invoice_edit_currency_rate

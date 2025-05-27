@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_invoicing_edit_currency_rate,access.invoicing.edit.currency.rate,model_invoice_edit_currency_rate,account.group_account_invoice,1,1,1,1
+access_invoice_edit_currency_rate,access.invoice.edit.currency.rate,model_invoice_edit_currency_rate,account.group_account_manager,1,1,1,1
