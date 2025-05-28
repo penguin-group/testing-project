@@ -173,16 +173,6 @@ class AccountMove(models.Model):
                                                             ], order="end_date", limit=1)
             else:
                 record.supplier_invoice_authorization_id = False
-    
-    def edit_currency_rate(self):
-        return {
-                'type': 'ir.actions.act_window',
-                'res_model': 'invoice.edit.currency.rate',
-                'view_mode': 'form',         
-                'view_id': self.env.ref('l10n_py.invoice_edit_currency_rate_view_form').id,      
-                'target': 'new',
-                'context': {'active_id': self.id}
-            }
 
     def button_cancel_invoice(self):
         return {

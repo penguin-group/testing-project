@@ -41,7 +41,6 @@
         "views/res_partner.xml",
         "views/hr_expense_views.xml",
         "wizards/invoice_cancel_views.xml",
-        "wizards/invoice_edit_currency_rate_views.xml",
         "wizards/report_res90_views.xml",
         "wizards/report_vat_purchase_views.xml",
         "wizards/report_vat_sale_views.xml"
