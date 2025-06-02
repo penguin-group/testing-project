@@ -10,6 +10,44 @@ class HrExpense(models.Model):
         currency_field='currency_id',
     )
 
+    payment_mode = fields.Selection(
+        selection_add=[('petty_cash', 'Petty Cash')],
+        ondelete={'petty_cash': 'set default'},
+    )
+
+    petty_cash_account_id = fields.Many2one(
+        'account.account',
+        string='Petty Cash Account',
+    )
+
+    petty_cash_account_ids = fields.Many2many(
+        comodel_name='account.account',
+        string='Petty Cash Accounts',
+        help='Select accounts for petty cash.',
+        compute='_compute_petty_cash_accounts',
+        store=True,
+    )
+
+    @api.onchange('payment_mode', 'employee_id')
+    def _compute_petty_cash_accounts(self):
+        for expense in self.filtered(lambda e: e.state == 'draft'):
+            expense.petty_cash_account_id = False
+            if expense.payment_mode == 'petty_cash' and expense.employee_id:
+                expense.petty_cash_account_ids = expense.employee_id.department_id.petty_cash_account_ids
+            else:
+                expense.petty_cash_account_ids = self.env['account.account']
+
+    @api.constrains('payment_mode')
+    def _check_petty_cash_constraints(self):
+        for expense in self:
+            if expense.payment_mode == 'petty_cash':
+                if not self.employee_id:
+                    raise ValueError("Petty Cash payment mode requires the expense to be linked to an employee.")
+                if not self.employee_id.department_id:
+                    raise ValueError("The employee linked to the expense must belong to a department.")
+                if not self.employee_id.department_id.petty_cash_account_ids:
+                    raise ValueError("The department linked to the employee must have petty cash accounts set up.")
+
     @api.depends('employee_id')
     def _compute_outstanding_balance(self):
         for expense in self:
@@ -50,11 +88,12 @@ class HrExpense(models.Model):
         if credit_line:
             credit_line.write({
                 'account_id': self.company_id.expense_reimbursement_account_id.id,
-                'partner_id': self.vendor_id.id,
+                'partner_id': self.vendor_id.id
             })
         
     def _create_clearing_entry(self, total_amount):
         self.ensure_one()
+        
         line_ids = []
         
         # Create a debit line for the total amount of the expense
@@ -90,7 +129,7 @@ class HrExpense(models.Model):
                     'partner_id': self.employee_id.work_contact_id.id,
                 }),
             )
-        else: # If the payment mode is 'employee_account'
+        elif self.payment_mode == 'employee_account': 
             # Create a credit line for the total amount of the expense
             # The account should be the expense reimbursement account (to Employee)
             line_ids.append(
@@ -98,6 +137,15 @@ class HrExpense(models.Model):
                     'credit': total_amount,
                     'account_id': self.company_id.expense_reimbursement_account_id.id,
                     'partner_id': self.employee_id.work_contact_id.id,
+                }),
+            )
+        elif self.payment_mode == 'petty_cash':
+            # Create a credit line for the total amount of the expense
+            # The account should be the petty cash account
+            line_ids.append(
+                Command.create({
+                    'credit': total_amount,
+                    'account_id': self.petty_cash_account_id.id,
                 }),
             )
 
