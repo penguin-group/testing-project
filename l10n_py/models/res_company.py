@@ -203,46 +203,31 @@ class ResCompany(models.Model):
         """Generate currency rates for the company based on parsed data from BCP."""
         Currency = self.env['res.currency']
         CurrencyRate = self.env['res.currency.rate']
+        
         for company in self:
-
-            # Check if the company has a currency provider set to BCP
             try:
-                company_currency = company.currency_id.name
-                currency_info = parsed_data.get(company_currency)
+                company_currency_code = company.currency_id.name
+                company_currency_info = parsed_data.get(company_currency_code)
 
-                if not currency_info:
+                if not company_currency_info:
                     raise UserError(
-                        f"Base currency ({company_currency}) is missing from provider response."
+                        f"Base currency ({company_currency_code}) is missing from provider response."
                     )
 
-                base_rate = (
-                    currency_info[0]
-                    if isinstance(currency_info, tuple)
-                    else currency_info.get('rate')
-                )
+                base_rate = company_currency_info.get('rate', 1.0)
 
                 for code, values in parsed_data.items():
-                    if isinstance(values, dict):
-                        rate = values.get('rate', 1.0)
-                        date = values.get('date')
-                        buying_company_rate = values.get('buying_company_rate')
-                        buying_inverse_company_rate = values.get('buying_inverse_company_rate')
-                    else:
-                        rate, date = values
-                        buying_company_rate = None
-                        buying_inverse_company_rate = None
-
-                    final_rate = rate / base_rate if base_rate else rate
-
                     currency = Currency.search([('name', '=', code)], limit=1)
                     if not currency:
                         continue
 
-                    existing = CurrencyRate.search([
-                        ('currency_id', '=', currency.id),
-                        ('company_id', '=', company.id),
-                        ('name', '=', date),
-                    ], limit=1)
+                    raw_rate = values.get('rate', 1.0)
+                    date = values.get('date')
+
+                    if code == company_currency_code:
+                        final_rate = 1.0
+                    else:
+                        final_rate = raw_rate / base_rate if base_rate else raw_rate
 
                     rate_vals = {
                         'currency_id': currency.id,
@@ -251,17 +236,26 @@ class ResCompany(models.Model):
                         'rate': final_rate,
                     }
 
+                    buying_company_rate = values.get('buying_company_rate')
+                    buying_inverse_company_rate = values.get('buying_inverse_company_rate')
+
                     if buying_company_rate:
                         rate_vals['buying_company_rate'] = buying_company_rate
                     if buying_inverse_company_rate:
                         rate_vals['buying_inverse_company_rate'] = buying_inverse_company_rate
+
+                    existing = CurrencyRate.search([
+                        ('currency_id', '=', currency.id),
+                        ('company_id', '=', company.id),
+                        ('name', '=', date),
+                    ], limit=1)
 
                     if existing:
                         existing.write(rate_vals)
                     else:
                         CurrencyRate.create(rate_vals)
 
-                _logger.info("Extended currency rates generated successfully.")
+                _logger.info("Currency rates generated successfully for company %s.", company.name)
 
             except UserError as e:
                 _logger.exception("User error during currency rate generation: %s", e)
