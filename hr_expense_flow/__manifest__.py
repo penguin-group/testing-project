@@ -21,6 +21,11 @@
             - For each expense line, a clearing journal entry is created and confirmed. 
               It debits the reimbursement account to the Vendor and credits the reimbursement 
               account to the Employee.
+        - Petty Cash
+            - We added a new option to the "Paid by" field in the expense form view,
+              which allows you to select "Petty Cash". This option will allow the user to select a
+              petty cash account to pay the expense. The petty cash possible values are taken from the
+              employee's department page.
     """,
     "author": "Penguin Infrastructure S.A.",
     "mantainers": ["José González"],
@@ -32,5 +37,6 @@
     "data": [
         "views/res_config_settings_views.xml",
         "views/hr_expense_views.xml",
+        "views/hr_department_views.xml",
     ],
 }

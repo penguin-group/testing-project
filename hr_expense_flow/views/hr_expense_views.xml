@@ -19,6 +19,14 @@
                 <field name="outstanding_balance" />
             </xpath>
 
+            <xpath expr="//field[@name='vendor_id']" position="after">
+                <field name="petty_cash_account_id" 
+                       invisible="payment_mode != 'petty_cash'"
+                       required="payment_mode == 'petty_cash'" 
+                       domain="[('id', 'in', petty_cash_account_ids)]"
+                       options="{'no_create': True, 'no_create_edit': True}" 
+                />
+            </xpath>
         </field>
     </record>
 
