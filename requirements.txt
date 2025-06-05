@@ -4,4 +4,4 @@ fpdf2
 unidecode
 python-stdnum==1.20
 beautifulsoup4==4.13.3
-requests==2.31.0
+requests==2.31.0cloudscraper==1.2.71
