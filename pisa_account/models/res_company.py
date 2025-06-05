@@ -3,6 +3,7 @@ import logging
 import requests
 from bs4 import BeautifulSoup
 from odoo.tools.translate import _
+import cloudscraper 
 
 
 from odoo import models, fields, tools
@@ -22,32 +23,47 @@ _logger = logging.getLogger(__name__)
 class ResCompany(models.Model):
     _inherit = 'res.company'
 
+from datetime import datetime, timedelta
+import logging
+import requests
+from bs4 import BeautifulSoup
+from odoo.tools.translate import _
+import cloudscraper
+from odoo import models, fields
+
+_logger = logging.getLogger(__name__)
+
+class ResCompany(models.Model):
+    _inherit = 'res.company'
+
     def _parse_bcp_data(self, available_currencies):
-        """
-        Parse BCP exchange rate data for the company.
-        :param available_currencies: List of available currencies for the company.
-        :return: Dictionary with exchange rates.
-        """
+        """Fetch and parse the daily exchange rate from BCP for companies where USD is the base and PYG is secondary."""
         _logger.info("Executing _parse_bcp_data for pisa_account")
+
+        if self.currency_id.name != 'USD':
+            _logger.warning("Skipping pisa_account parser. Company base currency is not USD. Delegating to l10n_py via super().")
+            return super()._parse_bcp_data(available_currencies)
+
         result = {}
         currency_names = available_currencies.mapped('name')
-        query_date = datetime.now() - timedelta(days=1)
-        bcp_request_date = query_date.strftime('%d/%m/%Y')
-        today_date = datetime.now().date()
+
+        # Always post with yesterday's date
+        today = fields.Date.context_today(self)
+        yesterday = today - timedelta(days=1)
+        formatted_yesterday = yesterday.strftime('%Y-%m-%d')
 
         try:
             url = self.env['ir.config_parameter'].sudo().get_param('bcp.exchange.url')
-
-            if not url:
-                raise ValueError("BCP exchange URL not configured in system parameters.")
-
-            payload = {'fecha': bcp_request_date}
             headers = {
-                'User-Agent': 'Mozilla/5.0',
+                "User-Agent": "Mozilla/5.0",
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                "Accept-Language": "en-US,en;q=0.5",
                 'Content-Type': 'application/x-www-form-urlencoded',
             }
 
-            response = requests.post(url, data=payload, headers=headers, timeout=15)
+            payload = {'fecha': formatted_yesterday}
+            scraper = cloudscraper.create_scraper()
+            response = scraper.post(url, data=payload, headers=headers, timeout=15)
             _logger.info("BCP Response status: %s", response.status_code)
             response.raise_for_status()
 
@@ -56,25 +72,47 @@ class ResCompany(models.Model):
             if not table:
                 raise ValueError("Exchange table not found in BCP response.")
 
-            thead = table.find('thead')
-            if thead:
-                header_cells = thead.find_all('th')
-                if not any('Compra' in h.get_text() for h in header_cells) or not any('Venta' in h.get_text() for h in header_cells):
-                    _logger.warning("Table <thead> headers do not contain expected 'Compra' and 'Venta'. Proceeding with caution.")
-            else:
-                _logger.warning("Table <thead> not found. Skipping header validation.")
-
+            closing_row = None
             tfoot = table.find('tfoot')
-            closing_row = tfoot.find('tr') if tfoot else None
+            if tfoot:
+                closing_row = tfoot.find('tr')
+                _logger.info("Found closing row in <tfoot>.")
+            else:
+                _logger.warning("<tfoot> not found. Looking into <tbody> for valid data...")
+                tbody = table.find('tbody')
+                rows = tbody.find_all('tr') if tbody else []
+                for row in reversed(rows):
+                    cols = row.find_all('td')
+                    if len(cols) >= 3 and cols[1].text.strip() and cols[2].text.strip():
+                        closing_row = row
+                        _logger.info("Found valid fallback row in <tbody>: %s", row)
+                        break
+
             if not closing_row:
-                raise ValueError("No valid closing row found. Only <tfoot> rates are accepted.")
+                raise ValueError("No valid closing row found in either <tfoot> or <tbody>.")
 
             cols = closing_row.find_all(['th', 'td'])
-            buying = float(cols[1].get_text(strip=True).replace('.', '').replace(',', '.'))
-            sale = float(cols[2].get_text(strip=True).replace('.', '').replace(',', '.'))
+            if len(cols) < 3:
+                raise ValueError("Incomplete closing row found")
 
-            if buying <= 0 or sale <= 0:
-                raise ValueError(f"Invalid exchange rates: buy={buying}, sell={sale}")
+            # Extract and validate actual published date
+            closing_label = cols[0].get_text(strip=True)  # e.g. "Cierre 03/06"
+            try:
+                closing_str = closing_label.split()[-1]
+                actual_date = datetime.strptime(closing_str + f'/{datetime.today().year}', '%d/%m/%Y').date()
+            except Exception as e:
+                raise ValueError(f"Could not parse closing date from label: '{closing_label}'")
+
+            if actual_date != yesterday:
+                raise ValueError(f"Expected exchange rate for {yesterday}, but found closing date {actual_date}")
+
+            # Parse values
+            buying_rate = float(cols[1].get_text(strip=True).replace('.', '').replace(',', '.'))
+            selling_rate = float(cols[2].get_text(strip=True).replace('.', '').replace(',', '.'))
+
+            if buying_rate <= 0 or selling_rate <= 0:
+                _logger.warning("Invalid rate: Buy %s, Sell %s", buying_rate, selling_rate)
+                return {}
 
             base_currency = self.currency_id.name
             _logger.info("Company base currency: %s", base_currency)
@@ -82,13 +120,13 @@ class ResCompany(models.Model):
             if base_currency == 'USD':
                 if 'PYG' in currency_names:
                     result['PYG'] = {
-                        'rate': sale,
-                        'company_rate': sale,
-                        'inverse_company_rate': round(1 / sale, 10),
-                        'buying_rate': buying,
-                        'buying_company_rate': buying,
-                        'buying_inverse_company_rate': round(1 / buying, 10),
-                        'date': today_date,
+                        'rate': selling_rate,
+                        'company_rate': selling_rate,
+                        'inverse_company_rate': round(1 / selling_rate, 10),
+                        'buying_rate': buying_rate,
+                        'buying_company_rate': buying_rate,
+                        'buying_inverse_company_rate': round(1 / buying_rate, 10),
+                        'date': actual_date,  # ✅ fixed here
                     }
                 result['USD'] = {
                     'rate': 1.0,
@@ -97,13 +135,13 @@ class ResCompany(models.Model):
                     'buying_rate': 1.0,
                     'buying_company_rate': 1.0,
                     'buying_inverse_company_rate': 1.0,
-                    'date': today_date,
+                    'date': actual_date,  # ✅ and here
                 }
             else:
                 _logger.warning("Base currency %s not supported for pisa_account.", base_currency)
                 return {}
 
-            _logger.info("Final exchange data sent to Odoo: %s", result)
+            _logger.info("Final parsed exchange data: %s", result)
             return result
 
         except requests.exceptions.RequestException as e:
@@ -117,6 +155,10 @@ class ResCompany(models.Model):
             self._notify_finance_team_error(e, provider="BCP")
 
         return {}
+
+
+
+
 
     def _notify_finance_team_error(self, error, provider="BCP"):
         """Notify the finance team about an error in fetching exchange rates."""
