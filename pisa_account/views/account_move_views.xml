@@ -25,11 +25,12 @@
 
                 <xpath expr="//header" position="inside">
                     <field name="company_secondary_currency_id" invisible="1"/>
+                    <field name="company_secondary_currency_name" invisible="1"/>
                     <button string="Edit Secondary Currency Rate" 
                         name="edit_secondary_currency_rate" 
                         type="object" 
                         groups="account.group_account_manager,account.group_account_invoice" 
-                        invisible="(not company_secondary_currency_id and company_id.country_code != 'PY') or move_type != 'in_invoice' or state != 'draft' or currency_id == company_secondary_currency_id"
+                        invisible="company_secondary_currency_name != 'PYG' or  (not company_secondary_currency_id and company_id.country_code != 'PY') or move_type != 'in_invoice' or state != 'draft' or currency_id == company_secondary_currency_id"
                     />
                 </xpath>
 
