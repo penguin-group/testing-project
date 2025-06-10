@@ -7,7 +7,7 @@ class HrExpense(models.Model):
     outstanding_balance = fields.Monetary(
         string='Outstanding Balance',
         compute='_compute_outstanding_balance',
-        currency_field='currency_id',
+        currency_field='company_currency_id',
     )
 
     payment_mode = fields.Selection(
@@ -48,7 +48,7 @@ class HrExpense(models.Model):
                 if not self.employee_id.department_id.petty_cash_account_ids:
                     raise ValueError("The department linked to the employee must have petty cash accounts set up.")
 
-    @api.depends('employee_id')
+    @api.depends('employee_id', 'currency_id', 'total_amount', 'total_amount_currency')
     def _compute_outstanding_balance(self):
         for expense in self:
             if not expense.employee_id:
@@ -69,9 +69,9 @@ class HrExpense(models.Model):
             'move_type': 'in_invoice',
             'journal_id': self.company_id.expense_journal_id.id,
             'partner_id': self.vendor_id.id,
-            'currency_id': self.sheet_id.currency_id.id,
+            'currency_id': self.currency_id.id,
             'invoice_date': fields.Date.context_today(self),
-            'line_ids': [Command.create(self._prepare_move_lines_vals())],
+            'line_ids': [Command.create(self._prepare_vendor_bill_line_vals())],
             'attachment_ids': [
                 Command.create(attachment.copy_data({'res_model': 'account.move', 'res_id': False, 'raw': attachment.raw})[0])
                 for attachment in self.message_main_attachment_id
@@ -80,6 +80,24 @@ class HrExpense(models.Model):
         bill = self.env['account.move'].sudo().create(invoice_vals)
         self._fix_move_lines(bill)
         return bill
+
+    def _prepare_vendor_bill_line_vals(self):
+        self.ensure_one()
+        account = self._get_base_account()
+
+        return {
+            'name': self._get_move_line_name(),
+            'account_id': account.id,
+            'quantity': self.quantity or 1,
+            'price_unit': self.total_amount_currency,
+            'currency_id': self.currency_id.id,
+            'product_id': self.product_id.id,
+            'product_uom_id': self.product_uom_id.id,
+            'analytic_distribution': self.analytic_distribution,
+            'expense_id': self.id,
+            'partner_id': False if self.payment_mode == 'company_account' else self.employee_id.sudo().work_contact_id.id,
+            'tax_ids': [Command.set(self.tax_ids.ids)],
+        }
 
     def _fix_move_lines(self, bill):
         self.ensure_one()
@@ -100,7 +118,8 @@ class HrExpense(models.Model):
         # The account should be the expense reimbursement account (to Vendor)
         line_ids.append(
             Command.create({
-                'debit': total_amount,
+                'amount_currency': total_amount, # debit
+                'currency_id': self.currency_id.id,
                 'account_id': self.company_id.expense_reimbursement_account_id.id,
                 'partner_id': self.vendor_id.id,
             }), 
@@ -109,32 +128,41 @@ class HrExpense(models.Model):
         if self.payment_mode == 'company_account':
             # If the balance is less than the total amount, create an additional line to record the difference 
             # as a credit to the employee's account (reimbursement payable account)
-            if self.outstanding_balance < total_amount:
+            outstanding_balance_currency = self.company_currency_id._convert(
+                self.outstanding_balance,
+                self.currency_id,
+                self.company_id,
+                self.date or fields.Date.context_today(self),
+            )
+            if outstanding_balance_currency < total_amount:
                 line_ids.append(
                     Command.create({
-                        'credit': total_amount - self.outstanding_balance,
+                        'amount_currency': -(total_amount - outstanding_balance_currency), # credit
+                        'currency_id': self.currency_id.id,
                         'account_id': self.company_id.expense_reimbursement_account_id.id,
                         'partner_id': self.employee_id.work_contact_id.id,
                     })
                 )
-                credit = self.outstanding_balance
+                credit = outstanding_balance_currency
             else:
                 credit = total_amount
             
             # Create a credit line for the outstanding balance 
             line_ids.append(
                 Command.create({
-                    'credit': credit,
+                    'amount_currency': -credit, # credit
+                    'currency_id': self.currency_id.id,
                     'account_id': self.company_id.expense_outstanding_account_id.id,
                     'partner_id': self.employee_id.work_contact_id.id,
                 }),
             )
-        elif self.payment_mode == 'employee_account': 
+        elif self.payment_mode == 'own_account': 
             # Create a credit line for the total amount of the expense
             # The account should be the expense reimbursement account (to Employee)
             line_ids.append(
                 Command.create({
-                    'credit': total_amount,
+                    'amount_currency': -total_amount, # credit
+                    'currency_id': self.currency_id.id,
                     'account_id': self.company_id.expense_reimbursement_account_id.id,
                     'partner_id': self.employee_id.work_contact_id.id,
                 }),
@@ -144,13 +172,15 @@ class HrExpense(models.Model):
             # The account should be the petty cash account
             line_ids.append(
                 Command.create({
-                    'credit': total_amount,
+                    'amount_currency': -total_amount, # credit
+                    'currency_id': self.currency_id.id,
                     'account_id': self.petty_cash_account_id.id,
                 }),
             )
 
         move_vals = {
             'move_type': 'entry',
+            'currency_id': self.currency_id.id,
             'expense_sheet_id': self.sheet_id.id,
             'date': fields.Date.context_today(self),
             'journal_id': self.company_id.clearing_journal_id.id,
