@@ -22,7 +22,5 @@
         'views/purchase_views.xml',
         'views/purchase_request_views.xml',
         'views/menu_override.xml',
-        # 'security/purchase_request.xml',
-        # 'security/ir.model.access.csv'
     ],
 }
