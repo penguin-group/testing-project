@@ -1669,3 +1669,18 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_py.view_move_form_inherited
 msgid "e.g.: 001-001-0000001"
 msgstr "Por ej.: 001-001-0000001"
+
+#. module: l10n_py
+#. odoo-python
+#: code:addons/l10n_py/models/res_company.py:0
+#, python-format
+msgid "Error in exchange rate update (%s)"
+msgstr "Error en actualización de tipo de cambio (%s)"
+
+#. module: l10n_py
+#. odoo-python
+#: code:addons/l10n_py/models/res_company.py:0
+#, python-format
+msgid "<p><strong>Automatically generated error</strong></p><p><strong>Provider:</strong> %s</p><p><strong>Error:</strong> %s</p>"
+msgstr "<p><strong>Error generado automáticamente</strong></p><p><strong>Proveedor:</strong> %s</p><p><strong>Error:</strong> %s</p>"
+

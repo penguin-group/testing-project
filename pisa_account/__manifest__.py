@@ -28,6 +28,7 @@
         'wizards/edit_secondary_currency_rate_views.xml',
         'views/partner_view.xml',
     ],
+
     'assets': {
         'web.assets_backend': [
             'pisa_account/static/src/components/bank_reconciliation/*',
