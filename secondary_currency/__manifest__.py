@@ -13,7 +13,7 @@
     'website': "https://www.pengin.digital",
 
     'category': 'Accounting',
-    'version': '18.0.0.1.1',
+    'version': '18.0.0.1',
     'license': "OPL-1",
 
     'depends': ['base', 'account', 'account_reports'],
