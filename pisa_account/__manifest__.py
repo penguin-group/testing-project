@@ -16,7 +16,7 @@
     'version': '18.0.1.0.0',
     'license': "OPL-1",
 
-    'depends': ['base', 'account_accountant', 'l10n_py', 'l10n_py_selfprinted_invoice', 'secondary_currency', 'account_custom_currency_rate'],
+    'depends': ['base', 'account_accountant', 'l10n_py', 'l10n_py_selfprinted_invoice', 'secondary_currency'],
 
     'data': [
         'security/account_security.xml',
