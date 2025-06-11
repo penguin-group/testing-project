@@ -256,7 +256,7 @@ class BookRegistrationReport(models.Model):
                             sub.balance_total as balance_total,
                             aa.id as account_code,
                             am.name as reference,
-                            aa.code as code,
+                            aa.code_store->>'{self.company_id.id}' as code,
                             CASE
                                 WHEN aa.name IS NOT NULL THEN 'Dentro del Rango'
                             END as query_state,
@@ -279,7 +279,7 @@ class BookRegistrationReport(models.Model):
                             debit, 
                             credit, 
                             balance, 
-                            aa.id, am.name, aa.code, ml.id
+                            aa.id, am.name, aa.code_store->>'{self.company_id.id}', ml.id
 
                     UNION
 
@@ -296,7 +296,7 @@ class BookRegistrationReport(models.Model):
                             SUM(ml.secondary_balance) AS balance_total,
                             aa.id as account_code,
                             NULL as reference,
-                            aa.code as code,
+                            aa.code_store->>'{self.company_id.id}' as code,
                             CASE
                                 WHEN aa.name IS NOT NULL THEN 'Otras Cuentas'
                             END as query_state,
@@ -320,7 +320,7 @@ class BookRegistrationReport(models.Model):
                                         AND ml_sub.parent_state = 'posted'
                             )
                         GROUP BY
-                            ml.account_id, aa.name, aa.code, aa.id
+                            ml.account_id, aa.name, aa.code_store->>'{self.company_id.id}', aa.id
 
                     ORDER BY
                         ---ml.account_id, ml.date,aa.code
@@ -336,13 +336,13 @@ class BookRegistrationReport(models.Model):
                 for row in results:
                     date, account_id, account_name, account_line_name, debit, credit, balance, debit_total, credit_total, balance_total, account_code, reference, code, query_state, line_code = row
                     if account_id not in [item['account'] for item in account_name_group]:
-                        account_name = json.loads(account_name)['en_US']
+                        account_name = account_name['en_US']
                         a = {
                             'account': account_id,
                             'account_name': account_name,
-                            'debit_total': abs(debit_total),
-                            'credit_total': abs(credit_total),
-                            'balance_total': abs(balance_total),
+                            'debit_total': abs(debit),
+                            'credit_total': abs(credit),
+                            'balance_total': abs(balance),
                             'code': code,
                             'query_state': query_state
 
