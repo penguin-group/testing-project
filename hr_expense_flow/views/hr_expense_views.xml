@@ -15,10 +15,6 @@
                 <attribute name="required">1</attribute>
             </xpath>
 
-            <xpath expr="//field[@name='employee_id'][2]" position="after">
-                <field name="outstanding_balance" />
-            </xpath>
-
             <xpath expr="//field[@name='vendor_id']" position="after">
                 <field name="petty_cash_account_id" 
                        invisible="payment_mode != 'petty_cash'"
