@@ -13,6 +13,7 @@
 
     'category': 'Accounting',
     'version': '18.0.1.0',
+    'license': "OPL-1",
 
     'depends': ['secondary_currency'],
 
