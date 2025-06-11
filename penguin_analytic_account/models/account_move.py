@@ -10,6 +10,7 @@ class AccountMoveLine(models.Model):
         for line in self:
             if line.move_id.is_invoice(include_receipts=True):
                 if line.product_id and line.product_id.requires_analytic_account:
+                    line._compute_analytic_distribution()
                     if not line.analytic_distribution:
                         raise ValidationError(
                             "The analytic distribution is mandatory for all invoice lines."
@@ -28,7 +29,7 @@ class SaleOrderLine(models.Model):
                             "The analytical distribution is mandatory for all lines."
                         )
 
-class SaleOrderLine(models.Model):
+class PurchaseOrderLine(models.Model):
     _inherit = 'purchase.order.line'
 
     @api.constrains('analytic_distribution')

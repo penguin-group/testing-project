@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_expense_view_form_inherited" model="ir.ui.view">
+        <field name="name">hr.expense.view.form.inherited</field>
+        <field name="model">hr.expense</field>
+        <field name="inherit_id" ref="hr_expense.hr_expense_view_form" />
+        <field name="arch" type="xml">
+
+            <!-- 
+            The Vendor field must be consistently displayed and cannot be hidden
+            no matter which payment mode is selected
+            -->
+            <xpath expr="//field[@name='vendor_id']" position="attributes">
+                <attribute name="invisible">0</attribute>
+                <attribute name="required">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='vendor_id']" position="after">
+                <field name="petty_cash_account_id" 
+                       invisible="payment_mode != 'petty_cash'"
+                       required="payment_mode == 'petty_cash'" 
+                       domain="[('id', 'in', petty_cash_account_ids)]"
+                       options="{'no_create': True, 'no_create_edit': True}" 
+                />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_expense_sheet_view_form_inherited" model="ir.ui.view">
+        <field name="name">hr.expense.sheet.view.form.inherited</field>
+        <field name="model">hr.expense.sheet</field>
+        <field name="inherit_id" ref="hr_expense.view_hr_expense_sheet_form" />
+        <field name="arch" type="xml">
+
+            <!-- 
+            We hide payment_method_line_id and employee_journal_id because we don't use them
+            -->
+            <xpath expr="//field[@name='payment_method_line_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='employee_journal_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

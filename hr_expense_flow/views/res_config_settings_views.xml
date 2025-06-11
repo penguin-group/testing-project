@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="res_config_settings_view_form_inherit" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="10" />
+            <field name="inherit_id" ref="hr_expense.res_config_settings_view_form" />
+            <field name="arch" type="xml">
+
+                <!-- Update the description of the original expense_journal_id and 
+                expense_outstanding_account_id fields, as they will be used for both 
+                payment modes. -->
+                
+                <xpath expr="//app[@name='hr_expense']/block[2]/setting[1]" position="attributes">
+                    <attribute name="string">Vendor Bills Journal</attribute>
+                    <attribute name="help">Accounting journal used for vendor bills.</attribute>
+                </xpath>
+
+                <xpath expr="//app[@name='hr_expense']/block[2]/setting[2]" position="attributes">
+                    <attribute name="help">Outstanding account por expenses.</attribute>
+                </xpath>
+
+                <xpath expr="//app[@name='hr_expense']/block[2]" position="inside">
+
+                    <setting company_dependent="1"
+                        help="Account (payable) used for employee expense reimbursements."
+                        string="Reimbursements Account">
+                        <field name="expense_reimbursement_account_id" />
+                    </setting>
+
+                    <setting company_dependent="1"
+                        help="Accounting journal used when creating the clearing entry."
+                        string="Clearing Journal">
+                        <field name="clearing_journal_id" />
+                    </setting>
+
+                </xpath>
+
+                <xpath expr="//app[@name='hr_expense']/block[2]/setting[3]" position="replace">
+                    <!-- Remove the original 'Payment Method' setting, as it will no longer be
+                    needed. -->
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>
