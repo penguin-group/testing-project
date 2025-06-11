@@ -444,6 +444,8 @@ class AccountReport(models.Model):
         currency_id = [company_id.currency_id, company_id.sec_currency_id]
         currency_id_list = []
         for currency in currency_id:
+            if not currency:
+                continue
             currency_dict = {
                 'id':currency.id,
                 'name':_(currency.name),

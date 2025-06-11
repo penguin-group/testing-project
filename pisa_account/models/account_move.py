@@ -12,7 +12,7 @@ class AccountMove(models.Model):
     _inherit = 'account.move'
 
     payment_info_qr_code = fields.Binary(
-        string="Payment Info QR Code", 
+        string="Payment Info QR Code",
         compute="_generate_payment_info_qr_code"
     )
 
@@ -20,19 +20,53 @@ class AccountMove(models.Model):
         related='company_id.sec_currency_id.name', readonly=True,
     )
 
+    vendor_country = fields.Char(related='partner_id.country_id.code', readonly=True)
+
+    show_edit_primary_currency_rate = fields.Boolean(compute='_compute_show_edit_primary_currency_rate', default=False)
+    show_edit_secondary_currency_rate = fields.Boolean(compute='_compute_show_edit_secondary_currency_rate',
+                                                       default=False)
+
+    @api.depends('currency_id', 'move_type', 'state', 'partner_id')
+    def _compute_show_edit_primary_currency_rate(self):
+        for move in self:
+            move.show_edit_primary_currency_rate = False
+
+            if self.env.company.country_id.code == 'PY' and move.company_id.country_id.code == 'PY':
+                if move.company_id == self.env.company and self.env.company.sec_currency_id:
+                    move.show_edit_primary_currency_rate = all([
+                        move.currency_id in [move.company_currency_id, move.company_secondary_currency_id],
+                        move.move_type == 'in_invoice',
+                        move.partner_id and move.vendor_country == 'PY',
+                        move.currency_id != move.company_currency_id
+                    ])
+
+    @api.depends('currency_id', 'move_type', 'state', 'partner_id')
+    def _compute_show_edit_secondary_currency_rate(self):
+        for move in self:
+            move.show_edit_secondary_currency_rate = False
+
+            if self.env.company.country_id.code == 'PY' and move.company_id.country_id.code == 'PY':
+                if move.company_id == self.env.company and self.env.company.sec_currency_id:
+                    move.show_edit_secondary_currency_rate = all([
+                        move.move_type == 'in_invoice',
+                        move.state == 'draft',
+                        move.partner_id and move.vendor_country == 'PY',
+                        move.currency_id == move.company_currency_id
+                    ])
+
     def _generate_payment_info_qr_code(self):
         for record in self:
             html_content = """
                         {{ payment_info }}
                     """
             html_content = re.sub(
-                r'{{ payment_info }}', 
-                str(record.journal_id.payment_info).replace('<br>', '\n'), 
+                r'{{ payment_info }}',
+                str(record.journal_id.payment_info).replace('<br>', '\n'),
                 html_content
             )
             html_tags_pattern = re.compile(r'<.*?>')
             plain_text = re.sub(html_tags_pattern, '', html_content)
-        
+
             qr = qrcode.QRCode(
                 version=1,
                 error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -46,7 +80,7 @@ class AccountMove(models.Model):
             img.save(temp, format="PNG")
             qr_image = base64.b64encode(temp.getvalue())
             record.payment_info_qr_code = qr_image
-    
+
     def action_post(self):
         for record in self:
             # Check invoice confirmation permission
@@ -80,7 +114,7 @@ class AccountMove(models.Model):
         result = super(AccountMove, self).is_inbound(include_receipts=include_receipts)
         inbound_payment = self.origin_payment_id and self.origin_payment_id.payment_type == 'inbound'
         return any([result, inbound_payment])
-    
+
     @api.depends('currency_id', 'company_secondary_currency_id', 'company_id', 'invoice_date')
     def _compute_invoice_secondary_currency_rate(self):
         if self.company_secondary_currency_id and self.company_id.country_code == "PY":
@@ -118,6 +152,6 @@ class AccountMove(models.Model):
                     record.amount_base5 = abs(sum(record.line_ids.filtered(lambda l: l.display_type =='product' and 5 in l.tax_ids.mapped('amount')).mapped("secondary_balance")))
                     record.amount_vat5 = abs(sum(record.line_ids.filtered(lambda l: l.display_type =='tax' and l.tax_line_id and l.tax_line_id.amount == 5).mapped("secondary_balance")))
                     record.amount_exempt = abs(sum(record.line_ids.filtered(lambda l: l.display_type =='product' and (0 in l.tax_ids.mapped('amount') or not l.tax_ids)).mapped("secondary_balance")))
-                    record.amount_taxable_imports = 0 
+                    record.amount_taxable_imports = 0
         else:
             super(AccountMove, self)._compute_fields_for_py_reports()
