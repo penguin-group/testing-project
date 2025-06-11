@@ -411,9 +411,9 @@ class BookRegistrationReport(models.Model):
                                 else:
                                     account_line_name = str(
                                         account_line_name).replace('₲', '').strip()
-                                total_debit_t = debit
-                                total_credit_t = credit
-                                total_balance_t = balance
+                                total_debit_t = debit if debit else 0
+                                total_credit_t = credit if credit else 0
+                                total_balance_t = balance if balance else 0
                                 if not date:
                                     date = ''
                                 else:
