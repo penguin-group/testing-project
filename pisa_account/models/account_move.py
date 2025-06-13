@@ -34,6 +34,7 @@ class AccountMove(models.Model):
             if self.env.company.country_id.code == 'PY' and move.company_id.country_id.code == 'PY':
                 if move.company_id == self.env.company and self.env.company.sec_currency_id:
                     move.show_edit_primary_currency_rate = all([
+                        move.state == 'draft',
                         move.currency_id in [move.company_currency_id, move.company_secondary_currency_id],
                         move.move_type == 'in_invoice',
                         move.partner_id and move.vendor_country == 'PY',
