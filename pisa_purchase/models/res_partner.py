@@ -10,7 +10,7 @@ class ResPartner(models.Model):
         # Check if being created as supplier
         if vals.get('supplier_rank', 0) > 0:
             if not vals.get('country_id'):
-                raise ValidationError("Suppliers must have a country set")
+                raise ValidationError("Suppliers must have a country set.")
         return super().create(vals)
 
     def write(self, vals):
@@ -20,5 +20,5 @@ class ResPartner(models.Model):
             if supplier_rank > 0:
                 # Partner is becoming a supplier
                 if not (vals.get('country_id') or partner.country_id):
-                    raise ValidationError("Suppliers must have a country set")
+                    raise ValidationError("Suppliers must have a country set.")
         return super().write(vals)
