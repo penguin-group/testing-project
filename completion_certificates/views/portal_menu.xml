@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Add Certificates to Portal Menu -->
+    <template id="portal_my_home_menu_certificates" name="Portal layout : Certificates menu entries" 
+              inherit_id="portal.portal_breadcrumbs" priority="40">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'certificate' or page_name == 'certificate_detail' or page_name == 'certificate_new'" 
+                class="breadcrumb-item">
+                <a href="/my/certificates">Certificates</a>
+            </li>
+            <li t-if="page_name == 'certificate_detail'" class="breadcrumb-item active">
+                Certificate Detail
+            </li>
+            <li t-if="page_name == 'certificate_new'" class="breadcrumb-item active">
+                New Certificate
+            </li>
+        </xpath>
+    </template>
+
+    <!-- Add Certificates to Portal Home -->
+    <template id="portal_my_home_certificates" name="Portal My Home : Certificates entries" 
+              inherit_id="portal.portal_my_home" priority="40">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Certificates</t>
+                <t t-set="url" t-value="'/my/certificates'"/>
+                <t t-set="placeholder_count" t-value="'certificate_count'"/>
+            </t>
+        </xpath>
+    </template>
+    
+    <!-- Update counters
+    <template id="portal_my_home_certificates_count" name="Portal: Certificates count" 
+              inherit_id="portal.portal_my_home" priority="50">
+        <xpath expr="//t[@t-set='counters']" position="attributes">
+            <attribute name="t-value" 
+                       add="portal.portal_my_home,counters += ['certificate_count']" 
+                       separator=","/>
+        </xpath>
+    </template> -->
+</odoo>

@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Certificate List Template -->
+    <template id="portal_my_certificates" name="My Certificates">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True" />
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Certificates</t>
+            </t>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3>My Certificates</h3>
+                        <a href="/my/certificate/new" class="btn btn-primary">
+                            <i class="fa fa-plus" /> New Certificate </a>
+                    </div>
+                </div>
+            </div>
+
+            <t t-if="not certificates">
+                <div class="alert alert-info">
+                    <p>You don't have any certificates yet.</p>
+                    <a href="/my/certificate/new" class="btn btn-primary">Create your first
+                        certificate</a>
+                </div>
+            </t>
+
+            <t t-if="certificates">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Certificate Name</th>
+                                <th>Date</th>
+                                <th>Purchase Order</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="certificates" t-as="certificate">
+                                <tr>
+                                    <td>
+                                        <a t-attf-href="/my/certificate/{{certificate.id}}">
+                                            <t t-esc="certificate.name" />
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <t t-esc="certificate.date" />
+                                    </td>
+                                    <td>
+                                        <t t-esc="certificate.purchase_order_id.name" />
+                                    </td>
+                                    <td>
+                                        <span
+                                            t-attf-class="badge badge-{{'success' if certificate.state == 'validated' else 'info' if certificate.state == 'submitted' else 'secondary'}}">
+                                            <t t-esc="certificate.state.title()" />
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a t-attf-href="/my/certificate/{{certificate.id}}"
+                                            class="btn btn-sm btn-outline-primary">
+                                            View
+                                        </a>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div t-if="pager" class="d-flex justify-content-center">
+                    <t t-call="portal.pager" />
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <!-- Certificate Detail Template -->
+    <template id="portal_certificate_detail" name="Certificate Detail">
+        <t t-call="portal.portal_layout">
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3>
+                            <t t-esc="certificate.name" />
+                        </h3>
+                        <a href="/my/certificates" class="btn btn-secondary">Back to List</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Certificate Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>
+                                <strong>Partner:</strong>
+                                <t t-esc="certificate.partner_id.name" />
+                            </p>
+                            <p>
+                                <strong>Date:</strong>
+                                <t t-esc="certificate.date" />
+                            </p>
+                            <p>
+                                <strong>Purchase Order:</strong>
+                                <t t-esc="certificate.purchase_order_id.name" />
+                            </p>
+                            <p>
+                                <strong>Status:</strong>
+                                <span
+                                    t-attf-class="badge badge-{{'success' if certificate.state == 'validated' else 'info' if certificate.state == 'submitted' else 'secondary'}}">
+                                    <t t-esc="certificate.state.title()" />
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Certificate Lines</h5>
+                        </div>
+                        <div class="card-body">
+                            <t t-if="not certificate.line_ids">
+                                <p class="text-muted">No certificate lines found.</p>
+                            </t>
+                            <t t-if="certificate.line_ids">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Product</th>
+                                                <th>Description</th>
+                                                <th>Qty Received</th>
+                                                <th>Date Received</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="certificate.line_ids"
+                                                t-as="line">
+                                                <tr>
+                                                    <td>
+                                                        <t t-esc="line.product_id.display_name" />
+                                                    </td>
+                                                    <td>
+                                                        <t t-esc="line.description" />
+                                                    </td>
+                                                    <td>
+                                                        <t t-esc="line.qty_received" />
+                                                    </td>
+                                                    <td>
+                                                        <t t-esc="line.date_received" />
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="portal_certificate_form" name="Certificate Form">
+        <t t-call="portal.portal_layout">
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3>New Certificate</h3>
+                        <a href="/my/certificates" class="btn btn-secondary">Back to List JA JA</a>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <owl-component name="completion_certificates.CertificatePortalForm" t-att-props="json.dumps({
+                        'csrfToken': request.csrf_token(),
+                        'partner': partner,
+                        'purchaseOrders': purchase_orders,
+                    })"/>
+                </div>
+            </div>
+            
+            <!-- <form class="portal-certificate-form" action="/my/certificate/create" method="post" id="certificate_form">
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Certificate Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="name">Certificate Name *</label>
+                                    <input type="text" class="form-control" id="name" name="name" required="required"/>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="partner_id">Partner</label>
+                                    <input type="text" class="form-control" readonly="readonly" t-att-value="partner.name"/>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="date">Certificate Date *</label>
+                                    <input type="date" class="form-control" id="date" name="date" required="required"/>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="purchase_order_id">Purchase Order *</label>
+                                    <select class="form-control" id="purchase_order_id" name="purchase_order_id" required="required">
+                                        <option value="">Select a Purchase Order</option>
+                                        <t t-foreach="purchase_orders" t-as="po">
+                                            <option t-att-value="po.id"><t t-esc="po.name"/></option>
+                                        </t>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card mt-4">
+                            <div class="card-header d-flex justify-content-between">
+                                <h5>Certificate Lines</h5>
+                                <button type="button" class="btn btn-sm btn-success" id="add_line_btn" disabled="disabled">
+                                    <i class="fa fa-plus"/> Add Line
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div id="certificate_lines_container">
+                                    <p class="text-muted">Select a purchase order first to add certificate lines.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-right mt-4">
+                            <button type="submit" class="btn btn-primary">Submit Certificate</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <input type="hidden" name="certificate_lines" id="certificate_lines_data"/>
+            </form> -->
+            
+            <!-- Hidden line template -->
+            <div id="line_template" style="display: none;">
+                <div class="certificate-line border p-3 mb-3">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>Product *</label>
+                            <select class="form-control product-select" required="required">
+                                <option value="">Select Product</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Description</label>
+                            <textarea class="form-control description-field" rows="2"></textarea>
+                        </div>
+                        <div class="col-md-2">
+                            <label>Qty Received *</label>
+                            <input type="number" class="form-control qty-field" step="0.01" required="required"/>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Date Received *</label>
+                            <input type="date" class="form-control date-field" required="required"/>
+                        </div>
+                        <div class="col-md-1 d-flex align-items-end">
+                            <button type="button" class="btn btn-danger btn-sm remove-line">
+                                <i class="fa fa-trash"/>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!--
+        FIX 2: This is now *only* the XML template for the OWL component.
+        It is referenced by the `static template` property in the JS file.
+        Notice that all the `t-att-` and `t-on-` attributes are now correctly
+        scoped within the component's state and methods.
+    -->
+
+</odoo>

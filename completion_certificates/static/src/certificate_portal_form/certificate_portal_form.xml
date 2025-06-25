@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="completion_certificates.CertificatePortalForm">
+        <form class="portal-certificate-form" action="/my/certificate/create" method="post" id="certificate_form" t-on-submit="onFormSubmit">
+                <input type="hidden" name="csrf_token" t-att-value="props.csrfToken"/>
+                
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>Certificate Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="name">Certificate Name *</label>
+                                    <input type="text" class="form-control" id="name" name="name" required="required"/>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="partner_id">Partner</label>
+                                    <input type="text" class="form-control" readonly="readonly" t-att-value="props.partner.name"/>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="date">Certificate Date *</label>
+                                    <input type="date" class="form-control" id="date" name="date" required="required"/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="purchase_order_id">Purchase Order *</label>
+                                    <select class="form-control" id="purchase_order_id" name="purchase_order_id" required="required"
+                                        t-on-change="onPurchaseOrderChange">
+                                        <option value="">Select a Purchase Order</option>
+                                        <t t-foreach="props.purchaseOrders" t-as="po" t-key="po.id">
+                                            <option t-att-value="po.id"><t t-esc="po.name"/></option>
+                                        </t>
+                                    </select>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+                        <div class="card mt-4">
+                            <div class="card-header d-flex justify-content-between">
+                                <h5>Certificate Lines</h5>
+                                <button type="button"
+                                        class="btn btn-sm btn-success"
+                                        id="add_line_btn"
+                                        t-att-disabled="!state.selectedPO"
+                                        t-on-click="onAddLine">
+                                    <i class="fa fa-plus"/> Add Line
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div id="certificate_lines_container">
+                                    <t t-if="!state.selectedPO">
+                                        <p class="text-muted">Select a purchase order first to add certificate lines.</p>
+                                    </t>
+                                    <t t-else="">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Purchase Line</th>
+                                                    <th>Description</th>
+                                                    <th>Qty Received</th>
+                                                    <th>Date Received</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <t t-foreach="state.certificateLines" t-as="line" t-key="line.lineIndex">
+                                                    <tr>
+                                                        <td>
+                                                            <select class="form-control"
+                                                                    t-att-value="line.purchase_line_id"
+                                                                    t-att-data-index="line.lineIndex"
+                                                                    t-on-change="onLineChange">
+                                                                <option value="">Select</option>
+                                                                <t t-foreach="state.purchaseOrderLines" t-as="pol" t-key="pol.purchase_line_id">
+                                                                    <option t-att-value="pol.purchase_line_id"><t t-esc="pol.name"/></option>
+                                                                </t>
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" class="form-control"
+                                                                t-att-value="line.description"
+                                                                t-att-data-index="line.lineIndex"
+                                                                t-att-name="'description'"
+                                                                t-on-input="onLineChange"/>
+                                                        </td>
+                                                        <td>
+                                                            <input type="number" class="form-control"
+                                                                t-att-value="line.qty_received"
+                                                                t-att-data-index="line.lineIndex"
+                                                                t-att-name="'qty_received'"
+                                                                t-on-input="onLineChange"/>
+                                                        </td>
+                                                        <td>
+                                                            <input type="date" class="form-control"
+                                                                t-att-value="line.date_received"
+                                                                t-att-data-index="line.lineIndex"
+                                                                t-att-name="'date_received'"
+                                                                t-on-input="onLineChange"/>
+                                                        </td>
+                                                        <td>
+                                                            <button type="button"
+                                                                    class="btn btn-danger btn-sm"
+                                                                    t-att-data-index="line.lineIndex"
+                                                                    t-on-click="onRemoveLine">
+                                                                <i class="fa fa-trash"></i> Remove
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </t>
+                                            </tbody>
+                                        </table>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-right mt-4">
+                            <button type="submit" class="btn btn-primary">Submit Certificate</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+    </t>
+</templates>
