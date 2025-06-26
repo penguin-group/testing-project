@@ -1,8 +1,9 @@
 import json
-from odoo import http
+from odoo import http, Command
 from odoo.http import request
 from odoo.addons.portal.controllers.portal import CustomerPortal
 from odoo.exceptions import AccessError, ValidationError, UserError
+import base64
 
 
 class CertificatePortal(CustomerPortal):
@@ -96,41 +97,50 @@ class CertificatePortal(CustomerPortal):
         }
         return request.render("completion_certificates.portal_certificate_form", values)
 
-    # FIX: Changed to a 'json' route to be called from the OWL component
-    @http.route(['/my/certificate/create'], type='json', auth="user", website=True, methods=['POST'])
-    def portal_certificate_create(self, **post):
+    @http.route('/my/certificate/create', type='http', auth='public', csrf=True, methods=['POST'], website=True)
+    def create_certificate(self, **post):
         try:
-            partner = request.env.user.partner_id
-            
-            # The data now comes from a JSON payload
-            certificate_vals = {
+            # Get the uploaded file
+            file_storage = request.httprequest.files.get('certificate_attachment')
+            if file_storage:
+                file_content = file_storage.read()
+                filename = file_storage.filename
+
+            # Parse certificate lines
+            certificate_lines = post.get('certificate_lines')
+            if certificate_lines:
+                certificate_lines = json.loads(certificate_lines)
+
+            # Create the record
+            certificate = request.env['certificate'].sudo().create({
                 'name': post.get('name'),
-                'partner_id': partner.id,
+                'partner_id': post.get('partner_id'),
                 'date': post.get('date'),
-                'purchase_order_id': int(post.get('purchase_order_id')),
-            }
-            
-            certificate = request.env['certificate'].sudo().create(certificate_vals)
-            
-            # Certificate lines are also in the payload
-            lines_data = post.get('certificate_lines', [])
-            for line_data in lines_data:
-                # Basic validation
-                if line_data.get('purchase_line_id') and line_data.get('qty_received'):
-                    line_vals = {
-                        'certificate_id': certificate.id,
-                        'purchase_line_id': int(line_data['purchase_line_id']),
-                        'description': line_data.get('description', ''),
-                        'qty_received': float(line_data['qty_received']),
-                        'date_received': line_data.get('date_received'),
-                    }
-                    request.env['certificate.line'].sudo().create(line_vals)
-            
-            # Return a success URL for client-side redirection
-            return {'redirect_url': '/my/certificate/%s' % certificate.id}
-            
+                'purchase_order_id': post.get('purchase_order_id'),
+            })
+
+            certificate.write({
+                'line_ids': [Command.create({
+                    'purchase_line_id': int(line.get('purchase_line_id')), 
+                    'description': line.get('description'),
+                    'qty_received': line.get('qty_received'),
+                    'date_received': line.get('date_received'),
+                }) for line in certificate_lines]
+            })
+
+            # Attach the file
+            if file_storage:
+                request.env['ir.attachment'].sudo().create({
+                    'name': filename,
+                    'datas': base64.b64encode(file_content),
+                    'res_model': 'certificate',
+                    'res_id': certificate.id,
+                    'type': 'binary',
+                })
+
+            return request.make_response(json.dumps({'redirect_url': '/my/certificate/%s' % certificate.id}), headers=[('Content-Type', 'application/json')])
+        
         except (ValueError, ValidationError, UserError) as e:
-            # Return error message in JSON format
             return {'error': str(e)}
 
     @http.route(['/my/certificate/get_po_products'], type='json', auth="user", methods=['POST'])

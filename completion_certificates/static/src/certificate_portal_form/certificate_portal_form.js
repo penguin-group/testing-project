@@ -76,25 +76,27 @@ export class CertificatePortalForm extends Component {
     async onFormSubmit(ev) {
         ev.preventDefault();
 
-        // Gather form data
         const form = ev.target;
         const formData = new FormData(form);
 
-        // Build the payload
-        const payload = {
-            name: formData.get("name"),
-            date: formData.get("date"),
-            purchase_order_id: formData.get("purchase_order_id"),
-            certificate_lines: this.state.certificateLines.map(line => ({
+        // Add certificate lines as a JSON string
+        formData.append(
+            "certificate_lines",
+            JSON.stringify(this.state.certificateLines.map(line => ({
                 purchase_line_id: line.purchase_line_id,
                 description: line.description,
                 qty_received: line.qty_received,
                 date_received: line.date_received,
-            })),
-        };
+            })))
+        );
 
-        // Send to server
-        const result = await rpc("/my/certificate/create", payload);
+        // Send using fetch (not rpc)
+        const response = await fetch("/my/certificate/create", {
+            method: "POST",
+            body: formData,
+        });
+
+        const result = await response.json();
 
         if (result && result.redirect_url) {
             window.location.href = result.redirect_url;
