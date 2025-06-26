@@ -29,13 +29,4 @@
         </xpath>
     </template>
     
-    <!-- Update counters
-    <template id="portal_my_home_certificates_count" name="Portal: Certificates count" 
-              inherit_id="portal.portal_my_home" priority="50">
-        <xpath expr="//t[@t-set='counters']" position="attributes">
-            <attribute name="t-value" 
-                       add="portal.portal_my_home,counters += ['certificate_count']" 
-                       separator=","/>
-        </xpath>
-    </template> -->
 </odoo>
