@@ -23,6 +23,14 @@
                        options="{'no_create': True, 'no_create_edit': True}" 
                 />
             </xpath>
+
+            <!--
+            The date field must be required to generate the vendor bill and the clearing entry
+            -->
+            <xpath expr="//field[@name='date']" position="attributes">
+                <attribute name="required">1</attribute>
+            </xpath>
+
         </field>
     </record>
 

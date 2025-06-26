@@ -70,7 +70,8 @@ class HrExpense(models.Model):
             'journal_id': self.company_id.expense_journal_id.id,
             'partner_id': self.vendor_id.id,
             'currency_id': self.currency_id.id,
-            'invoice_date': fields.Date.context_today(self),
+            'invoice_date': self.date,
+            'date': self.date,
             'line_ids': [Command.create(self._prepare_vendor_bill_line_vals())],
             'attachment_ids': [
                 Command.create(attachment.copy_data({'res_model': 'account.move', 'res_id': False, 'raw': attachment.raw})[0])
@@ -132,7 +133,7 @@ class HrExpense(models.Model):
                 self.outstanding_balance,
                 self.currency_id,
                 self.company_id,
-                self.date or fields.Date.context_today(self),
+                self.date,
             )
             if outstanding_balance_currency < total_amount:
                 line_ids.append(
@@ -182,7 +183,7 @@ class HrExpense(models.Model):
             'move_type': 'entry',
             'currency_id': self.currency_id.id,
             'expense_sheet_id': self.sheet_id.id,
-            'date': fields.Date.context_today(self),
+            'date': self.date,
             'journal_id': self.company_id.clearing_journal_id.id,
             'ref': f'Clearing entry for expense {self.name}',
             'line_ids': line_ids
