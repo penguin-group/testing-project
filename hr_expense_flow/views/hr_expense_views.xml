@@ -33,6 +33,10 @@
                 <attribute name="required">True</attribute>
             </xpath>
 
+            <xpath expr="//field[@name='date']" position="attributes">
+                <attribute name="required">1</attribute>
+            </xpath>
+
         </field>
     </record>
 
