@@ -199,11 +199,4 @@
         </t>
     </template>
 
-    <!--
-        FIX 2: This is now *only* the XML template for the OWL component.
-        It is referenced by the `static template` property in the JS file.
-        Notice that all the `t-att-` and `t-on-` attributes are now correctly
-        scoped within the component's state and methods.
-    -->
-
 </odoo>

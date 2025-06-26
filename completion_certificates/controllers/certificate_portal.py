@@ -55,8 +55,6 @@ class CertificatePortal(CustomerPortal):
     @http.route(['/my/certificate/<int:certificate_id>'], type='http', auth="user", website=True)
     def portal_certificate_detail(self, certificate_id, **kw):
         try:
-            # Sudo is not needed for reading if you have correct access rules.
-            # Only use sudo when creating/writing on behalf of a user.
             certificate_sudo = request.env['certificate'].sudo().browse(certificate_id)
             if certificate_sudo.partner_id != request.env.user.partner_id:
                 raise AccessError("You do not have access to this certificate.")

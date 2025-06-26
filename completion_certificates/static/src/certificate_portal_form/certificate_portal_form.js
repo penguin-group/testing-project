@@ -25,7 +25,7 @@ export class CertificatePortalForm extends Component {
         this.state.selectedPO = this.props.purchaseOrders.find(po => po.id == selectedPOId) || null;
         this.state.purchaseOrderLines = [];
         if (selectedPOId) {
-            // Fetch purchase order lines via AJAX
+            // Fetch purchase order lines
             const result = await rpc("/my/certificate/get_po_products", {
                 purchase_order_id: selectedPOId,
             });
@@ -108,7 +108,7 @@ export class CertificatePortalForm extends Component {
             })))
         );
 
-        // Send using fetch (not rpc)
+        // Send
         const response = await fetch("/my/certificate/create", {
             method: "POST",
             body: formData,
