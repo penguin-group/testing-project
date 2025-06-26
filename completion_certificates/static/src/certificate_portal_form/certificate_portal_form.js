@@ -77,6 +77,24 @@ export class CertificatePortalForm extends Component {
         ev.preventDefault();
 
         const form = ev.target;
+        const fileInput = form.querySelector('#certificate_attachment');
+        const file = fileInput && fileInput.files[0];
+
+        // File type and size validation
+        if (file) {
+            const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+            const maxSize = 5 * 1024 * 1024; // 5MB
+
+            if (!allowedTypes.includes(file.type)) {
+                alert('Only PDF, JPG, and PNG files are allowed.');
+                return;
+            }
+            if (file.size > maxSize) {
+                alert('File size must be less than 5MB.');
+                return;
+            }
+        }
+
         const formData = new FormData(form);
 
         // Add certificate lines as a JSON string

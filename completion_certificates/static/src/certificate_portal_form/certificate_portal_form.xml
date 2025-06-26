@@ -18,7 +18,7 @@
 
                                 <div class="form-group">
                                     <label for="certificate_attachment">Attachment</label>
-                                    <input type="file" class="form-control" id="certificate_attachment" name="certificate_attachment" />
+                                    <input type="file" class="form-control" id="certificate_attachment" name="certificate_attachment" accept=".pdf,image/*" />
                                 </div>
                                 
                                 <input type="hidden" t-att-value="props.partner.id" id="partner_id" name="partner_id"/>
