@@ -11,13 +11,25 @@ class HrExpense(models.Model):
     )
 
     payment_mode = fields.Selection(
-        selection_add=[('petty_cash', 'Petty Cash')],
-        ondelete={'petty_cash': 'set default'},
+        selection_add=[
+            ('petty_cash', 'Petty Cash'),
+            ('credit_card', 'Credit Card'),
+        ], 
+        ondelete={
+            'petty_cash': 'set default', 
+            'credit_card': 'set default'
+        }
     )
 
     petty_cash_account_id = fields.Many2one(
         'account.account',
         string='Petty Cash Account',
+    )
+
+    credit_card_account_id = fields.Many2one(
+        'account.account',
+        string='Credit Card Account',
+        domain="[('account_type', '=', 'liability_credit_card')]",
     )
 
     petty_cash_account_ids = fields.Many2many(
@@ -176,6 +188,16 @@ class HrExpense(models.Model):
                     'amount_currency': -total_amount, # credit
                     'currency_id': self.currency_id.id,
                     'account_id': self.petty_cash_account_id.id,
+                }),
+            )
+        elif self.payment_mode == 'credit_card':
+            # Create a credit line for the total amount of the expense
+            # The account should be the credit card account
+            line_ids.append(
+                Command.create({
+                    'amount_currency': -total_amount, # credit
+                    'currency_id': self.currency_id.id,
+                    'account_id': self.credit_card_account_id.id,
                 }),
             )
 
