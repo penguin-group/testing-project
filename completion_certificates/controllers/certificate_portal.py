@@ -86,7 +86,7 @@ class CertificatePortal(CustomerPortal):
 
         purchase_orders = [{
             'id': po.id,
-            'name': po.name,
+            'name': po.name
         } for po in purchase_order_ids]
 
         values = {
@@ -148,6 +148,8 @@ class CertificatePortal(CustomerPortal):
                     'id': line.product_id.id,
                     'name': line.product_id.display_name,
                     'description': line.product_id.description or '',
+                    'uom': line.product_uom.name,
+                    'qty_processed': line.qty_received
                 })
             
             return {'products': products}

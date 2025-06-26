@@ -140,6 +140,7 @@
                                             <tr>
                                                 <th>Product</th>
                                                 <th>Description</th>
+                                                <th>UOM</th>
                                                 <th>Qty Received</th>
                                                 <th>Date Received</th>
                                             </tr>
@@ -153,6 +154,9 @@
                                                     </td>
                                                     <td>
                                                         <t t-esc="line.description" />
+                                                    </td>
+                                                    <td>
+                                                        <t t-esc="line.purchase_line_id.product_uom.name" />
                                                     </td>
                                                     <td>
                                                         <t t-esc="line.qty_received" />
@@ -190,97 +194,6 @@
                         'partner': partner,
                         'purchaseOrders': purchase_orders,
                     })"/>
-                </div>
-            </div>
-            
-            <!-- <form class="portal-certificate-form" action="/my/certificate/create" method="post" id="certificate_form">
-                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
-                
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="card">
-                            <div class="card-header">
-                                <h5>Certificate Information</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <label for="name">Certificate Name *</label>
-                                    <input type="text" class="form-control" id="name" name="name" required="required"/>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="partner_id">Partner</label>
-                                    <input type="text" class="form-control" readonly="readonly" t-att-value="partner.name"/>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="date">Certificate Date *</label>
-                                    <input type="date" class="form-control" id="date" name="date" required="required"/>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="purchase_order_id">Purchase Order *</label>
-                                    <select class="form-control" id="purchase_order_id" name="purchase_order_id" required="required">
-                                        <option value="">Select a Purchase Order</option>
-                                        <t t-foreach="purchase_orders" t-as="po">
-                                            <option t-att-value="po.id"><t t-esc="po.name"/></option>
-                                        </t>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="card mt-4">
-                            <div class="card-header d-flex justify-content-between">
-                                <h5>Certificate Lines</h5>
-                                <button type="button" class="btn btn-sm btn-success" id="add_line_btn" disabled="disabled">
-                                    <i class="fa fa-plus"/> Add Line
-                                </button>
-                            </div>
-                            <div class="card-body">
-                                <div id="certificate_lines_container">
-                                    <p class="text-muted">Select a purchase order first to add certificate lines.</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="text-right mt-4">
-                            <button type="submit" class="btn btn-primary">Submit Certificate</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <input type="hidden" name="certificate_lines" id="certificate_lines_data"/>
-            </form> -->
-            
-            <!-- Hidden line template -->
-            <div id="line_template" style="display: none;">
-                <div class="certificate-line border p-3 mb-3">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label>Product *</label>
-                            <select class="form-control product-select" required="required">
-                                <option value="">Select Product</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <label>Description</label>
-                            <textarea class="form-control description-field" rows="2"></textarea>
-                        </div>
-                        <div class="col-md-2">
-                            <label>Qty Received *</label>
-                            <input type="number" class="form-control qty-field" step="0.01" required="required"/>
-                        </div>
-                        <div class="col-md-3">
-                            <label>Date Received *</label>
-                            <input type="date" class="form-control date-field" required="required"/>
-                        </div>
-                        <div class="col-md-1 d-flex align-items-end">
-                            <button type="button" class="btn btn-danger btn-sm remove-line">
-                                <i class="fa fa-trash"/>
-                            </button>
-                        </div>
-                    </div>
                 </div>
             </div>
         </t>

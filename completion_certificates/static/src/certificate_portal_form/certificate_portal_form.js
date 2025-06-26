@@ -41,6 +41,8 @@ export class CertificatePortalForm extends Component {
             lineIndex: this.state.nextLineIndex,
             purchase_line_id: "",
             description: "",
+            uom: "",
+            qty_processed: "",
             qty_received: "",
             date_received: "",
         });
@@ -49,9 +51,18 @@ export class CertificatePortalForm extends Component {
 
     onLineChange(ev) {
         const index = parseInt(ev.target.dataset.index, 10);
-        const field = ev.target.name || 'purchase_line_id'; // or set this via another data attribute
+        const field = ev.target.name || 'purchase_line_id';
         const value = ev.target.value;
         this.state.certificateLines[index][field] = value;
+
+        if (field === 'purchase_line_id') {
+            // Find the selected purchase line in purchaseOrderLines
+            const pol = this.state.purchaseOrderLines.find(
+                l => String(l.purchase_line_id) === String(value)
+            );
+            this.state.certificateLines[index].uom = pol ? pol.uom : "";
+            this.state.certificateLines[index].qty_processed = pol ? pol.qty_processed : "";
+        }
     }
 
     onRemoveLine(ev) {
