@@ -183,7 +183,7 @@
                 <div class="col-12">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h3>New Certificate</h3>
-                        <a href="/my/certificates" class="btn btn-secondary">Back to List JA JA</a>
+                        <a href="/my/certificates" class="btn btn-secondary">Back to List</a>
                     </div>
                 </div>
             </div>
