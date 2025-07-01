@@ -15,10 +15,14 @@ class ResPartner(models.Model):
 
     def write(self, vals):
         for partner in self:
-            # Check if becoming a supplier
-            supplier_rank = vals.get('supplier_rank', partner.supplier_rank)
-            if supplier_rank > 0:
-                # Partner is becoming a supplier
-                if not (vals.get('country_id') or partner.country_id):
-                    raise ValidationError(_("Suppliers must have a country set."))
+            if any([
+                self.env.context.get('from_contacts'),
+                self.env.context.get('from_purchase'),
+                self.env.context.get('res_partner_search_mode') == 'supplier'
+            ]):
+                # If becoming a supplier or already a supplier, check if country is set
+                supplier_rank = vals.get('supplier_rank', partner.supplier_rank)
+                if supplier_rank > 0:
+                    if not (vals.get('country_id') or partner.country_id):
+                        raise ValidationError(_("Suppliers must have a country set."))
         return super().write(vals)
