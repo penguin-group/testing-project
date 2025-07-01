@@ -1,0 +1,17 @@
+<odoo>
+    <data>
+
+        <record id="view_hr_attendance_form_inherited" model="ir.ui.view">
+            <field name="name">view.hr.attendance.form.inherited</field>
+            <field name="model">hr.attendance</field>
+            <field name="inherit_id" ref="hr_attendance.view_attendance_tree_management"/>
+            <field name="arch" type="xml">
+                <xpath expr="//list/header" position="inside">
+                   <button class="btn-secondary" string="Import attendance records" name="import_attendance_wizard" display="always" type="object"/>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

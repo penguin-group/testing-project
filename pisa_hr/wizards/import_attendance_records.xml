@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+
+        <record id="import_attendance_records_form" model="ir.ui.view">
+            <field name="name">import.attendance.records.form</field>
+            <field name="model">import.attendance.records.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Import Attendance Record">
+                    <sheet>
+                        <group>
+                            <field name="csv_file" options="{'accepted_file_extensions': 'text/csv'}"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="import_attendance_records" string="Import" type="object" class="btn-primary"/>
+                        <button string="Cancel" type="object" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="import_attendance_records_action" model="ir.actions.act_window">
+            <field name="name">Import attendance records</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">import.attendance.records.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+
+
+</odoo>
