@@ -31,7 +31,7 @@ class ImportAttendanceRecords(models.TransientModel):
 
         try:
             csv_data = base64.b64decode(self.csv_file)
-            df = pd.read_csv(BytesIO(csv_data), encoding='latin1', sep=',')
+            df = pd.read_csv(BytesIO(csv_data), encoding='latin1', skiprows=5, sep=';')
             df = df.loc[:, df.columns.str.strip().astype(bool) & ~df.columns.str.contains('^Unnamed')]
             df = df[['ID', 'Fecha', 'Hora de registro de entrada', 'Salida a', 'Nombre']]
             df = df[  # 2.1. If there is no check-in or check-out (e.g. '-'), or there is no Cedula, ignore the whole row
