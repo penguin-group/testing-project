@@ -11,6 +11,11 @@ import math
 
 _logger = logging.getLogger(__name__)
 
+def is_correct_number_format(number):
+        """Check if the number has the correct format xxx-xxx-xxxxxxx."""
+        pattern = re.compile(r'^(\d{3}-){2}\d{7}$')
+        return bool(pattern.match(number))
+
 class AccountMove(models.Model):
     _inherit = 'account.move'   
 
@@ -197,7 +202,7 @@ class AccountMove(models.Model):
             inv_auth = self.journal_id.invoice_authorization_id if self.is_customer_invoice() else self.supplier_invoice_authorization_id
             if inv_auth:
                 name = self.name if self.is_customer_invoice() else self.ref
-                if name:
+                if name and is_correct_number_format(name):
                     number = int(name.split('-')[-1])
                     establishment_number = name.split('-')[0]
                     expedition_point_number = name.split('-')[1]
@@ -259,13 +264,15 @@ class AccountMove(models.Model):
                         _("The maximum number of lines supported in the invoice has been reached."))
         return
 
-    def validate_supplier_invoice_number(self):
+    def validate_number(self):
         self.ensure_one()
-        pattern = re.compile(r'^(\d{3}-){2}\d{7}$')
-        if not pattern.match(self.ref):
+        document_number = self.name if self.is_customer_invoice() else self.ref
+        if not is_correct_number_format(document_number):
             raise ValidationError(
-                _('The invoice number does not have the correct format (xxx-xxx-xxxxxxx)')
+                _('The document number does not have the correct format (xxx-xxx-xxxxxxx)')
             )
+
+    
 
     def generate_token(self):
         secret_phrase = str(self.id) + "amakakeruriunohirameki"
@@ -337,7 +344,7 @@ class AccountMove(models.Model):
         for record in self:
             if record.is_invoice() and record.env.company.country_code == 'PY':
                 if record.is_vendor_bill_py():
-                    record.validate_supplier_invoice_number()
+                    record.validate_number()
                 record.validate_invoice_authorization()
                 record.write({'res90_number_invoice_authorization': record._compute_invoice_authorization_name()})
                 record.validate_empty_vat()
