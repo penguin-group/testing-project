@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="purchase_request.parent_menu_purchase_request" active="False" />
+        <menuitem id="purchase_request.menu_purchase_request_line" active="False" />
+    </data>
+</odoo>
