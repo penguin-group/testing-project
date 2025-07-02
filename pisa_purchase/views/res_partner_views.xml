@@ -1,0 +1,5 @@
+<odoo>
+    <record id="contacts.action_contacts" model="ir.actions.act_window">
+        <field name="context">{'from_contacts': True}</field>
+    </record>
+</odoo>
