@@ -11,13 +11,25 @@ class HrExpense(models.Model):
     )
 
     payment_mode = fields.Selection(
-        selection_add=[('petty_cash', 'Petty Cash')],
-        ondelete={'petty_cash': 'set default'},
+        selection_add=[
+            ('petty_cash', 'Petty Cash'),
+            ('credit_card', 'Credit Card'),
+        ], 
+        ondelete={
+            'petty_cash': 'set default', 
+            'credit_card': 'set default'
+        }
     )
 
     petty_cash_account_id = fields.Many2one(
         'account.account',
         string='Petty Cash Account',
+    )
+
+    credit_card_account_id = fields.Many2one(
+        'account.account',
+        string='Credit Card Account',
+        domain="[('account_type', '=', 'liability_credit_card')]",
     )
 
     petty_cash_account_ids = fields.Many2many(
@@ -70,7 +82,8 @@ class HrExpense(models.Model):
             'journal_id': self.company_id.expense_journal_id.id,
             'partner_id': self.vendor_id.id,
             'currency_id': self.currency_id.id,
-            'invoice_date': fields.Date.context_today(self),
+            'invoice_date': self.date,
+            'date': self.date,
             'line_ids': [Command.create(self._prepare_vendor_bill_line_vals())],
             'attachment_ids': [
                 Command.create(attachment.copy_data({'res_model': 'account.move', 'res_id': False, 'raw': attachment.raw})[0])
@@ -132,7 +145,7 @@ class HrExpense(models.Model):
                 self.outstanding_balance,
                 self.currency_id,
                 self.company_id,
-                self.date or fields.Date.context_today(self),
+                self.date,
             )
             if outstanding_balance_currency < total_amount:
                 line_ids.append(
@@ -177,12 +190,22 @@ class HrExpense(models.Model):
                     'account_id': self.petty_cash_account_id.id,
                 }),
             )
+        elif self.payment_mode == 'credit_card':
+            # Create a credit line for the total amount of the expense
+            # The account should be the credit card account
+            line_ids.append(
+                Command.create({
+                    'amount_currency': -total_amount, # credit
+                    'currency_id': self.currency_id.id,
+                    'account_id': self.credit_card_account_id.id,
+                }),
+            )
 
         move_vals = {
             'move_type': 'entry',
             'currency_id': self.currency_id.id,
             'expense_sheet_id': self.sheet_id.id,
-            'date': fields.Date.context_today(self),
+            'date': self.date,
             'journal_id': self.company_id.clearing_journal_id.id,
             'ref': f'Clearing entry for expense {self.name}',
             'line_ids': line_ids

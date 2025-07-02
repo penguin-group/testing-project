@@ -8,9 +8,12 @@ access_jr_accountant_account_group,access.jr.accountant.account.group,account.mo
 access_jr_accountant_account_fiscal_year,access.jr.accountant.account.fiscal.year,account_accountant.model_account_fiscal_year,pisa_account.group_account_jr_accountant,1,0,0,
 access_jr_accountant_account_asset,access.jr.accountant.account.asset,account_asset.model_account_asset,pisa_account.group_account_jr_accountant,1,1,1,1
 access_jr_accountant_account_asset_group,access.jr.accountant.account.asset.group,account_asset.model_account_asset_group,pisa_account.group_account_jr_accountant,1,1,1,1
+access_jr_accountant_account_report_expression,access.jr.accountant.account.report.expression,account_reports.model_account_report_expression,pisa_account.group_account_jr_accountant,1,0,0,0
+access_jr_accountant_account_report_horizontal_group,access.jr.accountant.account.report.horizontal.group,account_reports.model_account_report_horizontal_group,pisa_account.group_account_jr_accountant,1,0,0,0
 access_sr_accountant_account_account,access.sr.accountant.account.account,account.model_account_account,pisa_account.group_account_sr_accountant,1,1,1,1
 access_sr_accountant_res_currency,access.sr.accountant.res.currency,base.model_res_currency,pisa_account.group_account_sr_accountant,1,1,1,1
 access_sr_accountant_account_asset,access.sr.accountant.account.asset,account_asset.model_account_asset,pisa_account.group_account_sr_accountant,1,1,1,1
+access_sr_accountant_res_partner,access.sr.accountant.res.partner,base.model_res_partner,pisa_account.group_account_sr_accountant,1,1,0,0
 access_sr_finance_res_partner,access.sr.finance.res.partner,base.model_res_partner,pisa_account.group_account_sr_finance,1,1,1,1
 access_sr_finance_invoice_authorization,access.sr.finance.invoice.authorization,l10n_py.model_invoice_authorization,pisa_account.group_account_sr_finance,1,1,1,1
 access_sr_finance_account_report,access.sr.finance.account.report,account_reports.model_account_report,pisa_account.group_account_sr_finance,1,0,0,0
@@ -20,6 +23,7 @@ access_sr_finance_account_report_expression,access.sr.finance.account.report.exp
 access_sr_finance_account_group,access.sr.finance.account.group,account.model_account_group,pisa_account.group_account_sr_finance,1,0,0,0
 access_sr_finance_account_fiscal_year,access.sr.finance.account.fiscal.year,account_accountant.model_account_fiscal_year,pisa_account.group_account_sr_finance,1,0,0,0
 access_sr_finance_account_reconcile_model,access.sr.finance.account.reconcile.model,account.model_account_reconcile_model,pisa_account.group_account_sr_finance,1,1,1,1
+access_sr_finance_account_auto_reconcile_wizard,access.sr.finance.account.auto.reconcile.wizard,account_accountant.model_account_auto_reconcile_wizard,pisa_account.group_account_sr_finance,1,1,1,1
 access_head_finance_account_online_link,access.head.finance.account.online.link,account_online_synchronization.model_account_online_link,pisa_account.group_account_head_finance,1,1,1,1
 access_head_finance_payment_provider,access.head.finance.payment.provider,account_payment.model_payment_provider,pisa_account.group_account_head_finance,1,1,1,1
 access_head_finance_payment_method,access.head.finance.payment.method,payment.model_payment_method,pisa_account.group_account_head_finance,1,1,1,1

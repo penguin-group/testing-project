@@ -15,14 +15,28 @@
                 <attribute name="required">1</attribute>
             </xpath>
 
+            <xpath expr="//field[@name='date']" position="attributes">
+                <attribute name="required">1</attribute>
+            </xpath>
+
             <xpath expr="//field[@name='vendor_id']" position="after">
                 <field name="petty_cash_account_id" 
-                       invisible="payment_mode != 'petty_cash'"
-                       required="payment_mode == 'petty_cash'" 
-                       domain="[('id', 'in', petty_cash_account_ids)]"
-                       options="{'no_create': True, 'no_create_edit': True}" 
+                    invisible="payment_mode != 'petty_cash'"
+                    required="payment_mode == 'petty_cash'" 
+                    domain="[('id', 'in', petty_cash_account_ids)]"
+                    options="{'no_create': True, 'no_create_edit': True}" 
+                />
+                <field name="credit_card_account_id"
+                    invisible="payment_mode != 'credit_card'"
+                    required="payment_mode == 'credit_card'" 
+                    options="{'no_create': True, 'no_create_edit': True}"
                 />
             </xpath>
+
+            <xpath expr="//field[@name='analytic_distribution']" position="attributes">
+                <attribute name="required">True</attribute>
+            </xpath>
+
         </field>
     </record>
 
