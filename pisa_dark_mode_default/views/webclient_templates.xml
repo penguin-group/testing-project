@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="webclient_bootstrap_dark_default" inherit_id="web.webclient_bootstrap">
+        <!-- Override the dark mode detection logic to include our default -->
+        <xpath expr="//t[@t-if=&quot;request.cookies.get('color_scheme') == 'dark'&quot;]" position="attributes">
+            <attribute name="t-if">request.cookies.get('color_scheme') == 'dark' or default_dark_mode</attribute>
+        </xpath>
+    </template>
+</odoo> 
