@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>OAuth Only Login</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #71639e;
+            margin-bottom: 10px;
+        }
+        .feature {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #71639e;
+            border-radius: 4px;
+        }
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        .installation {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        code {
+            background: #e9ecef;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>OAuth Only Login</h1>
+        <p><strong>Enforce OAuth-only authentication in Odoo</strong></p>
+    </div>
+
+    <div class="warning">
+        <strong>⚠️ Important:</strong> This module will hide the traditional email/password login form. 
+        Make sure you have at least one OAuth provider configured before installing this module.
+    </div>
+
+    <h2>Features</h2>
+    
+    <div class="feature">
+        <h3>🔒 Enhanced Security</h3>
+        <p>Enforces authentication through trusted OAuth providers, eliminating password-based vulnerabilities.</p>
+    </div>
+
+    <div class="feature">
+        <h3>🎨 Clean Interface</h3>
+        <p>Provides a streamlined login experience with only OAuth provider buttons visible.</p>
+    </div>
+
+    <div class="feature">
+        <h3>🔧 Easy Integration</h3>
+        <p>Uses Odoo's template inheritance system for seamless integration without core modifications.</p>
+    </div>
+
+    <div class="feature">
+        <h3>📱 Responsive Design</h3>
+        <p>Includes custom CSS for improved mobile and desktop user experience.</p>
+    </div>
+
+    <h2>What it does</h2>
+    <ul>
+        <li>Hides email and password input fields from the login form</li>
+        <li>Removes "Forgot Password" and "Sign Up" links</li>
+        <li>Redirects signup and password reset pages to OAuth providers</li>
+        <li>Maintains all OAuth provider functionality</li>
+        <li>Preserves error and success message display</li>
+    </ul>
+
+    <div class="installation">
+        <h3>Before Installation:</h3>
+        <ol>
+            <li>Configure at least one OAuth provider in <code>Settings > General Settings > Integrations</code></li>
+            <li>Test the OAuth authentication flow</li>
+            <li>Ensure you have admin access through OAuth</li>
+        </ol>
+    </div>
+
+    <h2>Compatible OAuth Providers</h2>
+    <ul>
+        <li>Google OAuth</li>
+        <li>Microsoft Azure AD</li>
+        <li>Facebook Login</li>
+        <li>GitHub OAuth</li>
+        <li>LinkedIn OAuth</li>
+        <li>Any custom OAuth 2.0 provider</li>
+    </ul>
+
+    <h2>Technical Details</h2>
+    <p>This module uses Odoo's template inheritance system to override the following templates:</p>
+    <ul>
+        <li><code>web.login</code> - Main login form</li>
+        <li><code>auth_signup.login</code> - Signup links</li>
+        <li><code>auth_signup.signup</code> - Signup form</li>
+        <li><code>auth_signup.reset_password</code> - Password reset form</li>
+    </ul>
+
+    <p><strong>Author:</strong> Penguin Infrastructure S.A.<br>
+    <strong>Maintainer:</strong> William Eckerleben<br>
+    <strong>Version:</strong> 18.0.1.0.0<br>
+    <strong>License:</strong> OPL-1<br>
+    <strong>Website:</strong> <a href="https://penguin.digital" target="_blank">https://penguin.digital</a></p>
+</body>
+</html> 
