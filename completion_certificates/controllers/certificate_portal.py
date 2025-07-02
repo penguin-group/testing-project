@@ -80,7 +80,8 @@ class CertificatePortal(CustomerPortal):
         # Get purchase orders for this partner
         purchase_order_ids = request.env['purchase.order'].search([
             ('partner_id', '=', partner_id.id),
-            ('state', 'in', ['purchase', 'done'])
+            ('state', 'in', ['purchase', 'done']),
+            ('use_certificate', '=', True)
         ])
 
         purchase_orders = [{
