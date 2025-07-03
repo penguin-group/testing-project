@@ -139,8 +139,11 @@ class CertificatePortal(CustomerPortal):
 
             return request.make_response(json.dumps({'redirect_url': '/my/certificate/%s' % certificate.id}), headers=[('Content-Type', 'application/json')])
         
-        except (ValueError, ValidationError, UserError) as e:
-            return {'error': str(e)}
+        except Exception as e:
+            return request.make_response(
+                json.dumps({'error': str(e)}),
+                headers=[('Content-Type', 'application/json')]
+            )
 
     @http.route(['/my/certificate/get_po_products'], type='json', auth="user", methods=['POST'])
     def get_purchase_order_products(self, purchase_order_id, **kw):

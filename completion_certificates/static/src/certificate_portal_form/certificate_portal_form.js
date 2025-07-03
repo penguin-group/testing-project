@@ -17,6 +17,7 @@ export class CertificatePortalForm extends Component {
             purchaseOrderLines: [],
             certificateLines: [],
             nextLineIndex: 0,
+            error: "",
         });
     }
 
@@ -76,6 +77,9 @@ export class CertificatePortalForm extends Component {
     async onFormSubmit(ev) {
         ev.preventDefault();
 
+        // Clear previous error
+        this.state.error = "";
+
         const form = ev.target;
         const fileInput = form.querySelector('#certificate_attachment');
         const file = fileInput && fileInput.files[0];
@@ -93,6 +97,12 @@ export class CertificatePortalForm extends Component {
                 alert('File size must be less than 5MB.');
                 return;
             }
+        }
+
+        // Require at least one certificate line
+        if (!this.state.certificateLines.length) {
+            this.state.error = "Please add at least one certificate line.";
+            return;
         }
 
         const formData = new FormData(form);
@@ -114,14 +124,20 @@ export class CertificatePortalForm extends Component {
             body: formData,
         });
 
-        const result = await response.json();
+        let result;
+        try {
+            result = await response.json();
+        } catch (e) {
+            this.state.error = `An unexpected error occurred. Please try again. (${e && e.message ? e.message : e})`;
+            return;
+        }
 
         if (result && result.redirect_url) {
             window.location.href = result.redirect_url;
         } else if (result && result.error) {
-            alert("Error: " + result.error);
+            this.state.error = result.error;
         } else {
-            alert("Unknown error occurred.");
+            this.state.error = "Unknown error occurred.";
         }
     }
 }

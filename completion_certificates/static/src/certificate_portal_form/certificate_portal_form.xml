@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
     <t t-name="completion_certificates.CertificatePortalForm">
+        <t t-if="state.error">
+            <div class="alert alert-danger" role="alert">
+                <t t-esc="state.error"/>
+            </div>
+        </t>
         <form class="portal-certificate-form" action="/my/certificate/create" method="post" id="certificate_form" t-on-submit="onFormSubmit">
                 <input type="hidden" name="csrf_token" t-att-value="props.csrfToken"/>
                 
@@ -18,7 +23,7 @@
 
                                 <div class="form-group">
                                     <label for="certificate_attachment">Attachment</label>
-                                    <input type="file" class="form-control" id="certificate_attachment" name="certificate_attachment" accept=".pdf,image/*" />
+                                    <input type="file" class="form-control" id="certificate_attachment" name="certificate_attachment" accept=".pdf,image/*" required="required"/>
                                 </div>
                                 
                                 <input type="hidden" t-att-value="props.partner.id" id="partner_id" name="partner_id"/>
@@ -95,7 +100,8 @@
                                                                 t-att-value="line.description"
                                                                 t-att-data-index="line.lineIndex"
                                                                 t-att-name="'description'"
-                                                                t-on-input="onLineChange"/>
+                                                                t-on-input="onLineChange"
+                                                                t-att-disabled="!line.purchase_line_id"/>
                                                         </td>
                                                         <td>
                                                             <input type="text" class="form-control"
@@ -118,14 +124,18 @@
                                                                 t-att-value="line.qty_received"
                                                                 t-att-data-index="line.lineIndex"
                                                                 t-att-name="'qty_received'"
-                                                                t-on-input="onLineChange"/>
+                                                                t-on-input="onLineChange"
+                                                                required="required"
+                                                                t-att-disabled="!line.purchase_line_id"/>
                                                         </td>
                                                         <td>
                                                             <input type="date" class="form-control"
                                                                 t-att-value="line.date_received"
                                                                 t-att-data-index="line.lineIndex"
                                                                 t-att-name="'date_received'"
-                                                                t-on-input="onLineChange"/>
+                                                                t-on-input="onLineChange"
+                                                                required="required"
+                                                                t-att-disabled="!line.purchase_line_id"/>
                                                         </td>
                                                         <td>
                                                             <button type="button"
