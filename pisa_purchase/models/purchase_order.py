@@ -1,4 +1,6 @@
 from odoo import models, fields, api, _
+from odoo.exceptions import ValidationError
+
 
 class PurchaseOrder(models.Model):
     _inherit = "purchase.order"
@@ -18,6 +20,13 @@ class PurchaseOrder(models.Model):
 
     @api.model_create_multi
     def create(self, vals):
+        # Validate partner country if being set
+        for val in vals:
+            if 'partner_id' in val:
+                partner = self.env['res.partner'].browse(val['partner_id'])
+                if not partner.country_id:
+                    raise ValidationError(_("Suppliers must have a country set."))
+        
         # Create the PO
         order = super(PurchaseOrder, self).create(vals)
         
@@ -32,6 +41,12 @@ class PurchaseOrder(models.Model):
         return order
     
     def write(self, vals):
+        # Validate partner country if being set
+        if 'partner_id' in vals:
+            partner = self.env['res.partner'].browse(vals['partner_id'])
+            if not partner.country_id:
+                raise ValidationError(_("Suppliers must have a country set."))
+        
         # Store the old extra cost POs before write
         old_extra_cost_pos = {order.id: order.extra_cost_po_ids for order in self}
         result = super(PurchaseOrder, self).write(vals)
@@ -46,7 +61,7 @@ class PurchaseOrder(models.Model):
         if 'assignee_id' in vals and vals['assignee_id']:
             for order in self:
                 self.subscribe_assignee(order)
-        
+
         return result
 
     def subscribe_assignee(self, record):

@@ -36,4 +36,8 @@
         </field>
     </record>
 
+    <record id="purchase.purchase_form_action" model="ir.actions.act_window">
+        <field name="context">{'from_purchase': True}</field>
+    </record>
+
 </odoo>
