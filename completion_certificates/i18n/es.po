@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-27 11:27+0000\n"
-"PO-Revision-Date: 2025-06-27 11:27+0000\n"
+"POT-Creation-Date: 2025-07-08 16:30+0000\n"
+"PO-Revision-Date: 2025-07-08 16:30+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,12 +21,19 @@ msgid "<i class=\"fa fa-plus\"/> New Certificate"
 msgstr "<i class=\"fa fa-plus\"/> Nuevo Certificado"
 
 #. module: completion_certificates
+#: model_terms:ir.ui.view,arch_db:completion_certificates.portal_my_home_certificates
+msgid ""
+"<span class=\"fw-bold d-none\" data-placeholder_count=\"certificate_count\"/>\n"
+"                            <span>Certificados</span>"
+msgstr "<span class=\"fw-bold d-none\" data-placeholder_count=\"certificate_count\"/>\n"
+"                            <span>Certificados</span>"
+
+#. module: completion_certificates
 #: model_terms:ir.ui.view,arch_db:completion_certificates.view_certificate_form
 msgid ""
 "<span class=\"o_form_label\" invisible=\"state not in ('draft', "
 "'sent')\">Completion Certificate</span>"
-msgstr ""
-"<span class=\"o_form_label\" invisible=\"state not in ('draft', "
+msgstr "<span class=\"o_form_label\" invisible=\"state not in ('draft', "
 "'sent')\">Certificado de Finalización</span>"
 
 #. module: completion_certificates
@@ -69,17 +76,17 @@ msgstr "Actividades"
 #. module: completion_certificates
 #: model:ir.model.fields,field_description:completion_certificates.field_certificate__activity_exception_decoration
 msgid "Activity Exception Decoration"
-msgstr ""
+msgstr "Decoración de Excepción de Actividad"
 
 #. module: completion_certificates
 #: model:ir.model.fields,field_description:completion_certificates.field_certificate__activity_state
 msgid "Activity State"
-msgstr ""
+msgstr "Estado de la Actividad"
 
 #. module: completion_certificates
 #: model:ir.model.fields,field_description:completion_certificates.field_certificate__activity_type_icon
 msgid "Activity Type Icon"
-msgstr ""
+msgstr "Icono de Tipo de Actividad"
 
 #. module: completion_certificates
 #. odoo-javascript
@@ -100,10 +107,6 @@ msgstr "Cantidad de Adjuntos"
 
 #. module: completion_certificates
 #: model_terms:ir.ui.view,arch_db:completion_certificates.portal_certificate_detail
-msgid "Back to List"
-msgstr "Volver a la lista"
-
-#. module: completion_certificates
 #: model_terms:ir.ui.view,arch_db:completion_certificates.portal_certificate_form
 msgid "Back to List"
 msgstr "Volver a la lista"
@@ -184,10 +187,9 @@ msgstr "Confirmado"
 #. module: completion_certificates
 #: model_terms:ir.ui.view,arch_db:completion_certificates.portal_my_certificates
 msgid ""
-"Create your first\n"
-"                        certificate"
-"Cree su primer\n
+"Cree su primer\n"
 "                        certificado"
+msgstr "Cree su primer\n                        certificado"
 
 #. module: completion_certificates
 #: model:ir.model.fields,field_description:completion_certificates.field_certificate__create_uid
@@ -253,44 +255,44 @@ msgstr "Seguidores (Contactos)"
 #. module: completion_certificates
 #: model:ir.model.fields,help:completion_certificates.field_certificate__activity_type_icon
 msgid "Font awesome icon e.g. fa-tasks"
-msgstr ""
+msgstr "Icono de Font Awesome, por ejemplo fa-tasks"
 
 #. module: completion_certificates
 #: model:ir.model.fields,field_description:completion_certificates.field_certificate__has_message
 msgid "Has Message"
-msgstr ""
+msgstr "Tiene Mensaje"
 
 #. module: completion_certificates
 #: model:ir.model.fields,field_description:completion_certificates.field_certificate__id
 #: model:ir.model.fields,field_description:completion_certificates.field_certificate_line__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #. module: completion_certificates
 #: model:ir.model.fields,field_description:completion_certificates.field_certificate__activity_exception_icon
 msgid "Icon"
-msgstr ""
+msgstr "Icono"
 
 #. module: completion_certificates
 #: model:ir.model.fields,help:completion_certificates.field_certificate__activity_exception_icon
 msgid "Icon to indicate an exception activity."
-msgstr ""
+msgstr "Icono para indicar una actividad de excepción."
 
 #. module: completion_certificates
 #: model:ir.model.fields,help:completion_certificates.field_certificate__message_needaction
 msgid "If checked, new messages require your attention."
-msgstr ""
+msgstr "Si está marcado, hay mensajes nuevos que requieren su atención."
 
 #. module: completion_certificates
 #: model:ir.model.fields,help:completion_certificates.field_certificate__message_has_error
 #: model:ir.model.fields,help:completion_certificates.field_certificate__message_has_sms_error
 msgid "If checked, some messages have a delivery error."
-msgstr ""
+msgstr "Si está marcado, algunos mensajes tienen un error de entrega."
 
 #. module: completion_certificates
 #: model:ir.model.fields,field_description:completion_certificates.field_certificate__message_is_follower
 msgid "Is Follower"
-msgstr ""
+msgstr "Es Seguidor"
 
 #. module: completion_certificates
 #: model:ir.model.fields,field_description:completion_certificates.field_certificate__write_uid
@@ -312,17 +314,17 @@ msgstr "Líneas"
 #. module: completion_certificates
 #: model:ir.model.fields,field_description:completion_certificates.field_certificate__message_has_error
 msgid "Message Delivery error"
-msgstr ""
+msgstr "Error de entrega de mensaje"
 
 #. module: completion_certificates
 #: model:ir.model.fields,field_description:completion_certificates.field_certificate__message_ids
 msgid "Messages"
-msgstr ""
+msgstr "Mensajes"
 
 #. module: completion_certificates
 #: model:ir.model.fields,field_description:completion_certificates.field_certificate__my_activity_date_deadline
 msgid "My Activity Deadline"
-msgstr ""
+msgstr "Fecha límite de mi actividad"
 
 #. module: completion_certificates
 #: model_terms:ir.ui.view,arch_db:completion_certificates.portal_my_certificates
@@ -338,22 +340,22 @@ msgstr "Nuevo certificado"
 #. module: completion_certificates
 #: model:ir.model.fields,field_description:completion_certificates.field_certificate__activity_calendar_event_id
 msgid "Next Activity Calendar Event"
-msgstr ""
+msgstr "Próximo evento de calendario de actividad"
 
 #. module: completion_certificates
 #: model:ir.model.fields,field_description:completion_certificates.field_certificate__activity_date_deadline
 msgid "Next Activity Deadline"
-msgstr ""
+msgstr "Próxima fecha límite de actividad"
 
 #. module: completion_certificates
 #: model:ir.model.fields,field_description:completion_certificates.field_certificate__activity_summary
 msgid "Next Activity Summary"
-msgstr ""
+msgstr "Resumen de la próxima actividad"
 
 #. module: completion_certificates
 #: model:ir.model.fields,field_description:completion_certificates.field_certificate__activity_type_id
 msgid "Next Activity Type"
-msgstr ""
+msgstr "Tipo de próxima actividad"
 
 #. module: completion_certificates
 #: model_terms:ir.ui.view,arch_db:completion_certificates.portal_certificate_detail
@@ -373,29 +375,28 @@ msgstr "Número"
 #. module: completion_certificates
 #: model:ir.model.fields,field_description:completion_certificates.field_certificate__message_needaction_counter
 msgid "Number of Actions"
-msgstr ""
+msgstr "Número de acciones"
 
 #. module: completion_certificates
 #: model:ir.model.fields,field_description:completion_certificates.field_certificate__message_has_error_counter
 msgid "Number of errors"
-msgstr ""
+msgstr "Número de errores"
 
 #. module: completion_certificates
 #: model:ir.model.fields,help:completion_certificates.field_certificate__message_needaction_counter
 msgid "Number of messages requiring action"
-msgstr ""
+msgstr "Número de mensajes que requieren acción"
 
 #. module: completion_certificates
 #: model:ir.model.fields,help:completion_certificates.field_certificate__message_has_error_counter
 msgid "Number of messages with delivery error"
-msgstr ""
+msgstr "Número de mensajes con error de entrega"
 
 #. module: completion_certificates
 #. odoo-python
 #: code:addons/completion_certificates/models/purchase_order.py:0
 msgid "Only service products are allowed in the order lines."
-msgstr ""
-"Solo se permiten productos de tipo Servicio en las líneas de la orden."
+msgstr "Solo se permiten productos de tipo Servicio en las líneas de la orden."
 
 #. module: completion_certificates
 #: model:ir.model.fields,field_description:completion_certificates.field_certificate_line__qty
@@ -465,7 +466,7 @@ msgstr "Cantidad recibida"
 #. module: completion_certificates
 #: model:ir.model.fields,field_description:completion_certificates.field_certificate__rating_ids
 msgid "Ratings"
-msgstr ""
+msgstr "Calificaciones"
 
 #. module: completion_certificates
 #: model:ir.model.fields,field_description:completion_certificates.field_certificate_line__qty_received
@@ -501,7 +502,7 @@ msgstr "Usuario responsable"
 #. module: completion_certificates
 #: model:ir.model.fields,field_description:completion_certificates.field_certificate__message_has_sms_error
 msgid "SMS Delivery error"
-msgstr ""
+msgstr "Error de entrega de SMS"
 
 #. module: completion_certificates
 #. odoo-javascript
@@ -519,7 +520,8 @@ msgstr "Seleccione un pedido de compra"
 #. odoo-javascript
 #: code:addons/completion_certificates/static/src/certificate_portal_form/certificate_portal_form.xml:0
 msgid "Select a purchase order first to add certificate lines."
-msgstr "Seleccione primero un pedido de compra para agregar líneas de certificado."
+msgstr ""
+"Seleccione primero un pedido de compra para agregar líneas de certificado."
 
 #. module: completion_certificates
 #: model:ir.model.fields,field_description:completion_certificates.field_certificate__state
@@ -538,7 +540,7 @@ msgid ""
 "Overdue: Due date is already passed\n"
 "Today: Activity date is today\n"
 "Planned: Future activities."
-msgstr ""
+msgstr "Estado basado en actividades\nAtrasado: La fecha límite ya pasó\nHoy: La fecha de la actividad es hoy\nPlanificado: Actividades futuras."
 
 #. module: completion_certificates
 #. odoo-javascript
@@ -562,7 +564,15 @@ msgstr "Impuestos"
 msgid ""
 "The Control Policy of the product must be \"Receive\" to create a "
 "certificate line."
-msgstr ""
+msgstr "La política de control del producto debe ser \"Recibir\" para crear una línea de certificado."
+
+#. module: completion_certificates
+#. odoo-python
+#: code:addons/completion_certificates/models/purchase_order.py:0
+msgid ""
+"The control policy for all products should be 'On received quantities' when "
+"using certificates."
+msgstr "La política de control de todos los productos debe ser 'Sobre cantidades recibidas' al usar certificados."
 
 #. module: completion_certificates
 #. odoo-python
@@ -573,12 +583,12 @@ msgstr "Existen certificados relacionados con esta orden."
 #. module: completion_certificates
 #: model:ir.model.fields,field_description:completion_certificates.field_certificate__total
 msgid "Total"
-msgstr ""
+msgstr "Total"
 
 #. module: completion_certificates
 #: model:ir.model.fields,help:completion_certificates.field_certificate__activity_exception_decoration
 msgid "Type of the exception activity on record."
-msgstr ""
+msgstr "Tipo de la actividad de excepción en el registro."
 
 #. module: completion_certificates
 #. odoo-javascript
@@ -613,19 +623,24 @@ msgid "View"
 msgstr "Ver"
 
 #. module: completion_certificates
+#: model_terms:ir.ui.view,arch_db:completion_certificates.portal_my_home_certificates
+msgid "Ver y crear certificados"
+msgstr "Ver y crear certificados"
+
+#. module: completion_certificates
 #: model:ir.model.fields,field_description:completion_certificates.field_certificate__website_message_ids
 msgid "Website Messages"
-msgstr ""
+msgstr "Mensajes del sitio web"
 
 #. module: completion_certificates
 #: model:ir.model.fields,help:completion_certificates.field_certificate__website_message_ids
 msgid "Website communication history"
-msgstr ""
+msgstr "Historial de comunicación del sitio web"
 
 #. module: completion_certificates
 #: model:ir.model.fields,help:completion_certificates.field_certificate__partner_id
 msgid "You can find a vendor by its Name, TIN, Email or Internal Reference."
-msgstr ""
+msgstr "Puede encontrar un proveedor por su nombre, NIF, correo electrónico o referencia interna."
 
 #. module: completion_certificates
 #: model:ir.model.constraint,message:completion_certificates.constraint_certificate_line_unique_purchase_line
