@@ -51,16 +51,3 @@ class CertificateLine(models.Model):
         for line in self:
             if line.purchase_line_id.product_id.purchase_method != 'receive':
                 raise ValidationError(_('The Control Policy of the product must be "Receive" to create a certificate line.'))
-
-    @api.depends('purchase_line_id', 'qty_received')
-    def _compute_price_unit(self):
-        for line in self:
-            if line.certificate_id.state == 'draft':
-                if line.qty_processed + line.qty_received > line.qty:
-                    processed_total_amount = line.qty_processed * line.purchase_line_id.price_unit
-                    price_unit = (line.purchase_line_id.price_total - processed_total_amount) / line.qty_received
-                    line.price_unit = price_unit
-                else:
-                    line.price_unit = line.purchase_line_id.price_unit
-            else:
-                line.price_unit = line.price_unit
