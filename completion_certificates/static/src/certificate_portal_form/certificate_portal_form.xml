@@ -126,7 +126,8 @@
                                                                 t-att-name="'qty_received'"
                                                                 t-on-input="onLineChange"
                                                                 required="required"
-                                                                t-att-disabled="!line.purchase_line_id"/>
+                                                                t-att-disabled="!line.purchase_line_id"
+                                                                step="any"/>
                                                         </td>
                                                         <td>
                                                             <input type="date" class="form-control"
