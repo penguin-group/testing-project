@@ -112,7 +112,6 @@ class CertificatePortal(CustomerPortal):
 
             # Create the record
             certificate = request.env['certificate'].sudo().create({
-                'name': post.get('name'),
                 'partner_id': post.get('partner_id'),
                 'date': post.get('date'),
                 'purchase_order_id': post.get('purchase_order_id'),

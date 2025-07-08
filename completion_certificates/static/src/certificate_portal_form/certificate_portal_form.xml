@@ -17,11 +17,6 @@
                             </div>
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label for="name">Certificate Name *</label>
-                                    <input type="text" class="form-control" id="name" name="name" required="required"/>
-                                </div>
-
-                                <div class="form-group">
                                     <label for="certificate_attachment">Attachment</label>
                                     <input type="file" class="form-control" id="certificate_attachment" name="certificate_attachment" accept=".pdf,image/*" required="required"/>
                                 </div>
