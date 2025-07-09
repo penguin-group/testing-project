@@ -16,7 +16,7 @@ class CertificateLine(models.Model):
     qty = fields.Float(string='Ordered Quantity', related='purchase_line_id.product_qty', readonly=True)
     qty_processed = fields.Float(string='Processed Quantity', compute='_compute_qty_processed', store=True)
     qty_received = fields.Float(string='Received Quantity')
-    price_unit = fields.Float(string='Unit Price', compute='_compute_price_unit', store=True)
+    price_unit = fields.Float(string='Unit Price', compute='_compute_price_unit')
     tax_ids = fields.Many2many('account.tax', string='Taxes', related='purchase_line_id.taxes_id', readonly=True)
     price_subtotal = fields.Float(string='Subtotal')
     date_received = fields.Date(string='Date Received')
@@ -51,3 +51,9 @@ class CertificateLine(models.Model):
         for line in self:
             if line.purchase_line_id.product_id.purchase_method != 'receive':
                 raise ValidationError(_('The Control Policy of the product must be "Receive" to create a certificate line.'))
+    
+    @api.depends('purchase_line_id')
+    def _compute_price_unit(self):
+        for line in self:
+            line.price_unit = line.purchase_line_id.price_unit
+
