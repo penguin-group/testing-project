@@ -68,10 +68,10 @@ class AccountReport(models.Model):
                     expr_formula = line.expression_ids[0].formula
                     expr_formula = f"{expr_formula[:-1]}, ('analytic_distribution', 'in', [{analytic_account.id}])]"
                     expr_vals = {
-                        'label': 'balance',
-                        'engine': 'domain',
+                        'label': line.expression_ids[0].label,
+                        'engine': line.expression_ids[0].engine,
                         'formula': expr_formula,
-                        'subformula': 'sum',
+                        'subformula': line.expression_ids[0].subformula,
                     }
                     vals.append({
                         'report_id': self.id,
