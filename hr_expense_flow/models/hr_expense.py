@@ -1,4 +1,5 @@
 from odoo import models, fields, api, Command
+from odoo.exceptions import ValidationError
 
 
 class HrExpense(models.Model):
@@ -39,6 +40,13 @@ class HrExpense(models.Model):
         compute='_compute_petty_cash_accounts',
         store=True,
     )
+
+    @api.constrains('sheet_id', 'currency_id')
+    def _check_sheet_currency(self):
+        for expense in self:
+            if expense.sheet_id and expense.currency_id and expense.sheet_id.currency_id:
+                if expense.currency_id != expense.sheet_id.currency_id:
+                    raise ValidationError("The currency of the expense must match the currency of the expense report (sheet).")
 
     @api.onchange('payment_mode', 'employee_id')
     def _compute_petty_cash_accounts(self):

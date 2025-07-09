@@ -57,6 +57,26 @@
                 <attribute name="invisible">1</attribute>
             </xpath>
 
+            <!-- 
+            Replace the total section with amounts in currency
+            -->
+            <xpath expr="//group[@name='expense_total']" position="replace">
+                <group class="oe_subtotal_footer" colspan="2" name="expense_total">
+                    <field name="untaxed_amount_currency"/>
+                    <div class="oe_inline o_td_label">
+                        <label for="total_tax_amount_currency"/>
+                    </div>
+                    <field name="total_tax_amount_currency" nolabel="1"/>
+                    <div class="oe_inline o_td_label">
+                        <label for="total_amount_currency"/>
+                    </div>
+                    <field name="total_amount_currency" nolabel="1" class="oe_subtotal_footer_separator"/>
+                    <field name="amount_residual"
+                        class="oe_subtotal_footer_separator"
+                        invisible="state not in ('post', 'done')"/>
+                </group>
+            </xpath>
+
         </field>
     </record>
 
