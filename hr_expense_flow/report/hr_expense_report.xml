@@ -1,0 +1,31 @@
+<odoo>
+    <template id="report_expense_sheet_inherit" inherit_id="hr_expense.report_expense_sheet">
+
+        <!-- Replace total section to display the amounts in currency -->
+        <xpath expr="//div/div[5]/div/table/tbody" position="replace">
+            <tbody>
+                <tr>
+                    <td>Untaxed Amount</td>
+                    <td class="text-end"><span t-field="o.untaxed_amount_currency" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}">$500.00</span></td>
+                </tr>
+                <tr>
+                    <td>Taxes</td>
+                    <td class="text-end"><span t-field="o.total_tax_amount_currency" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}">$100.00</span></td>
+                </tr>
+                <tr class="fw-bold">
+                    <td>Total</td>
+                    <td class="text-end">
+                        <span t-field="o.total_amount_currency" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}">$600.00</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="text-end">
+                        <span t-if="o.currency_id != o.company_currency_id" t-field="o.total_amount_parenthesized">$600.00</span>
+                    </td>
+                </tr>
+            </tbody>
+        </xpath>
+
+    </template>
+</odoo>

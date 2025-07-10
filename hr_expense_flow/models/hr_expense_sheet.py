@@ -7,20 +7,25 @@ class HrExpenseSheet(models.Model):
 
     # === Amount fields (in the expense's currency) === #
     total_amount_currency = fields.Monetary(
-        string="Total in Currency",
+        string="Total",
         currency_field='currency_id',
         compute='_compute_amount_currency', store=True, readonly=True,
         tracking=True,
     )
     untaxed_amount_currency = fields.Monetary(
-        string="Untaxed Amount in Currency",
+        string="Untaxed Amount",
         currency_field='currency_id',
         compute='_compute_amount_currency', store=True, readonly=True,
     )
     total_tax_amount_currency = fields.Monetary(
-        string="Taxes in Currency",
+        string="Taxes",
         currency_field='currency_id',
         compute='_compute_amount_currency', store=True, readonly=True,
+    )
+
+    total_amount_parenthesized = fields.Char(
+        string='Total Amount (Parenthesized)',
+        compute='_compute_total_amount_parenthesized'
     )
 
     @api.depends('expense_line_ids.total_amount_currency', 'expense_line_ids.tax_amount_currency')
@@ -29,6 +34,13 @@ class HrExpenseSheet(models.Model):
             sheet.total_amount_currency = sum(sheet.expense_line_ids.mapped('total_amount_currency'))
             sheet.total_tax_amount_currency = sum(sheet.expense_line_ids.mapped('tax_amount_currency'))
             sheet.untaxed_amount_currency = sheet.total_amount_currency - sheet.total_tax_amount_currency
+    
+    def _compute_total_amount_parenthesized(self):
+        for rec in self:
+            if rec.total_amount:
+                rec.total_amount_parenthesized = f"({rec.company_currency_id.symbol} {rec.total_amount})"
+            else:
+                rec.total_amount_parenthesized = ""
     
     @api.depends('expense_line_ids.currency_id', 'company_currency_id')
     def _compute_currency_id(self):
