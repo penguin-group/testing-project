@@ -13,10 +13,10 @@
     'website': "https://penguin.digital",
 
     'category': 'Accounting',
-    'version': '18.0.1.1.1',
+    'version': '18.0.1.2.0',
     'license': "OPL-1",
 
-    'depends': ['base', 'purchase_requisition', 'purchase_tier_validation', 'purchase_request_tier_validation', 'completion_certificates', 'project', 'account', 'purchase_request'],
+    'depends': ['base', 'purchase_requisition', 'purchase_tier_validation', 'purchase_request_tier_validation', 'stock', 'completion_certificates', 'project', 'account', 'purchase_request'],
 
     'data': [
         'views/purchase_views.xml',
