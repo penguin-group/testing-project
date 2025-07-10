@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="po_email_notification_view_tree" model="ir.ui.view">
+        <field name="name">po.mail.notification.list</field>
+        <field name="model">po.mail.notification</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle" />
+                <field name="model_id" />
+                <field name="name" />
+                <field name="employee_ids" widget="many2many_tags"/>
+                <field
+                    name="company_id"
+                    groups="base.group_multi_company"
+                    optional="hide"
+                />
+                <field name="active" />
+            </list>
+        </field>
+    </record>
+    <record id="po_email_notification_view_form" model="ir.ui.view">
+        <field name="name">po.mail.notification.form</field>
+        <field name="model">po.mail.notification</field>
+        <field name="arch" type="xml">
+            <form string="PO Email Notification">
+                <sheet>
+                    <div class="o_form_label" name="button_box" />
+                    <widget
+                        name="web_ribbon"
+                        title="Archived"
+                        bg_color="bg-danger"
+                        invisible="active"
+                    />
+                    <div class="oe_title">
+                        <span class="oe_edit_only">Name</span>
+                        <h1>
+                            <field
+                                name="name"
+                                required="1"
+                                placeholder="e.g. Tier Validation for..."
+                            />
+                        </h1>
+                    </div>
+                    <group>
+                        <group name="left">
+                            <field name="model_id" options="{'no_create': True}" />
+                            <field name="model" invisible="1" />
+                            <field name="employee_ids" widget="many2many_tags" />
+                        </group>
+                        <group name="right">
+                            <field
+                                name="company_id"
+                                groups="base.group_multi_company"
+                                options="{'no_create': True}"
+                            />
+                            <field name="sequence" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="apply" string="Apply On">
+                            <group name="bottom">
+                                <field name="definition_type" />
+                                <field
+                                    name="definition_domain"
+                                    widget="domain"
+                                    options="{'model': 'model'}"
+                                    invisible="definition_type != 'domain'"
+                                />
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+<!--    <record id="tier_definition_view_search" model="ir.ui.view">-->
+<!--        <field name="name">tier.definition.search</field>-->
+<!--        <field name="model">tier.definition</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <search>-->
+<!--                <field name="name" />-->
+<!--                <field name="model_id" />-->
+<!--                <field name="reviewer_id" />-->
+<!--                <field name="reviewer_group_id" />-->
+<!--                <field name="active" />-->
+<!--                <separator />-->
+<!--                <filter-->
+<!--                    string="All"-->
+<!--                    name="all"-->
+<!--                    domain="[('active', 'in', (False, True))]"-->
+<!--                />-->
+<!--                <group expand="0" string="Group By">-->
+<!--                    <filter-->
+<!--                        string="Model"-->
+<!--                        name="model_id"-->
+<!--                        domain="[]"-->
+<!--                        context="{'group_by':'model_id'}"-->
+<!--                    />-->
+<!--                </group>-->
+<!--            </search>-->
+<!--        </field>-->
+<!--    </record>-->
+    <record id="po_email_notification_action" model="ir.actions.act_window">
+        <field name="name">PO Email Notification</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">po.mail.notification</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_all': 1}</field>
+    </record>
+    <menuitem
+        id="menu_po_email_notification"
+        name="PO Email Notification"
+        parent="base.menu_custom"
+    />
+    <menuitem
+        id="menu_tier_definition"
+        parent="menu_po_email_notification"
+        action="po_email_notification_action"
+        sequence="10"
+    />
+</odoo>
