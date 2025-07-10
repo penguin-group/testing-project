@@ -1,0 +1,194 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* hr_expense_flow
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-10 15:37+0000\n"
+"PO-Revision-Date: 2025-07-10 15:37+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: hr_expense_flow
+#: model_terms:ir.ui.view,arch_db:hr_expense_flow.report_expense_sheet_inherit
+msgid "$100.00"
+msgstr "$100.00"
+
+#. module: hr_expense_flow
+#: model_terms:ir.ui.view,arch_db:hr_expense_flow.report_expense_sheet_inherit
+msgid "$500.00"
+msgstr "$500.00"
+
+#. module: hr_expense_flow
+#: model_terms:ir.ui.view,arch_db:hr_expense_flow.report_expense_sheet_inherit
+msgid "$600.00"
+msgstr "$600.00"
+
+#. module: hr_expense_flow
+#: model_terms:ir.ui.view,arch_db:hr_expense_flow.res_config_settings_view_form_inherit
+msgid "Account (payable) used for employee expense reimbursements."
+msgstr "Cuenta (por pagar) utilizada para reembolsos de gastos de empleados."
+
+#. module: hr_expense_flow
+#: model_terms:ir.ui.view,arch_db:hr_expense_flow.res_config_settings_view_form_inherit
+msgid "Accounting journal used for vendor bills."
+msgstr "Diario contable utilizado para facturas de proveedores."
+
+#. module: hr_expense_flow
+#: model_terms:ir.ui.view,arch_db:hr_expense_flow.res_config_settings_view_form_inherit
+msgid "Accounting journal used when creating the clearing entry."
+msgstr "Diario contable utilizado al crear el asiento de compensación."
+
+#. module: hr_expense_flow
+#: model:ir.model.fields,field_description:hr_expense_flow.field_res_company__clearing_journal_id
+#: model:ir.model.fields,field_description:hr_expense_flow.field_res_config_settings__clearing_journal_id
+#: model_terms:ir.ui.view,arch_db:hr_expense_flow.res_config_settings_view_form_inherit
+msgid "Clearing Journal"
+msgstr "Diario de compensación"
+
+#. module: hr_expense_flow
+#: model:ir.model,name:hr_expense_flow.model_res_company
+msgid "Companies"
+msgstr "Compañías"
+
+#. module: hr_expense_flow
+#: model:ir.model,name:hr_expense_flow.model_res_config_settings
+msgid "Config Settings"
+msgstr "Ajustes de configuración"
+
+#. module: hr_expense_flow
+#: model:ir.model.fields.selection,name:hr_expense_flow.selection__hr_expense__payment_mode__credit_card
+msgid "Credit Card"
+msgstr "Tarjeta de crédito"
+
+#. module: hr_expense_flow
+#: model:ir.model.fields,field_description:hr_expense_flow.field_hr_expense__credit_card_account_id
+msgid "Credit Card Account"
+msgstr "Cuenta de tarjeta de crédito"
+
+#. module: hr_expense_flow
+#: model:ir.model,name:hr_expense_flow.model_hr_department
+msgid "Department"
+msgstr "Departamento"
+
+#. module: hr_expense_flow
+#: model:ir.model,name:hr_expense_flow.model_hr_expense
+msgid "Expense"
+msgstr "Gasto"
+
+#. module: hr_expense_flow
+#: model:ir.model,name:hr_expense_flow.model_hr_expense_sheet
+msgid "Expense Report"
+msgstr "Informe de gastos"
+
+#. module: hr_expense_flow
+#. odoo-python
+#: code:addons/hr_expense_flow/models/hr_expense_sheet.py:0
+msgid "Journal entries"
+msgstr "Asientos contables"
+
+#. module: hr_expense_flow
+#: model:ir.model.fields,field_description:hr_expense_flow.field_hr_expense__outstanding_balance
+msgid "Outstanding Balance"
+msgstr "Saldo pendiente"
+
+#. module: hr_expense_flow
+#: model_terms:ir.ui.view,arch_db:hr_expense_flow.res_config_settings_view_form_inherit
+msgid "Outstanding account por expenses."
+msgstr "Cuenta pendiente para gastos."
+
+#. module: hr_expense_flow
+#: model:ir.model.fields,field_description:hr_expense_flow.field_hr_expense__payment_mode
+msgid "Paid By"
+msgstr "Pagado por"
+
+#. module: hr_expense_flow
+#: model:ir.model.fields.selection,name:hr_expense_flow.selection__hr_expense__payment_mode__petty_cash
+msgid "Petty Cash"
+msgstr "Caja chica"
+
+#. module: hr_expense_flow
+#: model:ir.model.fields,field_description:hr_expense_flow.field_hr_expense__petty_cash_account_id
+msgid "Petty Cash Account"
+msgstr "Cuenta de caja chica"
+
+#. module: hr_expense_flow
+#: model:ir.model.fields,field_description:hr_expense_flow.field_hr_department__petty_cash_account_ids
+#: model:ir.model.fields,field_description:hr_expense_flow.field_hr_expense__petty_cash_account_ids
+msgid "Petty Cash Accounts"
+msgstr "Cuentas de caja chica"
+
+#. module: hr_expense_flow
+#: model:ir.model.fields,field_description:hr_expense_flow.field_res_company__expense_reimbursement_account_id
+#: model:ir.model.fields,field_description:hr_expense_flow.field_res_config_settings__expense_reimbursement_account_id
+msgid "Reimbursement Account"
+msgstr "Cuenta de reembolso"
+
+#. module: hr_expense_flow
+#: model_terms:ir.ui.view,arch_db:hr_expense_flow.res_config_settings_view_form_inherit
+msgid "Reimbursements Account"
+msgstr "Cuenta de reembolsos"
+
+#. module: hr_expense_flow
+#: model:ir.model.fields,help:hr_expense_flow.field_hr_department__petty_cash_account_ids
+#: model:ir.model.fields,help:hr_expense_flow.field_hr_expense__petty_cash_account_ids
+msgid "Select accounts for petty cash."
+msgstr "Seleccione cuentas para caja chica."
+
+#. module: hr_expense_flow
+#: model:ir.model.fields,field_description:hr_expense_flow.field_hr_expense_sheet__total_tax_amount_currency
+#: model_terms:ir.ui.view,arch_db:hr_expense_flow.report_expense_sheet_inherit
+msgid "Taxes"
+msgstr "Impuestos"
+
+#. module: hr_expense_flow
+#: model:ir.model.fields,help:hr_expense_flow.field_res_company__expense_reimbursement_account_id
+#: model:ir.model.fields,help:hr_expense_flow.field_res_config_settings__expense_reimbursement_account_id
+msgid "The account used to record the reimbursement to employee of expenses."
+msgstr "La cuenta utilizada para registrar el reembolso de gastos al empleado."
+
+#. module: hr_expense_flow
+#: model:ir.model.fields,help:hr_expense_flow.field_res_company__clearing_journal_id
+#: model:ir.model.fields,help:hr_expense_flow.field_res_config_settings__clearing_journal_id
+msgid "The company's default journal used when creating the clearing entry."
+msgstr "El diario predeterminado de la empresa utilizado al crear el asiento de compensación."
+
+#. module: hr_expense_flow
+#: model:ir.model.fields,field_description:hr_expense_flow.field_hr_expense_sheet__total_amount_currency
+#: model_terms:ir.ui.view,arch_db:hr_expense_flow.report_expense_sheet_inherit
+msgid "Total"
+msgstr "Total"
+
+#. module: hr_expense_flow
+#: model:ir.model.fields,field_description:hr_expense_flow.field_hr_expense_sheet__total_amount_parenthesized
+msgid "Total Amount (Parenthesized)"
+msgstr "Importe total (entre paréntesis)"
+
+#. module: hr_expense_flow
+#: model:ir.model.fields,field_description:hr_expense_flow.field_hr_expense_sheet__untaxed_amount_currency
+#: model_terms:ir.ui.view,arch_db:hr_expense_flow.report_expense_sheet_inherit
+msgid "Untaxed Amount"
+msgstr "Importe sin impuestos"
+
+#. module: hr_expense_flow
+#: model_terms:ir.ui.view,arch_db:hr_expense_flow.res_config_settings_view_form_inherit
+msgid "Vendor Bills Journal"
+msgstr "Diario de facturas de proveedores"
+
+#. module: hr_expense_flow
+#. odoo-python
+#: code:addons/hr_expense_flow/models/hr_expense.py:0
+msgid "You cannot report expenses in different currencies!"
+msgstr "¡No puede reportar gastos en diferentes monedas!"
+
+#. module: hr_expense_flow
+#. odoo-python
+#: code:addons/hr_expense_flow/models/hr_expense.py:0
+msgid "You cannot report expenses in different payment modes!"
+msgstr "¡No puede reportar gastos en diferentes métodos de pago!"
