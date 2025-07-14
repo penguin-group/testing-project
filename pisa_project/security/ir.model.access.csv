@@ -1,0 +1,16 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_project_project_team_manager,project.team.manager,project.model_project_project,group_project_team_manager,1,1,1,1
+access_project_project_stage_team_manager,project.stage.team.manager,project.model_project_project_stage,group_project_team_manager,1,1,1,1
+access_project_task_type_manager_team,project.task.type manager.team,project.model_project_task_type,group_project_team_manager,1,1,1,1
+access_report_project_task_user_team,report.project.task.user.team,project.model_report_project_task_user,group_project_team_manager,1,0,0,0
+access_project_tags_manager_team,project.project_tags_manager.team,project.model_project_tags,group_project_team_manager,1,1,1,1
+access_mail_activity_type_project_manager_team,mail.activity.type.project.manager.team,mail.model_mail_activity_type,group_project_team_manager,1,1,1,1
+access_account_analytic_account_manager_team,account.analytic.account.team,analytic.model_account_analytic_account,group_project_team_manager,1,1,1,1
+access_account_analytic_line_project_team,account.analytic.line project.team,analytic.model_account_analytic_line,group_project_team_manager,1,1,1,1
+access_project_task_type_delete_wizard_team,project.task.type.delete.wizard.team,project.model_project_task_type_delete_wizard,group_project_team_manager,1,1,1,1
+access_project_project_stage_delete_wizard_team,project.project.stage.delete.wizard.team,project.model_project_project_stage_delete_wizard,group_project_team_manager,1,1,1,1
+access_project_update_project_manager_team,project.update.project.manager.team,project.model_project_update,group_project_team_manager,1,1,1,1
+access_project_milestone_project_manager_team,project.milestone.project.manager.team,project.model_project_milestone,group_project_team_manager,1,1,1,1
+access_project_collaborator_manager_team,project.collaborator.manager.team,project.model_project_collaborator,group_project_team_manager,1,1,1,1
+access_project_share_manager_team,project.share.wizard.manager.team,project.model_project_share_wizard,group_project_team_manager,1,1,1,0
+access_mail_activity_plan_project_manager_team,mail.activity.plan.project.manager.team,mail.model_mail_activity_plan,group_project_team_manager,1,1,1,1

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="group_project_team_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="category_id" ref="base.module_category_services_project"/>
+        <field name="implied_ids" eval="[(4, ref('project.group_project_user')), (4, ref('mail.group_mail_canned_response_admin'))]"/>
+    </record>
+
+    <record id="project_team_manager_view_rule" model="ir.rule">
+        <field name="name">Project: Team manager view</field>
+        <field name="model_id" ref="project.model_project_project"/>
+        <field name="domain_force">
+            [('create_uid', '=', user.id)]
+        </field>
+        <field name="groups" eval="[(4, ref('pisa_project.group_project_team_manager'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+</odoo>
