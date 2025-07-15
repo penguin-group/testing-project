@@ -13,7 +13,7 @@
                         </group>
                     </sheet>
                     <footer>
-                        <button name="parse_csv" string="Import" type="object" class="btn-primary"/>
+                        <button name="parse_csv" string="Download new CSV" type="object" class="btn-primary"/>
                         <button string="Cancel" type="object" class="btn-secondary" special="cancel"/>
                     </footer>
                 </form>
