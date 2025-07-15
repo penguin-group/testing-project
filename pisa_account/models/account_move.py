@@ -84,9 +84,6 @@ class AccountMove(models.Model):
 
     def action_post(self):
         for record in self:
-            # Check invoice confirmation permission
-            if record.is_invoice and not record.env.user.has_group('account.group_account_invoice'):
-                raise ValidationError(_("You don't have permission to approve an invoice."))
             if record.move_type == 'in_invoice':
                 # Check if the "ref" field is blank
                 if not record.ref:
@@ -94,10 +91,6 @@ class AccountMove(models.Model):
                 # Check if the total invoice amount is less than or equal to zero
                 if record.amount_total <= 0:
                     raise ValidationError(_('The total invoice amount cannot be zero or negative.'))
-                # Is not in group Sr Finance
-                if record.env.user.has_group('pisa_account.group_account_sr_finance'):
-                    raise ValidationError(_("You don't have permission to approve this invoice."))
-
         return super(AccountMove, self).action_post()
 
     def edit_secondary_currency_rate(self):

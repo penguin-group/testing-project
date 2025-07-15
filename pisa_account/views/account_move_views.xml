@@ -8,7 +8,7 @@
             <field name="arch" type="xml">
                 
                 <xpath expr="//button[@name='action_post']" position="attributes">
-                    <attribute name="groups">account.group_account_user,pisa_account.group_account_head_finance</attribute>
+                    <attribute name="groups">account.group_account_user,account.group_account_invoice,pisa_account.group_account_head_finance,pisa_account.group_account_sr_finance</attribute>
                 </xpath>
 
                 <xpath expr="//button[2]" position="attributes">
