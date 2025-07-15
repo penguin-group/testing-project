@@ -19,8 +19,10 @@
     'depends': ['base', 'purchase_requisition', 'purchase_tier_validation', 'purchase_request_tier_validation', 'completion_certificates', 'project', 'account', 'purchase_request'],
 
     'data': [
+        'security/ir.model.access.csv',
         'views/purchase_views.xml',
         'views/purchase_request_views.xml',
         'views/menu_override.xml',
+        'wizard/purchase_currency_wizard_view.xml',
     ],
 }
