@@ -9,7 +9,7 @@
     """,
 
     'author': "Penguin Infrastructure S.A.",
-    'mantainers': ['José González'],
+    'mantainers': ['José González', 'David Páez'],
     'website': "https://penguin.digital",
 
     'category': 'Accounting',
@@ -20,6 +20,7 @@
 
     'data': [
         'security/ir.model.access.csv',
+        'security/purchase_security.xml',
         'views/purchase_views.xml',
         'views/purchase_request_views.xml',
         'views/menu_override.xml',
