@@ -3,29 +3,22 @@ import pandas as pd
 from io import BytesIO
 import base64
 from datetime import datetime, timedelta
-import pytz
 
 from odoo.exceptions import UserError
 
 
-def to_naive_utc(local_dt):
-    """Takes a naive Timestamp in local time, makes it a naive Timestamp in UTC and then
-     converts it to Python's native datetime object."""
-    local_tz = pytz.timezone("America/Asuncion")
-    aware_local = local_tz.localize(local_dt)
-    aware_utc = aware_local.astimezone(pytz.UTC)
-    return aware_utc.replace(tzinfo=None).to_pydatetime()
-
-
-class ImportAttendanceRecords(models.TransientModel):
-    _name = 'import.attendance.records.wizard'
-    _description = 'Import Attendance Records'
+class ParseAttendanceFile(models.TransientModel):
+    _name = 'parse.attendance.file.wizard'
+    _description = 'Parse Attendance File'
 
     csv_file = fields.Binary(string='CSV File')
 
-    def import_attendance_records(self):
+    processed_csv_file = fields.Binary(string='Processed CSV File', readonly=True)
+    processed_csv_file_name = fields.Char(string='Processed File Name')
+
+    def parse_csv(self):
         """
-        Reads a CSV file, cleans and restructure its data, and upload to Odoo's hr.attendance table.
+        Reads a CSV file, cleans and restructure its data, and generates a new CSV file from it.
         """
         self.ensure_one()
 
@@ -80,45 +73,43 @@ class ImportAttendanceRecords(models.TransientModel):
 
             # Fetch all matching employees once
             employees = self.env['hr.employee'].search([('identification_id', 'in', employee_identification)])
-            emp_map = {e.identification_id: e.id for e in employees}
+            employee_id_mapping = {e.identification_id: e.id for e in employees}
+            employee_name_mapping = {e.identification_id: e.name for e in employees}
 
             # Filter rows without matching employees
-            df['employee_id'] = df['ID'].apply(lambda x: emp_map.get(str(int(x)).strip()))
+            df['employee_id'] = df['ID'].apply(lambda x: employee_id_mapping.get(str(int(x)).strip()))
             df = df[df['employee_id'].notna()]
 
-            # Prepare attendance keys for bulk check
-            keys = []
-            for _, row in df.iterrows():
-                key = (int(row['employee_id']), row['checkin_datetime'].replace(tzinfo=None))
-                keys.append(key)
+            df['Nombre'] = df['ID'].apply(lambda x: employee_name_mapping.get(str(int(x)).strip()))
 
-            # Search existing attendances
-            domain = [
-                ('employee_id', 'in', list(set([k[0] for k in keys]))),
-                ('check_in', 'in', list(set([k[1] for k in keys])))
-            ]
-            existing_attendance = self.env['hr.attendance'].search(domain)
-            existing_keys = set(
-                (att.employee_id.id, att.check_in.replace(tzinfo=None))
-                for att in existing_attendance
-            )
-
-            # create attendances
+            # Group attendances that will be written to the new CSV
             new_attendances = []
             for _, row in df.iterrows():
-                key = (int(row['employee_id']), row['checkin_datetime'].replace(tzinfo=None))
-                if key in existing_keys:
-                    continue
-
                 new_attendances.append({
-                    'employee_id': int(row['employee_id']),
-                    'check_in': to_naive_utc(row['checkin_datetime']),
-                    'check_out': to_naive_utc(row['checkout_datetime']) if row['checkout_datetime'] else False,
+                    'employee_name': row['Nombre'],
+                    'check_in': row['checkin_datetime'].to_pydatetime(),
+                    'check_out': row['checkout_datetime'].to_pydatetime() if row['checkout_datetime'] else False,
                 })
 
-            if new_attendances:
-                self.env['hr.attendance'].create(new_attendances)
-            return {'type': 'ir.actions.act_window_close'}
+            new_attendances_df = pd.DataFrame.from_dict(new_attendances)
+
+            output = BytesIO()
+            new_attendances_df.to_csv(output, index=False, sep=",", encoding='utf-8')
+            file_bytes = output.getvalue()
+            output.close()
+
+            # Encode as base64
+            file_data_b64 = base64.b64encode(file_bytes)
+
+            # Save into transient model fields
+            self.processed_csv_file = file_data_b64
+            self.processed_csv_file_name = 'imported_attendances.csv'
+
+            return {
+                'type': 'ir.actions.act_url',
+                'url': f'/web/content/parse.attendance.file.wizard/{self.id}/processed_csv_file/{self.processed_csv_file_name}?download=true',
+                'close': True
+            }
 
         except Exception as e:
             raise UserError(e)

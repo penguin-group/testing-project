@@ -2,29 +2,28 @@
 <odoo>
 
     <data>
-
-        <record id="import_attendance_records_form" model="ir.ui.view">
-            <field name="name">import.attendance.records.form</field>
-            <field name="model">import.attendance.records.wizard</field>
+        <record id="parse_attendance_file_form" model="ir.ui.view">
+            <field name="name">parse.attendance.file.form</field>
+            <field name="model">parse.attendance.file.wizard</field>
             <field name="arch" type="xml">
-                <form string="Import Attendance Record">
+                <form string="Parse Attendance File">
                     <sheet>
                         <group>
                             <field name="csv_file" options="{'accepted_file_extensions': 'text/csv'}"/>
                         </group>
                     </sheet>
                     <footer>
-                        <button name="import_attendance_records" string="Import" type="object" class="btn-primary"/>
+                        <button name="parse_csv" string="Import" type="object" class="btn-primary"/>
                         <button string="Cancel" type="object" class="btn-secondary" special="cancel"/>
                     </footer>
                 </form>
             </field>
         </record>
 
-        <record id="import_attendance_records_action" model="ir.actions.act_window">
-            <field name="name">Import attendance records</field>
+        <record id="parse_attendance_file_action" model="ir.actions.act_window">
+            <field name="name">Parse Attendance File</field>
             <field name="type">ir.actions.act_window</field>
-            <field name="res_model">import.attendance.records.wizard</field>
+            <field name="res_model">parse.attendance.file.wizard</field>
             <field name="view_mode">form</field>
             <field name="target">new</field>
         </record>

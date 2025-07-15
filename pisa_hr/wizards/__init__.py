@@ -1,1 +1,1 @@
-from . import import_attendance_records
+from . import parse_attendance_file

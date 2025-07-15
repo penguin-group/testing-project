@@ -14,13 +14,19 @@
     'version': '18.0.1.0.0',
     'license': "OPL-1",
 
-    'depends': ['base', 'account', 'web'],
+    'depends': ['base', 'account', 'web', 'base_import'],
 
     "data": [
         "security/ir.model.access.csv",
-        "views/hr_attendance_views.xml",
-        "wizards/import_attendance_records.xml"
+        "wizards/parse_attendance_file.xml"
     ],
+
+    'assets': {
+        'web.assets_backend': [
+            'pisa_hr/static/src/js/import_action_extension.js',
+            'pisa_hr/static/src/xml/import_action_extension.xml',
+        ],
+    },
 
     'i18n': ['i18n/es.po'],
 }
