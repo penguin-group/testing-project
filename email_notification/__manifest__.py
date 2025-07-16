@@ -6,10 +6,10 @@
     "author": "David Páez",
     "application": False,
     "installable": True,
-    "depends": ["mail", "hr"],
+    "depends": ["mail", "hr", "purchase"],
     "data": [
         "security/ir.model.access.csv",
-        # "views/res_config_settings_views.xml",
+        "data/email_template.xml",
         "views/po_mail_notification_view.xml",
         # "views/tier_review_view.xml",
         # "views/tier_validation_exception_view.xml",
