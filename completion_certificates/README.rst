@@ -129,7 +129,6 @@ Technical Details
 **Key Methods**
 
 * ``action_confirm()``: Confirms certificate and generates vendor bill
-* ``_adjust_vendor_bill_unit_price()``: Adjusts unit prices in generated vendor bill
 * ``_onchange_purchase_order_id()``: Populates certificate lines from purchase order
 
 **Constraints**
@@ -155,7 +154,7 @@ Authors
 Maintainers
 ~~~~~~~~~~~
 
-* José González <jose@penguin.digital>
+* José González <jose.gonzalez@penguin.digital>
 
 This module is maintained by Penguin Infrastructure.
 

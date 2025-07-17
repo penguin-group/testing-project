@@ -1,4 +1,5 @@
-from odoo import models, fields, api, Command
+from odoo import models, fields, api, Command, _
+from odoo.exceptions import ValidationError, UserError
 
 
 class HrExpense(models.Model):
@@ -39,6 +40,33 @@ class HrExpense(models.Model):
         compute='_compute_petty_cash_accounts',
         store=True,
     )
+
+    @api.constrains('sheet_id', 'currency_id')
+    def _check_sheet(self):
+        for expense in self:
+            if expense.sheet_id:
+                # Currency validation
+                if expense.currency_id and expense.sheet_id.currency_id:
+                    if expense.currency_id != expense.sheet_id.currency_id:
+                        raise ValidationError(_(
+                            f"{expense.name}: The currency of the expense ({expense.currency_id.name}) must match the currency of the expense report (sheet) ({expense.sheet_id.currency_id.name})."
+                        ))
+                # Payment mode validation
+                if expense.sheet_id.expense_line_ids:
+                    payment_modes = list(set(expense.sheet_id.expense_line_ids.mapped('payment_mode') + [expense.payment_mode]))
+                    if len(payment_modes) > 1:
+                        raise ValidationError(_(
+                            f"{expense.name}: The 'Paid By' value must be the same for all expenses in the expense report. Found: {', '.join(payment_modes)}"
+                        ))
+
+    def _get_default_expense_sheet_values(self):
+        # Extending to add currency and payment mode validations
+        if len(self.mapped('currency_id')) > 1:
+            raise UserError(_("You cannot report expenses in different currencies!"))
+        if len(list(set(self.mapped('payment_mode')))) > 1:
+            raise UserError(_("You cannot report expenses in different payment modes!"))
+        return super(HrExpense, self)._get_default_expense_sheet_values()
+
 
     @api.onchange('payment_mode', 'employee_id')
     def _compute_petty_cash_accounts(self):

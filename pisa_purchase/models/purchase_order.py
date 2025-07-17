@@ -5,7 +5,8 @@ from odoo.exceptions import ValidationError
 class PurchaseOrder(models.Model):
     _inherit = "purchase.order"
 
-    assignee_id = fields.Many2one('res.users', string='Assignee', help='User responsible for this RFQ')
+    assignee_id = fields.Many2one('res.users', string='Assignee', help='User responsible for this RFQ',
+        default=lambda self: self.env.user.id)
     extra_cost_po_ids = fields.Many2many('purchase.order', 'purchase_extra_cost_rel', 'main_po_id', 'extra_cost_po_id',
         string='Extra Cost POs', help='Link extra cost POs (customs, shipping etc) to this PO for accurate cost tracking')
     off_budget = fields.Boolean(string='Off-Budget', tracking=True)
