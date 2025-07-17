@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="ImportAction" t-inherit="ImportAction" t-inherit-mode="extension">
+        <xpath expr="//FileInput" position="after">
+            <button t-if="resModel === 'hr.attendance'"
+                    type="button"
+                    class="btn btn-secondary"
+                    t-on-click="openAttendanceWizard">
+                Parse Attendance File
+            </button>
+        </xpath>
+    </t>
+</templates>
