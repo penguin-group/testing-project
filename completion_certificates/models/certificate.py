@@ -27,6 +27,14 @@ class Certificate(models.Model):
     line_ids = fields.One2many('certificate.line', 'certificate_id', string='Lines')
     notes = fields.Text(string='Notes')
 
+    def unlink(self):
+        for record in self:
+            if record.state == 'confirmed':
+                raise ValidationError(_(
+                    'You cannot delete a completion certificate that is confirmed. Only draft certificates can be deleted.'
+                ))
+        return super(Certificate, self).unlink()
+
     @api.depends('purchase_order_id', 'line_ids.price_subtotal')
     def _compute_total(self):
         for record in self:
