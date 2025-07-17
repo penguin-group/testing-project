@@ -9,10 +9,7 @@
     "depends": ["mail", "hr", "purchase"],
     "data": [
         "security/ir.model.access.csv",
-        "data/email_template.xml",
-        "views/po_mail_notification_view.xml",
-        # "views/tier_review_view.xml",
-        # "views/tier_validation_exception_view.xml",
-        # "templates/tier_validation_templates.xml",
+        "data/email_template_purchase_order.xml",
+        "views/po_mail_notification_view.xml"
     ]
 }

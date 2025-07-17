@@ -1,11 +1,10 @@
 from odoo import api, fields, models
 from odoo.tools.safe_eval import safe_eval
 from odoo.osv import expression
-from odoo.tools import formatLang
 
 class PisaMailNotification(models.Model):
     _name = "pisa.mail.notification"
-    _description = "Email Notification"
+    _description = "Pisa Email Notification"
 
     @api.model
     def _get_default_name(self):
@@ -28,7 +27,7 @@ class PisaMailNotification(models.Model):
         domain=lambda self: [("model", "in", self._get_email_notification_model_names())]
     )
     model = fields.Char(related="model_id.model", index=True, store=True)
-    receiver_filtering_method = fields.Selection(string="Filter users by", selection=[("job_id", "Job Position"), ("employee_id", "Employees")])
+    recipients_filtering_method = fields.Selection(string="Filter users by", selection=[("job_id", "Job Position"), ("employee_id", "Employees")])
     job_ids = fields.Many2many("hr.job", string="Job Positions")
     employee_ids = fields.Many2many("hr.employee", string="Employees")
     definition_type = fields.Selection(
@@ -90,25 +89,16 @@ class PisaMailNotification(models.Model):
     def send_notifications(self, record):
         self.ensure_one()
 
-        template = self.env.ref('email_notification.mail_template_notification_po')
+        template = self.template_id
 
-        base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
-        route_url = f'/odoo/purchase/{record.id}/'
-        record_url = f"{base_url}{route_url}"
+        recipients = []
+        if self.recipients_filtering_method == 'job_id':
+            employees = self.env['hr.employee'].search([('job_id', 'in', self.job_ids.ids)])
+            for employee in employees:
+                recipients.append(employee.work_email)
+        elif self.recipients_filtering_method == 'employee_id':
+            for employee in self.employee_ids:
+                recipients.append(employee.work_email)
 
-        amount_in_usd = ''  # symbol + amount
-        if record.currency_id.name == 'USD':
-            amount_in_usd = formatLang(self.env, record.amount_total, currency_obj=self.company_currency_id)
-        else:
-            amount_in_usd = record.tax_totals['amount_total_cc'].removeprefix('(').removesuffix(')')
-
-        email_custom_values = {'employee_name': ceo.name, 'amount_in_usd': amount_in_usd, 'record_url': record_url}
-
-        template.with_context(email_custom_values).send_mail(
-            record.id,
-            force_send=True,
-            email_values={'email_to': ceo.work_email},
-        )
-
-
-        print("notification sent!")
+        template.email_to = ','.join(recipients)
+        return template or False
