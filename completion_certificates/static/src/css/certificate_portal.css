@@ -1,0 +1,86 @@
+/* Certificate Portal Styles */
+
+.certificate-line {
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    position: relative;
+}
+
+.certificate-line:hover {
+    background-color: #e9ecef;
+}
+
+.certificate-line .remove-line {
+    opacity: 0.7;
+}
+
+.certificate-line .remove-line:hover {
+    opacity: 1;
+}
+
+/* Form styling */
+.portal-certificate-form .card {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.portal-certificate-form .form-group label {
+    font-weight: 600;
+    color: #495057;
+}
+
+.portal-certificate-form .form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+/* Table styling */
+.table th {
+    background-color: #f8f9fa;
+    border-top: none;
+    font-weight: 600;
+}
+
+/* Badge styling */
+.badge {
+    font-size: 0.875em;
+}
+
+/* Button spacing */
+.btn + .btn {
+    margin-left: 0.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .certificate-line .row {
+        margin: 0;
+    }
+    
+    .certificate-line .col-md-1,
+    .certificate-line .col-md-2,
+    .certificate-line .col-md-3 {
+        margin-bottom: 1rem;
+    }
+    
+    .table-responsive {
+        font-size: 0.875rem;
+    }
+}
+
+/* Loading state */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Error states */
+.form-control.is-invalid {
+    border-color: #dc3545;
+}
+
+.invalid-feedback {
+    display: block;
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}

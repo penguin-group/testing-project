@@ -27,6 +27,14 @@ class Certificate(models.Model):
     line_ids = fields.One2many('certificate.line', 'certificate_id', string='Lines')
     notes = fields.Text(string='Notes')
 
+    def unlink(self):
+        for record in self:
+            if record.state == 'confirmed':
+                raise ValidationError(_(
+                    'You cannot delete a completion certificate that is confirmed. Only draft certificates can be deleted.'
+                ))
+        return super(Certificate, self).unlink()
+
     @api.depends('purchase_order_id', 'line_ids.price_subtotal')
     def _compute_total(self):
         for record in self:
@@ -45,18 +53,7 @@ class Certificate(models.Model):
                     line.purchase_line_id.qty_received += line.qty_received
                 invoices = record.purchase_order_id.action_create_invoice()
                 record.vendor_bill_id = invoices['res_id']
-                if record.line_ids.filtered(lambda l: l.qty_processed + l.qty_received > l.purchase_line_id.product_qty):
-                    record._adjust_vendor_bill_unit_price()
                 return invoices
-
-    def _adjust_vendor_bill_unit_price(self):
-        self.ensure_one()
-        vendor_bill = self.vendor_bill_id
-        for line in self.line_ids:
-            vendor_bill_line = vendor_bill.invoice_line_ids.filtered(lambda l: l.purchase_line_id == line.purchase_line_id)
-            vendor_bill_line.write({
-                'price_unit': line.price_unit,
-            })
 
     @api.onchange('purchase_order_id')
     def _onchange_purchase_order_id(self):
@@ -75,3 +72,4 @@ class Certificate(models.Model):
                     
                 }))
             self.line_ids = lines
+            
