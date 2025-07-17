@@ -57,6 +57,24 @@
                 <attribute name="invisible">1</attribute>
             </xpath>
 
+            <!-- 
+            Display the amount values in the expense's currency.
+            -->
+            <xpath expr="//group[@name='expense_total']" position="replace">
+                <group class="oe_subtotal_footer" colspan="2" name="expense_total_currency">
+                    <field name="untaxed_amount_currency"/>
+                    <div class="oe_inline o_td_label">
+                        <label for="total_tax_amount_currency"/>
+                    </div>
+                    <field name="total_tax_amount_currency" nolabel="1"/>
+                    <div class="oe_inline o_td_label">
+                        <label for="total_amount_currency"/>
+                    </div>
+                    <field name="total_amount_currency" nolabel="1" class="oe_subtotal_footer_separator"/>
+                    <field name="total_amount_parenthesized" nolabel="1" invisible="currency_id == company_currency_id"/>
+                </group>
+            </xpath>
+
         </field>
     </record>
 
