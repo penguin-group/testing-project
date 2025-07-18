@@ -1,6 +1,6 @@
 {
     "name": "Email Notification",
-    "summary": "Implement a notification workflow depending on purchase orders' total amount.",
+    "summary": "Implements a notification workflow based on conditions set by the user.",
     "version": "18.0.1.0.0",
     "website": "https://penguin.digital",
     "author": "David Páez",
