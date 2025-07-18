@@ -5,7 +5,6 @@
         <field name="model">pisa.mail.notification</field>
         <field name="arch" type="xml">
             <list>
-                <field name="sequence" widget="handle" />
                 <field name="model_id" />
                 <field name="name" />
                 <field name="job_ids" widget="many2many_tags"/>
@@ -55,8 +54,8 @@
                                 name="company_id"
                                 groups="base.group_multi_company"
                                 options="{'no_create': True}"
+                                invisible="True"
                             />
-                            <field name="sequence" />
                         </group>
                     </group>
                     <notebook>

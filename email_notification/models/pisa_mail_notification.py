@@ -48,7 +48,6 @@ class PisaMailNotification(models.Model):
         help="Template used for the email notification.",
     )
     active = fields.Boolean(default=True)
-    sequence = fields.Integer(default=30)
     company_id = fields.Many2one(
         comodel_name="res.company",
         string="Company",
@@ -62,7 +61,7 @@ class PisaMailNotification(models.Model):
             ('model', '=', model_name),
             ('active', '=', True),
             ('company_id', 'in', [self.env.company.id, False]),
-        ], order='sequence')
+        ])
 
     def check_mail_notification_rule(self, record):
         """Evaluate the rule’s domain or Python code against a single record. Returns True if it matches."""
