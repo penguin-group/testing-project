@@ -1,4 +1,4 @@
-PISA HR
+PISA HR Attendance
 ==================
 
 .. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
@@ -13,7 +13,7 @@ PISA HR
 
 |badge1| |badge2| |badge3|
 
-Module to handle specific HR processes adapted to Penguin Infrastructure's business logic.
+Module to handle specific attendance processes adapted to Penguin Infrastructure's business logic.
 
 Features
 ========
