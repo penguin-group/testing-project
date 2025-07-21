@@ -1,5 +1,5 @@
 {
-    "name": "Email Notification",
+    "name": "Pisa Email Notification",
     "summary": "Implements a notification workflow based on conditions set by the user.",
     "version": "18.0.1.0.0",
     "website": "https://penguin.digital",

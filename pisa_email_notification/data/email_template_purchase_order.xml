@@ -17,17 +17,20 @@
                         </p>
 
                         <p>
-                          You can view the full details by accessing the Purchase Order record in Odoo.
+                          You can view the full details by accessing the Purchase Order record in Odoo:
                         </p>
 
-                        <p>URL: <t t-esc="ctx.get('record_url')"></t></p>
+                        <a t-att-href="ctx.get('record_url')"
+                            target="_blank"
+                            style="padding: 10px 15px; color: #FFFFFF; text-decoration: none; background-color: #875A7B; border: 1px solid #875A7B; border-radius: 5px">
+                            <strong>View Purchase Order</strong>
+                        </a>
 
                         <p>
-                          If no further action is needed, you may disregard this message.
+                          This is an auto-generated email. Please, do not reply to this message.
                         </p>
 
-                        <p>Best regards,<br/>
-                        The Finance Team</p>
+                        <p>- PisaBot</p>
                     </td></tr>
                 </tbody></table>
             </field>
