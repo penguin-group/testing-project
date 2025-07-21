@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "PISA Human Resources",
+    'name': "PISA HR Attendance",
 
-    'summary': "PISA Human Resources",
+    'summary': "PISA Human Resources Attendance",
 
     'description': """
-        Module to handle specific HR processes adapted to Penguin Infrastructure's business logic.
+        Module to handle specific attendance processes adapted to Penguin Infrastructure's business logic.
     """,
 
     'author': "Penguin Infrastructure, David Paez",
