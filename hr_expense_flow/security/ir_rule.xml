@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <record id="ir_rule_hr_expense_advanced_user" model="ir.rule">
+            <field name="name">Advanced User Expense</field>
+            <field name="model_id" ref="model_hr_expense"/>
+            <field name="domain_force">['|', '|', '|', '|', '|',
+                ('employee_id.user_id', '=', user.id),
+                ('employee_id.department_id.manager_id.user_id', '=', user.id),
+                ('employee_id.parent_id.user_id', '=', user.id),
+                ('employee_id.expense_manager_id', '=', user.id),
+                ('sheet_id.user_id', '=', user.id),
+                ('create_uid', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('hr_expense_flow.group_hr_expense_user_advanced'))]"/>
+        </record>
+
+</odoo>

@@ -37,6 +37,17 @@
                 <attribute name="required">True</attribute>
             </xpath>
 
+            <xpath expr="//t" position="after">
+                <t groups="hr_expense_flow.group_hr_expense_user_advanced">
+                    <field name="employee_id"
+                        widget="many2one_avatar_employee" 
+                        options="{'no_create': True}" 
+                        readonly="not is_editable"
+                        invisible="payment_mode not in ['own_account', 'company_account']"
+                    />
+                </t>
+            </xpath>
+
         </field>
     </record>
 
