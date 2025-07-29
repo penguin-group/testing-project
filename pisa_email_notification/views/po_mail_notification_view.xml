@@ -21,7 +21,7 @@
         <field name="name">pisa.mail.notification.form</field>
         <field name="model">pisa.mail.notification</field>
         <field name="arch" type="xml">
-            <form string="PO Email Notification">
+            <form string="Email Notification">
                 <sheet>
                     <div class="o_form_label" name="button_box" />
                     <widget
@@ -36,7 +36,6 @@
                             <field
                                 name="name"
                                 required="1"
-                                placeholder="e.g. Tier Validation for..."
                             />
                         </h1>
                     </div>
@@ -47,7 +46,7 @@
                             <field name="recipients_filtering_method" />
                             <field name="job_ids" widget="many2many_tags" invisible="recipients_filtering_method != 'job_id'" />
                             <field name="employee_ids" widget="many2many_tags" invisible="recipients_filtering_method != 'employee_id'" />
-                            <field name="template_id" options="{'no_create': True}"/>
+                            <field name="email_custom_message"/>
                         </group>
                         <group name="right">
                             <field

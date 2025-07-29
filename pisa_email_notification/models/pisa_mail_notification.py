@@ -1,6 +1,5 @@
 from odoo import api, fields, models
 from odoo.tools.safe_eval import safe_eval
-from odoo.osv import expression
 
 class PisaMailNotification(models.Model):
     _name = "pisa.mail.notification"
@@ -35,18 +34,13 @@ class PisaMailNotification(models.Model):
     )
     definition_domain = fields.Char()
     python_code = fields.Text(
-        string="Tier Definition Expression",
+        string="Python Code",
         help="Write Python code that defines when this rule is applied. "
              "The result of executing the expresion must be "
              "a boolean.",
         default="""# Available locals:\n#  - rec: current record\nTrue""",
     )
-    template_id = fields.Many2one(
-        "mail.template",
-        string="Email Template",
-        domain="[('model_id', '=', model_id)]",
-        help="Template used for the email notification.",
-    )
+    email_custom_message = fields.Text(string="Email Custom Message", required=True)
     active = fields.Boolean(default=True)
     company_id = fields.Many2one(
         comodel_name="res.company",
@@ -85,19 +79,29 @@ class PisaMailNotification(models.Model):
 
         return False
 
-    def send_notifications(self, record):
+    def _get_mail_recipients(self):
         self.ensure_one()
 
-        template = self.template_id
-
-        recipients = []
+        recipient_ids = []
         if self.recipients_filtering_method == 'job_id':
             employees = self.env['hr.employee'].search([('job_id', 'in', self.job_ids.ids)])
             for employee in employees:
-                recipients.append(employee.work_email)
+                if employee.work_email:
+                    recipient_ids.append(employee.user_partner_id.id)
         elif self.recipients_filtering_method == 'employee_id':
             for employee in self.employee_ids:
-                recipients.append(employee.work_email)
+                if employee.work_email:
+                    recipient_ids.append(employee.user_partner_id.id)
 
-        template.email_to = ','.join(recipients)
-        return template or False
+        return recipient_ids or False
+
+
+    def send_notifications(self, record):
+        record.message_post(
+            body=self.email_custom_message,
+            subject=record.name,
+            message_type="notification",
+            subtype_xmlid="mail.mt_note",
+            partner_ids=self._get_mail_recipients(),  # recipient
+            email_layout_xmlid="mail.mail_notification_light"
+        )
