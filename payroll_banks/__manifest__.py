@@ -16,6 +16,7 @@
     'depends': ['base', 'account', 'web', 'hr_payroll'],
 
     "data": [
+        "security/ir.model.access.csv",
         "views/res_config_settings.xml",
     ],
 
