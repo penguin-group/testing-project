@@ -20,4 +20,11 @@
         <field name="perm_unlink" eval="True"/>
     </record>
 
+    <record model="ir.rule" id="task_type_manager_rule">
+        <field name="name">Project/Task Type: Team manager sees own stages (created)</field>
+        <field name="model_id" ref="project.model_project_task_type"/>
+        <field name="domain_force">[('create_uid', '=', user.id)]</field>
+        <field name="groups" eval="[(4,ref('pisa_project.group_project_team_manager'))]"/>
+    </record>
+
 </odoo>

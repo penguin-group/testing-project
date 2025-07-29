@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem
+        id="project.menu_project_config"
+        name="Configuration"
+        parent="project.menu_main_pm"
+        groups="project.group_project_manager,pisa_project.group_project_team_manager"
+        sequence="100"
+    />
+</odoo>
