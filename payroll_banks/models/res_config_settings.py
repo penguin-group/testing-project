@@ -11,8 +11,9 @@ class ResConfigSettings(models.TransientModel):
 
     @api.model
     def _get_available_banks(self):
-        """Return list of (model_name, label).
-        E.g: (payroll.bank.itau, Itau)
+        """Return list of available banks to add to salary_payment_bank selection.
+
+        E.g: ('interfisa', 'Interfisa')
         """
         banks = self.env['payroll.bank.definition']._get_available_banks()
-        return [(bank_model, bank_model.replace('payroll.bank.', '').capitalize()) for bank_model in banks]
+        return banks
