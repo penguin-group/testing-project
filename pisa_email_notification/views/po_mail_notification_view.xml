@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="pisa_email_notification_view_tree" model="ir.ui.view">
+        <field name="name">pisa.mail.notification.list</field>
+        <field name="model">pisa.mail.notification</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="model_id" />
+                <field name="name" />
+                <field name="job_ids" widget="many2many_tags"/>
+                <field
+                    name="company_id"
+                    groups="base.group_multi_company"
+                    optional="hide"
+                />
+                <field name="active" />
+            </list>
+        </field>
+    </record>
+    <record id="pisa_email_notification_view_form" model="ir.ui.view">
+        <field name="name">pisa.mail.notification.form</field>
+        <field name="model">pisa.mail.notification</field>
+        <field name="arch" type="xml">
+            <form string="Email Notification">
+                <sheet>
+                    <div class="o_form_label" name="button_box" />
+                    <widget
+                        name="web_ribbon"
+                        title="Archived"
+                        bg_color="bg-danger"
+                        invisible="active"
+                    />
+                    <div class="oe_title">
+                        <span class="oe_edit_only">Name</span>
+                        <h1>
+                            <field
+                                name="name"
+                                required="1"
+                            />
+                        </h1>
+                    </div>
+                    <group>
+                        <group name="left">
+                            <field name="model_id" options="{'no_create': True}" />
+                            <field name="model" invisible="1" />
+                            <field name="recipients_filtering_method" />
+                            <field name="job_ids" widget="many2many_tags" invisible="recipients_filtering_method != 'job_id'" />
+                            <field name="employee_ids" widget="many2many_tags" invisible="recipients_filtering_method != 'employee_id'" />
+                            <field name="email_custom_message"/>
+                        </group>
+                        <group name="right">
+                            <field
+                                name="company_id"
+                                groups="base.group_multi_company"
+                                options="{'no_create': True}"
+                                invisible="True"
+                            />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="apply" string="Apply On">
+                            <group name="bottom">
+                                <field name="definition_type" />
+                                <field
+                                    name="definition_domain"
+                                    widget="domain"
+                                    options="{'model': 'model'}"
+                                    invisible="definition_type not in ('domain', 'domain_formula')"
+                                />
+                                <field
+                                    name="python_code"
+                                    widget="code"
+                                    options="{'mode': 'python'}"
+                                    invisible="definition_type not in ('formula', 'domain_formula')"
+                                />
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="pisa_email_notification_action" model="ir.actions.act_window">
+        <field name="name">Pisa Email Notification</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">pisa.mail.notification</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_all': 1}</field>
+    </record>
+
+    <menuitem
+        id="menu_pisa_email_notification"
+        name="Pisa Email Notification"
+        parent="base.menu_custom"
+    />
+    <menuitem
+        id="menu_tier_definition"
+        parent="menu_pisa_email_notification"
+        action="pisa_email_notification_action"
+        sequence="10"
+    />
+</odoo>
