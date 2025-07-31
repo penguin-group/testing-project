@@ -71,11 +71,15 @@ class HrExpense(models.Model):
     @api.onchange('payment_mode', 'employee_id')
     def _compute_petty_cash_accounts(self):
         for expense in self.filtered(lambda e: e.state == 'draft'):
+            # Reset petty cash account if payment mode is not petty cash
             expense.petty_cash_account_id = False
             if expense.payment_mode == 'petty_cash' and expense.employee_id:
                 expense.petty_cash_account_ids = expense.employee_id.department_id.petty_cash_account_ids
             else:
                 expense.petty_cash_account_ids = self.env['account.account']
+            # Reset employee if payment mode is not own_account or company_account
+            if expense.payment_mode not in ['own_account', 'company_account']:
+                expense.employee_id = expense._default_employee_id()
 
     @api.constrains('payment_mode')
     def _check_petty_cash_constraints(self):

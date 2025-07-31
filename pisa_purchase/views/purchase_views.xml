@@ -40,4 +40,24 @@
         <field name="context">{'from_purchase': True}</field>
     </record>
 
+    <record id="action_set_currency_on_purchase_orders" model="ir.actions.server">
+        <field name="name">Set Currency</field>
+        <field name="model_id" ref="purchase.model_purchase_order"/>
+        <field name="binding_model_id" ref="purchase.model_purchase_order"/>
+        <field name="state">code</field>
+        <field name="binding_type">action</field>
+        <field name="code">
+view = env.ref('pisa_purchase.view_purchase_currency_wizard_form')
+action = {
+    'type': 'ir.actions.act_window',
+    'res_model': 'purchase.currency.wizard',
+    'view_mode': 'form',
+    'target': 'new',
+    'context': {'active_ids': records.ids},
+    'name': 'Set Currency',
+    'view_id': view.id,
+}
+        </field>
+    </record>
+
 </odoo>

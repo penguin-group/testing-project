@@ -67,8 +67,9 @@ class AccountReport(models.Model):
                     code = new_line.code + '_' + str(analytic_account.id)
                     expr_formula = line.expression_ids[0].formula
                     expr_formula = f"{expr_formula[:-1]}, ('analytic_distribution', 'in', [{analytic_account.id}])]"
+                    label = line.expression_ids[0].label
                     expr_vals = {
-                        'label': line.expression_ids[0].label,
+                        'label': label,
                         'engine': line.expression_ids[0].engine,
                         'formula': expr_formula,
                         'subformula': line.expression_ids[0].subformula,
@@ -85,11 +86,11 @@ class AccountReport(models.Model):
                         'groupby': line.groupby,
                         'expression_ids': [(0, 0, expr_vals)]
                     })
-                    total_formula += f' + {code}.balance' if total_formula else f'{code}.balance'
+                    total_formula += f' + {code}.{label}' if total_formula else f'{code}.{label}'
                 self.env['account.report.line'].create(vals)                    
                 self.env['account.report.expression'].create({
                     'report_line_id': new_line.id,
-                    'label': 'balance',
+                    'label': label,
                     'engine': 'aggregation',
                     'formula': total_formula
                 })

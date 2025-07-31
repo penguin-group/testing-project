@@ -10,6 +10,14 @@
                     <field name="request_assistance" string="Request Procurement Assistance" widget="boolean_toggle"/>
                     <field name="off_budget" string="Off-Budget" widget="boolean_toggle" readonly="purchase_count > 0"/>
                 </field>
+
+                <xpath expr="//field[@name='description']" position="after">
+                    <field name="currency_id" readonly="0" />
+                </xpath>
+
+                <xpath expr="//group[hasclass('oe_subtotal_footer')]/field" position="replace">
+                    <field name="currency_id" invisible="1" />
+                </xpath>
             </field>
         </record>
     </data>
