@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 17.0+e\n"
+"Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-20 19:08+0000\n"
-"PO-Revision-Date: 2024-11-20 19:08+0000\n"
+"POT-Creation-Date: 2025-07-17 17:01+0000\n"
+"PO-Revision-Date: 2025-07-17 17:01+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -18,14 +18,14 @@ msgstr ""
 #. module: pisa_account
 #. odoo-python
 #: code:addons/pisa_account/models/book_registration_report.py:0
-#, python-format
 msgid ""
 "A base report for the Income Statement of the Inventory Book report is not "
 "set. Please go to the accounting settings to establish the necessary "
 "parameters."
 msgstr ""
-"Un informe base para el Estado de Resultados del Libro de Inventarios no está configurado." 
-"Por favor, vaya a la configuración de contabilidad para establecer los parámetros necesarios."
+"Un informe base para el Estado de Resultados del Libro de Inventarios no "
+"está configurado.Por favor, vaya a la configuración de contabilidad para "
+"establecer los parámetros necesarios."
 
 #. module: pisa_account
 #: model_terms:ir.ui.view,arch_db:pisa_account.edit_secondary_currency_rate_view_form
@@ -38,9 +38,30 @@ msgid "Book Registration Report"
 msgstr "Informe con Rúbrica"
 
 #. module: pisa_account
+#: model:res.groups,name:pisa_account.group_account_cfo
+msgid "CFO"
+msgstr ""
+
+#. module: pisa_account
 #: model_terms:ir.ui.view,arch_db:pisa_account.edit_secondary_currency_rate_view_form
 msgid "Cancel"
 msgstr "Cancelar"
+
+#. module: pisa_account
+#: model:ir.model,name:pisa_account.model_account_change_lock_date
+msgid "Change Lock Date"
+msgstr "Cambiar fecha de bloqueo"
+
+#. module: pisa_account
+#: model:ir.model,name:pisa_account.model_res_company
+msgid "Companies"
+msgstr "Compañías"
+
+#. module: pisa_account
+#: model:ir.model.fields,field_description:pisa_account.field_account_bank_statement_line__vendor_country
+#: model:ir.model.fields,field_description:pisa_account.field_account_move__vendor_country
+msgid "Country Code"
+msgstr "Código de País"
 
 #. module: pisa_account
 #: model:ir.model.fields,field_description:pisa_account.field_edit_secondary_currency_rate__create_uid
@@ -53,6 +74,18 @@ msgid "Created on"
 msgstr "Creado el"
 
 #. module: pisa_account
+#: model:ir.model.fields,field_description:pisa_account.field_account_bank_statement_line__company_secondary_currency_name
+#: model:ir.model.fields,field_description:pisa_account.field_account_move__company_secondary_currency_name
+msgid "Currency"
+msgstr "Moneda"
+
+#. module: pisa_account
+#: model:ir.model.fields,help:pisa_account.field_account_bank_statement_line__company_secondary_currency_name
+#: model:ir.model.fields,help:pisa_account.field_account_move__company_secondary_currency_name
+msgid "Currency Code (ISO 4217)"
+msgstr "Código de Moneda (ISO 4217)"
+
+#. module: pisa_account
 #: model:ir.model.fields,field_description:pisa_account.field_edit_secondary_currency_rate__display_name
 msgid "Display Name"
 msgstr "Nombre Mostrado"
@@ -61,14 +94,24 @@ msgstr "Nombre Mostrado"
 #: model:ir.actions.act_window,name:pisa_account.edit_secondary_currency_rate_action
 #: model:ir.model,name:pisa_account.model_edit_secondary_currency_rate
 #: model_terms:ir.ui.view,arch_db:pisa_account.edit_secondary_currency_rate_view_form
-#: model_terms:ir.ui.view,arch_db:pisa_account.view_move_form_inherited
+#: model_terms:ir.ui.view,arch_db:pisa_account.view_move_form_inherited_pisa_account
 msgid "Edit Secondary Currency Rate"
 msgstr "Editar Tipo de Cambio Secundario"
 
 #. module: pisa_account
+#: model:res.groups,name:pisa_account.group_account_head_finance
+msgid "Head of Finance"
+msgstr ""
+
+#. module: pisa_account
 #: model:ir.model.fields,field_description:pisa_account.field_edit_secondary_currency_rate__id
 msgid "ID"
-msgstr ""
+msgstr "ID"
+
+#. module: pisa_account
+#: model:ir.model.fields,field_description:pisa_account.field_edit_secondary_currency_rate__inverse_secondary_currency_rate
+msgid "Inverse Secondary Currency Rate"
+msgstr "Tipo de Cambio Secundario Inverso"
 
 #. module: pisa_account
 #: model:res.groups,name:pisa_account.group_account_invoice_approver
@@ -86,9 +129,9 @@ msgid "Journal Entry"
 msgstr "Asiento contable"
 
 #. module: pisa_account
-#: model:ir.model,name:pisa_account.model_account_move_line
-msgid "Journal Item"
-msgstr "Apunte contable"
+#: model:res.groups,name:pisa_account.group_account_jr_accountant
+msgid "Jr Accountant"
+msgstr ""
 
 #. module: pisa_account
 #: model:ir.model.fields,field_description:pisa_account.field_edit_secondary_currency_rate__write_uid
@@ -101,6 +144,12 @@ msgid "Last Updated on"
 msgstr "Última actualización el"
 
 #. module: pisa_account
+#. odoo-python
+#: code:addons/pisa_account/wizards/account_change_lock_date.py:0
+msgid "Only Billing Administrators are allowed to change lock dates!"
+msgstr "¡Solo los administradores de facturación pueden cambiar las fechas de bloqueo!"
+
+#. module: pisa_account
 #: model_terms:ir.ui.view,arch_db:pisa_account.view_account_journal_form_inherited
 msgid "Payment Info"
 msgstr "Información de Pagos"
@@ -108,7 +157,6 @@ msgstr "Información de Pagos"
 #. module: pisa_account
 #: model:ir.model.fields,field_description:pisa_account.field_account_bank_statement_line__payment_info_qr_code
 #: model:ir.model.fields,field_description:pisa_account.field_account_move__payment_info_qr_code
-#: model:ir.model.fields,field_description:pisa_account.field_account_payment__payment_info_qr_code
 msgid "Payment Info QR Code"
 msgstr "Código QR de Información de Pagos"
 
@@ -132,22 +180,43 @@ msgid "Secondary Currency Rate"
 msgstr "Tipo de Cambio Secundario"
 
 #. module: pisa_account
+#: model:ir.model.fields,field_description:pisa_account.field_account_bank_statement_line__show_edit_primary_currency_rate
+#: model:ir.model.fields,field_description:pisa_account.field_account_move__show_edit_primary_currency_rate
+msgid "Show Edit Primary Currency Rate"
+msgstr "Mostrar Edición de Tipo de Cambio Primario"
+
+#. module: pisa_account
+#: model:ir.model.fields,field_description:pisa_account.field_account_bank_statement_line__show_edit_secondary_currency_rate
+#: model:ir.model.fields,field_description:pisa_account.field_account_move__show_edit_secondary_currency_rate
+msgid "Show Edit Secondary Currency Rate"
+msgstr "Mostrar Edición de Tipo de Cambio Secundario"
+
+#. module: pisa_account
+#: model:res.groups,name:pisa_account.group_account_sr_accountant
+msgid "Sr Accountant"
+msgstr ""
+
+#. module: pisa_account
+#: model:res.groups,name:pisa_account.group_account_sr_finance
+msgid "Sr Finance"
+msgstr ""
+
+#. module: pisa_account
 #. odoo-python
 #: code:addons/pisa_account/models/account_move.py:0
-#, python-format
 msgid "The \"Invoice Number\" field is required."
 msgstr "El campo \"Número de Factura\" es obligatorio."
 
 #. module: pisa_account
-#. odoo-python
-#: code:addons/pisa_account/models/account_move.py:0
-#, python-format
-msgid "The total invoice amount cannot be zero or negative."
-msgstr "El monto total de la factura no puede ser cero o negativo."
+#: model:ir.model.fields,help:pisa_account.field_account_bank_statement_line__vendor_country
+#: model:ir.model.fields,help:pisa_account.field_account_move__vendor_country
+msgid ""
+"The ISO country code in two chars. \n"
+"You can use this field for quick search."
+msgstr "El código de país ISO en dos caracteres.\nPuede usar este campo para búsqueda rápida."
 
 #. module: pisa_account
 #. odoo-python
 #: code:addons/pisa_account/models/account_move.py:0
-#, python-format
-msgid "You don't have permission to approve an invoice."
-msgstr "No tenés permiso para aprobar facturas."
+msgid "The total invoice amount cannot be zero or negative."
+msgstr "El monto total de la factura no puede ser cero o negativo."
