@@ -19,6 +19,7 @@ class HrPayrollPaymentReportWizard(models.TransientModel):
         if self.export_format == 'xlsx' and salary_payment_bank == 'interfisa':
             output = io.BytesIO()
 
+            # setting up the excel file
             workbook = xlsxwriter.Workbook(output, {'in_memory': True})
             worksheet = workbook.add_worksheet('Payslip Batch')
             header_format = workbook.add_format({'bold': True, 'align': 'center'})
@@ -33,12 +34,13 @@ class HrPayrollPaymentReportWizard(models.TransientModel):
             worksheet.set_column(3, 3, 20)  # Cuenta credito
 
             index = 1
-            for slip in self.payslip_ids:
+            for slip in self.payslip_ids:  # extract data both from the payslip and from the employee
                 employee_document_id = slip.employee_id.identification_id
                 employee_name = slip.employee_id.name
                 amount_to_be_paid = slip.net_wage
                 employee_bank_account = slip.employee_id.bank_account_id.acc_number
 
+                # we can't generate the file if one of these variables is false:
                 if not all([employee_document_id, employee_name, amount_to_be_paid, employee_bank_account]):
                     raise UserError(_(f"The employee {employee_name} may not have all the necessary fields filled.\nPlease, verify the following information: employee's name, identification number, bank account details, and the payslip amount."))
 

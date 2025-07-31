@@ -4,8 +4,8 @@
 
     'summary': "Interfisa Localization",
 
-    'description': """
-    """,
+    'description': """Module responsible for generating an XLSX file needed by Banco Interfisa in order to perform
+    payroll operations.""",
 
     'author': "Penguin Infrastructure",
     'maintainers': ['David Páez'],
