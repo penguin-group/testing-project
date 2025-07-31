@@ -26,15 +26,21 @@
               which allows you to select "Petty Cash". This option will allow the user to select a
               petty cash account to pay the expense. The petty cash possible values are taken from the
               employee's department page.
+        - Advanced User Features
+            - Added a new user group "Advanced User" that allows (only for expenses paid by employee or company):
+                - Create expenses for all employees in the same company
+                - Access to expenses where the user is the expense creator or the selected employee
     """,
     "author": "Penguin Infrastructure S.A.",
-    "mantainers": ["José González"],
+    "maintainers": ["José González"],
     "website": "https://penguin.digital",
     "category": "Expenses",
-    "version": "18.0.1.1.0",
+    "version": "18.0.1.2.0",
     "license": "OPL-1",
     "depends": ["hr_expense"],
     "data": [
+        "security/hr_expense_security.xml",
+        "security/ir_rule.xml",
         "views/res_config_settings_views.xml",
         "views/hr_expense_views.xml",
         "views/hr_department_views.xml",
