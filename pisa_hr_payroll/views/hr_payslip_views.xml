@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Payslip Form View Extension -->
+        <record id="view_hr_payslip_form_py" model="ir.ui.view">
+            <field name="name">hr.payslip.form.py</field>
+            <field name="model">hr.payslip</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+            <field name="arch" type="xml">
+                
+                <!-- Add Paraguay-specific fields to payslip -->
+                <xpath expr="//field[@name='number']" position="after">
+                    <field name="location"/>
+                    <field name="currency_name"/>
+                </xpath>
+
+                <!-- Add payment details -->
+                <xpath expr="//field[@name='note']" position="after">
+                    <group string="Detalles de Pago" name="payment_details_group">
+                        <field name="payment_details" nolabel="1"/>
+                    </group>
+                </xpath>
+
+            </field>
+        </record>
+
+        <!-- Payslip Tree View Extension -->
+        <record id="view_hr_payslip_tree_py" model="ir.ui.view">
+            <field name="name">hr.payslip.tree.py</field>
+            <field name="model">hr.payslip</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payslip_tree"/>
+            <field name="arch" type="xml">
+                
+                <!-- Add location column -->
+                <xpath expr="//field[@name='company_id']" position="after">
+                    <field name="location" optional="hide"/>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

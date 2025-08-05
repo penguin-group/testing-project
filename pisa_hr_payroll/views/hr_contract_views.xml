@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Contract Form View Extension -->
+        <record id="view_contract_form_py_payroll" model="ir.ui.view">
+            <field name="name">hr.contract.form.py.payroll</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+            <field name="arch" type="xml">
+                
+                <!-- Add Paraguay Payroll section -->
+                <xpath expr="//group[@name='salary_info']" position="after">
+                    <group string="Paraguay - Configuración de Nómina" name="py_payroll_config">
+                        <group string="Vacaciones y Beneficios">
+                            <field name="vacation_days_per_year"/>
+                            <field name="medical_insurance_contribution"/>
+                            <field name="has_internet_allowance"/>
+                            <field name="transportation_allowance"/>
+                        </group>
+                        <group string="Embargos Judiciales">
+                            <field name="court_garnishment_percentage"/>
+                            <field name="court_garnishment_amount"/>
+                        </group>
+                    </group>
+                </xpath>
+
+            </field>
+        </record>
+
+        <!-- Contract Tree View Extension -->
+        <record id="view_contract_tree_py_payroll" model="ir.ui.view">
+            <field name="name">hr.contract.tree.py.payroll</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_tree"/>
+            <field name="arch" type="xml">
+                
+                <!-- Add vacation days column -->
+                <xpath expr="//field[@name='wage']" position="after">
+                    <field name="vacation_days_per_year" optional="hide"/>
+                    <field name="medical_insurance_contribution" optional="hide"/>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

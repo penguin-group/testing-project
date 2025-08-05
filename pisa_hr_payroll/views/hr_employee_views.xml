@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Employee Form View Extension -->
+        <record id="view_employee_form_py_payroll" model="ir.ui.view">
+            <field name="name">hr.employee.form.py.payroll</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='children']" position="after">
+                    <field name="children_under_3"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

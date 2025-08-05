@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="report_payslip_py">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.external_layout">
+                        <div class="page">
+                            
+                            <!-- Header Information -->
+                            <div class="row mt32 mb32">
+                                <div class="col-12">
+                                    <h3 class="text-center">
+                                        <strong>RECIBO DE SALARIO</strong>
+                                    </h3>
+                                </div>
+                            </div>
+
+                            <!-- Employee Information Table -->
+                            <table class="table table-sm table-bordered">
+                                <tr>
+                                    <td width="15%"><strong>#</strong></td>
+                                    <td width="35%"><span t-field="o.number"/></td>
+                                    <td width="50%" rowspan="8" class="text-center align-middle">
+                                        <!-- Company Logo Area -->
+                                        <img t-if="o.company_id.logo" 
+                                             t-att-src="image_data_uri(o.company_id.logo)" 
+                                             style="max-height: 120px; max-width: 200px;"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Sede</strong></td>
+                                    <td><span t-field="o.location"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Area</strong></td>
+                                    <td><span t-field="o.area"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Departamento</strong></td>
+                                    <td><span t-field="o.employee_id.department_id.name"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Moneda</strong></td>
+                                    <td><span t-field="o.currency_name"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Cédula</strong></td>
+                                    <td><span t-field="o.cedula"/></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Empleados</strong></td>
+                                    <td><span t-field="o.employee_id.name"/></td>
+                                </tr>
+                            </table>
+
+                            <!-- Payslip Lines - Income Section -->
+                            <table class="table table-sm table-bordered mt16">
+                                <thead>
+                                    <tr class="bg-light">
+                                        <th width="60%">Concepto</th>
+                                        <th width="40%" class="text-right">Importe</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Basic Salary -->
+                                    <t t-set="basic_line" t-value="o.line_ids.filtered(lambda l: l.code == 'BASIC_PY')"/>
+                                    <tr t-if="basic_line">
+                                        <td>Salario Base</td>
+                                        <td class="text-right">
+                                            <span t-esc="'{:,.0f}'.format(o.contract_id.wage)" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    
+                                    <!-- Worked Days -->
+                                    <tr>
+                                        <td>Días Trabajados</td>
+                                        <td class="text-right">
+                                            <t t-set="worked_days_line" t-value="o.worked_days_line_ids.filtered(lambda w: w.code == 'WORK100')"/>
+                                            <span t-if="worked_days_line" t-esc="int(worked_days_line.number_of_days)"/>
+                                            <span t-else="">30</span>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Proportional Salary -->
+                                    <tr t-if="basic_line">
+                                        <td>Salario Proporcional</td>
+                                        <td class="text-right">
+                                            <span t-esc="'{:,.0f}'.format(basic_line.total)" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"/>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Other Income Lines -->
+                                    <t t-foreach="o.line_ids.filtered(lambda l: l.category_id.code in ['ALLOW_PY', 'OVERTIME_PY', 'FAMILY_PY', 'VACATION_PY'] and l.total != 0)" t-as="line">
+                                        <tr>
+                                            <td><span t-field="line.name"/></td>
+                                            <td class="text-right">
+                                                <span t-esc="'{:,.0f}'.format(line.total)" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+
+                                    <!-- Zero lines for empty concepts -->
+                                    <t t-set="concepts" t-value="[
+                                        ('Otros Ingresos', 'OTHER_INC_PY'),
+                                        ('Licencias', 'MEDICAL_LEAVE_PY'), 
+                                        ('Feriado', 'HOLIDAY_DAY_PY'),
+                                        ('Bono', 'BONUS_PY'),
+                                        ('Horas Extras Diurnas', 'OVERTIME_DAY_PY'),
+                                        ('Horas Extras Nocturnas', 'OVERTIME_NIGHT_PY'),
+                                        ('Recargos Nocturnos', 'NIGHT_SURCHARGE_PY'),
+                                        ('Vacaciones', 'VACATION_PY'),
+                                        ('Otros ingresos GND', 'OTHER_NON_DED_PY'),
+                                        ('Bonif. Fliar', 'FAMILY_ALLOW_PY'),
+                                        ('Guardería', 'DAYCARE_ALLOW_PY')
+                                    ]"/>
+                                    
+                                    <t t-foreach="concepts" t-as="concept">
+                                        <t t-set="concept_line" t-value="o.line_ids.filtered(lambda l: l.code == concept[1])"/>
+                                        <tr t-if="not concept_line">
+                                            <td><span t-esc="concept[0]"/></td>
+                                            <td class="text-right">0</td>
+                                        </tr>
+                                    </t>
+
+                                    <!-- Totals Section -->
+                                    <tr class="font-weight-bold bg-light">
+                                        <td>Totales Base IPS</td>
+                                        <td class="text-right">
+                                            <t t-set="ips_base_line" t-value="o.line_ids.filtered(lambda l: l.code == 'IPS_BASE_PY')"/>
+                                            <span t-if="ips_base_line" t-esc="'{:,.0f}'.format(ips_base_line.total)" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"/>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="font-weight-bold bg-light">
+                                        <td>Totales Ingreso</td>
+                                        <td class="text-right">
+                                            <t t-set="total_income_line" t-value="o.line_ids.filtered(lambda l: l.code == 'TOTAL_INC_PY')"/>
+                                            <span t-if="total_income_line" t-esc="'{:,.0f}'.format(total_income_line.total)" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"/>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Deductions Section -->
+                                    <tr style="background-color: #ffebee;">
+                                        <td><strong>IPS Employee</strong></td>
+                                        <td class="text-right">
+                                            <t t-set="ips_employee_line" t-value="o.line_ids.filtered(lambda l: l.code == 'IPS_EMP_PY')"/>
+                                            <span t-if="ips_employee_line" t-esc="'{:,.0f}'.format(abs(ips_employee_line.total))" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"/>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="font-weight-bold" style="background-color: #e8f5e8;">
+                                        <td>Net Salary</td>
+                                        <td class="text-right">
+                                            <t t-set="net_before_line" t-value="o.line_ids.filtered(lambda l: l.code == 'NET_BEFORE_PY')"/>
+                                            <span t-if="net_before_line" t-esc="'{:,.0f}'.format(net_before_line.total)" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"/>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Other Deductions -->
+                                    <t t-foreach="o.line_ids.filtered(lambda l: l.category_id.code in ['ADVANCES_PY', 'GARNISH_PY', 'MEDICAL_PY', 'SOLIDARITY_PY', 'OTHER_DED_PY'] and l.total != 0)" t-as="deduction_line">
+                                        <tr>
+                                            <td><span t-field="deduction_line.name"/></td>
+                                            <td class="text-right">
+                                                <span t-esc="'{:,.0f}'.format(abs(deduction_line.total))" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+
+                                    <!-- Zero deduction lines -->
+                                    <t t-set="deduction_concepts" t-value="[
+                                        ('Anticipos', 'ADVANCE_PY'),
+                                        ('Embargo Judic.', 'GARNISH_PY'),
+                                        ('Seguro Medico', 'MEDICAL_INS_PY'),
+                                        ('Solidaridad', 'SOLIDARITY_PY'),
+                                        ('Otros Descuentos', 'OTHER_DED_PY')
+                                    ]"/>
+                                    
+                                    <t t-foreach="deduction_concepts" t-as="ded_concept">
+                                        <t t-set="ded_concept_line" t-value="o.line_ids.filtered(lambda l: l.code == ded_concept[1])"/>
+                                        <tr t-if="not ded_concept_line or ded_concept_line.total == 0">
+                                            <td><span t-esc="ded_concept[0]"/></td>
+                                            <td class="text-right"></td>
+                                        </tr>
+                                    </t>
+
+                                    <!-- Final Totals -->
+                                    <tr class="font-weight-bold" style="background-color: #ffebee;">
+                                        <td>TOTAL DESCUENTO</td>
+                                        <td class="text-right">
+                                            <t t-set="total_deductions_line" t-value="o.line_ids.filtered(lambda l: l.code == 'TOTAL_DED_PY')"/>
+                                            <span t-if="total_deductions_line" t-esc="'{:,.0f}'.format(abs(total_deductions_line.total))" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"/>
+                                        </td>
+                                    </tr>
+
+                                    <tr class="font-weight-bold" style="background-color: #e8f5e8; font-size: 1.2em;">
+                                        <td>NETO A PAGAR</td>
+                                        <td class="text-right">
+                                            <t t-set="net_pay_line" t-value="o.line_ids.filtered(lambda l: l.code == 'NET_PAY_PY')"/>
+                                            <span t-if="net_pay_line" t-esc="'{:,.0f}'.format(net_pay_line.total)" t-options="{'widget': 'monetary', 'display_currency': o.company_id.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <!-- Payment Details -->
+                            <div class="mt16" t-if="o.payment_details">
+                                <p><strong>Detalles de Pago:</strong></p>
+                                <p t-field="o.payment_details"/>
+                            </div>
+
+                            <!-- Footer with considerations -->
+                            <div class="mt32">
+                                <p><strong>Consideraciones:</strong></p>
+                                <ul style="font-size: 0.9em;">
+                                    <li>Salario proporcional: se considera el jornal diario x cantidad de días trabajados</li>
+                                    <li>IPS Employee: aporte del 9% del colaborador de todos los conceptos deducibles de IPS</li>
+                                    <li>Horas extras diurnas: se considera la jornada diurna, 50% adicional</li>
+                                    <li>Horas extras nocturnas: se considera la jornada nocturna, 100% adicional + 30% recargo nocturno</li>
+                                    <li>Recargos nocturnos: 30% adicional sobre el salario ordinario nocturno</li>
+                                    <li>Bonificación familiar: para hijos menores de 17 años, máximo 2 salarios mínimos</li>
+                                    <li>Guardería: para hijos menores de 3 años</li>
+                                    <li>Embargo judicial: máximo 25% de todo lo percibido por el colaborador</li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>
