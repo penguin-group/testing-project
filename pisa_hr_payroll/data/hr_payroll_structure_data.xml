@@ -10,9 +10,11 @@
             <field name="type_id" ref="structure_type_employee_py"/>
             <field name="payslip_name">Recibo de Salario</field>
             <field name="use_worked_day_lines" eval="True"/>
+            <field name="journal_id" ref="account_journal_payroll_py"/>
             <field name="unpaid_work_entry_type_ids" eval="[
                 (4, ref('hr_work_entry_contract.work_entry_type_unpaid_leave')),
             ]"/>
+            <field name="rule_ids" eval="[]"/>  <!-- Start with empty rules, add only what we need -->
             <field name="note">Estructura de nómina para empleados en Paraguay. Incluye: Salario básico proporcional, Horas extras diurnas y nocturnas, Recargos nocturnos, Trabajo en feriados, Bonificación familiar, Subsidio de guardería, IPS empleado (9%), Descuentos varios.</field>
         </record>
 

@@ -9,14 +9,8 @@
             <field name="country_id" ref="base.py"/>
         </record>
         
-        <record id="hr_rule_parameter_value_minimum_wage_py_2025" model="hr.rule.parameter.value">
-            <field name="rule_parameter_id" ref="hr_rule_parameter_minimum_wage_py"/>
-            <field name="date_from">2025-01-01</field>
-            <field name="parameter_value">2798309</field>
-        </record>
-        
         <!-- Updated minimum wage from July 1st, 2025 -->
-        <record id="hr_rule_parameter_value_minimum_wage_py_2025_july" model="hr.rule.parameter.value">
+        <record id="hr_rule_parameter_value_minimum_wage_py_2025" model="hr.rule.parameter.value">
             <field name="rule_parameter_id" ref="hr_rule_parameter_minimum_wage_py"/>
             <field name="date_from">2025-07-01</field>
             <field name="parameter_value">2899048</field>
@@ -35,7 +29,20 @@
             <field name="parameter_value">0.09</field>
         </record>
 
-        <!-- Family Allowance per Child -->
+        <!-- IPS Employer Contribution Rate (16.5%) -->
+        <record id="hr_rule_parameter_ips_employee_rate" model="hr.rule.parameter">
+            <field name="name">Tasa IPS Empleado</field>
+            <field name="code">ips_employee_rate</field>
+            <field name="country_id" ref="base.py"/>
+        </record>
+        
+        <record id="hr_rule_parameter_value_ips_employee_rate" model="hr.rule.parameter.value">
+            <field name="rule_parameter_id" ref="hr_rule_parameter_ips_employee_rate"/>
+            <field name="date_from">2025-01-01</field>
+            <field name="parameter_value">0.165</field>
+        </record>
+
+        <!-- Family Allowance per Child Rate (5%) -->
         <record id="hr_rule_parameter_family_allowance_per_child" model="hr.rule.parameter">
             <field name="name">Bonificación Familiar por Hijo</field>
             <field name="code">family_allowance_per_child_py</field>
@@ -45,7 +52,7 @@
         <record id="hr_rule_parameter_value_family_allowance_per_child" model="hr.rule.parameter.value">
             <field name="rule_parameter_id" ref="hr_rule_parameter_family_allowance_per_child"/>
             <field name="date_from">2025-01-01</field>
-            <field name="parameter_value">25000</field>
+            <field name="parameter_value">0.05</field>
         </record>
 
         <!-- Daycare Allowance per Child -->
@@ -58,20 +65,7 @@
         <record id="hr_rule_parameter_value_daycare_allowance_per_child" model="hr.rule.parameter.value">
             <field name="rule_parameter_id" ref="hr_rule_parameter_daycare_allowance_per_child"/>
             <field name="date_from">2025-01-01</field>
-            <field name="parameter_value">30000</field>
-        </record>
-
-        <!-- Night Work Surcharge Rate (30%) -->
-        <record id="hr_rule_parameter_night_surcharge_rate" model="hr.rule.parameter">
-            <field name="name">Recargo Nocturno</field>
-            <field name="code">night_surcharge_rate</field>
-            <field name="country_id" ref="base.py"/>
-        </record>
-        
-        <record id="hr_rule_parameter_value_night_surcharge_rate" model="hr.rule.parameter.value">
-            <field name="rule_parameter_id" ref="hr_rule_parameter_night_surcharge_rate"/>
-            <field name="date_from">2025-01-01</field>
-            <field name="parameter_value">0.30</field>
+            <field name="parameter_value">100000</field>
         </record>
 
         <!-- Day Overtime Rate (50%) -->
@@ -84,7 +78,7 @@
         <record id="hr_rule_parameter_value_overtime_rate_day" model="hr.rule.parameter.value">
             <field name="rule_parameter_id" ref="hr_rule_parameter_overtime_rate_day"/>
             <field name="date_from">2025-01-01</field>
-            <field name="parameter_value">0.50</field>
+            <field name="parameter_value">1.50</field>
         </record>
 
         <!-- Night Overtime Rate (100%) -->
@@ -97,7 +91,20 @@
         <record id="hr_rule_parameter_value_overtime_rate_night" model="hr.rule.parameter.value">
             <field name="rule_parameter_id" ref="hr_rule_parameter_overtime_rate_night"/>
             <field name="date_from">2025-01-01</field>
-            <field name="parameter_value">1.00</field>
+            <field name="parameter_value">2.30</field>
+        </record>
+
+        <!-- Night Work Surcharge Rate (30%) -->
+        <record id="hr_rule_parameter_night_surcharge_rate" model="hr.rule.parameter">
+            <field name="name">Recargo Nocturno</field>
+            <field name="code">night_surcharge_rate</field>
+            <field name="country_id" ref="base.py"/>
+        </record>
+        
+        <record id="hr_rule_parameter_value_night_surcharge_rate" model="hr.rule.parameter.value">
+            <field name="rule_parameter_id" ref="hr_rule_parameter_night_surcharge_rate"/>
+            <field name="date_from">2025-01-01</field>
+            <field name="parameter_value">1.30</field>
         </record>
 
         <!-- Holiday Day Rate (200%) -->

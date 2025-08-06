@@ -2,109 +2,88 @@
 <odoo>
     <data noupdate="1">
 
-        <!-- Basic Salary Category -->
-        <record id="hr_salary_rule_category_basic_py" model="hr.salary.rule.category">
-            <field name="name">Salario Básico</field>
-            <field name="code">BASIC_PY</field>
-            <field name="parent_id" ref="hr_payroll.BASIC"/>
-        </record>
-
         <!-- Allowances Category -->
         <record id="hr_salary_rule_category_allowances_py" model="hr.salary.rule.category">
             <field name="name">Asignaciones</field>
             <field name="code">ALLOW_PY</field>
-            <field name="parent_id" ref="hr_payroll.ALW"/>
         </record>
 
         <!-- Overtime and Extra Hours Category -->
         <record id="hr_salary_rule_category_overtime_py" model="hr.salary.rule.category">
             <field name="name">Horas Extras y Recargos</field>
             <field name="code">OVERTIME_PY</field>
-            <field name="parent_id" ref="hr_payroll.ALW"/>
         </record>
 
         <!-- Family Benefits Category -->
         <record id="hr_salary_rule_category_family_py" model="hr.salary.rule.category">
             <field name="name">Beneficios Familiares</field>
             <field name="code">FAMILY_PY</field>
-            <field name="parent_id" ref="hr_payroll.ALW"/>
         </record>
 
         <!-- Vacation and Leave Category -->
         <record id="hr_salary_rule_category_vacation_py" model="hr.salary.rule.category">
             <field name="name">Vacaciones y Licencias</field>
             <field name="code">VACATION_PY</field>
-            <field name="parent_id" ref="hr_payroll.ALW"/>
         </record>
 
         <!-- IPS (Social Security) Category -->
         <record id="hr_salary_rule_category_ips_py" model="hr.salary.rule.category">
             <field name="name">IPS (Seguridad Social)</field>
             <field name="code">IPS_PY</field>
-            <field name="parent_id" ref="hr_payroll.DED"/>
         </record>
 
         <!-- Advances Category -->
         <record id="hr_salary_rule_category_advances_py" model="hr.salary.rule.category">
             <field name="name">Anticipos</field>
             <field name="code">ADVANCES_PY</field>
-            <field name="parent_id" ref="hr_payroll.DED"/>
         </record>
 
         <!-- Court Garnishments Category -->
         <record id="hr_salary_rule_category_garnishment_py" model="hr.salary.rule.category">
             <field name="name">Embargo Judicial</field>
             <field name="code">GARNISH_PY</field>
-            <field name="parent_id" ref="hr_payroll.DED"/>
         </record>
 
         <!-- Medical Insurance Category -->
         <record id="hr_salary_rule_category_medical_py" model="hr.salary.rule.category">
             <field name="name">Seguro Médico</field>
             <field name="code">MEDICAL_PY</field>
-            <field name="parent_id" ref="hr_payroll.DED"/>
         </record>
 
         <!-- Other Deductions Category -->
         <record id="hr_salary_rule_category_other_deductions_py" model="hr.salary.rule.category">
             <field name="name">Otros Descuentos</field>
             <field name="code">OTHER_DED_PY</field>
-            <field name="parent_id" ref="hr_payroll.DED"/>
         </record>
 
         <!-- Solidarity Contributions Category -->
         <record id="hr_salary_rule_category_solidarity_py" model="hr.salary.rule.category">
             <field name="name">Solidaridad</field>
             <field name="code">SOLIDARITY_PY</field>
-            <field name="parent_id" ref="hr_payroll.DED"/>
         </record>
 
         <!-- Total Base IPS Category (for reporting) -->
         <record id="hr_salary_rule_category_ips_base_py" model="hr.salary.rule.category">
             <field name="name">Total Base IPS</field>
             <field name="code">IPS_BASE_PY</field>
-            <field name="parent_id" ref="hr_payroll.GROSS"/>
-        </record>
-
-        <!-- Total Income Category -->
-        <record id="hr_salary_rule_category_total_income_py" model="hr.salary.rule.category">
-            <field name="name">Total Ingresos</field>
-            <field name="code">TOTAL_INC_PY</field>
-            <field name="parent_id" ref="hr_payroll.GROSS"/>
         </record>
 
         <!-- Net Salary Before Deductions -->
         <record id="hr_salary_rule_category_net_before_deductions_py" model="hr.salary.rule.category">
             <field name="name">Salario Neto (antes de descuentos)</field>
             <field name="code">NET_BEFORE_DED_PY</field>
-            <field name="parent_id" ref="hr_payroll.NET"/>
+        </record>
+
+        <!-- Non-Deductible Income Category -->
+        <record id="hr_salary_rule_category_non_deductible_py" model="hr.salary.rule.category">
+            <field name="name">Ingresos No Deducibles</field>
+            <field name="code">NON_DED_PY</field>
         </record>
 
         <!-- Total Deductions Category -->
         <record id="hr_salary_rule_category_total_deductions_py" model="hr.salary.rule.category">
             <field name="name">Total Descuentos</field>
             <field name="code">TOTAL_DED_PY</field>
-            <field name="parent_id" ref="hr_payroll.DED"/>
         </record>
 
     </data>

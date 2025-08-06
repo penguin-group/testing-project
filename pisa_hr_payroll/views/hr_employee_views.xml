@@ -8,8 +8,10 @@
             <field name="model">hr.employee</field>
             <field name="inherit_id" ref="hr.view_employee_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='children']" position="after">
-                    <field name="children_under_3"/>
+                <xpath expr="//field[@name='company_id']" position="after">
+                    <group string="Paraguay Information" name="paraguay_info">
+                        <field name="ips_number"/>
+                    </group>
                 </xpath>
             </field>
         </record>
