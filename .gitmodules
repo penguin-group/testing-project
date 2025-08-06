@@ -7,3 +7,8 @@
 	path = submodules/purchase-workflow
 	url = git@github.com:OCA/purchase-workflow.git
 	branch = 18.0
+
+[submodule "submodules/queue"]
+	path = submodules/queue
+	url = git@github.com:OCA/queue.git
+	branch = 18.0

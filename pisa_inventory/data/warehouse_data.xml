@@ -1,5 +1,5 @@
 <odoo>
-    <data noupdate="1">
+    <data>
         <record id="warehouse_on_rack" model="stock.warehouse">
             <field name="name">On Rack</field>
             <field name="code">ONR</field>
