@@ -1,0 +1,34 @@
+<odoo>
+    <data>
+        <record id="view_repair_steps_tree" model="ir.ui.view">
+            <field name="name">repair.steps.tree.view</field>
+            <field name="model">repair.steps</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name" />
+                    <field name="type" />
+                    <field name="url" />
+                    <field name="sequence" />
+                </list>
+            </field>
+        </record>
+
+        <record id="view_repair_steps_form" model="ir.ui.view">
+            <field name="name">repair.steps.form</field>
+            <field name="model">repair.steps</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="name" />
+                            <field name="type" />
+                            <field name="sequence" />
+                            <field name="url" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

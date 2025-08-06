@@ -1,0 +1,98 @@
+<odoo>
+    <data noupdate="1">
+
+        <record id="fault_asic_error" model="repair.fault">
+            <field name="name">ASIC_ERROR</field>
+            <field name="description">Failure of one or more ASIC chips. This may be due to communication issues, defective chips, or loss of response in the ASIC chain.</field>
+        </record>
+        <record id="fault_temp_error" model="repair.fault">
+            <field name="name">TEMP_ERROR</field>
+            <field name="description">Temperature out of safe range. Possible causes: insufficient ventilation, warm environment, obstructions, or faulty sensors.</field>
+        </record>
+        <record id="fault_fan_error" model="repair.fault">
+            <field name="name">FAN_ERROR</field>
+            <field name="description">One or more fans are not working, are disconnected, or spinning below the minimum threshold. This affects cooling capacity.</field>
+        </record>
+        <record id="fault_psu_error" model="repair.fault">
+            <field name="name">PSU_ERROR</field>
+            <field name="description">Power supply failure or communication loss. Could be due to a faulty PSU, unstable voltage, or a disconnected cable.</field>
+        </record>
+        <record id="fault_low_hashrate" model="repair.fault">
+            <field name="name">LOW_HASHRATE</field>
+            <field name="description">Hashrate is lower than expected. Common causes: inactive ASICs, high temperature, hashboard failures, or firmware issues.</field>
+        </record>
+        <record id="fault_hashboard_missing" model="repair.fault">
+            <field name="name">HASHBOARD_MISSING</field>
+            <field name="description">One or more hashboards were not detected. Possible causes include loose connections, physical failure, or firmware problems.</field>
+        </record>
+        <record id="fault_eeprom_error" model="repair.fault">
+            <field name="name">EEPROM_ERROR</field>
+            <field name="description">EEPROM read or write error. This may cause loss of settings, failed startup, or incorrect parameters.</field>
+        </record>
+        <record id="fault_boot_fail" model="repair.fault">
+            <field name="name">BOOT_FAIL</field>
+            <field name="description">The system does not complete the boot process. Possible causes: firmware corruption, control board issues, or damaged memory.</field>
+        </record>
+        <record id="fault_network_error" model="repair.fault">
+            <field name="name">NETWORK_ERROR</field>
+            <field name="description">No network connection. Check the cable, IP configuration, router/switch, or pool server status.</field>
+        </record>
+        <record id="fault_rtc_error" model="repair.fault">
+            <field name="name">RTC_ERROR</field>
+            <field name="description">Real-time clock error. Affects log synchronization, events, and scheduled functions.</field>
+        </record>
+        <record id="fault_crc_error" model="repair.fault">
+            <field name="name">CRC_ERROR</field>
+            <field name="description">Cyclic redundancy check (CRC) error between the control board and hashboards. Possible causes: interference or poor contact.</field>
+        </record>
+        <record id="fault_no_power" model="repair.fault">
+            <field name="name">NO_POWER</field>
+            <field name="description">The device does not power on. Could be due to a faulty PSU, short circuit on hashboard, or damaged control board.</field>
+        </record>
+        <record id="fault_freq_error" model="repair.fault">
+            <field name="name">FREQ_ERROR</field>
+            <field name="description">Error adjusting or maintaining chip operating frequency. Possible causes: incorrect EEPROM values or electrical instability.</field>
+        </record>
+        <record id="fault_vcore_unstable" model="repair.fault">
+            <field name="name">VCORE_UNSTABLE</field>
+            <field name="description">ASIC core voltage (Vcore) is unstable. This can compromise miner performance and stability.</field>
+        </record>
+        <record id="fault_pll_unlocked" model="repair.fault">
+            <field name="name">PLL_UNLOCKED</field>
+            <field name="description">The PLL circuit is not synchronizing correctly. This prevents the chips from operating at proper frequency.</field>
+        </record>
+        <record id="fault_temp_sensor_error" model="repair.fault">
+            <field name="name">TEMP_SENSOR_ERROR</field>
+            <field name="description">Temperature sensor reading error. Possible causes: damaged, disconnected, or incompatible sensors.</field>
+        </record>
+        <record id="fault_freq_offset_exceeded" model="repair.fault">
+            <field name="name">FREQ_OFFSET_EXCEEDED</field>
+            <field name="description">Chip frequency difference exceeds allowed threshold. Indicates desynchronization or defective chips.</field>
+        </record>
+        <record id="fault_ctrl_board_init_fail" model="repair.fault">
+            <field name="name">CTRL_BOARD_INIT_FAIL</field>
+            <field name="description">Failure during control board initialization. May be related to firmware or hardware issues.</field>
+        </record>
+        <record id="fault_power_limit" model="repair.fault">
+            <field name="name">POWER_LIMIT</field>
+            <field name="description">Active power consumption limitation due to overcurrent or overheating prevention. Impacts performance.</field>
+        </record>
+        <record id="fault_coolant_low_pressure" model="repair.fault">
+            <field name="name">COOLANT_LOW_PRESSURE</field>
+            <field name="description">(Liquid cooling) Low pressure in the cooling circuit. May trigger protective shutdown.</field>
+        </record>
+        <record id="fault_coolant_high_temp" model="repair.fault">
+            <field name="name">COOLANT_HIGH_TEMP</field>
+            <field name="description">(Liquid cooling) Coolant temperature is out of safe range. Risk of thermal shutdown.</field>
+        </record>
+        <record id="fault_over_temp_shutdown" model="repair.fault">
+            <field name="name">OVER_TEMP_SHUTDOWN</field>
+            <field name="description">Automatic shutdown due to excessive temperature as a protection measure. Check ventilation and dust buildup.</field>
+        </record>
+        <record id="fault_hashboards_unbalance" model="repair.fault">
+            <field name="name">HASHBOARDS_UNBALANCE</field>
+            <field name="description">Automatic shutdown due to imbalances in hashboard chips. Refer to technical support.</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,24 @@
+<odoo>
+    <record id="view_product_template_form_custom" model="ir.ui.view">
+        <field name="name">product.template.form.custom</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <field name="is_miner_category" invisible="1"/>
+            </xpath>
+            <xpath expr="//group[@name='group_standard_price']" position="after">
+                <group string="Miner Properties" invisible="is_miner_category != True" style="width: 100%;">
+                    <field name="miner_brand"/>
+                    <field name="miner_model"/>
+                    <field name="miner_hashrate_nominal"/>
+                    <field name="miner_theoretical_consumption"/>
+                    <field name="miner_input_voltage_minimum"/>
+                    <field name="miner_input_voltage_maximum"/>
+                    <field name="miner_efficiency"/>
+                    <field name="miner_cooling_type"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

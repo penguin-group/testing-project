@@ -1,0 +1,49 @@
+<odoo>
+    <record id="view_repair_order_kanban_custom" model="ir.ui.view">
+        <field name="name">repair.order.kanban.custom</field>
+        <field name="model">repair.order</field>
+        <field name="inherit_id" ref="repair.view_repair_kanban" />
+        <field name="arch" type="xml">
+            <xpath expr="//kanban" position="attributes">
+                <attribute name="kanban_drag">true</attribute>
+            </xpath>
+
+            <xpath expr="//kanban//templates//t[@t-name='card']//div[hasclass('row')]"
+                position="replace">
+                <div class="row w-100% p-2">
+                    <span class="col-6 fw-bolder mb-1">
+                        <field name="name" />
+                    </span>
+                    <field name="state" class="col-6 text-end mb-1" widget="label_selection"
+                        options="{'classes': {
+                           'draft': 'info',
+                           'confirmed': 'light',
+                           'under_repair': 'warning',
+                           'ready_for_deployment': 'dark',
+                           'done': 'success',
+                           'cancel': 'danger'
+                       }}"
+                    />
+                    <div class="col-6 text-muted">
+                        <span>
+                            <field name="product_id" />
+                        </span>
+                    </div>
+                    <div class="col-6 text-muted">
+                        <span class="float-end">
+                            <field name="partner_id" />
+                        </span>
+                    </div>
+                    <div class="col-12 text-muted">
+                        <field name="lot_id" string="Serial Number" readonly="1" groups="pisa_repair.group_noc" />
+                    </div>
+                    <field name="tag_ids" widget="many2many_tags"
+                        options="{'color_field': 'color'}"
+                        groups="pisa_repair.group_micro"
+                    />
+                </div>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

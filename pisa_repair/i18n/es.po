@@ -1,0 +1,1353 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#   * pisa_repair
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-11-20 19:08+0000\n"
+"PO-Revision-Date: 2024-11-20 19:08+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+# ============= repair_fault =============
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_fault__name
+msgid "Failure name"
+msgstr "Nombre de la Falla"
+
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/models/repair_fault.py:0
+#, python-format
+msgid "Delete Repair Fault"
+msgstr "Eliminar Falla de Reparación"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_final_resolution__name
+msgid "Resolution Name"
+msgstr "Nombre de la Resolución"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_final_resolution__repair_order_ids
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_order_list_custom
+msgid "Repair Orders"
+msgstr "Órdenes de Reparación"
+
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/models/repair_final_resolution.py:0
+#, python-format
+msgid "Delete Final Resolution"
+msgstr "Eliminar Resolución Final"
+
+
+# ============= repair_initial_state =============
+#. module: pisa_repair
+#: model:ir.model,name:pisa_repair.model_repair_initial_state
+msgid "Repair Initial State"
+msgstr "Estado Inicial de Reparación"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_initial_state__name
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_external_service__name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/models/repair_initial_state.py:0
+#, python-format
+msgid "Delete Initial State"
+msgstr "Eliminar Estado Inicial"
+
+
+
+# ============= repair_order_actions =============
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/models/repair_order_actions.py:0
+#, python-format
+msgid "The repair order is already in the final state."
+msgstr "La orden de reparación ya se encuentra en el estado final."
+
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/models/repair_order_actions.py:0
+#, python-format
+msgid "The transition to the next state is invalid."
+msgstr "La transición al siguiente estado no es válida."
+
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/models/repair_order_actions.py:0
+#, python-format
+msgid "All steps in 'Performed Steps Relation' must be completed before proceeding."
+msgstr "Todos los pasos en 'Relación de Pasos Realizados' deben completarse antes de continuar."
+
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/models/repair_order_actions.py:0
+#, python-format
+msgid "The 'Failure Evidence' field is mandatory. You must upload an image."
+msgstr "El campo 'Evidencia de Falla' es obligatorio. Debes subir una imagen."
+
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/models/repair_order_actions.py:0
+#, python-format
+msgid "The 'Initial State' field is mandatory. You must select an option."
+msgstr "El campo 'Estado Inicial' es obligatorio. Debes seleccionar una opción."
+
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/models/repair_order_actions.py:0
+#, python-format
+msgid "You cannot proceed while the miner is in rest mode. Please ensure all necessary conditions are met before continuing."
+msgstr "No puedes continuar mientras el minero está en modo de reposo. Asegúrate de que se cumplan todas las condiciones necesarias antes de continuar."
+
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/models/repair_order_actions.py:0
+#, python-format
+msgid "Ticket Validation"
+msgstr "Validar de Ticket"
+
+
+
+# ============= repair_order_fields =============
+#. module: pisa_repair
+#: model:ir.model,name:pisa_repair.model_repair_order_fields
+msgid "Repair Order Fields"
+msgstr "Campos de la Orden de Reparación"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__sale_order_id
+msgid "Sale Order"
+msgstr "Orden de Venta"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__lot_id
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_order_form_custom
+#: model_terms:ir.ui.view,arch_db:pisa_repair.portal_sale_order_inherit
+msgid "Lot/Serial Number"
+msgstr "Número de Lote/Serie"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__lot_ref
+msgid "Internal Reference"
+msgstr "Referencia Interna"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__scrapped
+msgid "Is the product scrapped?"
+msgstr "¿El producto es irreparable?"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__is_validated
+msgid "Is Validated"
+msgstr "Está Validado"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__is_noc
+msgid "Is NOC"
+msgstr "Es NOC"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__is_mining
+msgid "Is MINING"
+msgstr "Es Mining"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__is_micro
+msgid "Is MICRO"
+msgstr "Es Micro"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__tag_names
+msgid "Tag Names"
+msgstr "Nombres de Etiquetas"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__partner_id
+#: model_terms:ir.ui.view,arch_db:pisa_repair.custom_search_views
+msgid "Customer"
+msgstr "Cliente"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__product_id
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_order_list_custom
+msgid "Product to Repair"
+msgstr "Producto a Reparar"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__sequence
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order_steps_rel__step_sequence
+msgid "Sequence"
+msgstr "Secuencia"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__state
+msgid "Status"
+msgstr "Estado"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__state_priority
+msgid "State Priority"
+msgstr "Prioridad del Estado"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__external_service_id
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_external_service_form
+msgid "External Service"
+msgstr "Servicio Externo"
+
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/models/repair_order_fields.py:0
+#, python-format
+msgid "The product with serial number [%s] already has an active repair ticket ([%s]). It must be completed before creating a new ticket."
+msgstr "El producto con número de serie [%s] ya tiene un ticket de reparación activo ([%s]). Debe completarse antes de crear un nuevo ticket."
+
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/models/repair_order_fields.py:0
+#, python-format
+msgid "Validation Error"
+msgstr "Error de Validación"
+
+
+# ============= repair_order_mining_tab =============
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__is_invisible
+msgid "Is Invisible"
+msgstr "Es Invisible"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__initial_state
+msgid "Initial State"
+msgstr "Estado Inicial"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__replaced_components
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_replaced_components_form
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_replaced_components_tree
+msgid "Replaced Components"
+msgstr "Componentes Reemplazados"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__evidence_image
+msgid "Failure Evidence"
+msgstr "Evidencia de Falla"
+
+# repair_final_resolution
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__final_resolution
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_final_resolution_form
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_final_resolution_tree
+msgid "Final Resolution"
+msgstr "Resolución Final"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__extraction
+msgid "Will Extraction Be Necessary"
+msgstr "¿Será Necesario Extraerlo?"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__needs_rest
+msgid "Is it necessary to let it rest"
+msgstr "¿Es necesario dejarlo en reposo?"
+
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__all_steps_completed
+msgid "All Steps Completed"
+msgstr "Todos los Pasos Completados"
+
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__performed_steps_rel_ids
+msgid "Performed Steps"
+msgstr "Pasos Realizados"
+
+
+
+
+# ============= repair_order_form_tab_mining_view =============
+# falta cambiar los botonessss
+#. module: pisa_repair
+#: model:ir.ui.view,arch_db:pisa_repair.repair_order_form_tab_mining_view
+msgid "Start Rest"
+msgstr "Iniciar Reposo"
+
+#. module: pisa_repair
+#: model:ir.ui.view,arch_db:pisa_repair.repair_order_form_tab_mining_view
+msgid "End Rest"
+msgstr "Finalizar Reposo"
+
+
+
+
+
+
+# ============= repair_order_noc_tab =============
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__diagnosed_failure
+msgid "Diagnosed Failure"
+msgstr "Falla Diagnosticada"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__origin_location
+msgid "Origin Location"
+msgstr "Ubicación de Origen"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__destination_location
+msgid "Destination Location"
+msgstr "Ubicación de Destino"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_order_form_datos_noc
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_order_form_datos_noc
+msgid "Created on"
+msgstr "Creado el"
+
+
+
+# ============= repair_order_steps_rel =============
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order_steps_rel__order_id
+msgid "Repair Order"
+msgstr "Orden de Reparación"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order_steps_rel__step_id
+msgid "Step"
+msgstr "Paso"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order_steps_rel__step_name
+msgid "Step Name"
+msgstr "Nombre del Paso"
+
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order_steps_rel__step_url
+msgid "URL"
+msgstr "URL"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order_steps_rel__completed
+msgid "Completed"
+msgstr "Completado"
+
+#. module: pisa_repair
+#: model:ir.model.constraint,message:pisa_repair.constraint_unique_order_step
+msgid "This step is already added to this order."
+msgstr "Este paso ya ha sido agregado a esta orden."
+
+#. module: pisa_repair
+#: model:ir.model.constraint,message:pisa_repair.constraint_invalid_step_type
+msgid "You cannot add a step of type %s. Only steps of type 'general' or '%s' are allowed."
+msgstr "No puedes agregar un paso de tipo %s. Solo se permiten pasos de tipo 'general' o '%s'."
+
+
+
+# ============= repair_order_tag_history =============
+#. module: pisa_repair
+#: model:ir.model,name:pisa_repair.model_repair_order_tag_history
+msgid "Tag History in Repair Orders"
+msgstr "Historial de Etiquetas en Órdenes de Reparación"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order_tag_history__tag_id
+msgid "Tag"
+msgstr "Etiqueta"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order_tag_history__user_id
+msgid "Added by"
+msgstr "Agregado por"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order_tag_history__create_date
+msgid "Change Date"
+msgstr "Fecha de Cambio"
+
+
+
+# ============= repair_replaced_components =============
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_replaced_components__name
+msgid "Component Name"
+msgstr "Nombre del Componente"
+
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/models/repair_replaced_components.py:0
+#, python-format
+msgid "Delete Replaced Component"
+msgstr "Eliminar Componente Reemplazado"
+
+
+
+# ============= repair_steps =============
+#. module: pisa_repair
+#: model:ir.model,name:pisa_repair.model_repair_steps
+msgid "Steps to be performed"
+msgstr "Pasos a realizar"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_steps__name
+msgid "Steps"
+msgstr "Pasos"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_steps__type
+msgid "Type"
+msgstr "Tipo"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_steps__url
+msgid "Url"
+msgstr "URL"
+
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_steps__order_rel_ids
+#: model:ir.ui.menu,name:pisa_repair.repair.repair_order_menu
+#: model:ir.ui.menu,name:pisa_repair.repair_order_menu_micro
+msgid "Orders"
+msgstr "Órdenes"
+
+
+
+
+# ============= sale_order_line =============
+#. module: pisa_repair
+#: model:ir.model,name:pisa_repair.model_sale_order_line
+msgid "Sale Order Line"
+msgstr "Línea de Orden de Venta"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_sale_order_line__related_quotation_ids
+msgid "Related Quotations"
+msgstr "Cotizaciones Relacionadas"
+
+#. module: pisa_repair
+#: model:ir.model.fields,help:pisa_repair.field_sale_order_line__related_quotation_ids
+msgid "Original quotations related to this order line."
+msgstr "Cotizaciones originales relacionadas con esta línea de pedido."
+
+
+
+# ============= sale_order =============
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_sale_order__is_consolidated
+msgid "Is Consolidated"
+msgstr "Está Consolidado"
+
+#. module: pisa_repair
+#: model:ir.model.fields,help:pisa_repair.field_sale_order__is_consolidated
+msgid "Indicates if this quotation is a consolidation of other quotations."
+msgstr "Indica si esta cotización es una consolidación de otras cotizaciones."
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_sale_order__has_repair_orders
+msgid "Has Repair Orders"
+msgstr "Tiene Órdenes de Reparación"
+
+
+
+# ============= stock_move =============
+#. module: pisa_repair
+#: model:ir.model,name:pisa_repair.model_stock_move
+msgid "Stock Move"
+msgstr "Movimiento de Inventario"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_stock_move__repair_line_type
+msgid "Insumo"
+msgstr "Insumo"
+
+
+
+# ============= confirm_repair_extraction_view =============
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/models/repair_order_noc_tab.py:0
+#, python-format
+msgid "Confirm State Change"
+msgstr "Confirmar Cambio de Estado"
+
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_order_form_custom_buttons
+msgid "You have not marked 'Extraction Will Be Necessary'. If you continue, the order will go directly to 'Done'."
+msgstr "No ha marcado 'Será necesaria la extracción'. Si continúa, la orden se establecerá directamente a 'Completado'."
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_order_form_custom_buttons
+msgid "If the product is marked as scrapped, the order will be directly set to 'Done'. Do you want to proceed?"
+msgstr "Si el producto está marcado como desechado, la orden se establecerá directamente a 'Completado'. ¿Desea continuar?"
+
+
+
+
+# ============= confirm_repair_scrapped_view =============
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/models/repair_order_noc_tab.py:0
+#, python-format
+msgid "Confirm Scrapped Order"
+msgstr "Confirmar Estado de Irreparable"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.confirm_repair_scrapped_view_form
+msgid "Confirm"
+msgstr "Confirmar"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.confirm_repair_scrapped_view_form
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_ticket_validation_wizard_form
+msgid "Cancel"
+msgstr "Cancelar"
+
+
+# ============= consolidate_quotations_wizard =============
+#. module: pisa_repair
+#: model:ir.model,name:pisa_repair.model_consolidate_quotations_wizard
+msgid "Wizard to Consolidate Quotations"
+msgstr "Asistente para Consolidar Cotizaciones"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_consolidate_quotations_wizard__quotation_ids
+msgid "Quotations"
+msgstr "Cotizaciones"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_consolidate_quotations_wizard
+msgid "Consolidate"
+msgstr "Consolidar"
+
+#. module: pisa_repair
+#: model:ir.actions.act_window,name:pisa_repair.action_consolidate_quotations
+msgid "Consolidate Quotations"
+msgstr "Consolidar Cotizaciones"
+
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/wizards/consolidate_quotations_wizard.py:0
+#, python-format
+msgid "Please select at least two quotations."
+msgstr "Por favor, seleccione al menos dos cotizaciones."
+
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/wizards/consolidate_quotations_wizard.py:0
+#, python-format
+msgid "All quotations must belong to the same customer."
+msgstr "Todas las cotizaciones deben pertenecer al mismo cliente."
+
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/wizards/consolidate_quotations_wizard.py:0
+#, python-format
+msgid "The following quotations cannot be consolidated because they are not linked to any repair order: %s"
+msgstr "Las siguientes cotizaciones no pueden ser consolidadas porque no están vinculadas a ninguna orden de reparación: %s"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_consolidate_quotations_wizard
+msgid "Consolidated Quotation"
+msgstr "Cotización Consolidada"
+
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/wizards/consolidate_quotations_wizard.py:0
+#, python-format
+msgid "No Lot"
+msgstr "Sin Lote"
+
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/wizards/consolidate_quotations_wizard.py:0
+#, python-format
+msgid "N/A"
+msgstr "N/D"
+
+
+# ============= repair_fault_delete_wizard =============
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.repair_fault_delete_view_form
+#: model_terms:ir.ui.view,arch_db:pisa_repair.repair_final_resolution_delete_view_form
+#: model_terms:ir.ui.view,arch_db:pisa_repair.repair_initial_state_delete_view_form
+#: model_terms:ir.ui.view,arch_db:pisa_repair.repair_replaced_components_delete_view_form
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_final_resolution_tree
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_initial_state_tree
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_replaced_components_tree
+msgid "Are you sure you want to delete this record?"
+msgstr "¿Está seguro de que desea eliminar este registro?"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_fault_tree
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_final_resolution_tree
+#: model_terms:ir.ui.view,arch_db:pisa_repair.repair_initial_state_delete_view_form
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_initial_state_tree
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_replaced_components_tree
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_fault_tree
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_external_service_tree
+#: model_terms:ir.ui.view,arch_db:pisa_repair.repair_external_service_delete_view_form
+msgid "Delete"
+msgstr "Eliminar"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.repair_fault_delete_view_form
+#: model_terms:ir.ui.view,arch_db:pisa_repair.repair_final_resolution_delete_view_form
+#: model_terms:ir.ui.view,arch_db:pisa_repair.repair_initial_state_delete_view_form
+#: model_terms:ir.ui.view,arch_db:pisa_repair.repair_replaced_components_delete_view_form
+#: model_terms:ir.ui.view,arch_db:pisa_repair.repair_external_service_delete_view_form
+msgid "Discard"
+msgstr "Descartar"
+
+
+
+# ============= repair_initial_state_view =============
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_initial_state_form
+msgid "Initial State Name"
+msgstr "Nombre del Estado Inicial"
+
+
+
+# ============= ticket_validation_wizard =============
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_ticket_validation_wizard_form
+msgid "Warning"
+msgstr "Advertencia"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_ticket_validation_wizard_form
+msgid "Enter the Serial Number of the machine."
+msgstr "Ingrese el Número de Serie de la máquina."
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_ticket_validation_wizard_form
+msgid "Input Data"
+msgstr "Dato de Entrada"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_ticket_validation_wizard_form
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_order_form_custom_buttons
+msgid "Validate"
+msgstr "Validar"
+
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/wizards/ticket_validation.py:0
+#, python-format
+msgid "You must enter data to continue."
+msgstr "Debe ingresar datos para continuar."
+
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/wizards/ticket_validation.py:0
+#, python-format
+msgid "The product has no associated lot or serial number."
+msgstr "El producto no tiene un lote o número de serie asociado."
+
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/wizards/ticket_validation.py:0
+#, python-format
+msgid "The entered data does not match the machine's Serial Number."
+msgstr "Los datos ingresados no coinciden con el Número de Serie de la máquina."
+
+
+
+# ============= repair_order_customizations =============
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_order_form_custom_buttons
+msgid "Next Stage"
+msgstr "Siguiente Etapa"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_order_form_custom_buttons
+msgid "Start Diagnosis"
+msgstr "Iniciar Diagnóstico"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_order_form_custom_buttons
+msgid "Start Repair"
+msgstr "Iniciar Reparación"
+
+
+# ============= repair_order_statusbar =============
+#. module: pisa_repair
+#: model:ir.model.fields.selection,name:pisa_repair.selection__repair_order__state__draft
+msgid "Open Tickets"
+msgstr "Tickets Abiertos"
+
+#. module: pisa_repair
+#: model:ir.model.fields.selection,name:pisa_repair.selection__repair_order__state__confirmed
+#: model:repair.tags,name:pisa_repair.confirmed
+msgid "In Progress"
+msgstr "En Progreso"
+
+#. module: pisa_repair
+#: model:ir.model.fields.selection,name:pisa_repair.selection__repair_order__state__under_repair
+msgid "Repair Service Stage"
+msgstr "Etapa de Servicio de Reparación"
+
+#. module: pisa_repair
+#: model:ir.model.fields.selection,name:pisa_repair.selection__repair_order__state__ready_for_deployment
+msgid "Ready For Deployment"
+msgstr "Listo para Despliegue"
+
+#. module: pisa_repair
+#: model:ir.model.fields.selection,name:pisa_repair.selection__repair_order__state__done
+#: model:repair.tags,name:pisa_repair.done
+msgid "Done"
+msgstr "Completado"
+
+#. module: pisa_repair
+#: model:ir.model.fields.selection,name:pisa_repair.selection__repair_order__state__cancel
+#: model:repair.tags,name:pisa_repair.cancel
+msgid "Cancelled"
+msgstr "Cancelado"
+
+
+# ============= repair_order_list_custom =============
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_order_list_custom
+msgid "Repair Reference"
+msgstr "Referencia de Reparación"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_order_list_custom
+msgid "Scheduled Date"
+msgstr "Fecha Programada"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_order_list_custom
+#: model_terms:ir.ui.view,arch_db:pisa_repair.custom_search_views
+msgid "Serial Number"
+msgstr "Número de Serie"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_order_list_custom
+#: model_terms:ir.ui.view,arch_db:pisa_repair.custom_search_views
+msgid "Position"
+msgstr "Posición"
+
+# ============= repair_menu =============
+#. module: pisa_repair
+#: model:ir.ui.menu,name:pisa_repair.menu_steps_miner
+msgid "Steps Mining"
+msgstr "Pasos Mining"
+
+# ============= repair_menu =============
+#. module: pisa_repair
+#: model:ir.actions.act_window,name:pisa_repair.action_repair_steps
+#: model:ir.ui.view,arch_db:pisa_repair.view_repair_steps_tree
+#: model:ir.ui.view,arch_db:pisa_repair.view_repair_steps_form
+msgid "Repair Steps"
+msgstr "Pasos de Reparación"
+
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_fault_tree
+msgid "Are you sure you want to delete this fault?"
+msgstr "¿Estás seguro de que quieres eliminar esta falla?"
+
+# ============= pisa_repair =============
+#. module: pisa_repair
+#. odoo-python
+#: code:pisa-addons/pisa_repair/models/stock_move.py:0
+#, python-format
+msgid "Error: No valid product provided."
+msgstr "Error: No se proporcionó un producto válido."
+
+#. module: pisa_repair
+#. odoo-python
+#: code:pisa-addons/pisa_repair/models/stock_move.py:0
+#, python-format
+msgid "Error: No internal location found for the product %s."
+msgstr "Error: No se encontró una ubicación interna para el producto %s."
+
+#. module: pisa_repair
+#. odoo-python
+#: code:pisa-addons/pisa_repair/models/stock_move.py:0
+#, python-format
+msgid "Error: No valid Scrap location found in the database."
+msgstr "Error: No se encontró una ubicación de desecho válida en la base de datos."
+
+#. module: pisa_repair
+#. odoo-python
+#: code:pisa-addons/pisa_repair/models/stock_move.py:0
+#, python-format
+msgid "Warning: No availability of product %s in any warehouse."
+msgstr "Advertencia: No hay disponibilidad del producto %s en ningún almacén."
+
+#. module: pisa_repair
+#. odoo-python
+#: code:pisa-addons/pisa_repair/models/stock_move.py:0
+#, python-format
+msgid "Warning: The requested quantity (%s) of product %s exceeds the available stock (%s)."
+msgstr "Advertencia: La cantidad solicitada (%s) del producto %s excede el stock disponible (%s)."
+
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/models/sale_order.py:0
+#, python-format
+msgid "No quotations have been selected for consolidation."
+msgstr "No se han seleccionado cotizaciones para la consolidación."
+
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/models/sale_order.py:0
+#, python-format
+msgid "Cannot consolidate because one of the selected quotations is already a consolidation and groups other quotations:\n%s"
+msgstr "No se puede consolidar porque una de las cotizaciones seleccionadas ya es una consolidación y agrupa otras cotizaciones:\n%s"
+
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/models/sale_order.py:0
+#, python-format
+msgid "Cannot consolidate because the following quotations already belong to an active consolidation:\n%s"
+msgstr "No se puede consolidar porque las siguientes cotizaciones ya pertenecen a una consolidación activa:\n%s"
+
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/models/sale_order.py:0
+#, python-format
+msgid "%s -> %s"
+msgstr "%s -> %s"
+
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/models/sale_order.py:0
+#, python-format
+msgid "Cannot consolidate because the following quotations do not have products added:\n%s"
+msgstr "No se puede consolidar porque las siguientes cotizaciones no tienen productos agregados:\n%s"
+
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/models/repair_order_fields.py:0
+#, python-format
+msgid "The product with serial number [%s] was previously marked as irreparable in repair order [%s]. It cannot be added to a new repair order."
+msgstr "El producto con número de serie [%s] fue previamente marcado como irreparable en la orden [%s]. No puede ser agregado a una nueva orden de reparación."
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_order_form_custom_buttons
+msgid "Are you sure you want to cancel this repair?"
+msgstr "¿Está seguro que desea cancelar esta reparación?"
+
+
+
+#. module: pisa_repair
+#: model:repair.initial.state,name:pisa_repair.state_breaker_triggered
+msgid "Breaker tripped. Miner has no power."
+msgstr "Disyuntor accionado. Minero sin alimentación."
+
+#. module: pisa_repair
+#: model:repair.initial.state,name:pisa_repair.state_burning_smell
+msgid "Burning smell near the equipment"
+msgstr "Olor a quemado cerca del equipo"
+
+#. module: pisa_repair
+#: model:repair.initial.state,name:pisa_repair.state_oil_bubbles
+msgid "Constant bubbles in immersion tank"
+msgstr "Burbujas constantes en tanque de inmersión"
+
+#. module: pisa_repair
+#: model:repair.initial.state,name:pisa_repair.state_fan_stopped
+msgid "Fan stopped (one or more)"
+msgstr "Ventilador detenido (uno o más)"
+
+#. module: pisa_repair
+#: model:repair.initial.state,name:pisa_repair.state_heat_wall_loose
+msgid "Heat wall is loose or poorly placed"
+msgstr "Pared de calor suelta o mal colocada"
+
+#. module: pisa_repair
+#: model:repair.initial.state,name:pisa_repair.state_inflated_hose
+msgid "Hose is swollen or deformed"
+msgstr "Manguera inflada o deformada"
+
+#. module: pisa_repair
+#: model:repair.initial.state,name:pisa_repair.state_hot_air_backflow
+msgid "Hot air backflow through the equipment"
+msgstr "Reflujo de aire caliente por el equipo"
+
+#. module: pisa_repair
+#: model:repair.initial.state,name:pisa_repair.state_fan_noise_vibration
+msgid "Intermittent fan noise or abnormal vibration"
+msgstr "Ruido intermitente en ventilador o vibración anormal"
+
+#. module: pisa_repair
+#: model:repair.initial.state,name:pisa_repair.state_power_connector_loose
+msgid "Loose power connector"
+msgstr "Conector de alimentación flojo"
+
+#. module: pisa_repair
+#: model:repair.initial.state,name:pisa_repair.state_low_dielectric_oil
+msgid "Low visible dielectric oil level"
+msgstr "Nivel bajo de aceite dieléctrico visible"
+
+#. module: pisa_repair
+#: model:repair.initial.state,name:pisa_repair.state_machine_off
+msgid "Machine off (no lights or fans)"
+msgstr "Máquina apagada (sin luces ni ventiladores)"
+
+#. module: pisa_repair
+#: model:repair.initial.state,name:pisa_repair.state_network_led_off
+msgid "Network LED off. Possible Ethernet port issue"
+msgstr "LED de red apagado. Problemas de puerto Ethernet"
+
+#. module: pisa_repair
+#: model:repair.initial.state,name:pisa_repair.state_network_cable_loose
+msgid "Network cable disconnected or loose"
+msgstr "Cable de red desconectado o flojo"
+
+#. module: pisa_repair
+#: model:repair.initial.state,name:pisa_repair.state_dark_oil
+msgid "Oil appears dark or cloudy"
+msgstr "Aceite con color oscuro o turbio"
+
+#. module: pisa_repair
+#: model:repair.initial.state,name:pisa_repair.state_oil_spill
+msgid "Oil stains or spills at the base of the tank"
+msgstr "Manchas o derrames de aceite en base del tanque"
+
+#. module: pisa_repair
+#: model:repair.initial.state,name:pisa_repair.state_green_lights_no_activity
+msgid "Only steady green lights, but no activity on dashboard"
+msgstr "Solo luces verdes fijas, pero sin actividad en dashboard"
+
+#. module: pisa_repair
+#: model:repair.initial.state,name:pisa_repair.state_power_cable_burnt
+msgid "Power cable shows burn or melted marks"
+msgstr "Cable de poder con marcas de quemado o derretido"
+
+#. module: pisa_repair
+#: model:repair.initial.state,name:pisa_repair.state_pests_present
+msgid "Presence of insects or rodents in or near the equipment"
+msgstr "Presencia de insectos o roedores en o cerca del equipo"
+
+#. module: pisa_repair
+#: model:repair.initial.state,name:pisa_repair.state_error_lights_red
+msgid "Red error lights on (steady or blinking)"
+msgstr "Luces de error en rojo fijo o parpadeante"
+
+#. module: pisa_repair
+#: model:repair.initial.state,name:pisa_repair.state_humidity_reported
+msgid "Reported presence of humidity"
+msgstr "Presencia de humedad reportada"
+
+#. module: pisa_repair
+#: model:repair.initial.state,name:pisa_repair.state_dust_accumulation
+msgid "Visible dust accumulation on grilles or fans"
+msgstr "Acumulación visible de polvo en rejillas o ventiladores"
+
+#. module: pisa_repair
+#: model:repair.initial.state,name:pisa_repair.state_water_leak
+msgid "Water leak in hoses"
+msgstr "Fuga de agua en mangueras"
+
+#. module: pisa_repair
+#: model:repair.final.resolution,name:pisa_repair.resolution_breaker_reactivated
+msgid "Breaker reactivated"
+msgstr "Disyuntor reactivado"
+
+#. module: pisa_repair
+#: model:repair.final.resolution,name:pisa_repair.resolution_firmware_flashed
+msgid "Firmware flashed"
+msgstr "Firmware flasheado"
+
+#. module: pisa_repair
+#: model:repair.final.resolution,name:pisa_repair.resolution_heatwall_adjusted
+msgid "Heat wall repositioned"
+msgstr "Reacomodación de pared de calor"
+
+#. module: pisa_repair
+#: model:repair.final.resolution,name:pisa_repair.resolution_hoses_replaced
+msgid "Hoses replaced"
+msgstr "Cambio de mangueras"
+
+#. module: pisa_repair
+#: model:repair.final.resolution,name:pisa_repair.resolution_miner_power_reset
+msgid "Miner disconnected and reconnected"
+msgstr "Minero desconectado y reconectado"
+
+#. module: pisa_repair
+#: model:repair.final.resolution,name:pisa_repair.resolution_dust_cleaned
+#: model:repair.final.resolution,name:pisa_repair.resolution_dust_cleaned_2
+msgid "Miner dust cleaned"
+msgstr "Limpieza de polvo del minero"
+
+#. module: pisa_repair
+#: model:repair.final.resolution,name:pisa_repair.resolution_fan_replaced
+msgid "Miner fan replaced"
+msgstr "Fan del minero reemplazado"
+
+#. module: pisa_repair
+#: model:repair.final.resolution,name:pisa_repair.resolution_miner_restarted
+msgid "Miner physically restarted"
+msgstr "Minero reiniciado físicamente"
+
+#. module: pisa_repair
+#: model:repair.final.resolution,name:pisa_repair.resolution_miner_repositioned
+msgid "Miner repositioned"
+msgstr "Cambio de posición del minero"
+
+#. module: pisa_repair
+#: model:repair.final.resolution,name:pisa_repair.resolution_position_optimized
+msgid "Miner repositioned to improve airflow"
+msgstr "Se reorganizó posición para mejorar flujo de aire"
+
+#. module: pisa_repair
+#: model:repair.final.resolution,name:pisa_repair.resolution_miner_restarted_soft
+msgid "Miner restarted"
+msgstr "Minero reiniciado"
+
+#. module: pisa_repair
+#: model:repair.final.resolution,name:pisa_repair.resolution_unit_ok
+msgid "Miner working properly"
+msgstr "Minero funcionando correctamente"
+
+#. module: pisa_repair
+#: model:repair.final.resolution,name:pisa_repair.resolution_network_reconnected
+msgid "Network cable reconnected"
+msgstr "Cable de red reconectado"
+
+#. module: pisa_repair
+#: model:repair.final.resolution,name:pisa_repair.resolution_network_cable_replaced
+msgid "Network cable replaced"
+msgstr "Cable de red cambiado"
+
+#. module: pisa_repair
+#: model:repair.final.resolution,name:pisa_repair.resolution_oil_refilled
+msgid "Oil level refilled"
+msgstr "Se repuso nivel de aceite"
+
+#. module: pisa_repair
+#: model:repair.final.resolution,name:pisa_repair.resolution_power_cable_changed
+msgid "Power cable replaced"
+msgstr "Cambio de cable de fuerza"
+
+#. module: pisa_repair
+#: model:repair.final.resolution,name:pisa_repair.resolution_psu_reconnected
+msgid "Power supply disconnected and reconnected"
+msgstr "Fuente desconectada y reconectada"
+
+#. module: pisa_repair
+#: model:repair.final.resolution,name:pisa_repair.resolution_sent_to_maintenance
+msgid "Referred to maintenance"
+msgstr "Derivado a mantenimiento"
+
+#. module: pisa_repair
+#: model:repair.final.resolution,name:pisa_repair.resolution_sent_to_networking
+msgid "Referred to networking"
+msgstr "Derivado a networking"
+
+#. module: pisa_repair
+#: model:repair.final.resolution,name:pisa_repair.resolution_switch_port_changed
+msgid "Switch port changed"
+msgstr "Cambio de puerto en switch"
+
+#. module: pisa_repair
+#: model:repair.final.resolution,name:pisa_repair.resolution_switch_restarted
+msgid "Switch restarted"
+msgstr "Se reinició el switch"
+
+#. module: pisa_repair
+#: model:repair.final.resolution,name:pisa_repair.resolution_valves_opened
+msgid "Water valves opened"
+msgstr "Se abrieron las válvulas de agua"
+
+
+#. module: pisa_repair
+#: model:repair.fault,description:pisa_repair.fault_coolant_high_temp
+msgid ""
+"(Liquid cooling) Coolant temperature is out of safe range. Risk of thermal "
+"shutdown."
+msgstr "(Refrigeración líquida) Temperatura del líquido refrigerante fuera de rango seguro. Riesgo de apagado térmico."
+
+#. module: pisa_repair
+#: model:repair.fault,description:pisa_repair.fault_coolant_low_pressure
+msgid ""
+"(Liquid cooling) Low pressure in the cooling circuit. May trigger protective"
+" shutdown."
+msgstr "(Refrigeración líquida) Baja presión en el circuito de refrigeración. Puede provocar apagado de protección."
+
+#. module: pisa_repair
+#: model:repair.fault,description:pisa_repair.fault_vcore_unstable
+msgid ""
+"ASIC core voltage (Vcore) is unstable. This can compromise miner performance"
+" and stability."
+msgstr "Voltaje del núcleo ASIC (Vcore) presenta inestabilidad. Esto puede comprometer el rendimiento y estabilidad del minero."
+
+#. module: pisa_repair
+#: model:repair.fault,name:pisa_repair.fault_asic_error
+msgid "ASIC_ERROR"
+msgstr "ASIC_ERROR"
+
+#. module: pisa_repair
+#: model:repair.fault,description:pisa_repair.fault_power_limit
+msgid ""
+"Active power consumption limitation due to overcurrent or overheating "
+"prevention. Impacts performance."
+msgstr "Limitación activa de consumo de energía por sobrecorriente o prevención de sobrecalentamiento. Afecta el rendimiento."
+
+#. module: pisa_repair
+#: model:repair.fault,description:pisa_repair.fault_over_temp_shutdown
+msgid ""
+"Automatic shutdown due to excessive temperature as a protection measure. "
+"Check ventilation and dust buildup."
+msgstr "Apagado automático del equipo por exceso de temperatura como medida de protección. Revisar ventilación y acumulación de polvo."
+
+#. module: pisa_repair
+#: model:repair.fault,description:pisa_repair.fault_hashboards_unbalance
+msgid ""
+"Automatic shutdown due to imbalances in hashboard chips. Refer to technical "
+"support."
+msgstr "Apagado automático del equipo por desbalances en los chips de las hashboards. Derivación al equipo técnico."
+
+#. module: pisa_repair
+#: model:repair.fault,name:pisa_repair.fault_boot_fail
+msgid "BOOT_FAIL"
+msgstr "BOOT_FAIL"
+
+#. module: pisa_repair
+#: model:repair.fault,name:pisa_repair.fault_coolant_high_temp
+msgid "COOLANT_HIGH_TEMP"
+msgstr "COOLANT_HIGH_TEMP"
+
+#. module: pisa_repair
+#: model:repair.fault,name:pisa_repair.fault_coolant_low_pressure
+msgid "COOLANT_LOW_PRESSURE"
+msgstr "COOLANT_LOW_PRESSURE"
+
+#. module: pisa_repair
+#: model:repair.fault,name:pisa_repair.fault_crc_error
+msgid "CRC_ERROR"
+msgstr "CRC_ERROR"
+
+#. module: pisa_repair
+#: model:repair.fault,name:pisa_repair.fault_ctrl_board_init_fail
+msgid "CTRL_BOARD_INIT_FAIL"
+msgstr "CTRL_BOARD_INIT_FAIL"
+
+#. module: pisa_repair
+#: model:repair.fault,description:pisa_repair.fault_freq_offset_exceeded
+msgid ""
+"Chip frequency difference exceeds allowed threshold. Indicates "
+"desynchronization or defective chips."
+msgstr "Diferencia entre frecuencias de chips supera el umbral permitido. Indica desincronización o chips defectuosos."
+
+#. module: pisa_repair
+#: model:repair.fault,description:pisa_repair.fault_crc_error
+msgid ""
+"Cyclic redundancy check (CRC) error between the control board and "
+"hashboards. Possible causes: interference or poor contact."
+msgstr "Error en verificación cíclica de datos entre la control board y las hashboards. Posibles causas: interferencia o mal contacto."
+
+#. module: pisa_repair
+#: model:repair.fault,description:pisa_repair.fault_eeprom_error
+msgid ""
+"EEPROM read or write error. This may cause loss of settings, failed startup,"
+" or incorrect parameters."
+msgstr "Error en la lectura o escritura de la EEPROM. Puede causar pérdida de configuraciones, arranque fallido o parámetros incorrectos."
+
+#. module: pisa_repair
+#: model:repair.fault,name:pisa_repair.fault_eeprom_error
+msgid "EEPROM_ERROR"
+msgstr "EEPROM_ERROR"
+
+#. module: pisa_repair
+#: model:repair.fault,description:pisa_repair.fault_freq_error
+msgid ""
+"Error adjusting or maintaining chip operating frequency. Possible causes: "
+"incorrect EEPROM values or electrical instability."
+msgstr "Error al ajustar o mantener la frecuencia de operación de los chips. Puede deberse a valores EEPROM incorrectos o inestabilidad eléctrica."
+
+#. module: pisa_repair
+#: model:repair.fault,name:pisa_repair.fault_fan_error
+msgid "FAN_ERROR"
+msgstr "FAN_ERROR"
+
+#. module: pisa_repair
+#: model:repair.fault,name:pisa_repair.fault_freq_error
+msgid "FREQ_ERROR"
+msgstr "FREQ_ERROR"
+
+#. module: pisa_repair
+#: model:repair.fault,name:pisa_repair.fault_freq_offset_exceeded
+msgid "FREQ_OFFSET_EXCEEDED"
+msgstr "FREQ_OFFSET_EXCEEDED"
+
+#. module: pisa_repair
+#: model:repair.fault,description:pisa_repair.fault_ctrl_board_init_fail
+msgid ""
+"Failure during control board initialization. May be related to firmware or "
+"hardware issues."
+msgstr "Fallo durante la inicialización de la control board. Puede estar relacionado con problemas de firmware o hardware."
+
+#. module: pisa_repair
+#: model:repair.fault,description:pisa_repair.fault_asic_error
+msgid ""
+"Failure of one or more ASIC chips. This may be due to communication issues, "
+"defective chips, or loss of response in the ASIC chain."
+msgstr "Falla de uno o varios chips ASIC. Puede deberse a problemas de comunicación, chips defectuosos o pérdida de respuesta en la cadena de ASICs."
+
+#. module: pisa_repair
+#: model:repair.fault,name:pisa_repair.fault_hashboards_unbalance
+msgid "HASHBOARDS_UNBALANCE"
+msgstr "HASHBOARDS_UNBALANCE"
+
+#. module: pisa_repair
+#: model:repair.fault,name:pisa_repair.fault_hashboard_missing
+msgid "HASHBOARD_MISSING"
+msgstr "HASHBOARD_MISSING"
+
+#. module: pisa_repair
+#: model:repair.fault,description:pisa_repair.fault_low_hashrate
+msgid ""
+"Hashrate is lower than expected. Common causes: inactive ASICs, high "
+"temperature, hashboard failures, or firmware issues."
+msgstr "Hashrate inferior al esperado. Causas comunes: ASICs inactivos, temperatura alta, fallos en hashboards o firmware."
+
+#. module: pisa_repair
+#: model:repair.fault,name:pisa_repair.fault_low_hashrate
+msgid "LOW_HASHRATE"
+msgstr "LOW_HASHRATE"
+
+#. module: pisa_repair
+#: model:repair.fault,name:pisa_repair.fault_network_error
+msgid "NETWORK_ERROR"
+msgstr "NETWORK_ERROR"
+
+#. module: pisa_repair
+#: model:repair.fault,name:pisa_repair.fault_no_power
+msgid "NO_POWER"
+msgstr "NO_POWER"
+
+#. module: pisa_repair
+#: model:repair.fault,description:pisa_repair.fault_network_error
+msgid ""
+"No network connection. Check the cable, IP configuration, router/switch, or "
+"pool server status."
+msgstr "No hay conexión de red. Revisar cable, configuración IP, router/switch o estado del servidor pool."
+
+#. module: pisa_repair
+#: model:repair.fault,name:pisa_repair.fault_over_temp_shutdown
+msgid "OVER_TEMP_SHUTDOWN"
+msgstr "OVER_TEMP_SHUTDOWN"
+
+#. module: pisa_repair
+#: model:repair.fault,description:pisa_repair.fault_fan_error
+msgid ""
+"One or more fans are not working, are disconnected, or spinning below the "
+"minimum threshold. This affects cooling capacity."
+msgstr "Uno o más ventiladores no funcionan, están desconectados o giran por debajo del umbral mínimo. Afecta la capacidad de enfriamiento."
+
+#. module: pisa_repair
+#: model:repair.fault,description:pisa_repair.fault_hashboard_missing
+msgid ""
+"One or more hashboards were not detected. Possible causes include loose "
+"connections, physical failure, or firmware problems."
+msgstr "Una o más hashboards no fueron detectadas. Puede ser por conexión suelta, fallo físico o problema de firmware."
+
+#. module: pisa_repair
+#: model:repair.fault,name:pisa_repair.fault_pll_unlocked
+msgid "PLL_UNLOCKED"
+msgstr "PLL_UNLOCKED"
+
+#. module: pisa_repair
+#: model:repair.fault,name:pisa_repair.fault_power_limit
+msgid "POWER_LIMIT"
+msgstr "POWER_LIMIT"
+
+#. module: pisa_repair
+#: model:repair.fault,name:pisa_repair.fault_psu_error
+msgid "PSU_ERROR"
+msgstr "PSU_ERROR"
+
+#. module: pisa_repair
+#: model:repair.fault,description:pisa_repair.fault_psu_error
+msgid ""
+"Power supply failure or communication loss. Could be due to a faulty PSU, "
+"unstable voltage, or a disconnected cable."
+msgstr "Falla o falta de comunicación con la fuente de alimentación. Puede deberse a PSU defectuosa, voltaje inestable o cable desconectado."
+
+#. module: pisa_repair
+#: model:repair.fault,name:pisa_repair.fault_rtc_error
+msgid "RTC_ERROR"
+msgstr "RTC_ERROR"
+
+#. module: pisa_repair
+#: model:repair.fault,description:pisa_repair.fault_rtc_error
+msgid ""
+"Real-time clock error. Affects log synchronization, events, and scheduled "
+"functions."
+msgstr "Error en el reloj de tiempo real. Afecta la sincronización de logs, eventos y funciones programadas."
+
+#. module: pisa_repair
+#: model:repair.fault,name:pisa_repair.fault_temp_error
+msgid "TEMP_ERROR"
+msgstr "TEMP_ERROR"
+
+#. module: pisa_repair
+#: model:repair.fault,name:pisa_repair.fault_temp_sensor_error
+msgid "TEMP_SENSOR_ERROR"
+msgstr "TEMP_SENSOR_ERROR"
+
+#. module: pisa_repair
+#: model:repair.fault,description:pisa_repair.fault_temp_error
+msgid ""
+"Temperature out of safe range. Possible causes: insufficient ventilation, "
+"warm environment, obstructions, or faulty sensors."
+msgstr "Temperatura fuera de rango seguro. Causas posibles: ventilación insuficiente, ambiente cálido, obstrucciones o sensores defectuosos."
+
+#. module: pisa_repair
+#: model:repair.fault,description:pisa_repair.fault_temp_sensor_error
+msgid ""
+"Temperature sensor reading error. Possible causes: damaged, disconnected, or"
+" incompatible sensors."
+msgstr "Error en lectura de sensores de temperatura. Puede deberse a sensores dañados, desconectados o incompatibles."
+
+#. module: pisa_repair
+#: model:repair.fault,description:pisa_repair.fault_pll_unlocked
+msgid ""
+"The PLL circuit is not synchronizing correctly. This prevents the chips from"
+" operating at proper frequency."
+msgstr "El circuito PLL no se sincroniza correctamente. Esto impide que los chips trabajen en frecuencia adecuada."
+
+#. module: pisa_repair
+#: model:repair.fault,description:pisa_repair.fault_no_power
+msgid ""
+"The device does not power on. Could be due to a faulty PSU, short circuit on"
+" hashboard, or damaged control board."
+msgstr "El equipo no enciende. Puede ser por PSU defectuosa, cortocircuito en hashboard o control board dañada."
+
+#. module: pisa_repair
+#: model:repair.fault,description:pisa_repair.fault_boot_fail
+msgid ""
+"The system does not complete the boot process. Possible causes: firmware "
+"corruption, control board issues, or damaged memory."
+msgstr "El sistema no completa el proceso de arranque. Puede deberse a corrupción de firmware, problema en control board o memoria dañada."
+
+#. module: pisa_repair
+#: model:repair.fault,name:pisa_repair.fault_vcore_unstable
+msgid "VCORE_UNSTABLE"
+msgstr "VCORE_UNSTABLE"

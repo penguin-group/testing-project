@@ -1,0 +1,21 @@
+<odoo>
+    <record id="view_order_form_inherit_product_2" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.product_2</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/list/field[@name='product_template_id']"
+                position="after">
+                <field name="related_quotation_ids" widget="many2one"
+                    column_invisible="parent.is_consolidated == False" />
+                <field name="lot_serial" column_invisible="parent.is_consolidated == False" />
+            </xpath>
+
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="is_consolidated" invisible='1' />
+                <field name="has_repair_orders" invisible="1" />
+
+            </xpath>
+        </field>
+    </record>
+</odoo>
