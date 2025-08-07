@@ -129,7 +129,45 @@
             <field name="code">OTHER_DEDUCTIONS</field>
             <field name="country_id" ref="base.py"/>
             <field name="available_in_attachments" eval="True"/>
-        </record>        
+        </record>
+
+        <!-- Parking Deduction Input -->
+        <record id="payslip_input_parking" model="hr.payslip.input.type">
+            <field name="name">Estacionamiento</field>
+            <field name="code">PARKING</field>
+            <field name="country_id" ref="base.py"/>
+            <field name="available_in_attachments" eval="True"/>
+        </record>
+
+        <!-- Training Deduction Input -->
+        <record id="payslip_input_training" model="hr.payslip.input.type">
+            <field name="name">Capacitación</field>
+            <field name="code">TRAINING</field>
+            <field name="country_id" ref="base.py"/>
+            <field name="available_in_attachments" eval="True"/>
+        </record>
+
+        <!-- Loan Deduction Input -->
+        <record id="payslip_input_loan" model="hr.payslip.input.type">
+            <field name="name">Préstamo</field>
+            <field name="code">LOAN</field>
+            <field name="country_id" ref="base.py"/>
+            <field name="available_in_attachments" eval="True"/>
+        </record>
+
+        <!-- Notice Period Pay Input -->
+        <record id="payslip_input_notice_pay" model="hr.payslip.input.type">
+            <field name="name">Pre aviso</field>
+            <field name="code">NOTICE_PAY</field>
+            <field name="country_id" ref="base.py"/>
+        </record>
+
+        <!-- Severance Pay Input -->
+        <record id="payslip_input_severance_pay" model="hr.payslip.input.type">
+            <field name="name">Indemnización</field>
+            <field name="code">SEVERANCE_PAY</field>
+            <field name="country_id" ref="base.py"/>
+        </record>
 
     </data>
 </odoo>

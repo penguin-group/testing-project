@@ -86,5 +86,17 @@
             <field name="code">TOTAL_DED_PY</field>
         </record>
 
+        <!-- Provisions Category (for monthly provisions) -->
+        <record id="hr_salary_rule_category_provisions_py" model="hr.salary.rule.category">
+            <field name="name">Provisiones</field>
+            <field name="code">PROVISIONS_PY</field>
+        </record>
+
+        <!-- Employer Contributions Category -->
+        <record id="hr_salary_rule_category_employer_contributions_py" model="hr.salary.rule.category">
+            <field name="name">Aportes Patronales</field>
+            <field name="code">EMPLOYER_CONTRIB_PY</field>
+        </record>
+
     </data>
 </odoo>
