@@ -16,3 +16,4 @@ from . import repair_final_resolution
 from . import repair_steps
 from . import repair_order_steps_rel
 from . import repair_external_service
+from . import stock_move_patch

@@ -16,7 +16,7 @@
                     invisible="under_warranty or state == 'draft' or state == 'confirmed' or is_mining">
                     
                     <field name="move_ids" readonly="state == 'cancel' or state == 'done'" 
-                        context="{'default_repair_id': id, 'default_product_uom_qty': 1, 'default_company_id': company_id, 'default_date': schedule_date, 'default_repair_line_type': 'add'}">
+                        context="{'default_repair_id': id, 'default_product_uom_qty': 1, 'default_company_id': company_id, 'default_date': schedule_date, 'default_repair_line_type': 'insumo'}">
                         <list string="Operations" editable="bottom">
                             <control>
                                 <create string="Add a line"/>
