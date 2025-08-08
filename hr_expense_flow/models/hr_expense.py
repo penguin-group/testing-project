@@ -243,5 +243,5 @@ class HrExpense(models.Model):
             'line_ids': line_ids
         }
         clearing_entry = self.env['account.move'].sudo().create(move_vals)
-        clearing_entry.line_ids._inverse_amount_currency()
+        clearing_entry.action_post()
         return clearing_entry
