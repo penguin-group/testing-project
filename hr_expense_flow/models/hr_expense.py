@@ -239,7 +239,7 @@ class HrExpense(models.Model):
             'expense_sheet_id': self.sheet_id.id,
             'date': self.date,
             'journal_id': self.company_id.clearing_journal_id.id,
-            'ref': f'Clearing entry for expense {self.name}',
+            'ref': f'Clearing entry for expense {self.name} - Vendor: {self.vendor_id.name}',
             'line_ids': line_ids
         }
         clearing_entry = self.env['account.move'].sudo().create(move_vals)
