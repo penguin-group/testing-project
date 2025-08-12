@@ -126,12 +126,12 @@ class HrExpenseSheet(models.Model):
                 'views': [(False, 'list'), (False, 'form')],
             })
         return action
-    
+
     @api.depends_context('uid')
     @api.depends('employee_id')
     def _compute_can_approve(self):
         """ Full override of '_compute_can_approve' method of the hr_expense module to add custom logic for approval checks."""
-        
+
         is_team_approver = self.env.user.has_group('hr_expense.group_hr_expense_team_approver') or self.env.su
         is_approver = self.env.user.has_group('hr_expense.group_hr_expense_user') or self.env.su
         is_hr_admin = self.env.user.has_group('hr_expense.group_hr_expense_manager') or self.env.su
