@@ -41,8 +41,3 @@ class AccountMoveLine(models.Model):
                     line.secondary_balance = line.company_secondary_currency_id.round(line.balance / line.secondary_currency_rate)
             else:
                 line.secondary_balance = 0
-
-    def _inverse_amount_currency(self):
-        """ Extend the method to compute secondary currency balance """
-        super(AccountMoveLine, self)._inverse_amount_currency()
-        self._compute_secondary_balance()
