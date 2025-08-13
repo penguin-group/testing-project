@@ -145,7 +145,7 @@
                     type="object"
                     string="Create Quotation"
                     class="btn-primary"
-                    invisible="scrapped or is_validated == False or state != 'under_repair' or sale_order_id or not tag_names or 'under diagnosis' not in tag_names"
+                    invisible="scrapped or is_validated == False or state != 'under_repair' or sale_order_id or not tag_names or 'under diagnosis' not in tag_names or not has_diagnostic_note"
                     groups="pisa_repair.group_noc,pisa_repair.group_micro"/>
                 <button name="action_open_validation_wizard"
                     type="object"

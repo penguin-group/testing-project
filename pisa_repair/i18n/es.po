@@ -1351,3 +1351,70 @@ msgstr "El sistema no completa el proceso de arranque. Puede deberse a corrupci�
 #: model:repair.fault,name:pisa_repair.fault_vcore_unstable
 msgid "VCORE_UNSTABLE"
 msgstr "VCORE_UNSTABLE"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__diagnostic_note
+msgid "Diagnostic Note"
+msgstr "Nota de diagnóstico"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__repair_note
+msgid "Repair Note"
+msgstr "Nota de reparación"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__has_diagnostic_note
+msgid "Has Diagnostic Note"
+msgstr "Tiene nota de diagnóstico"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__has_repair_note
+msgid "Has Repair Note"
+msgstr "Tiene nota de reparación"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__is_in_diagnostic
+msgid "Is in Diagnostic"
+msgstr "Está en diagnóstico"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__is_in_repair
+msgid "Is in Repair"
+msgstr "Está en reparación"
+
+# Placeholders de la vista (usa el ID real de tu vista si difiere)
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.repair_order_form_tab_customizations
+msgid "Add diagnostic note."
+msgstr "Agregar nota de diagnóstico."
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.repair_order_form_tab_customizations
+msgid "Add repair note."
+msgstr "Agregar nota de reparación."
+
+# Botones/etiquetas que aparecen en tu XML (por si no están aún)
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_order_form_custom_buttons
+msgid "Cancel Repair"
+msgstr "Cancelar Reparación"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_order_form_custom_buttons
+msgid "Create Quotation"
+msgstr "Crear Cotización"
+
+# Mensajes Python que mencionaste en otros métodos (UserError/confirm)
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/models/repair_order_fields.py:0
+#, python-format
+msgid "You must fill in the Diagnostic Note before creating a quotation."
+msgstr "Debe completar la Nota de diagnóstico antes de crear una cotización."
+
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/models/repair_order_actions.py:0
+#, python-format
+msgid "You must fill in the Repair Note before moving to the next stage."
+msgstr "Debe completar la Nota de reparación antes de pasar a la siguiente etapa."

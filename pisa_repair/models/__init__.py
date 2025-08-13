@@ -1,5 +1,6 @@
 from . import repair_order_noc_tab
 from . import repair_order_mining_tab
+from . import repair_order_micro_tab
 from . import restrict_user_roles
 from . import sale_order
 from . import repair_order_fields
