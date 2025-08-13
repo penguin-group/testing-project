@@ -17,3 +17,5 @@ from . import repair_steps
 from . import repair_order_steps_rel
 from . import repair_external_service
 from . import stock_move_patch
+from . import product_product
+from . import sale_advance_payment_inv
