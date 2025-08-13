@@ -3,7 +3,14 @@ from odoo.exceptions import ValidationError
 
 
 class PurchaseOrder(models.Model):
+    _name = "purchase.order"
     _inherit = "purchase.order"
+
+    def _compute_validation_status(self):
+            super(PurchaseOrder, self)._compute_validation_status()
+            for order in self:
+                if order.requisition_id and order.requisition_id.validation_status == 'validated':
+                    order.validation_status = 'validated'
 
     assignee_id = fields.Many2one('res.users', string='Assignee', help='User responsible for this RFQ',
         default=lambda self: self.env.user.id)
