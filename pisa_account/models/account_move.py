@@ -119,7 +119,7 @@ class AccountMove(models.Model):
                         from_currency=move.company_secondary_currency_id,
                         to_currency=move.currency_id,
                         company=move.company_id,
-                        date=move.invoice_date or fields.Date.context_today(move),
+                        date=move.invoice_date or move.date or fields.Date.context_today(move),
                         rate_type=rate_type,
                     )
                 else:
