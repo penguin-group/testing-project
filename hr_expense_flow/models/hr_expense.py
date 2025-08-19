@@ -208,7 +208,7 @@ class HrExpense(models.Model):
                 Command.create({
                     'amount_currency': -total_amount, # credit
                     'currency_id': self.currency_id.id,
-                    'account_id': self.company_id.expense_reimbursement_account_id.id,
+                    'account_id': self.company_id.emp_reimbursement_transient_account_id.id,
                     'partner_id': self.employee_id.work_contact_id.id,
                 }),
             )
@@ -245,3 +245,53 @@ class HrExpense(models.Model):
         clearing_entry = self.env['account.move'].sudo().create(move_vals)
         clearing_entry.action_post()
         return clearing_entry
+
+    def _create_employee_reimbursement_invoice(self, amount, date=None):
+        """Create a vendor bill for employee reimbursement and set transient and payable accounts on it."""
+        self.ensure_one()
+
+        partner = self.employee_id.user_partner_id
+        journal = self.env.company.clearing_journal_id
+        company = self.sheet_id.company_id or self.company_id or self.env.company
+        transient_acc = company.emp_reimbursement_transient_account_id or self.account_id
+
+        if not transient_acc:
+            raise UserError("Missing transient account configuration for employee reimbursement.")
+
+        total_amount = amount  # in expense sheet currency
+
+        # Convert amount to company currency
+        invoice_date = date or (self.sheet_id.accounting_date or fields.Date.context_today(self))
+        expense_currency = self.currency_id
+
+        move_vals = {
+            'move_type': 'in_invoice',
+            'journal_id': journal.id,
+            'partner_id': partner.id,
+            'invoice_date': invoice_date,
+            'invoice_origin': self.sheet_id.name or 'Employee Reimbursement',
+            'ref': self.sheet_id.name or 'Employee Reimbursement',
+            'currency_id': expense_currency.id,
+            'partner_bank_id': self.sheet_id.bank_account_id.id,
+            'invoice_line_ids': [
+                Command.create({
+                    'name': "Employee Reimbursement",
+                    'account_id': transient_acc.id,
+                    'price_unit': total_amount,
+                    'tax_ids': False,
+                }),
+            ]
+        }
+
+        move = self.env['account.move'].sudo().create(move_vals)
+
+        # remove journal item added by Odoo and replace it with expense_reimbursement_account_id.
+        # Admittedly, this is somewhat brute-forcing a change on journal items, and it's not the best of practices.
+        # However, inheriting and modifying the behaviour of line_ids would have been overkill for our
+        # use case, as we would have touched too much native code.
+        payable_line = move.line_ids.filtered(lambda l: l.credit > 0)
+        if payable_line:
+            payable_line.account_id = company.expense_reimbursement_account_id.id
+
+        move._post()
+        return move

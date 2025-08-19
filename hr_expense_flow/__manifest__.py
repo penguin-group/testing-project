@@ -39,9 +39,9 @@
     "license": "OPL-1",
     "depends": ["hr_expense", "account_asset"],
     "data": [
+        "data/account_chart.xml",
         "security/hr_expense_security.xml",
         "security/ir_rule.xml",
-        "data/account_chart.xml",
         "views/res_config_settings_views.xml",
         "views/hr_expense_views.xml",
         "views/hr_department_views.xml",
