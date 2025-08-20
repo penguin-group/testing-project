@@ -14,6 +14,18 @@
             <xpath expr="//page[@name='mining_data']" position="after">
                 <page name="microelectronics_data" string="Microelectronics Data"
                     invisible="under_warranty or state == 'draft' or state == 'confirmed' or is_mining">
+
+                    <group>
+                        <field name="diagnostic_note"
+                            placeholder="Add diagnostic note."
+                            invisible="is_micro and (not is_in_diagnostic) and (not has_diagnostic_note)"
+                            readonly="under_warranty or not is_validated or state != 'under_repair' or not is_micro or ((not is_in_diagnostic) and has_diagnostic_note)"/>
+
+                        <field name="repair_note"
+                            placeholder="Add repair note."
+                            invisible="is_micro and (not is_in_repair) and (not has_repair_note)"
+                            readonly="under_warranty or not is_validated or state != 'under_repair' or not is_micro or ((not is_in_repair) and has_repair_note)"/>
+                    </group>
                     
                     <field name="move_ids" readonly="state == 'cancel' or state == 'done'" 
                         context="{'default_repair_id': id, 'default_product_uom_qty': 1, 'default_company_id': company_id, 'default_date': schedule_date, 'default_repair_line_type': 'insumo'}">
