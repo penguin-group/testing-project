@@ -29,7 +29,7 @@ class ResUsers(models.Model):
         group_mining = self.env.ref('pisa_repair.group_mining', raise_if_not_found=False)
         group_micro = self.env.ref('pisa_repair.group_micro', raise_if_not_found=False)
         group_micro_leader = self.env.ref('pisa_repair.group_micro_leader', raise_if_not_found=False)
-
+        group_sales_user = self.env.ref('sales_team.group_sale_salesman', raise_if_not_found=False)
 
         for user in self:
             groups = user.groups_id
@@ -46,6 +46,11 @@ class ResUsers(models.Model):
             if (is_micro_like or is_mining) and group_admin in groups:
                 user.with_context(bypass_write=True).write({
                     'groups_id': [(3, group_admin.id)]
+                })
+
+            if is_micro_like and group_sales_user and group_sales_user not in groups:
+                user.with_context(bypass_write=True).write({
+                    'groups_id': [(4, group_sales_user.id)]
                 })
 
         return res

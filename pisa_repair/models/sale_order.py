@@ -34,6 +34,17 @@ class SaleOrder(models.Model):
     def _compute_is_only_micro(self):
         for order in self:
             order.is_only_micro = self.env.user.has_group('pisa_repair.group_micro') and  not self.env.user.has_group('pisa_repair.group_micro_leader')
+
+    @api.model
+    def default_get(self, fields):
+        defaults = super().default_get(fields)
+        user = self.env.user
+        defaults['is_micro_leader'] = user.has_group('pisa_repair.group_micro_leader')
+        defaults['is_only_micro'] = (
+            user.has_group('pisa_repair.group_micro') and
+            not user.has_group('pisa_repair.group_micro_leader')
+        )
+        return defaults
     
     def _compute_has_repair_orders(self):
         repair_order_model = self.env['repair.order']
