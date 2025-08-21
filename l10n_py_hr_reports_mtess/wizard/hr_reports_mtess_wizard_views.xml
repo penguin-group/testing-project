@@ -1,0 +1,35 @@
+<odoo>
+    <!-- Form View -->
+    <record id="view_hr_reports_mtess_wizard_form" model="ir.ui.view">
+        <field name="name">hr.reports.mtess.wizard.form</field>
+        <field name="model">hr.reports.mtess.wizard</field>
+        <field name="arch" type="xml">
+            <form string="MTESS Reports Wizard">
+                <group>
+                    <field name="report_type"/>
+                    <field name="year"/>
+                </group>
+                <footer>
+                    <button string="Generate" type="object" name="action_generate_excel" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_hr_reports_mtess_wizard" model="ir.actions.act_window">
+        <field name="name">MTESS HR Reports Wizard</field>
+        <field name="res_model">hr.reports.mtess.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_hr_reports_mtess_wizard_form"/>
+    </record>
+
+    <!-- Menu Item -->
+    <menuitem id="menu_hr_reports_mtess_wizard"
+              name="MTESS"
+              parent="hr.hr_menu_hr_reports"
+              action="action_hr_reports_mtess_wizard"
+              sequence="100"/>
+</odoo>
