@@ -21,6 +21,7 @@
 
     "data": [
         "views/hr_views.xml",
+        "views/hr_department_views.xml",
     ],
 
     'i18n': ['i18n/es.po'],
