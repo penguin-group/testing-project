@@ -24,5 +24,5 @@ class ResCompany(models.Model):
 
     emp_reimbursement_transient_account_id = fields.Many2one(
         "account.account", string="Transient account for employee reimbursement",
-        check_company=True, default=lambda self: self.env.ref('hr_expense_flow.custom_transient_reimbursement_employee_account'),
+        check_company=True
     )
