@@ -8,6 +8,7 @@
         Module to handle specific HR processes adapted to Penguin Infrastructure's business logic.
         
         - Limit who can view an employee's skills.
+        - Set an analytic account on a department and propagate it on employee contracts.
     """,
 
     'author': "Penguin Infrastructure",
@@ -17,11 +18,12 @@
     'version': '18.0.1.0.0',
     'license': "OPL-1",
 
-    'depends': ['base', 'account', 'web', 'hr'],
+    'depends': ['base', 'account', 'web', 'hr', 'hr_payroll_account'],
 
     "data": [
         "views/hr_views.xml",
         "views/hr_department_views.xml",
+        "views/hr_contract.xml"
     ],
 
     'i18n': ['i18n/es.po'],
