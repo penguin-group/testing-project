@@ -1,4 +1,4 @@
-from odoo import models, api, exceptions
+from odoo import models, api, exceptions, _
 
 class ResUsers(models.Model):
     _inherit = 'res.users'
@@ -12,10 +12,9 @@ class ResUsers(models.Model):
             if 'Micro Leader' in names and 'Micro' in names:
                 names = [n for n in names if n != 'Micro']
             if len(names) > 1:
-                raise exceptions.ValidationError(
-                    "Solo puede tener un rol: NOC, MINING o MICRO (o MICRO LEADER). "
-                    f"Actual: {', '.join(sorted(names))}"
-                )
+                raise exceptions.ValidationError(_(
+                "A user can only be assigned one role: NOC, MINING o MICRO (o MICRO LEADER). Current: %(roles)s"
+            ) % {"roles": ', '.join(sorted(names))})
 
     @api.model
     def write(self, vals):
