@@ -2,8 +2,9 @@
 
 from datetime import date, datetime
 from collections import defaultdict
-from odoo import api, fields, models
+from odoo import api, fields, models, _
 from odoo.tools import float_round
+from odoo.exceptions import UserError
 
 
 class HrPayslip(models.Model):
@@ -15,6 +16,41 @@ class HrPayslip(models.Model):
         default='ASUNCION',
         help='Work location for payslip'
     )
+    
+    def _check_payroll_closing_date(self):
+        """Check if current date is after payroll closing day for the payslip period month"""
+        for payslip in self:
+            if not payslip.company_id.payroll_closing_day:
+                continue  # Payroll closing disabled
+                
+            # Check current date against the closing date of the payslip period month
+            today = fields.Date.today()
+            # Use the end date of the payslip to determine which month's closing date to check
+            period_closing_date = payslip.company_id.get_payroll_closing_date(payslip.date_to)
+            
+            if period_closing_date and today <= period_closing_date:
+                raise UserError(_(
+                    "Cannot confirm payslip for %s.\n"
+                    "Today (%s) is on or before the payroll closing day (%s) for the payslip period (%s).\n"
+                    "Payroll operations for %s %s are only allowed after %s.\n\n"
+                    "Please either:\n"
+                    "• Wait until after %s to confirm this payslip\n"
+                    "• Contact your administrator to adjust the payroll closing day in Settings > Payroll"
+                ) % (
+                    payslip.employee_id.name,
+                    today.strftime('%Y-%m-%d'),
+                    period_closing_date.strftime('%Y-%m-%d'),
+                    payslip.date_to.strftime('%B %Y'),
+                    payslip.date_to.strftime('%B'),
+                    payslip.date_to.strftime('%Y'),
+                    payslip.company_id._get_closing_day_ordinal(),
+                    period_closing_date.strftime('%Y-%m-%d')
+                ))
+    
+    def action_payslip_done(self):
+        """Override to add payroll closing date validation"""
+        self._check_payroll_closing_date()
+        return super().action_payslip_done()
     
     area = fields.Char(
         related='employee_id.department_id.name',

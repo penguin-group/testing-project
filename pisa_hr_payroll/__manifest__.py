@@ -60,6 +60,7 @@
         "views/hr_payslip_views.xml",
         "views/hr_payroll_structure_views.xml",
         "views/hr_payroll_menus.xml",
+        "views/res_config_settings_views.xml",
         
         # Reports
         "reports/hr_payslip_report.xml",

@@ -9,6 +9,41 @@ from odoo.tools import float_compare, float_is_zero
 class HrPayslipAccount(models.Model):
     _inherit = 'hr.payslip'
     
+    def _check_payroll_closing_date_accounting(self):
+        """Check if current date is after payroll closing day for the payslip period before creating accounting entries"""
+        for payslip in self:
+            if not payslip.company_id.payroll_closing_day:
+                continue  # Payroll closing disabled
+                
+            # Check current date against the closing date of the payslip period month
+            today = fields.Date.today()
+            # Use the end date of the payslip to determine which month's closing date to check
+            period_closing_date = payslip.company_id.get_payroll_closing_date(payslip.date_to)
+            
+            if period_closing_date and today <= period_closing_date:
+                raise UserError(_(
+                    "Cannot create accounting entries for payslip of %s.\n"
+                    "Today (%s) is on or before the payroll closing day (%s) for the payslip period (%s).\n"
+                    "Accounting entries for %s %s are only allowed after %s.\n\n"
+                    "Please either:\n"
+                    "• Wait until after %s to create accounting entries\n"
+                    "• Contact your administrator to adjust the payroll closing day in Settings > Payroll"
+                ) % (
+                    payslip.employee_id.name,
+                    today.strftime('%Y-%m-%d'),
+                    period_closing_date.strftime('%Y-%m-%d'),
+                    payslip.date_to.strftime('%B %Y'),
+                    payslip.date_to.strftime('%B'),
+                    payslip.date_to.strftime('%Y'),
+                    payslip.company_id._get_closing_day_ordinal(),
+                    period_closing_date.strftime('%Y-%m-%d')
+                ))
+
+    def _action_create_account_move(self):
+        """Override to add payroll closing date validation before creating accounting entries"""
+        self._check_payroll_closing_date_accounting()
+        return super()._action_create_account_move()
+    
     def _prepare_line_values(self, line, account_id, date, debit, credit):
         """Override to handle multi-currency accounting entries"""
         res = super()._prepare_line_values(line, account_id, date, debit, credit)
