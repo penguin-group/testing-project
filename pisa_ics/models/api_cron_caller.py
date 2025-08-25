@@ -17,7 +17,7 @@ class ApiCronCaller(models.Model):
         password = params.get_param('ICS_Password')
         host = params.get_param('ICS_Host')
 
-        url = f'http://{host}/login'
+        url = f'{host}/login'
 
         if not email or not password or not host:
             api_cron_logger.error('Configuration not found.')
@@ -36,7 +36,7 @@ class ApiCronCaller(models.Model):
         })
 
         try:
-            response = requests.post(url, headers=headers, data=payload, timeout=5)
+            response = requests.post(url, headers=headers, data=payload, timeout=5, verify=False)
 
             if response.status_code == 200:
                 data = response.json()
