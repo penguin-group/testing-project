@@ -1,13 +1,13 @@
-from odoo import fields, models, api, _
+from odoo import fields, models, api
 
 
 class HrContract(models.Model):
     _inherit = 'hr.contract'
 
     sync_with_department_analytic_acc = fields.Boolean(
-        string=_("Use Analytic Account from Department"),
+        string="Use Analytic Account from Department",
         default=True,
-        help=_("When checked, the analytic account will automatically sync with the department's analytic account")
+        help="When checked, the analytic account will automatically sync with the department's analytic account"
     )
 
     analytic_account_id = fields.Many2one(
