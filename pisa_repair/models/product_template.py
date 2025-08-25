@@ -1,6 +1,6 @@
 from odoo import models, fields, api, _
 
-class ProductProduct(models.Model):
+class ProductTemplatec(models.Model):
     _inherit = 'product.template'
 
     is_only_micro = fields.Boolean(
