@@ -14,7 +14,7 @@
     'version': '18.0.1.0.0',
     'license': "OPL-1",
 
-    'depends': ['base', 'account', 'web', 'hr_payroll', 'payroll_banks'],
+    'depends': ['base', 'account', 'web', 'hr_payroll', 'l10n_hr_payroll_banks'],
 
     'i18n': ['i18n/es.po'],
 }
