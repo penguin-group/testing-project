@@ -32,7 +32,7 @@ Installation
 To install this module, you need to:
 
 #. Clone the pisa_addons repository if you haven't already. In case you do have the pisa_addons repo but you still don't see this module, make sure to ``git pull`` and get the latest version of pisa_addons.
-#. Ensure dependencies are installed: ``base``, ``account``, ``web``, ``hr_payroll``, ``l10n_hr_payroll_banks``
+#. Ensure dependencies are installed: ``base``, ``account``, ``web``, ``hr_payroll``, ``l10n_py_hr_payroll_banks``
 #. Update the module list
 #. Install the module from the Apps menu
 
@@ -45,7 +45,7 @@ This module depends on:
 * ``account``: Accounting module
 * ``web``: The core of the Odoo Web Client
 * ``hr_payroll``: Odoo's native payroll module (enterprise)
-* ``l10n_hr_payroll_banks``: This module allows to add the bank to Payroll settings.
+* ``l10n_py_hr_payroll_banks``: This module allows to add the bank to Payroll settings.
 
 
 Usage
