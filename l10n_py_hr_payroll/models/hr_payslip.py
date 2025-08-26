@@ -155,25 +155,6 @@ class HrPayslip(models.Model):
             })
         
         return localdict
-    
-    def _get_payslip_lines(self, inherit_contrat=False):
-        """Override to handle currency conversion in payslip lines"""
-        # For contracts with different currency, ensure proper conversion
-        if self.contract_id.currency_id != self.company_id.currency_id:
-            # The payroll calculations should use the contract currency
-            # The enterprise payroll module will handle the base calculation
-            pass
-        return super()._get_payslip_lines()
-
-    def _compute_basic_net(self):
-        """Override to handle currency properly in wage calculations"""
-        # Ensure monetary fields use the correct currency
-        for payslip in self:
-            if payslip.contract_id and payslip.currency_id != payslip.contract_id.currency_id:
-                # If currencies differ, we might need conversion
-                # But the payslip currency should already be set from contract
-                pass
-        return super()._compute_basic_net()
 
 
 class HrPayslipWorkedDays(models.Model):

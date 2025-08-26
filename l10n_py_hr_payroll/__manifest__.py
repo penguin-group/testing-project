@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "PISA HR Payroll",
+    'name': "Paraguay HR Payroll",
 
-    'summary': "Paraguayan Payroll Localization for Penguin Infrastructure",
+    'summary': "Paraguayan Payroll Localization",
 
     'description': """
         Streamlined Paraguayan payroll using native Odoo features and salary attachments.
@@ -24,7 +24,8 @@
         * Future-proof against Odoo upgrades
     """,
 
-    'author': "Penguin Infrastructure",
+    'author': "Penguin Infrastructure S.A.",
+    'maintainers': ["Penguin Infrastructure S.A."],
     'website': "https://penguin.digital",
     'category': 'Human Resources/Payroll',
     'version': '18.0.1.0.0',
@@ -59,7 +60,6 @@
         "views/hr_contract_views.xml", 
         "views/hr_payslip_views.xml",
         "views/hr_payroll_structure_views.xml",
-        "views/hr_payroll_menus.xml",
         "views/res_config_settings_views.xml",
         
         # Reports

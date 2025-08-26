@@ -47,12 +47,6 @@ class HrContract(models.Model):
         aggregator="avg"
     )
     
-    def _get_contract_wage(self):
-        """Override to ensure proper currency handling"""
-        self.ensure_one()
-        # Get the base wage and handle any currency conversion if needed
-        return super()._get_contract_wage()
-    
     def _convert_currency_amount(self, amount, target_currency=None, date=None):
         """Convert amount from contract currency to target currency"""
         self.ensure_one()
