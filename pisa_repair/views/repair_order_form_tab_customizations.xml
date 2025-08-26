@@ -1,0 +1,85 @@
+<odoo>
+    <record id="repair_order_form_tab_customizations" model="ir.ui.view">
+        <field name="name">repair.order.form.tab.customizations</field>
+        <field name="model">repair.order</field>
+        <field name="inherit_id" ref="repair.view_repair_order_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Hide the original "Parts" tab -->
+            <xpath expr="//page[@name='parts']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <!-- Move the "Microelectronics Data" tab after "Mining Data" with its original content -->
+            <xpath expr="//page[@name='mining_data']" position="after">
+                <page name="microelectronics_data" string="Microelectronics Data"
+                    invisible="under_warranty or state == 'draft' or state == 'confirmed' or is_mining">
+
+                    <group>
+                        <field name="diagnostic_note"
+                            placeholder="Add diagnostic note."
+                            invisible="is_micro and (not is_in_diagnostic) and (not has_diagnostic_note)"
+                            readonly="under_warranty or not is_validated or state != 'under_repair' or not is_micro or ((not is_in_diagnostic) and has_diagnostic_note)"/>
+
+                        <field name="repair_note"
+                            placeholder="Add repair note."
+                            invisible="is_micro and (not is_in_repair) and (not has_repair_note)"
+                            readonly="under_warranty or not is_validated or state != 'under_repair' or not is_micro or ((not is_in_repair) and has_repair_note)"/>
+                    </group>
+                    
+                    <field name="move_ids" readonly="state == 'cancel' or state == 'done'" 
+                        context="{'default_repair_id': id, 'default_product_uom_qty': 1, 'default_company_id': company_id, 'default_date': schedule_date, 'default_repair_line_type': 'insumo'}">
+                        <list string="Operations" editable="bottom">
+                            <control>
+                                <create string="Add a line"/>
+                                <button name="action_add_from_catalog_repair" string="Catalog" type="object" 
+                                    class="px-4 btn-link" context="{'order_id': parent.id}"/>
+                            </control>
+                            <field name="repair_line_type" required="1"/>
+                            <field name="product_id" context="{'default_is_storable': True}" required="1" 
+                                readonly="(state != 'draft' and not additional) or move_lines_count &gt; 0"/>
+                            <field name="description_picking" string="Description" optional="hide"/>
+                            <field name="date" optional="hide"/>
+                            <field name="product_uom_qty" string="Demand" readonly="state in ('done', 'cancel')"/>
+                            <field name="forecast_availability" string="Forecasted" column_invisible="parent.state in ('draft', 'done')" widget="forecast_widget"/>
+                            <field name="quantity" string="Done" readonly="not product_id"/>
+                            <field name="product_uom" readonly="state != 'draft' and not additional" options="{'no_open': True, 'no_create': True}" 
+                                string="Unit of Measure" groups="uom.group_uom"/>
+                            <field name="picked" string="Used"/>
+                        </list>
+                    </field>
+
+                    <!-- Internal notes field inside the "Microelectronics Data" tab -->
+                    <group>
+                        <field name="internal_notes"
+                            placeholder="Add internal notes."
+                            readonly="under_warranty or not is_validated or state != 'under_repair' or not is_micro"/>
+                    </group>
+
+                    <!-- Nuevo checkbox para marcar como irreparable, visible solo después de iniciar el diagnóstico -->
+                    <group>
+                        <field name="scrapped" string="Is the product scrapped?"
+                            invisible="'under diagnosis' not in tag_names and 'not approved' not in tag_names"
+                            readonly="under_warranty or not is_validated or state != 'under_repair' or not is_micro"/>
+                    </group>
+                </page>
+            </xpath>
+
+            <!-- Disable fields inside the "Parts" tab if the state is not 'under_repair' -->
+            <xpath expr="//page[@name='microelectronics_data']/field" position="attributes">
+                <attribute name="readonly">under_warranty or not is_validated or state != 'under_repair' or not is_micro</attribute>
+            </xpath>
+
+            <!-- Hide the "Repair Notes" tab -->
+            <xpath expr="//page[@name='repair_notes']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <!-- Hide the "Miscellaneous" tab -->
+            <xpath expr="//page[@name='page_miscellaneous']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

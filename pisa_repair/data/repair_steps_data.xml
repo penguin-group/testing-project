@@ -1,0 +1,55 @@
+<odoo>
+    <data noupdate="1">
+        <!-- Predefined Repair Steps -->
+
+        <record id="step_check_water_valves" model="repair.steps">
+            <field name="name">Verification of water inlet and outlet valves</field>
+            <field name="type">hydro</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <record id="step_check_water_hoses" model="repair.steps">
+            <field name="name">Verification of water inlet and outlet hoses</field>
+            <field name="type">hydro</field>
+            <field name="sequence">20</field>
+        </record>
+
+        <record id="step_check_miner_fans" model="repair.steps">
+            <field name="name">Verification of miner fans</field>
+            <field name="type">fan</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <record id="step_check_heat_wall" model="repair.steps">
+            <field name="name">Verification of heat wall</field>
+            <field name="type">fan</field>
+            <field name="sequence">20</field>
+        </record>
+
+        <record id="step_check_oil_temp" model="repair.steps">
+            <field name="name">Verification of oil inlet and outlet temperature</field>
+            <field name="type">immersion</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <record id="step_check_electrical_connections" model="repair.steps">
+            <field name="name">Verification of electrical connections</field>
+            <field name="url">https://www.youtube.com/watch?v=9aENYvHzfr4&amp;ab_channel=PenguinGroup</field>
+            <field name="type">general</field>
+            <field name="sequence">30</field>
+        </record>
+
+        <record id="step_check_network_link" model="repair.steps">
+            <field name="name">Verification of network link with tester</field>
+            <field name="url">https://www.youtube.com/watch?v=9aENYvHzfr4&amp;ab_channel=PenguinGroup</field>
+            <field name="type">general</field>
+            <field name="sequence">30</field>
+        </record>
+
+        <record id="step_machine_restart" model="repair.steps">
+            <field name="name">Machine restart</field>
+            <field name="type">general</field>            
+            <field name="sequence">30</field>
+        </record>
+    </data>
+</odoo>

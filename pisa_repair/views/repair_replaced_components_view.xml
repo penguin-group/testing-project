@@ -1,0 +1,31 @@
+<odoo>
+    <data>
+        <record id="view_repair_replaced_components_tree" model="ir.ui.view">
+            <field name="name">repair.replaced.components.tree.view</field>
+            <field name="model">repair.replaced.components</field>
+            <field name="arch" type="xml">
+                <list string="Replaced Components">
+                    <field name="name" />
+                    <button name="unlink" string="Delete" type="object"
+                        class="btn-danger"
+                        confirm="Are you sure you want to delete this record?" />
+                </list>
+            </field>
+        </record>
+
+        <record id="view_repair_replaced_components_form" model="ir.ui.view">
+            <field name="name">repair.replaced.components.form</field>
+            <field name="model">repair.replaced.components</field>
+            <field name="arch" type="xml">
+                <form string="Replaced Components">
+                    <sheet>
+                        <group>
+                            <field name="name" string="Component Name" />
+                            <field name="repair_order_ids" invisible="1" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

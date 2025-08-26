@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="repair.repair_picking_type_menu" model="ir.ui.menu">
+            <field name="groups_id" eval="[(6, 0, [ref('pisa_repair.group_noc')])]" />
+        </record>
+
+        <record id="action_repair_orders_noc_mining" model="ir.actions.act_window">
+            <field name="name">Repair Orders</field>
+            <field name="res_model">repair.order</field>
+            <field name="view_mode">list,kanban,form</field>
+            <field name="context">{'group_by': 'state'}</field>
+        </record>
+
+        <record id="action_repair_orders_micro" model="ir.actions.act_window">
+            <field name="name">Repair Orders</field>
+            <field name="res_model">repair.order</field>
+            <field name="view_mode">list,kanban,form</field>
+            <field name="context">{'group_by': 'tag_ids'}</field>
+        </record>
+
+        <record id="repair.repair_order_menu" model="ir.ui.menu">
+            <field name="name">Orders</field>
+            <field name="parent_id" ref="repair.menu_repair_order" />
+            <field name="action" ref="pisa_repair.action_repair_orders_noc_mining" />
+            <field name="sequence" eval="0" />
+            <field name="groups_id"
+                eval="[(6, 0, [ref('pisa_repair.group_noc'), ref('pisa_repair.group_mining')])]" />
+        </record>
+
+        <record id="repair_order_menu_micro" model="ir.ui.menu">
+            <field name="name">Orders</field>
+            <field name="parent_id" ref="repair.menu_repair_order" />
+            <field name="action" ref="pisa_repair.action_repair_orders_micro" />
+            <field name="sequence" eval="10" />
+            <field name="groups_id" eval="[(6, 0, [ref('pisa_repair.group_micro')])]" />
+        </record>
+
+        <record id="action_repair_steps" model="ir.actions.act_window">
+            <field name="name">Repair Steps</field>
+            <field name="res_model">repair.steps</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <record id="menu_steps_miner" model="ir.ui.menu">
+            <field name="name">Steps Mining</field>
+            <field name="parent_id" ref="repair.repair_menu_config" />
+            <field name="action" ref="pisa_repair.action_repair_steps" />
+            <field name="sequence" eval="4" />
+        </record>
+
+        <record id="action_repair_external_service" model="ir.actions.act_window">
+            <field name="name">Repair External Services</field>
+            <field name="res_model">repair.external.service</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <record id="menu_repair_external_service" model="ir.ui.menu">
+            <field name="name">External Services</field>
+            <field name="parent_id" ref="repair.repair_menu_config" />
+            <field name="action" ref="pisa_repair.action_repair_external_service" />
+            <field name="sequence" eval="5" />
+        </record>
+
+
+        <record id="action_sales_quotations_micro" model="ir.actions.act_window">
+            <field name="name">Quotations</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_mode">list</field>
+            <field name="context">{'is_only_micro': True}</field>
+
+        </record>
+
+        <record id="sale.menu_sale_quotations" model="ir.ui.menu">
+            <field name="name">Quotations</field>
+            <field name="parent_id" ref="sale.sale_order_menu" />
+            <field name="action" ref="pisa_repair.action_sales_quotations_micro" />
+            <field name="groups_id"
+                eval="[(6, 0, [ref('pisa_repair.group_micro'), ref('sales_team.group_sale_salesman')])]" />
+        </record>
+
+    </data>
+</odoo>

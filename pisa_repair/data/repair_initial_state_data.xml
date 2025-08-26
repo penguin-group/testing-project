@@ -1,0 +1,72 @@
+<odoo>
+    <data noupdate="1">
+
+        <record id="state_machine_off" model="repair.initial.state">
+            <field name="name">Machine off (no lights or fans)</field>
+        </record>
+        <record id="state_error_lights_red" model="repair.initial.state">
+            <field name="name">Red error lights on (steady or blinking)</field>
+        </record>
+        <record id="state_green_lights_no_activity" model="repair.initial.state">
+            <field name="name">Only steady green lights, but no activity on dashboard</field>
+        </record>
+        <record id="state_network_cable_loose" model="repair.initial.state">
+            <field name="name">Network cable disconnected or loose</field>
+        </record>
+        <record id="state_fan_stopped" model="repair.initial.state">
+            <field name="name">Fan stopped (one or more)</field>
+        </record>
+        <record id="state_breaker_triggered" model="repair.initial.state">
+            <field name="name">Breaker tripped. Miner has no power.</field>
+        </record>
+        <record id="state_hot_air_backflow" model="repair.initial.state">
+            <field name="name">Hot air backflow through the equipment</field>
+        </record>
+        <record id="state_dust_accumulation" model="repair.initial.state">
+            <field name="name">Visible dust accumulation on grilles or fans</field>
+        </record>
+        <record id="state_water_leak" model="repair.initial.state">
+            <field name="name">Water leak in hoses</field>
+        </record>
+        <record id="state_inflated_hose" model="repair.initial.state">
+            <field name="name">Hose is swollen or deformed</field>
+        </record>
+        <record id="state_low_dielectric_oil" model="repair.initial.state">
+            <field name="name">Low visible dielectric oil level</field>
+        </record>
+        <record id="state_oil_bubbles" model="repair.initial.state">
+            <field name="name">Constant bubbles in immersion tank</field>
+        </record>
+        <record id="state_dark_oil" model="repair.initial.state">
+            <field name="name">Oil appears dark or cloudy</field>
+        </record>
+        <record id="state_oil_spill" model="repair.initial.state">
+            <field name="name">Oil stains or spills at the base of the tank</field>
+        </record>
+        <record id="state_power_connector_loose" model="repair.initial.state">
+            <field name="name">Loose power connector</field>
+        </record>
+        <record id="state_burning_smell" model="repair.initial.state">
+            <field name="name">Burning smell near the equipment</field>
+        </record>
+        <record id="state_fan_noise_vibration" model="repair.initial.state">
+            <field name="name">Intermittent fan noise or abnormal vibration</field>
+        </record>
+        <record id="state_network_led_off" model="repair.initial.state">
+            <field name="name">Network LED off. Possible Ethernet port issue</field>
+        </record>
+        <record id="state_power_cable_burnt" model="repair.initial.state">
+            <field name="name">Power cable shows burn or melted marks</field>
+        </record>
+        <record id="state_heat_wall_loose" model="repair.initial.state">
+            <field name="name">Heat wall is loose or poorly placed</field>
+        </record>
+        <record id="state_pests_present" model="repair.initial.state">
+            <field name="name">Presence of insects or rodents in or near the equipment</field>
+        </record>
+        <record id="state_humidity_reported" model="repair.initial.state">
+            <field name="name">Reported presence of humidity</field>
+        </record>
+
+    </data>
+</odoo>

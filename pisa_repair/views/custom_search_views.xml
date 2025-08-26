@@ -1,0 +1,15 @@
+<odoo>
+    <record id="custom_search_views" model="ir.ui.view">
+        <field name="name">repair.order.search</field>
+        <field name="model">repair.order</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="lot_id" string="Serial Number" filter_domain="[('lot_id.name', 'ilike', self)]"/>
+
+                <field name="lot_ref" string="Position" filter_domain="[('lot_id.ref', 'ilike', self)]"/>
+
+                <field name="partner_id" string="Customer"/>
+            </search>
+        </field>
+    </record>
+</odoo>

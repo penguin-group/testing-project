@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Vista TREE para "Search More" con columnas separadas -->
+    <record id="view_repair_fault_tree" model="ir.ui.view">
+        <field name="name">repair.fault.tree.view</field>
+        <field name="model">repair.fault</field>
+        <field name="arch" type="xml">
+            <list string="Diagnosed Failure">
+                <field name="name" string="Code"/>
+                <field name="description" string="Description"/>
+                <button name="unlink" string="Delete" type="object"
+                        class="btn-danger"
+                        confirm="Are you sure you want to delete this fault?" />
+            </list>
+        </field>
+    </record>
+
+</odoo>

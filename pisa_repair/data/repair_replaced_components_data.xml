@@ -1,0 +1,16 @@
+<odoo>
+    <data noupdate="1">
+
+        <!-- Predefined Replaced Components -->
+        <record id="component_network_cable" model="repair.replaced.components">
+            <field name="name">Network Cable</field>
+        </record>
+        <record id="component_power_cable" model="repair.replaced.components">
+            <field name="name">Power Cable</field>
+        </record>
+        <record id="component_hose" model="repair.replaced.components">
+            <field name="name">Hose</field>
+        </record>
+
+    </data>
+</odoo>

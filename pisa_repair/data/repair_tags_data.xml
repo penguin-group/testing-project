@@ -1,0 +1,83 @@
+<odoo>
+    <data noupdate="1">
+
+        <record id="open" model="repair.tags">
+            <field name="name">Open</field>
+            <field name="color">2</field>  <!-- Blue -->
+        </record>
+
+        <record id="confirmed" model="repair.tags">
+            <field name="name">In Progress</field>
+            <field name="color">2</field>  <!-- Blue -->
+        </record>
+
+        <record id="resting_mode" model="repair.tags">
+            <field name="name">Resting mode</field>
+            <field name="color">2</field>  <!-- Blue -->
+        </record>
+
+        <!-- Repair Service Stage under repair -->
+
+        <record id="pending_of_diagnosis" model="repair.tags">
+            <field name="name">Pending of Diagnosis</field>
+            <field name="color">3</field>  <!-- Yellow -->
+        </record>
+
+        <record id="under_diagnosis" model="repair.tags">
+            <field name="name">Under Diagnosis</field>
+            <field name="color">3</field>  <!-- Yellow -->
+        </record>
+
+        <record id="quotation_created" model="repair.tags">
+            <field name="name">Quotation Created</field>
+            <field name="color">4</field>  <!-- Light Blue -->
+        </record>
+
+        <record id="quotation_sent" model="repair.tags">
+            <field name="name">Quotation Sent</field>
+            <field name="color">4</field>  <!-- Light Blue -->
+        </record>
+
+        <record id="not_approved" model="repair.tags">
+            <field name="name">Not Approved</field>
+            <field name="color">1</field>  <!-- Red -->
+        </record>
+
+        <record id="approved" model="repair.tags">
+            <field name="name">Approved</field>
+            <field name="color">4</field>  <!-- Light Blue -->
+        </record>
+
+        <record id="under_repair" model="repair.tags">
+            <field name="name">Under Repair</field>
+            <field name="color">5</field>  <!-- Green -->
+        </record>
+
+        <record id="external_service_repair" model="repair.tags">
+            <field name="name">External Service Repair</field>
+            <field name="color">6</field>  <!-- Purple -->
+        </record>
+
+        <!-- Repair Service Stage -->
+
+        <record id="ready_for_deployment" model="repair.tags">
+            <field name="name">Ready for Deployment</field>
+            <field name="color">7</field>  <!-- Cyan -->
+        </record>
+
+        <record id="done" model="repair.tags">
+            <field name="name">Done</field>
+            <field name="color">10</field>  <!-- Dark Green -->
+        </record>
+
+        <record id="cancel" model="repair.tags">
+            <field name="name">Cancelled</field>
+            <field name="color">1</field>  <!-- Red -->
+        </record>
+
+        <record id="scrapped" model="repair.tags">
+            <field name="name">Scrapped</field>
+            <field name="color">1</field>  <!-- Red -->
+        </record>
+    </data>
+</odoo>

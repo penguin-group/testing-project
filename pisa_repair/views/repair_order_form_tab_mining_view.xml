@@ -1,0 +1,56 @@
+<odoo>
+    <record id="repair_order_form_tab_mining_view" model="ir.ui.view">
+        <field name="name">repair.order.form.tab.mining.view</field>
+        <field name="model">repair.order</field>
+        <field name="inherit_id" ref="repair.view_repair_order_form" />
+        <field name="arch" type="xml">
+
+            <!-- Add a new "Mining Data" tab inside the notebook -->
+            <notebook position="inside">
+                <page name="mining_data" string="Mining Data" invisible="is_invisible">
+                    <group>
+                        <field name="initial_state" widget="many2many_tags" 
+                            readonly="state != 'confirmed' or is_validated == False or not is_mining"/>
+                    </group>
+
+                    <div>
+                        <field name="performed_steps_rel_ids">
+                            <list editable="bottom" create="0" delete="0">
+                                <field name="step_id"
+                                    context="{'default_type': parent.lot_repair_type}"
+                                    required="1"
+                                    readonly="1"
+                                    widget="selection" />
+                                <field name="step_url" widget="url" readonly="1" />
+                                <field name="completed" readonly="is_validated == False" />
+                            </list>
+                        </field>
+                    </div>
+
+                    <group>
+                        <field name="needs_rest"
+                            readonly="not all_steps_completed or state != 'confirmed' or is_validated == False or end_rest or (start_rest and needs_rest)" />
+                        <field name="replaced_components" widget="many2many_tags" 
+                            readonly="state != 'confirmed' or is_validated == False or not is_mining"/>
+                        <field name="final_resolution" widget="many2many_tags" 
+                            readonly="state != 'confirmed' or is_validated == False or not is_mining"/>
+                        <field name="evidence_image"
+                            readonly="state != 'confirmed' or is_validated == False" />
+                        <field name="extraction"
+                            readonly="state != 'confirmed' or is_validated == False" />
+                        <button name="action_start_rest"
+                            string="Start Rest"
+                            type="object"
+                            class="oe_highlight"
+                            invisible="needs_rest == False or resting == True or is_validated == False or start_rest != False" />
+                        <button name="action_end_rest"
+                            string="End Rest"
+                            type="object"
+                            class="oe_highlight"
+                            invisible="resting == False or is_validated == False or end_rest != False" />
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+</odoo>

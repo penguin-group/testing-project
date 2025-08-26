@@ -1,0 +1,13 @@
+<odoo>
+    <record id="channel_ics" model="queue.job.channel">
+        <field name="name">ics</field>
+        <field name="parent_id" ref="queue_job.channel_root"/>
+    </record>
+
+    <record id="job_function_repair_order_state_update" model="queue.job.function">
+        <field name="model_id" ref="model_repair_order"/>
+        <field name="method">_perform_state_update_to_ics</field>
+        <field name="channel_id" ref="channel_ics"/>
+        <field name="retry_pattern" eval="{ 1: 60, 2: 60, 3: 60, 4: 60, 5: 60, 6: 300, 7: 300, 8: 300, 9: 300, 10: 300, 11: 600, 12: 600, 13: 600, 14: 600, 15: 600 }"/>
+    </record>
+</odoo>
