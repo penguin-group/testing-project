@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_py_banking" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.py.banking</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="hr_payroll.res_config_settings_view_form"/>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <xpath expr="//setting[@name='module_hr_payroll_account_iso20022']" position="after">
+                <setting help="Choose the bank you have to send payslip records to:">
+                    <field name="salary_payment_bank" options="{'no_create': True}" invisible="False" />
+                </setting>
+            </xpath>
+        </field>
+    </record>
+</odoo>

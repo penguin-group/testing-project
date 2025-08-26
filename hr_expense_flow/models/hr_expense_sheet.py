@@ -127,3 +127,29 @@ class HrExpenseSheet(models.Model):
             })
         return action
     
+    @api.depends_context('uid')
+    @api.depends('employee_id')
+    def _compute_can_approve(self):
+        """ Full override of '_compute_can_approve' method of the hr_expense module to add custom logic for approval checks."""
+        
+        is_team_approver = self.env.user.has_group('hr_expense.group_hr_expense_team_approver') or self.env.su
+        is_approver = self.env.user.has_group('hr_expense.group_hr_expense_user') or self.env.su
+        is_hr_admin = self.env.user.has_group('hr_expense.group_hr_expense_manager') or self.env.su
+
+        for sheet in self:
+            reason = False
+            if not is_team_approver:
+                reason = _("%s: Your are not a Manager or HR Officer", sheet.name)
+
+            elif not is_hr_admin:
+                sheet_employee = sheet.employee_id
+                current_managers = sheet_employee.expense_manager_id \
+                                   | sheet_employee.parent_id.user_id \
+                                   | sheet_employee.department_id.manager_id.user_id \
+                                   | sheet.user_id
+
+                if self.env.user not in current_managers and not is_approver and sheet_employee.expense_manager_id.id != self.env.user.id:
+                    reason = _("%s: It is not from your department", sheet.name)
+
+            sheet.can_approve = not reason
+            sheet.cannot_approve_reason = reason
