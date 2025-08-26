@@ -100,6 +100,21 @@ msgstr "El campo 'Evidencia de Falla' es obligatorio. Debes subir una imagen."
 
 #. module: pisa_repair
 #. odoo-python
+#: code:addons/pisa_repair/models/restrict_user_roles.py:0
+#, python-format
+msgid "A user can only be assigned one role: NOC, MINING o MICRO (o MICRO LEADER). Current: %(roles)s"
+msgstr "Un usuario solo puede tener un rol asignado: NOC, MINING o MICRO (o MICRO LEADER). Actual: %(roles)s"
+
+#. module: pisa_repair
+#. odoo-python
+#: code:addons/pisa_repair/models/sale_advance_payment_inv.py:0
+#: code:addons/pisa_repair/models/sale_order.py:0
+#, python-format
+msgid "You do not have sufficient permissions"
+msgstr "No tienes permisos suficientes"
+
+#. module: pisa_repair
+#. odoo-python
 #: code:addons/pisa_repair/models/repair_order_actions.py:0
 #, python-format
 msgid "The 'Initial State' field is mandatory. You must select an option."

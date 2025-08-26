@@ -14,6 +14,37 @@ class SaleOrder(models.Model):
         compute="_compute_has_repair_orders",
         store=False
     )
+
+    is_micro_leader = fields.Boolean(
+        compute='_compute_is_micro_leader', 
+        store=False
+    )
+
+    is_only_micro = fields.Boolean(
+        compute='_compute_is_only_micro', 
+        store=False
+    )
+
+    @api.depends()
+    def _compute_is_micro_leader(self):
+        for order in self:
+            order.is_micro_leader = self.env.user.has_group('pisa_repair.group_micro_leader')
+
+    @api.depends()
+    def _compute_is_only_micro(self):
+        for order in self:
+            order.is_only_micro = self.env.user.has_group('pisa_repair.group_micro') and  not self.env.user.has_group('pisa_repair.group_micro_leader')
+
+    @api.model
+    def default_get(self, fields):
+        defaults = super().default_get(fields)
+        user = self.env.user
+        defaults['is_micro_leader'] = user.has_group('pisa_repair.group_micro_leader')
+        defaults['is_only_micro'] = (
+            user.has_group('pisa_repair.group_micro') and
+            not user.has_group('pisa_repair.group_micro_leader')
+        )
+        return defaults
     
     def _compute_has_repair_orders(self):
         repair_order_model = self.env['repair.order']
@@ -205,6 +236,11 @@ class SaleOrder(models.Model):
         return res
     
     def action_quotation_send(self):
+
+        for order in self:
+            if order.is_only_micro:
+                raise UserError(_("You do not have sufficient permissions"))
+            
         res = super(SaleOrder, self).action_quotation_send()
 
         for order in self:
@@ -216,6 +252,11 @@ class SaleOrder(models.Model):
     
     def action_confirm(self):
         """Confirm the consolidation only if all quotations have products."""
+
+        for order in self:
+            if order.is_only_micro:
+                raise UserError(_("You do not have sufficient permissions"))
+
         res = super(SaleOrder, self).action_confirm()
 
         for order in self:

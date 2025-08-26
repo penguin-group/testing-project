@@ -345,7 +345,7 @@ class RepairOrderActions(models.Model):
                 "Tags": tag_summary
             }]
 
-            post_response = requests.post(url, headers=headers, json=data, timeout=10)
+            post_response = requests.post(url, headers=headers, json=data, timeout=10, verify=False)
             post_response.raise_for_status()
 
         except requests.exceptions.RequestException as e:

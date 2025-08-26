@@ -54,6 +54,8 @@
         'views/repair_final_resolution_view.xml',
         'views/repair_external_service_view.xml',
         'views/portal_sale_order.xml',
+        'views/product_template_views.xml',
+        'views/sale_order_views.xml',
         'reports/saleorder_report.xml', 
         'wizards/consolidate_quotations_view.xml',
         'wizards/ticket_validation_views.xml',

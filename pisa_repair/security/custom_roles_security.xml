@@ -1,5 +1,5 @@
 <odoo>
-    <data noupdate="1">
+    <data>
         <record id="group_noc" model="res.groups">
             <field name="name">Noc</field>
             <field name="category_id" ref="base.module_category_inventory_inventory" />
@@ -25,5 +25,12 @@
                 (4, ref('sales_team.group_sale_salesman_all_leads'))
             ]" />
         </record>
+
+        <record id="group_micro_leader" model="res.groups">
+            <field name="name">Micro Leader</field>
+            <field name="category_id" ref="base.module_category_inventory_inventory" />
+            <field name="implied_ids" eval="[(4, ref('pisa_repair.group_micro'))]" />
+        </record>
+
     </data>
 </odoo>
