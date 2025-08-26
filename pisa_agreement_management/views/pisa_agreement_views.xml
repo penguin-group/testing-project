@@ -1,7 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="pisa_agreement_form_view" model="ir.actions.act_window">
-        <field name="name">Pisa Agreement</field>
+    <record id="view_pisa_agreement_list" model="ir.ui.view">
+        <field name="name">pisa.agreement.list</field>
+        <field name="model">pisa.agreement</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_pisa_agreement_form" model="ir.ui.view">
+        <field name="name">pisa.agreement.form</field>
+        <field name="model">pisa.agreement</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="partner_id"/>
+                            <field name="signature_date"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="company_id"/>
+                        </group>
+                        <group>
+                            <field name="agreement_type"/>
+                            <field name="legal_process_type"/>
+                            <field name="related_agreements" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Key Obligations" >
+                            <field name="key_obligations" />
+                        </page>
+                    </notebook>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_pisa_agreement" model="ir.actions.act_window">
+        <field name="name">Pisa Agreements</field>
         <field name="res_model">pisa.agreement</field>
         <field name="view_mode">list,form</field>
     </record>
