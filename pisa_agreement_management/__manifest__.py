@@ -11,6 +11,8 @@
     "data": [
         "security/ir.model.access.csv",
         "views/pisa_agreement_views.xml",
+        "views/agreement_type_views.xml",
+        "views/legal_process_type_views.xml",
         "views/pisa_agreement_menu_views.xml",
     ]
 }
