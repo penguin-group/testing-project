@@ -63,22 +63,5 @@
             <field name="sequence" eval="5" />
         </record>
 
-
-        <record id="action_sales_quotations_micro" model="ir.actions.act_window">
-            <field name="name">Quotations</field>
-            <field name="res_model">sale.order</field>
-            <field name="view_mode">list</field>
-            <field name="context">{'is_only_micro': True}</field>
-
-        </record>
-
-        <record id="sale.menu_sale_quotations" model="ir.ui.menu">
-            <field name="name">Quotations</field>
-            <field name="parent_id" ref="sale.sale_order_menu" />
-            <field name="action" ref="pisa_repair.action_sales_quotations_micro" />
-            <field name="groups_id"
-                eval="[(6, 0, [ref('pisa_repair.group_micro'), ref('sales_team.group_sale_salesman')])]" />
-        </record>
-
     </data>
 </odoo>
