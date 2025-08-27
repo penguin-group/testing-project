@@ -16,10 +16,14 @@
         <field name="arch" type="xml">
             <form>
                 <sheet>
+                    <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="stage != 'draft'"/>
+                            </h1>
+                        </div>
                     <group>
                         <group>
-                            <field name="name"/>
-                            <field name="partner_id"/>
+                            <field name="partner_ids" widget="many2many_tags" />
                             <field name="signature_date"/>
                             <field name="start_date"/>
                             <field name="end_date"/>

@@ -15,12 +15,12 @@ AGREEMENT_STAGES = [
 class PisaAgreement(models.Model):
     _name = 'pisa.agreement'
 
-    name = fields.Char(string="Agreement Name", required=True)
-    partner_id = fields.Many2one('res.partner', string="Partner", required=False)
+    name = fields.Char(string="Agreement Name", required=True, default="New Agreement")
+    partner_ids = fields.Many2many('res.partner', string="Partner", required=False)
     signature_date = fields.Date(string="Signature Date", required=False)
     start_date = fields.Date(string="Start Date", required=False)
     end_date = fields.Date(string="End Date", required=False)
-    company_id = fields.Many2one('res.company', string="Company", required=False)
+    company_id = fields.Many2one('res.company', string="Company", default=lambda self: self.env.company, required=False)
     stage = fields.Selection(AGREEMENT_STAGES, string="Stage", default='draft')
     key_obligations = fields.Text(string="Key Obligations")
 
