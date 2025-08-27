@@ -14,6 +14,8 @@ AGREEMENT_STAGES = [
 
 class PisaAgreement(models.Model):
     _name = 'pisa.agreement'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
+    _description = 'Agreement'
 
     name = fields.Char(string="Agreement Name", required=True, default="New Agreement")
     partner_ids = fields.Many2many('res.partner', string="Partner", required=False)
@@ -21,7 +23,7 @@ class PisaAgreement(models.Model):
     start_date = fields.Date(string="Start Date", required=False)
     end_date = fields.Date(string="End Date", required=False)
     company_id = fields.Many2one('res.company', string="Company", default=lambda self: self.env.company, required=False)
-    stage = fields.Selection(AGREEMENT_STAGES, string="Stage", default='draft')
+    stage = fields.Selection(AGREEMENT_STAGES, string="Stage", default='draft', tracking=True)
     key_obligations = fields.Text(string="Key Obligations")
 
     agreement_type = fields.Many2one('agreement.type', string="Agreement Type")

@@ -15,6 +15,9 @@
         <field name="model">pisa.agreement</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                    <field name="stage" widget="statusbar" options="{'clickable': '1'}" />
+                </header>
                 <sheet>
                     <div class="oe_title">
                             <h1>
@@ -42,6 +45,7 @@
                     </notebook>
 
                 </sheet>
+                <chatter/>
             </form>
         </field>
     </record>
