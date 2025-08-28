@@ -6,3 +6,4 @@ access_agreement_stage,access_agreement_stage,model_agreement_stage,base.group_u
 access_agreement_renewal_term,access_agreement_renewal_term,model_agreement_renewal_term,base.group_user,1,1,1,1
 access_agreement_jurisdiction,access_agreement_jurisdiction,model_agreement_jurisdiction,base.group_user,1,1,1,1
 access_agreement_tag,access_agreement_tag,model_agreement_tag,base.group_user,1,1,1,1
+access_agreement_milestone,access_agreement_milestone,model_agreement_milestone,base.group_user,1,1,1,1

@@ -47,3 +47,4 @@ class PisaAgreement(models.Model):
         help="Agreements that are related to this one"
     )
     file_location = fields.Char(string="File Location (URL)")
+    milestone_ids = fields.One2many('agreement.milestone', "agreement_id", string="Milestone")
