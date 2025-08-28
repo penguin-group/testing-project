@@ -1,0 +1,710 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- 1. BASIC SALARY RULES -->
+        
+        <!-- Basic Salary (Proportional) - Override default rule -->
+        <record id="hr_payroll.default_basic_salary_rule" model="hr.salary.rule">
+            <field name="name">Salario Proporcional</field>
+            <field name="code">BASIC</field>
+            <field name="category_id" ref="hr_payroll.BASIC"/>
+            <field name="sequence">10</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+# Calculate proportional salary based on worked days
+# worked_days is a BrowsableObject (dict-like), access with ['WORK100'] not .WORK100
+work_entry = worked_days['WORK100'] if 'WORK100' in worked_days else None
+worked_days_total = work_entry.number_of_days if work_entry else 30  # Default to 30 days per month
+daily_wage = contract.wage / 30  # Standard 30 days per month in Paraguay
+result = daily_wage * worked_days_total
+            </field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
+        </record>
+
+        <!-- 2. ALLOWANCES AND INCOME -->
+        
+        <!-- Other Income -->
+        <record id="hr_salary_rule_other_income_py" model="hr.salary.rule">
+            <field name="name">Otros Ingresos</field>
+            <field name="code">OTHER_INC_PY</field>
+            <field name="category_id" ref="hr_salary_rule_category_allowances_py"/>
+            <field name="sequence">20</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = 'OTHER_INCOME' in inputs and inputs['OTHER_INCOME'].amount > 0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+# Use currency-converted attachment amount if available, fallback to direct input
+try:
+    result = payslip._get_attachment_amount_for_input_code('OTHER_INCOME')
+except:
+    result = inputs['OTHER_INCOME'].amount if 'OTHER_INCOME' in inputs else 0
+            </field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
+        </record>
+
+        <!-- Medical Leave (Licencias) -->
+        <record id="hr_salary_rule_medical_leave_py" model="hr.salary.rule">
+            <field name="name">Licencias</field>
+            <field name="code">MEDICAL_LEAVE_PY</field>
+            <field name="category_id" ref="hr_salary_rule_category_vacation_py"/>
+            <field name="sequence">30</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = 'MEDICAL_LEAVE_DAYS' in inputs and inputs['MEDICAL_LEAVE_DAYS'].amount > 1</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+# Medical leave: 1 day = no deduction, 2-3 days = 50% company reimbursement
+if 'MEDICAL_LEAVE_DAYS' in inputs and inputs['MEDICAL_LEAVE_DAYS'].amount > 1:
+    daily_wage = contract.wage / 30  # 30 days per month
+    leave_days = min(inputs['MEDICAL_LEAVE_DAYS'].amount - 1, 2)  # Max 2 days reimbursement
+    result = daily_wage * leave_days * 0.5  # 50% reimbursement rate
+else:
+    result = 0
+            </field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
+        </record>
+
+        <!-- Bonus -->
+        <record id="hr_salary_rule_bonus_py" model="hr.salary.rule">
+            <field name="name">Bono</field>
+            <field name="code">BONUS_PY</field>
+            <field name="category_id" ref="hr_salary_rule_category_allowances_py"/>
+            <field name="sequence">40</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = 'BONUS' in inputs and inputs['BONUS'].amount > 0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+# Use currency-converted attachment amount if available, fallback to direct input
+try:
+    result = payslip._get_attachment_amount_for_input_code('BONUS')
+except:
+    result = inputs['BONUS'].amount if 'BONUS' in inputs else 0
+            </field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
+        </record>
+
+        <!-- 3. OVERTIME AND SURCHARGES -->
+        
+        <!-- Day Overtime -->
+        <record id="hr_salary_rule_overtime_day_py" model="hr.salary.rule">
+            <field name="name">Horas Extras Diurnas</field>
+            <field name="code">OVERTIME_DAY_PY</field>
+            <field name="category_id" ref="hr_salary_rule_category_overtime_py"/>
+            <field name="sequence">50</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = 'OVERTIME_DAY_HOURS' in inputs and inputs['OVERTIME_DAY_HOURS'].amount > 0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+# Day overtime: (wage/30/8) * 50% = hourly_rate * 1.5
+if 'OVERTIME_DAY_HOURS' in inputs:
+    hourly_rate = contract.wage / 30 / 8  # 30 days, 8 hours per day
+    overtime_rate = 1.5  # 50% overtime rate = 1 + 0.5
+    result = hourly_rate * overtime_rate * inputs['OVERTIME_DAY_HOURS'].amount
+else:
+    result = 0
+            </field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
+        </record>
+
+        <!-- Night Overtime -->
+        <record id="hr_salary_rule_overtime_night_py" model="hr.salary.rule">
+            <field name="name">Horas Extras Nocturnas</field>
+            <field name="code">OVERTIME_NIGHT_PY</field>
+            <field name="category_id" ref="hr_salary_rule_category_overtime_py"/>
+            <field name="sequence">60</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = 'OVERTIME_NIGHT_HOURS' in inputs and inputs['OVERTIME_NIGHT_HOURS'].amount > 0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+# Night overtime: (wage/30/8) * 2 + 30% night surcharge
+if 'OVERTIME_NIGHT_HOURS' in inputs:
+    hourly_rate = contract.wage / 30 / 8  # 30 days, 8 hours per day
+    night_rate = 2.0  # 100% overtime rate = 1 + 1.0  
+    night_surcharge = 0.30  # 30% night surcharge
+    total_rate = night_rate + night_surcharge
+    result = hourly_rate * total_rate * inputs['OVERTIME_NIGHT_HOURS'].amount
+else:
+    result = 0
+            </field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
+        </record>
+
+        <!-- Night Surcharge -->
+        <record id="hr_salary_rule_night_surcharge_py" model="hr.salary.rule">
+            <field name="name">Recargos Nocturnos</field>
+            <field name="code">NIGHT_SURCHARGE_PY</field>
+            <field name="category_id" ref="hr_salary_rule_category_overtime_py"/>
+            <field name="sequence">70</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = 'NIGHT_SURCHARGE_HOURS' in inputs and inputs['NIGHT_SURCHARGE_HOURS'].amount > 0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+# Night surcharge: 30% additional on regular night hours
+if 'NIGHT_SURCHARGE_HOURS' in inputs:
+    hourly_rate = contract.wage / 30 / 8  # 30 days, 8 hours per day
+    surcharge_rate = 0.30  # 30% night surcharge
+    result = hourly_rate * (1 + surcharge_rate) * inputs['NIGHT_SURCHARGE_HOURS'].amount
+else:
+    result = 0
+            </field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
+        </record>
+
+        <!-- Holiday Work -->
+        <record id="hr_salary_rule_holiday_day_py" model="hr.salary.rule">
+            <field name="name">Feriado Diurno</field>
+            <field name="code">HOLIDAY_PY</field>
+            <field name="category_id" ref="hr_salary_rule_category_overtime_py"/>
+            <field name="sequence">80</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = 'HOLIDAY_DAY_HOURS' in inputs and inputs['HOLIDAY_DAY_HOURS'].amount > 0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+result = 0
+# Holiday day work: 200% of hourly rate
+if 'HOLIDAY_DAY_HOURS' in inputs:
+    hourly_rate = contract.wage / 30 / 8  # 30 days, 8 hours per day
+    holiday_rate = 2.0  # 200% holiday rate
+    result += hourly_rate * holiday_rate * inputs['HOLIDAY_DAY_HOURS'].amount
+
+# Holiday night work: 200% + 30% night surcharge = 230%
+if 'HOLIDAY_NIGHT_HOURS' in inputs:
+    hourly_rate = contract.wage / 30 / 8  # 30 days, 8 hours per day
+    holiday_night_rate = 2.30  # 230% holiday night rate (200% + 30% surcharge)
+    result += hourly_rate * holiday_night_rate * inputs['HOLIDAY_NIGHT_HOURS'].amount
+            </field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
+        </record>
+
+        <!-- Vacation Pay -->
+        <record id="hr_salary_rule_vacation_py" model="hr.salary.rule">
+            <field name="name">Vacaciones</field>
+            <field name="code">VACATION_PY</field>
+            <field name="category_id" ref="hr_salary_rule_category_vacation_py"/>
+            <field name="sequence">100</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = 'VACATION_DAYS' in inputs and inputs['VACATION_DAYS'].amount > 0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+# Vacation pay: daily wage * vacation days
+if 'VACATION_DAYS' in inputs:
+    daily_wage = contract.wage / 30  # 30 days per month
+    result = daily_wage * inputs['VACATION_DAYS'].amount
+else:
+    result = 0
+            </field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
+        </record>
+
+        <!-- Other Non-Deductible Income -->
+        <record id="hr_salary_rule_other_non_deductible_py" model="hr.salary.rule">
+            <field name="name">Otros Ingresos No Deducibles</field>
+            <field name="code">OTHER_NON_DED_PY</field>
+            <field name="category_id" ref="hr_salary_rule_category_non_deductible_py"/>
+            <field name="sequence">110</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = 'OTHER_NON_DEDUCTIBLE' in inputs and inputs['OTHER_NON_DEDUCTIBLE'].amount > 0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+# Use currency-converted attachment amount if available, fallback to direct input
+try:
+    result = payslip._get_attachment_amount_for_input_code('OTHER_NON_DEDUCTIBLE')
+except:
+    result = inputs['OTHER_NON_DEDUCTIBLE'].amount if 'OTHER_NON_DEDUCTIBLE' in inputs else 0
+            </field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
+        </record>
+
+        <!-- 4. FAMILY BENEFITS -->
+        
+        <!-- Family Allowance - Now uses existing CHILD_SUPPORT input type -->
+        <record id="hr_salary_rule_family_allowance_py" model="hr.salary.rule">
+            <field name="name">Bonificación Familiar</field>
+            <field name="code">FAMILY_ALLOW_PY</field>
+            <field name="category_id" ref="hr_salary_rule_category_family_py"/>
+            <field name="sequence">120</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = 'FAMILY_ALLOWANCE' in inputs and inputs['FAMILY_ALLOWANCE'].amount > 0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+# Family allowance via salary attachment with currency conversion
+# HR creates attachments for eligible employees (children under 17, salary limits)
+try:
+    result = payslip._get_attachment_amount_for_input_code('FAMILY_ALLOWANCE')
+except:
+    result = inputs['FAMILY_ALLOWANCE'].amount if 'FAMILY_ALLOWANCE' in inputs else 0
+            </field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
+        </record>
+
+        <!-- Daycare Allowance - Now uses salary attachment for children under 3 -->
+        <record id="hr_salary_rule_daycare_allowance_py" model="hr.salary.rule">
+            <field name="name">Guardería</field>
+            <field name="code">DAYCARE_ALLOW_PY</field>
+            <field name="category_id" ref="hr_salary_rule_category_family_py"/>
+            <field name="sequence">130</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = 'DAYCARE_ALLOWANCE_PY' in inputs and inputs['DAYCARE_ALLOWANCE_PY'].amount > 0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+# Daycare allowance via salary attachment with currency conversion
+# HR creates attachments for employees with children under 3
+try:
+    result = payslip._get_attachment_amount_for_input_code('DAYCARE_ALLOWANCE_PY')
+except:
+    result = inputs['DAYCARE_ALLOWANCE_PY'].amount if 'DAYCARE_ALLOWANCE_PY' in inputs else 0
+            </field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
+        </record>
+
+        <!-- 5. TOTALS -->
+        
+        <!-- IPS Base Total -->
+        <record id="hr_salary_rule_ips_base_py" model="hr.salary.rule">
+            <field name="name">Total Base IPS</field>
+            <field name="code">IPS_BASE_PY</field>
+            <field name="category_id" ref="hr_salary_rule_category_ips_base_py"/>
+            <field name="sequence">140</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+# Sum all IPS-deductible income (excludes non-deductible income)
+# IPS Base = All income that contributes to IPS calculation (9% deduction)
+
+# Start with 0
+result = 0
+
+# Add all IPS-deductible categories using result_rules for proper access
+result += result_rules.get('BASIC', {}).get('total', 0)
+result += result_rules.get('OTHER_INC_PY', {}).get('total', 0)
+result += result_rules.get('MEDICAL_LEAVE_PY', {}).get('total', 0)
+result += result_rules.get('BONUS_PY', {}).get('total', 0)
+result += result_rules.get('OVERTIME_DAY_PY', {}).get('total', 0)
+result += result_rules.get('OVERTIME_NIGHT_PY', {}).get('total', 0)
+result += result_rules.get('NIGHT_SURCHARGE_PY', {}).get('total', 0)
+result += result_rules.get('VACATION_PY', {}).get('total', 0)
+result += result_rules.get('HOLIDAY_PY', {}).get('total', 0)
+            </field>
+            <field name="appears_on_payslip" eval="False"/>
+            <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
+        </record>
+
+        <!-- Total Income - Override default rule -->
+        <record id="hr_payroll.default_gross_salary_rule" model="hr.salary.rule">
+            <field name="name">Total Ingresos</field>
+            <field name="code">GROSS</field>
+            <field name="category_id" ref="hr_payroll.GROSS"/>
+            <field name="sequence">150</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+# TOTAL INGRESOS = SALARIO + OTROS INGRESOS + LICENCIAS + FERIADO + BONO + 
+#                  HORAS EXTRAS DIURNAS + HORAS EXTRAS NOCTURNAS + RECARGOS NOCTURNOS +
+#                  VACACIONES + OTROS INGRESOS GND + BONIFICACIÓN FAMILIAR + GUARDERÍA
+
+# Start with 0
+result = 0
+
+result += result_rules.get('BASIC', {}).get('total', 0)
+result += result_rules.get('OTHER_INC_PY', {}).get('total', 0)
+result += result_rules.get('MEDICAL_LEAVE_PY', {}).get('total', 0)
+result += result_rules.get('BONUS_PY', {}).get('total', 0)
+result += result_rules.get('OVERTIME_DAY_PY', {}).get('total', 0)
+result += result_rules.get('OVERTIME_NIGHT_PY', {}).get('total', 0)
+result += result_rules.get('NIGHT_SURCHARGE_PY', {}).get('total', 0)
+result += result_rules.get('VACATION_PY', {}).get('total', 0)
+result += result_rules.get('HOLIDAY_PY', {}).get('total', 0)
+result += result_rules.get('OTHER_NON_DED_PY', {}).get('total', 0)
+result += result_rules.get('FAMILY_ALLOW_PY', {}).get('total', 0)
+result += result_rules.get('DAYCARE_ALLOW_PY', {}).get('total', 0)
+            </field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
+        </record>
+
+        <!-- 6. DEDUCTIONS -->
+        
+        <!-- IPS Employee (9%) -->
+        <record id="hr_salary_rule_ips_employee_py" model="hr.salary.rule">
+            <field name="name">IPS 9%</field>
+            <field name="code">IPS_EMP_PY</field>
+            <field name="category_id" ref="hr_salary_rule_category_ips_py"/>
+            <field name="sequence">160</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+# IPS Employee: 9% of IPS base
+result = -result_rules.get('IPS_BASE_PY', {}).get('total', 0) * 0.09  # 9% IPS employee contribution
+            </field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
+        </record>
+
+        <!-- Salary Advance -->
+        <record id="hr_salary_rule_advance_py" model="hr.salary.rule">
+            <field name="name">Anticipos</field>
+            <field name="code">ADVANCE_PY</field>
+            <field name="category_id" ref="hr_salary_rule_category_advances_py"/>
+            <field name="sequence">180</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = 'SALARY_ADVANCE' in inputs and inputs['SALARY_ADVANCE'].amount > 0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+# Use currency-converted attachment amount if available, fallback to direct input
+try:
+    result = -payslip._get_attachment_amount_for_input_code('SALARY_ADVANCE')
+except:
+    result = -inputs['SALARY_ADVANCE'].amount if 'SALARY_ADVANCE' in inputs else 0
+            </field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
+        </record>
+
+        <!-- Court Garnishment - Now uses native salary attachment system -->
+        <record id="hr_salary_rule_garnishment_py" model="hr.salary.rule">
+            <field name="name">Embargo Judicial</field>
+            <field name="code">GARNISH_PY</field>
+            <field name="category_id" ref="hr_salary_rule_category_garnishment_py"/>
+            <field name="sequence">190</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = 'COURT_GARNISHMENT' in inputs and inputs['COURT_GARNISHMENT'].amount > 0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+# Court garnishment via salary attachment with currency conversion (max 25% of total income)
+try:
+    garnishment = payslip._get_attachment_amount_for_input_code('COURT_GARNISHMENT')
+except:
+    garnishment = inputs['COURT_GARNISHMENT'].amount if 'COURT_GARNISHMENT' in inputs else 0
+
+if garnishment > 0:
+    
+    # Calculate max garnishment (25% of total income per Paraguay law)
+    # Use contract wage as fallback if total income not available yet
+    total_income = 0
+    try:
+        total_income = result_rules.get('IPS_BASE_PY', {}).get('total', 0)
+    except:
+        total_income = contract.wage  # Fallback to monthly wage
+    
+    max_garnishment = total_income * 0.25
+    result = -min(garnishment, max_garnishment)
+else:
+    result = 0
+            </field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
+        </record>
+
+        <!-- Medical Insurance - Now uses salary attachment input type -->
+        <record id="hr_salary_rule_medical_insurance_py" model="hr.salary.rule">
+            <field name="name">Seguro Médico</field>
+            <field name="code">MEDICAL_INS_PY</field>
+            <field name="category_id" ref="hr_salary_rule_category_medical_py"/>
+            <field name="sequence">200</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = 'MEDICAL_INSURANCE' in inputs and inputs['MEDICAL_INSURANCE'].amount > 0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+# Use currency-converted attachment amount if available, fallback to direct input
+try:
+    result = -payslip._get_attachment_amount_for_input_code('MEDICAL_INSURANCE')
+except:
+    result = -inputs['MEDICAL_INSURANCE'].amount if 'MEDICAL_INSURANCE' in inputs else 0
+            </field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
+        </record>
+
+        <!-- Solidarity Contribution -->
+        <record id="hr_salary_rule_solidarity_py" model="hr.salary.rule">
+            <field name="name">Solidaridad</field>
+            <field name="code">SOLIDARITY_PY</field>
+            <field name="category_id" ref="hr_salary_rule_category_solidarity_py"/>
+            <field name="sequence">210</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = 'SOLIDARITY' in inputs and inputs['SOLIDARITY'].amount > 0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+# Use currency-converted attachment amount if available, fallback to direct input
+try:
+    result = -payslip._get_attachment_amount_for_input_code('SOLIDARITY')
+except:
+    result = -inputs['SOLIDARITY'].amount if 'SOLIDARITY' in inputs else 0
+            </field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
+        </record>
+
+        <!-- Parking Deduction -->
+        <record id="hr_salary_rule_parking_py" model="hr.salary.rule">
+            <field name="name">Estacionamiento</field>
+            <field name="code">PARKING_PY</field>
+            <field name="category_id" ref="hr_salary_rule_category_other_deductions_py"/>
+            <field name="sequence">215</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = 'PARKING' in inputs and inputs['PARKING'].amount > 0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+# Use currency-converted attachment amount if available, fallback to direct input
+try:
+    result = -payslip._get_attachment_amount_for_input_code('PARKING')
+except:
+    result = -inputs['PARKING'].amount if 'PARKING' in inputs else 0
+            </field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
+        </record>
+
+        <!-- Training Deduction -->
+        <record id="hr_salary_rule_training_py" model="hr.salary.rule">
+            <field name="name">Capacitación</field>
+            <field name="code">TRAINING_PY</field>
+            <field name="category_id" ref="hr_salary_rule_category_other_deductions_py"/>
+            <field name="sequence">216</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = 'TRAINING' in inputs and inputs['TRAINING'].amount > 0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+result = -inputs['TRAINING'].amount if 'TRAINING' in inputs else 0
+            </field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
+        </record>
+
+        <!-- Loan Deduction -->
+        <record id="hr_salary_rule_loan_py" model="hr.salary.rule">
+            <field name="name">Préstamo</field>
+            <field name="code">LOAN_PY</field>
+            <field name="category_id" ref="hr_salary_rule_category_other_deductions_py"/>
+            <field name="sequence">217</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = 'LOAN' in inputs and inputs['LOAN'].amount > 0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+result = -inputs['LOAN'].amount if 'LOAN' in inputs else 0
+            </field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
+        </record>
+
+        <!-- Other Deductions (Consolidated) -->
+        <record id="hr_salary_rule_other_deductions_py" model="hr.salary.rule">
+            <field name="name">Otros Descuentos</field>
+            <field name="code">OTHER_DED_PY</field>
+            <field name="category_id" ref="hr_salary_rule_category_other_deductions_py"/>
+            <field name="sequence">220</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+# Consolidated other deductions = OTHER_DEDUCTIONS + PARKING + TRAINING + LOAN
+result = 0
+result += -inputs['OTHER_DEDUCTIONS'].amount if 'OTHER_DEDUCTIONS' in inputs else 0
+result += -inputs['PARKING'].amount if 'PARKING' in inputs else 0
+result += -inputs['TRAINING'].amount if 'TRAINING' in inputs else 0
+result += -inputs['LOAN'].amount if 'LOAN' in inputs else 0
+            </field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
+        </record>
+
+        <!-- 7. FINAL TOTALS -->
+        
+        <!-- Total Deductions -->
+        <record id="hr_salary_rule_total_deductions_py" model="hr.salary.rule">
+            <field name="name">Total Descuentos</field>
+            <field name="code">TOTAL_DED_PY</field>
+            <field name="category_id" ref="hr_salary_rule_category_total_deductions_py"/>
+            <field name="sequence">260</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+# TOTAL EGRESOS = IPS 9% + ANTICIPOS + EMBARGO JUDICIAL + SEGURO MÉDICO + 
+#                 ESTACIONAMIENTO + CAPACITACIÓN + PRÉSTAMO + OTROS DESCUENTOS
+# All deduction values should be negative
+
+# Start with 0
+result = 0
+
+result += result_rules.get('IPS_EMP_PY', {}).get('total', 0)
+result += result_rules.get('ADVANCE_PY', {}).get('total', 0)
+result += result_rules.get('GARNISH_PY', {}).get('total', 0)
+result += result_rules.get('MEDICAL_INS_PY', {}).get('total', 0)
+result += result_rules.get('SOLIDARITY_PY', {}).get('total', 0)
+result += result_rules.get('PARKING_PY', {}).get('total', 0)
+result += result_rules.get('TRAINING_PY', {}).get('total', 0)
+result += result_rules.get('LOAN_PY', {}).get('total', 0)
+result += result_rules.get('OTHER_DED_PY', {}).get('total', 0)
+            </field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
+        </record>
+
+        <!-- Net Amount to Pay - Override default rule -->
+        <record id="hr_payroll.default_net_salary" model="hr.salary.rule">
+            <field name="name">Neto a Pagar</field>
+            <field name="code">NET</field>
+            <field name="category_id" ref="hr_payroll.NET"/>
+            <field name="sequence">270</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+# SALARIO NETO A COBRAR = TOTAL INGRESOS - TOTAL EGRESOS
+# Since deductions are negative, we add them (subtraction)
+
+result = 0
+
+result += result_rules.get('GROSS', {}).get('total', 0)
+result += result_rules.get('TOTAL_DED_PY', {}).get('total', 0)
+            </field>
+            <field name="appears_on_payslip" eval="True"/>
+            <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
+        </record>
+
+        <!-- 8. TERMINATION AND BENEFITS -->
+
+        <!-- Christmas Bonus (Aguinaldo) - Only paid in December -->
+        <record id="hr_salary_rule_aguinaldo_py" model="hr.salary.rule">
+            <field name="name">Aguinaldo</field>
+            <field name="code">AGUINALDO_PY</field>
+            <field name="category_id" ref="hr_salary_rule_category_allowances_py"/>
+            <field name="sequence">280</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">
+# Only calculate in December
+result = payslip.date_to.month == 12
+            </field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute"><![CDATA[
+# Aguinaldo = Sum of all IPS_BASE_PY over the year divided by 12
+# Only paid in December
+
+if payslip.date_to.month == 12:
+    # Get the year
+    year = payslip.date_to.year
+    
+    # Search for all payslips of the same employee in the current year
+    domain = [
+        ('employee_id', '=', payslip.employee_id.id),
+        ('date_from', '>=', str(year) + '-01-01'),
+        ('date_to', '<=', str(year) + '-12-31'),
+        ('state', 'in', ['done', 'paid'])
+    ]
+    year_payslips = payslip.env['hr.payslip'].search(domain)
+    
+    # Sum all IPS_BASE_PY amounts from the year
+    total_gross = sum(p.line_ids.filtered(lambda l: l.code == 'IPS_BASE_PY').total for p in year_payslips)
+    
+    # Aguinaldo = total gross / 12
+    result = total_gross / 12 if total_gross else 0
+else:
+    result = 0
+            ]]></field>
+            <field name="appears_on_payslip" eval="False"/>
+            <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
+        </record>
+
+        <!-- Notice Period Pay (Pre aviso) -->
+        <record id="hr_salary_rule_notice_pay_py" model="hr.salary.rule">
+            <field name="name">Pre aviso</field>
+            <field name="code">NOTICE_PAY_PY</field>
+            <field name="category_id" ref="hr_salary_rule_category_allowances_py"/>
+            <field name="sequence">290</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = 'NOTICE_PAY' in inputs and inputs['NOTICE_PAY'].amount > 0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+# Notice period pay (usually 1-2 months of salary)
+result = inputs['NOTICE_PAY'].amount if 'NOTICE_PAY' in inputs else 0
+            </field>
+            <field name="appears_on_payslip" eval="False"/>
+            <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
+        </record>
+
+        <!-- Severance Pay (Indemnización) -->
+        <record id="hr_salary_rule_severance_py" model="hr.salary.rule">
+            <field name="name">Indemnización</field>
+            <field name="code">SEVERANCE_PY</field>
+            <field name="category_id" ref="hr_salary_rule_category_allowances_py"/>
+            <field name="sequence">300</field>
+            <field name="condition_select">python</field>
+            <field name="condition_python">result = 'SEVERANCE_PAY' in inputs and inputs['SEVERANCE_PAY'].amount > 0</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+# Severance pay (varies based on length of service and reason for termination)
+result = inputs['SEVERANCE_PAY'].amount if 'SEVERANCE_PAY' in inputs else 0
+            </field>
+            <field name="appears_on_payslip" eval="False"/>
+            <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
+        </record>
+
+        <!-- Proportional Christmas Bonus (Monthly provision) -->
+        <record id="hr_salary_rule_aguinaldo_proportional_py" model="hr.salary.rule">
+            <field name="name">Aguinaldo Proporcional</field>
+            <field name="code">AGUINALDO_PROP_PY</field>
+            <field name="category_id" ref="hr_salary_rule_category_provisions_py"/>
+            <field name="sequence">310</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+# Monthly provision for Aguinaldo = IPS_BASE_PY / 12
+# This is for accounting purposes to provision the annual bonus monthly
+gross_amount = result_rules.get('IPS_BASE_PY', {}).get('total', 0)
+result = gross_amount / 12 if gross_amount else 0
+            </field>
+            <field name="appears_on_payslip" eval="False"/>
+            <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
+        </record>
+
+        <!-- Proportional Vacation Pay (Monthly provision) -->
+        <record id="hr_salary_rule_vacation_proportional_py" model="hr.salary.rule">
+            <field name="name">Vacaciones Proporcionales</field>
+            <field name="code">VACATION_PROP_PY</field>
+            <field name="category_id" ref="hr_salary_rule_category_provisions_py"/>
+            <field name="sequence">320</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+# Monthly provision for vacation pay = IPS_BASE_PY / 12
+# This is for accounting purposes to provision vacation pay monthly
+gross_amount = result_rules.get('IPS_BASE_PY', {}).get('total', 0)
+result = gross_amount / 12 if gross_amount else 0
+            </field>
+            <field name="appears_on_payslip" eval="False"/>
+            <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
+        </record>
+
+        <!-- 9. EMPLOYER CONTRIBUTIONS -->
+
+        <!-- AOP - Employer IPS Contribution (16.5%) -->
+        <record id="hr_salary_rule_aop_employer_py" model="hr.salary.rule">
+            <field name="name">AOP 16,5%</field>
+            <field name="code">AOP_EMP_PY</field>
+            <field name="category_id" ref="hr_salary_rule_category_employer_contributions_py"/>
+            <field name="sequence">330</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">
+# AOP Employer: 16.5% of IPS base (same base as employee IPS)
+# This is not paid by employee, it's an employer cost
+ips_base = result_rules.get('IPS_BASE_PY', {}).get('total', 0)
+result = ips_base * 0.165  # 16.5% employer contribution
+            </field>
+            <field name="appears_on_payslip" eval="False"/>
+            <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
+        </record>
+
+    </data>
+</odoo>
