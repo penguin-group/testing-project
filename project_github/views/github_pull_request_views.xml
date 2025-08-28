@@ -1,0 +1,26 @@
+<odoo>
+    <record id="github_pull_request_action" model="ir.actions.act_window">
+        <field name="name">GitHub Pull Requests</field>
+        <field name="res_model">github.pull.request</field>
+        <field name="view_mode">list</field>
+        <field name="context">{'default_task_id': active_id}</field>
+    </record>
+
+    <record id="github_pull_request_list_view" model="ir.ui.view">
+        <field name="name">github.pull.request.list</field>
+        <field name="model">github.pull.request</field>
+        <field name="arch" type="xml">
+            <list string="GitHub Pull Request"
+                editable="bottom" create="false" edit="false" delete="false">
+                <field name="number"/>
+                <field name="name" />
+                <field name="task_id" optional="hide"/>
+                <field name="url" widget="url" text="Open"/>
+                <field name="state" widget="badge" class="o_badge_text_dark"
+                   decoration-success="state == 'merged'"
+                   decoration-info="state == 'open'"
+                   decoration-muted="state == 'closed'"/>
+            </list>
+        </field>
+    </record>
+</odoo>

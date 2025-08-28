@@ -1,0 +1,74 @@
+<odoo>
+    <record id="view_task_form2_inherit" model="ir.ui.view">
+        <field name="name">project.task.form.inherit</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <field name="is_development_task" invisible="1"/>
+                <button class="oe_stat_button" type="object" name="action_view_github_branches" icon="fa-github" invisible="not is_development_task or branch_count == 0" context="{'default_task_id': id}">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value">
+                            <field name="branch_count" nolabel="1"/>
+                        </span>
+                        <span class="o_stat_text">
+                            Branches
+                        </span>
+                    </div>
+                </button>
+                <button class="oe_stat_button" type="object" name="action_view_commits" icon="fa-github" invisible="not is_development_task or commit_count == 0">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value">
+                            <field name="commit_count" nolabel="1"/>
+                        </span>
+                        <span class="o_stat_text">
+                            Commits
+                        </span>
+                    </div>
+                </button>
+                <button class="oe_stat_button" type="object" name="action_view_pull_requests" icon="fa-github" invisible="not is_development_task or pull_request_count == 0">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value">
+                            <field name="pull_request_count" nolabel="1"/>
+                        </span>
+                        <span class="o_stat_text">
+                            Pull Requests
+                        </span>
+                    </div>
+                </button>
+            </xpath>
+
+            <xpath expr="//div[@name='project']" position="after">
+                <field name="task_code"/>
+            </xpath>
+
+            <xpath expr="//header" position="inside">
+                <button name="action_create_github_branch" string="Create GitHub Branch" type="object" class="oe_highlight" invisible="not is_development_task"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Inherit List View -->
+    <record id="open_view_all_tasks_list_view_inherited" model="ir.ui.view">
+        <field name="name">open.view.all.tasks.list.view.inherited</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.open_view_all_tasks_list_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="task_code"/>
+            </xpath>
+        </field>
+    </record>
+
+        <!-- Inherit Kanban View -->
+        <record id="view_task_kanban_inherited" model="ir.ui.view">
+            <field name="name">view.task.kanban.inherited</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_kanban"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="before">
+                    <field name="task_code" class="fs-6"/>
+                </xpath>
+            </field>
+        </record>
+</odoo>
