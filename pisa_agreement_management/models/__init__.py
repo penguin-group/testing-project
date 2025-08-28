@@ -4,3 +4,4 @@ from . import legal_process_type
 from . import agreement_stage
 from . import agreement_jurisdiction
 from . import agreement_renewal_term
+from . import agreement_tag
