@@ -42,6 +42,8 @@
                         <group>
                             <field name="agreement_type"/>
                             <field name="legal_process_type"/>
+                            <field name="renewal_terms"/>
+                            <field name="jurisdiction"/>
                             <field name="related_agreements" widget="many2many_tags"/>
                         </group>
                     </group>

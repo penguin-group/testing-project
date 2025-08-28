@@ -35,6 +35,8 @@ class PisaAgreement(models.Model):
 
     agreement_type = fields.Many2one('agreement.type', string="Agreement Type")
     legal_process_type = fields.Many2one('legal.process.type', string="Legal Process Type")
+    renewal_terms = fields.Many2one("agreement.renewal.term", string="Renewal Terms")
+    jurisdiction = fields.Many2one("agreement.jurisdiction", string="Jurisdiction")
 
     related_agreements = fields.Many2many(
         'pisa.agreement',
