@@ -14,11 +14,19 @@
     'version': '18.0.1.0.0',
     'license': "OPL-1", 
 
-    'depends': ['base', 'hr'],
+    'depends': ['base', 'hr_payroll'],
 
     'data': [
         'security/ir.model.access.csv',
+        'views/hr_reports_mtess_views.xml',
         'wizard/hr_reports_mtess_wizard_views.xml',
     ],
+
+    'assets': {
+        'web.assets_backend': [
+            'l10n_py_hr_reports_mtess/static/src/js/mtess_list_controller.js',
+            'l10n_py_hr_reports_mtess/static/src/xml/mtess_list_buttons.xml',
+        ],
+    },
 }
 

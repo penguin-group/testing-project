@@ -1,0 +1,33 @@
+<odoo>
+    <!-- List View -->
+    <record id="view_hr_reports_mtess_list" model="ir.ui.view">
+        <field name="name">hr.reports.mtess.list</field>
+        <field name="model">hr.reports.mtess</field>
+        <field name="arch" type="xml">
+            <list create="false">
+                <field name="year"/>
+                <field name="name"/>
+                <field name="report_type"/>
+                <field name="xlsx_filename" invisible="1" column_invisible="1"/>
+                <field name="xlsx_output" string="XLSX File" widget="binary" filename="xlsx_filename"/>
+                <button name="action_generate" type="object" string="Generate" class="oe_highlight"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_hr_reports_mtess" model="ir.actions.act_window">
+        <field name="name">MTESS Reports</field>
+        <field name="res_model">hr.reports.mtess</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_hr_reports_mtess_list"/>
+        <field name="context">{'group_by': ['year']}</field>
+    </record>
+
+    <!-- Menu Item -->
+    <menuitem id="menu_hr_reports_mtess"
+              name="MTESS Reports"
+              parent="hr_payroll.menu_hr_payroll_report"
+              action="action_hr_reports_mtess"
+              sequence="10"/>
+</odoo>
