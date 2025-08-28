@@ -9,6 +9,9 @@
                 <field name="lot_ref" string="Position" filter_domain="[('lot_id.ref', 'ilike', self)]"/>
 
                 <field name="partner_id" string="Customer"/>
+
+                <filter name="not_done" string="Exclude Done" domain="[('tag_ids', 'not ilike', 'done')]"/>
+
             </search>
         </field>
     </record>
