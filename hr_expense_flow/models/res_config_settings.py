@@ -21,3 +21,10 @@ class ResConfigSettings(models.TransientModel):
         check_company=True,
         domain="[('type', '=', 'general')]",
     )
+
+    emp_reimbursement_transient_account_id = fields.Many2one(
+        "account.account",
+        related="company_id.emp_reimbursement_transient_account_id",
+        readonly=False,
+        check_company=True
+    )

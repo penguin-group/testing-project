@@ -56,6 +56,9 @@
         <field name="model">hr.expense.sheet</field>
         <field name="inherit_id" ref="hr_expense.view_hr_expense_sheet_form" />
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='payment_mode']" position="after">
+                <field name="bank_account_id" invisible="payment_mode != 'own_account'" domain="[('partner_id', '=', employee_related_partner_id)]"/>
+            </xpath>
 
             <!-- 
             We hide payment_method_line_id and employee_journal_id because we don't use them
