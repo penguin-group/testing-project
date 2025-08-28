@@ -12,5 +12,6 @@
     <menuitem id="menuitem_pisa_agreement_stages" name="Agreement Stages" parent="menu_pisa_agreement_config" sequence="40" action="action_agreement_stage"/>
     <menuitem id="menuitem_pisa_agreement_renewal_term" name="Renewal Terms" parent="menu_pisa_agreement_config" sequence="50" action="action_agreement_renewal_term"/>
     <menuitem id="menuitem_pisa_agreement_jurisdiction" name="Jurisdictions" parent="menu_pisa_agreement_config" sequence="60" action="action_agreement_jurisdiction"/>
+    <menuitem id="menuitem_pisa_agreement_tag" name="Agreement Tags" parent="menu_pisa_agreement_config" sequence="70" action="action_agreement_tag"/>
 
 </odoo>
