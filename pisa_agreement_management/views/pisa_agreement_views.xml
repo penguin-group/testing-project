@@ -56,6 +56,16 @@
                             </group>
                             <field name="related_agreements" />
                         </page>
+                        <page string="Milestones">
+                            <field name="milestone_ids">
+                                <list editable="bottom">
+                                    <field name="name" />
+                                    <field name="agreement_id" readonly="1" />
+                                    <field name="deadline" />
+                                    <field name="is_reached" />
+                                </list>
+                            </field>
+                        </page>
                     </notebook>
 
                 </sheet>

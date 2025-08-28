@@ -18,6 +18,7 @@
         "views/agreement_jurisdiction_views.xml",
         "views/agreement_renewal_term_views.xml",
         "views/agreement_tag_views.xml",
+        "views/agreement_milestone_views.xml",
         "views/pisa_agreement_menu_views.xml",
     ]
 }
