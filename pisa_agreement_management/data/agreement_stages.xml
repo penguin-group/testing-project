@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="agreement_stage_draft" model="agreement.stage">
+            <field name="name">Draft</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="agreement_stage_missing_info" model="agreement.stage">
+            <field name="name">Missing Information</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="agreement_stage_under_review" model="agreement.stage">
+            <field name="name">Under Review</field>
+            <field name="sequence">30</field>
+        </record>
+        <record id="agreement_stage_executed" model="agreement.stage">
+            <field name="name">Executed</field>
+            <field name="sequence">40</field>
+        </record>
+        <record id="agreement_stage_active" model="agreement.stage">
+            <field name="name">Active</field>
+            <field name="sequence">50</field>
+        </record>
+        <record id="agreement_stage_expired" model="agreement.stage">
+            <field name="name">Expired</field>
+            <field name="sequence">60</field>
+        </record>
+        <record id="agreement_stage_terminated" model="agreement.stage">
+            <field name="name">Terminated</field>
+            <field name="sequence">70</field>
+        </record>
+
+
+    </data>
+</odoo>

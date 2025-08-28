@@ -10,6 +10,7 @@
     "depends": ["base", "web", "mail"],
     "data": [
         "security/ir.model.access.csv",
+        "data/agreement_stages.xml",
         "views/pisa_agreement_views.xml",
         "views/agreement_type_views.xml",
         "views/agreement_stage_views.xml",
