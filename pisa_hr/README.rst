@@ -1,4 +1,4 @@
-Interfisa Localization (l10n)
+PISA HR
 ==================
 
 .. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
@@ -13,18 +13,17 @@ Interfisa Localization (l10n)
 
 |badge1| |badge2| |badge3|
 
-Module responsible for generating an XLSX file needed by Banco Interfisa in order to perform payroll operations.
+Module to handle HR processes adapted to Penguin Infrastructure's business logic.
 
 Features
 ========
 
-* **Create payment report**: This module inherits the native payment report model found in Payroll. It changes the default file format for the report and allows the user to download the generated XLSX file.
+* **Limit read access to employee skills:** Only HR officers and admins can see skills.
 
 Overview
 ========
 
-The main purpose of this module is to overwrite the native behavior of Odoo's payment report functionality. This is needed in order to change the file format and build the file based on the structure needed by Banco Interfisa.
-
+Currently, this module adds group restrictions to a few views so that employees cannot see their skills tracking.
 
 Installation
 ============
@@ -32,9 +31,9 @@ Installation
 To install this module, you need to:
 
 #. Clone the pisa_addons repository if you haven't already. In case you do have the pisa_addons repo but you still don't see this module, make sure to ``git pull`` and get the latest version of pisa_addons.
-#. Ensure dependencies are installed: ``base``, ``account``, ``web``, ``hr_payroll``, ``payroll_banks``
+#. Ensure dependencies are installed: ``base``, ``account``, ``web``, ``hr``
 #. Update the module list
-#. Install the module from the Apps menu
+#. Install the module from Apps menu
 
 Dependencies
 ============
@@ -44,19 +43,8 @@ This module depends on:
 * ``base``: Core Odoo functionality
 * ``account``: Accounting module
 * ``web``: The core of the Odoo Web Client
-* ``hr_payroll``: Odoo's native payroll module (enterprise)
-* ``payroll_banks``: This module allows to add the bank to Payroll settings.
+* ``hr``: Odoo's native implementation for human resources
 
-
-Usage
-=====
-
-**Create payment report**
-
-#. Go to Payroll > Payslips > Batches
-#. Choose a batch with a state of "Done"
-#. Create payment report
-#. The file is added to the payment_report field.
 
 Bug Tracker
 ===========

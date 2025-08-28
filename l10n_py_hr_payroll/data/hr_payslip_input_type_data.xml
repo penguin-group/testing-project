@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Other Income Input -->
+        <record id="payslip_input_other_income_py" model="hr.payslip.input.type">
+            <field name="name">Otros Ingresos</field>
+            <field name="code">OTHER_INCOME</field>
+            <field name="country_id" ref="base.py"/>
+            <field name="available_in_attachments" eval="True"/>
+        </record>
+
+        <!-- Medical Leave Days Input -->
+        <record id="payslip_input_medical_leave_days" model="hr.payslip.input.type">
+            <field name="name">Licencias</field>
+            <field name="code">MEDICAL_LEAVE_DAYS</field>
+            <field name="country_id" ref="base.py"/>
+        </record>
+
+        <!-- Holiday Day Hours Input -->
+        <record id="payslip_input_holiday_day_hours" model="hr.payslip.input.type">
+            <field name="name">Horas Feriado Diurno</field>
+            <field name="code">HOLIDAY_DAY_HOURS</field>
+            <field name="country_id" ref="base.py"/>
+        </record>
+
+        <!-- Holiday Night Hours Input -->
+        <record id="payslip_input_holiday_night_hours" model="hr.payslip.input.type">
+            <field name="name">Horas Feriado Nocturno</field>
+            <field name="code">HOLIDAY_NIGHT_HOURS</field>
+            <field name="country_id" ref="base.py"/>
+        </record>
+
+        <!-- Bonus Input -->
+        <record id="payslip_input_bonus" model="hr.payslip.input.type">
+            <field name="name">Bono</field>
+            <field name="code">BONUS</field>
+            <field name="country_id" ref="base.py"/>
+            <field name="available_in_attachments" eval="True"/>
+        </record>
+
+        <!-- Overtime Day Hours Input -->
+        <record id="payslip_input_overtime_day_hours" model="hr.payslip.input.type">
+            <field name="name">Horas Extras Diurnas</field>
+            <field name="code">OVERTIME_DAY_HOURS</field>
+            <field name="country_id" ref="base.py"/>
+        </record>
+
+        <!-- Overtime Night Hours Input -->
+        <record id="payslip_input_overtime_night_hours" model="hr.payslip.input.type">
+            <field name="name">Horas Extras Nocturnas</field>
+            <field name="code">OVERTIME_NIGHT_HOURS</field>
+            <field name="country_id" ref="base.py"/>
+        </record>
+
+        <!-- Night Surcharge Hours Input -->
+        <record id="payslip_input_night_surcharge_hours" model="hr.payslip.input.type">
+            <field name="name">Horas Recargo Nocturno</field>
+            <field name="code">NIGHT_SURCHARGE_HOURS</field>
+            <field name="country_id" ref="base.py"/>
+        </record>
+
+        <!-- Vacation Days Input -->
+        <record id="payslip_input_vacation_days" model="hr.payslip.input.type">
+            <field name="name">Vacaciones</field>
+            <field name="code">VACATION_DAYS</field>
+            <field name="country_id" ref="base.py"/>
+        </record>
+
+        <!-- Other Non-Deductible Income Input -->
+        <record id="payslip_input_other_non_deductible" model="hr.payslip.input.type">
+            <field name="name">Otros Ingresos No Deducibles</field>
+            <field name="code">OTHER_NON_DEDUCTIBLE</field>
+            <field name="country_id" ref="base.py"/>
+            <field name="available_in_attachments" eval="True"/>
+        </record>
+
+        <!-- Family Allowance Input (Bonificación Familiar) -->
+        <record id="payslip_input_family_allowance" model="hr.payslip.input.type">
+            <field name="name">Bonificación Familiar</field>
+            <field name="code">FAMILY_ALLOWANCE</field>
+            <field name="country_id" ref="base.py"/>
+            <field name="available_in_attachments" eval="True"/>
+        </record>
+
+        <!-- Daycare Allowance Input (from actual payslip) -->
+        <record id="payslip_input_daycare_allowance_py" model="hr.payslip.input.type">
+            <field name="name">Guardería</field>
+            <field name="code">DAYCARE_ALLOWANCE_PY</field>
+            <field name="country_id" ref="base.py"/>
+            <field name="available_in_attachments" eval="True"/>
+        </record>
+
+        <!-- Salary Advance Input -->
+        <record id="payslip_input_salary_advance" model="hr.payslip.input.type">
+            <field name="name">Anticipo de Salario</field>
+            <field name="code">SALARY_ADVANCE</field>
+            <field name="country_id" ref="base.py"/>
+            <field name="available_in_attachments" eval="True"/>
+        </record>
+
+        <!-- Court Garnishment Input (Embargo Judicial) -->
+        <record id="payslip_input_court_garnishment" model="hr.payslip.input.type">
+            <field name="name">Embargo Judicial</field>
+            <field name="code">COURT_GARNISHMENT</field>
+            <field name="country_id" ref="base.py"/>
+            <field name="available_in_attachments" eval="True"/>
+        </record>
+
+        <!-- Medical Insurance Input (from actual payslip) -->
+        <record id="payslip_input_medical_insurance" model="hr.payslip.input.type">
+            <field name="name">Seguro Médico</field>
+            <field name="code">MEDICAL_INSURANCE</field>
+            <field name="country_id" ref="base.py"/>
+            <field name="available_in_attachments" eval="True"/>
+        </record>
+
+        <!-- Solidarity Contribution Input -->
+        <record id="payslip_input_solidarity" model="hr.payslip.input.type">
+            <field name="name">Solidaridad</field>
+            <field name="code">SOLIDARITY</field>
+            <field name="country_id" ref="base.py"/>
+            <field name="available_in_attachments" eval="True"/>
+        </record>
+
+        <!-- Other Deductions Input (Consolidated) -->
+        <record id="payslip_input_other_deductions" model="hr.payslip.input.type">
+            <field name="name">Otros Descuentos</field>
+            <field name="code">OTHER_DEDUCTIONS</field>
+            <field name="country_id" ref="base.py"/>
+            <field name="available_in_attachments" eval="True"/>
+        </record>
+
+        <!-- Parking Deduction Input -->
+        <record id="payslip_input_parking" model="hr.payslip.input.type">
+            <field name="name">Estacionamiento</field>
+            <field name="code">PARKING</field>
+            <field name="country_id" ref="base.py"/>
+            <field name="available_in_attachments" eval="True"/>
+        </record>
+
+        <!-- Training Deduction Input -->
+        <record id="payslip_input_training" model="hr.payslip.input.type">
+            <field name="name">Capacitación</field>
+            <field name="code">TRAINING</field>
+            <field name="country_id" ref="base.py"/>
+            <field name="available_in_attachments" eval="True"/>
+        </record>
+
+        <!-- Loan Deduction Input -->
+        <record id="payslip_input_loan" model="hr.payslip.input.type">
+            <field name="name">Préstamo</field>
+            <field name="code">LOAN</field>
+            <field name="country_id" ref="base.py"/>
+            <field name="available_in_attachments" eval="True"/>
+        </record>
+
+        <!-- Notice Period Pay Input -->
+        <record id="payslip_input_notice_pay" model="hr.payslip.input.type">
+            <field name="name">Pre aviso</field>
+            <field name="code">NOTICE_PAY</field>
+            <field name="country_id" ref="base.py"/>
+        </record>
+
+        <!-- Severance Pay Input -->
+        <record id="payslip_input_severance_pay" model="hr.payslip.input.type">
+            <field name="name">Indemnización</field>
+            <field name="code">SEVERANCE_PAY</field>
+            <field name="country_id" ref="base.py"/>
+        </record>
+
+    </data>
+</odoo>

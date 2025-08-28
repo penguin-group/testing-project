@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Extend Payroll Structure form to highlight journal for Paraguay structures -->
+        <record id="view_hr_payroll_structure_form_py" model="ir.ui.view">
+            <field name="name">hr.payroll.structure.form.py</field>
+            <field name="model">hr.payroll.structure</field>
+            <field name="inherit_id" ref="hr_payroll_account.hr_payroll_structure_view_form"/>
+            <field name="arch" type="xml">
+                
+                <!-- Add informational message for Paraguay structures -->
+                <xpath expr="//field[@name='journal_id']" position="after">
+                    <div class="alert alert-info" role="status" invisible="country_id != %(base.py)d">
+                        <strong>📊 Contabilidad Paraguay:</strong><br/>
+                        Esta estructura utiliza el diario <strong>"Nómina Paraguay (NOM)"</strong> para registrar los asientos contables de nómina.<br/>
+                        Los asientos se generan automáticamente al confirmar las liquidaciones.
+                    </div>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>
