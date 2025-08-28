@@ -44,12 +44,17 @@
                             <field name="legal_process_type"/>
                             <field name="renewal_terms"/>
                             <field name="jurisdiction"/>
-                            <field name="related_agreements" widget="many2many_tags"/>
                         </group>
                     </group>
                     <notebook>
                         <page string="Key Obligations" >
                             <field name="key_obligations" />
+                        </page>
+                        <page string="Document Management">
+                            <group>
+                                <field name="file_location" widget="url" />
+                            </group>
+                            <field name="related_agreements" />
                         </page>
                     </notebook>
 
