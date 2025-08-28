@@ -28,6 +28,46 @@ msgid "Bono"
 msgstr "Bono"
 
 #. module: pisa_hr_payroll
+#: model:hr.employee.child,field:age
+msgid "Age"
+msgstr "Edad"
+
+#. module: pisa_hr_payroll
+#: model:hr.employee.child,field:date_of_birth
+msgid "Date of Birth"
+msgstr "Fecha de Nacimiento"
+
+#. module: pisa_hr_payroll
+#: model:hr.employee.child,field:name
+msgid "Full Name"
+msgstr "Nombre Completo"
+
+#. module: pisa_hr_payroll
+#: model:hr.employee.child,field:identification_number
+msgid "ID Number"
+msgstr "Número de Cédula"
+
+#. module: pisa_hr_payroll
+#: model:hr.employee.child,field:is_dependent
+msgid "Is Dependent"
+msgstr "Es Dependiente"
+
+#. module: pisa_hr_payroll
+#: model:hr.employee.child,field:notes
+msgid "Notes"
+msgstr "Notas"
+
+#. module: pisa_hr_payroll
+#: view:hr.employee.form:pisa_hr_payroll.view_employee_form_py_payroll
+msgid "Children Details"
+msgstr "Detalles de los Hijos"
+
+#. module: pisa_hr_payroll
+#: model:hr.employee,field:children_ids
+msgid "Children"
+msgstr "Hijos"
+
+#. module: pisa_hr_payroll
 #: model:hr.salary.rule.category,name:pisa_hr_payroll.hr_salary_rule_category_family_py
 msgid "Beneficios Familiares"
 msgstr "Beneficios Familiares"

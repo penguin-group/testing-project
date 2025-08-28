@@ -53,18 +53,12 @@
         "data/hr_payslip_input_type_data.xml",
         "data/hr_rule_parameter_data.xml",
         "data/hr_salary_rule_data.xml",
-        "data/hr_payroll_structure_updates.xml",  # Must be last to resolve references
         
         # Views
-        "views/hr_employee_views.xml",
-        "views/hr_contract_views.xml", 
-        "views/hr_payslip_views.xml",
+        "views/hr_contract_views.xml",
         "views/hr_payroll_structure_views.xml",
+        "views/hr_salary_attachment_views.xml",
         "views/res_config_settings_views.xml",
-        
-        # Reports
-        "reports/hr_payslip_report.xml",
-        "reports/report_payslip_py.xml",
     ],
 
     'demo': [
@@ -76,8 +70,4 @@
     'installable': True,
     'application': False,
     'auto_install': False,
-    
-    # Hooks
-    'post_init_hook': 'post_init_hook',
-    'uninstall_hook': 'uninstall_hook',
 }

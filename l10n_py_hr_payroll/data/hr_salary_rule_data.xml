@@ -35,7 +35,13 @@ result = daily_wage * worked_days_total
             <field name="condition_select">python</field>
             <field name="condition_python">result = 'OTHER_INCOME' in inputs and inputs['OTHER_INCOME'].amount > 0</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">result = inputs['OTHER_INCOME'].amount if 'OTHER_INCOME' in inputs else 0</field>
+            <field name="amount_python_compute">
+# Use currency-converted attachment amount if available, fallback to direct input
+try:
+    result = payslip._get_attachment_amount_for_input_code('OTHER_INCOME')
+except:
+    result = inputs['OTHER_INCOME'].amount if 'OTHER_INCOME' in inputs else 0
+            </field>
             <field name="appears_on_payslip" eval="True"/>
             <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
         </record>
@@ -71,7 +77,13 @@ else:
             <field name="condition_select">python</field>
             <field name="condition_python">result = 'BONUS' in inputs and inputs['BONUS'].amount > 0</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">result = inputs['BONUS'].amount if 'BONUS' in inputs else 0</field>
+            <field name="amount_python_compute">
+# Use currency-converted attachment amount if available, fallback to direct input
+try:
+    result = payslip._get_attachment_amount_for_input_code('BONUS')
+except:
+    result = inputs['BONUS'].amount if 'BONUS' in inputs else 0
+            </field>
             <field name="appears_on_payslip" eval="True"/>
             <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
         </record>
@@ -203,7 +215,13 @@ else:
             <field name="condition_select">python</field>
             <field name="condition_python">result = 'OTHER_NON_DEDUCTIBLE' in inputs and inputs['OTHER_NON_DEDUCTIBLE'].amount > 0</field>
             <field name="amount_select">code</field>
-            <field name="amount_python_compute">result = inputs['OTHER_NON_DEDUCTIBLE'].amount if 'OTHER_NON_DEDUCTIBLE' in inputs else 0</field>
+            <field name="amount_python_compute">
+# Use currency-converted attachment amount if available, fallback to direct input
+try:
+    result = payslip._get_attachment_amount_for_input_code('OTHER_NON_DEDUCTIBLE')
+except:
+    result = inputs['OTHER_NON_DEDUCTIBLE'].amount if 'OTHER_NON_DEDUCTIBLE' in inputs else 0
+            </field>
             <field name="appears_on_payslip" eval="True"/>
             <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
         </record>
@@ -220,9 +238,12 @@ else:
             <field name="condition_python">result = 'FAMILY_ALLOWANCE' in inputs and inputs['FAMILY_ALLOWANCE'].amount > 0</field>
             <field name="amount_select">code</field>
             <field name="amount_python_compute">
-# Family allowance via salary attachment
+# Family allowance via salary attachment with currency conversion
 # HR creates attachments for eligible employees (children under 17, salary limits)
-result = inputs['FAMILY_ALLOWANCE'].amount if 'FAMILY_ALLOWANCE' in inputs else 0
+try:
+    result = payslip._get_attachment_amount_for_input_code('FAMILY_ALLOWANCE')
+except:
+    result = inputs['FAMILY_ALLOWANCE'].amount if 'FAMILY_ALLOWANCE' in inputs else 0
             </field>
             <field name="appears_on_payslip" eval="True"/>
             <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
@@ -238,9 +259,12 @@ result = inputs['FAMILY_ALLOWANCE'].amount if 'FAMILY_ALLOWANCE' in inputs else 
             <field name="condition_python">result = 'DAYCARE_ALLOWANCE_PY' in inputs and inputs['DAYCARE_ALLOWANCE_PY'].amount > 0</field>
             <field name="amount_select">code</field>
             <field name="amount_python_compute">
-# Daycare allowance via salary attachment  
+# Daycare allowance via salary attachment with currency conversion
 # HR creates attachments for employees with children under 3
-result = inputs['DAYCARE_ALLOWANCE_PY'].amount if 'DAYCARE_ALLOWANCE_PY' in inputs else 0
+try:
+    result = payslip._get_attachment_amount_for_input_code('DAYCARE_ALLOWANCE_PY')
+except:
+    result = inputs['DAYCARE_ALLOWANCE_PY'].amount if 'DAYCARE_ALLOWANCE_PY' in inputs else 0
             </field>
             <field name="appears_on_payslip" eval="True"/>
             <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
@@ -339,8 +363,12 @@ result = -result_rules.get('IPS_BASE_PY', {}).get('total', 0) * 0.09  # 9% IPS e
             <field name="condition_python">result = 'SALARY_ADVANCE' in inputs and inputs['SALARY_ADVANCE'].amount > 0</field>
             <field name="amount_select">code</field>
             <field name="amount_python_compute">
-result = -inputs['SALARY_ADVANCE'].amount if 'SALARY_ADVANCE' in inputs else 0
-</field>
+# Use currency-converted attachment amount if available, fallback to direct input
+try:
+    result = -payslip._get_attachment_amount_for_input_code('SALARY_ADVANCE')
+except:
+    result = -inputs['SALARY_ADVANCE'].amount if 'SALARY_ADVANCE' in inputs else 0
+            </field>
             <field name="appears_on_payslip" eval="True"/>
             <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
         </record>
@@ -355,9 +383,13 @@ result = -inputs['SALARY_ADVANCE'].amount if 'SALARY_ADVANCE' in inputs else 0
             <field name="condition_python">result = 'COURT_GARNISHMENT' in inputs and inputs['COURT_GARNISHMENT'].amount > 0</field>
             <field name="amount_select">code</field>
             <field name="amount_python_compute">
-# Court garnishment via salary attachment (max 25% of total income)
-if 'COURT_GARNISHMENT' in inputs:
-    garnishment = inputs['COURT_GARNISHMENT'].amount
+# Court garnishment via salary attachment with currency conversion (max 25% of total income)
+try:
+    garnishment = payslip._get_attachment_amount_for_input_code('COURT_GARNISHMENT')
+except:
+    garnishment = inputs['COURT_GARNISHMENT'].amount if 'COURT_GARNISHMENT' in inputs else 0
+
+if garnishment > 0:
     
     # Calculate max garnishment (25% of total income per Paraguay law)
     # Use contract wage as fallback if total income not available yet
@@ -386,7 +418,11 @@ else:
             <field name="condition_python">result = 'MEDICAL_INSURANCE' in inputs and inputs['MEDICAL_INSURANCE'].amount > 0</field>
             <field name="amount_select">code</field>
             <field name="amount_python_compute">
-result = -inputs['MEDICAL_INSURANCE'].amount if 'MEDICAL_INSURANCE' in inputs else 0
+# Use currency-converted attachment amount if available, fallback to direct input
+try:
+    result = -payslip._get_attachment_amount_for_input_code('MEDICAL_INSURANCE')
+except:
+    result = -inputs['MEDICAL_INSURANCE'].amount if 'MEDICAL_INSURANCE' in inputs else 0
             </field>
             <field name="appears_on_payslip" eval="True"/>
             <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
@@ -402,7 +438,11 @@ result = -inputs['MEDICAL_INSURANCE'].amount if 'MEDICAL_INSURANCE' in inputs el
             <field name="condition_python">result = 'SOLIDARITY' in inputs and inputs['SOLIDARITY'].amount > 0</field>
             <field name="amount_select">code</field>
             <field name="amount_python_compute">
-result = -inputs['SOLIDARITY'].amount if 'SOLIDARITY' in inputs else 0
+# Use currency-converted attachment amount if available, fallback to direct input
+try:
+    result = -payslip._get_attachment_amount_for_input_code('SOLIDARITY')
+except:
+    result = -inputs['SOLIDARITY'].amount if 'SOLIDARITY' in inputs else 0
             </field>
             <field name="appears_on_payslip" eval="True"/>
             <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>
@@ -418,7 +458,11 @@ result = -inputs['SOLIDARITY'].amount if 'SOLIDARITY' in inputs else 0
             <field name="condition_python">result = 'PARKING' in inputs and inputs['PARKING'].amount > 0</field>
             <field name="amount_select">code</field>
             <field name="amount_python_compute">
-result = -inputs['PARKING'].amount if 'PARKING' in inputs else 0
+# Use currency-converted attachment amount if available, fallback to direct input
+try:
+    result = -payslip._get_attachment_amount_for_input_code('PARKING')
+except:
+    result = -inputs['PARKING'].amount if 'PARKING' in inputs else 0
             </field>
             <field name="appears_on_payslip" eval="True"/>
             <field name="struct_id" ref="hr_payroll_structure_py_employee_salary"/>

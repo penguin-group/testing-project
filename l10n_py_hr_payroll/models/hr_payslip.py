@@ -9,13 +9,6 @@ from odoo.exceptions import UserError
 
 class HrPayslip(models.Model):
     _inherit = 'hr.payslip'
-
-    # Paraguay-specific payslip fields
-    location = fields.Char(
-        string='Location',
-        default='ASUNCION',
-        help='Work location for payslip'
-    )
     
     def _check_payroll_closing_date(self):
         """Check if current date is after payroll closing day for the payslip period month"""
@@ -51,30 +44,6 @@ class HrPayslip(models.Model):
         """Override to add payroll closing date validation"""
         self._check_payroll_closing_date()
         return super().action_payslip_done()
-    
-    area = fields.Char(
-        related='employee_id.department_id.name',
-        string='Area',
-        help='Employee department/area'
-    )
-    
-    currency_name = fields.Char(
-        string='Currency Name',
-        default='GUARANIES',
-        help='Currency name for display on payslip'
-    )
-    
-    cedula = fields.Char(
-        related='employee_id.identification_id',
-        string='Cédula',
-        help='Employee identification number'
-    )
-    
-    # Payment details
-    payment_details = fields.Text(
-        string='Payment Details',
-        help='Details about how the payment was made (transfer, cash, etc.)'
-    )
     
     # Currency handling for multi-currency contracts
     @api.depends('contract_id.contract_currency_id', 'contract_id.currency_id')
@@ -153,8 +122,80 @@ class HrPayslip(models.Model):
                     amount, contract_currency, self.company_id, self.date_to or fields.Date.today()
                 ) if contract_currency != company_currency else amount,
             })
+            
+            # Add multi-currency salary attachment utilities
+            localdict.update({
+                'get_attachment_amount': self._get_attachment_amount_for_input_code,
+                'get_attachment_amounts': self._get_attachment_amounts_for_input_codes,
+            })
         
         return localdict
+    
+    def _get_attachment_amount_for_input_code(self, input_code):
+        """
+        Get converted salary attachment amount for a specific input code
+        
+        Args:
+            input_code (str): Input type code (e.g., 'SALARY_ADVANCE', 'MEDICAL_INSURANCE')
+            
+        Returns:
+            float: Total converted amount for the input code using payroll closing date rate
+        """
+        if not self.employee_id.salary_attachment_ids:
+            return 0.0
+        
+        attachment_model = self.env['hr.salary.attachment']
+        amounts = attachment_model._get_attachment_amounts_for_payslip(self, [input_code])
+        return amounts.get(input_code, 0.0)
+    
+    def _get_attachment_amounts_for_input_codes(self, input_codes):
+        """
+        Get converted salary attachment amounts for multiple input codes
+        
+        Args:
+            input_codes (list): List of input type codes
+            
+        Returns:
+            dict: {input_code: converted_amount} using payroll closing date rates
+        """
+        if not self.employee_id.salary_attachment_ids:
+            return {}
+        
+        attachment_model = self.env['hr.salary.attachment']
+        return attachment_model._get_attachment_amounts_for_payslip(self, input_codes)
+
+    def _get_payslip_lines(self):
+        line_vals = super()._get_payslip_lines()
+        for line in line_vals:
+            line['amount'] = round(line['amount'], 0 if self.currency_id.name == 'PYG' else 2)
+            line['total'] = round(line['total'], 0 if self.currency_id.name == 'PYG' else 2)
+        return line_vals
+    
+    def _prepare_adjust_line(self, line_ids, adjust_type, debit_sum, credit_sum, date):
+        acc_id = self.sudo().journal_id.default_account_id.id
+        if not acc_id:
+            raise UserError(_('The Expense Journal "%s" has not properly configured the default Account!', self.journal_id.name))
+        existing_adjustment_line = (
+            line_id for line_id in line_ids if line_id['name'] == self.env._('Adjustment Entry')
+        )
+        adjust_credit = next(existing_adjustment_line, False)
+                    
+        amount_currency_sum = 0
+        for line_id in line_ids:
+            amount_currency_sum += line_id['amount_currency']
+
+        adjust_credit = {
+            'name': _('Adjustment Entry - Net Payable'),
+            'partner_id': False,
+            'account_id': acc_id,
+            'journal_id': self.journal_id.id,
+            'date': date,
+            'currency_id': self.currency_id.id,
+            'amount_currency': -amount_currency_sum,
+            'debit': 0.0 if adjust_type == 'credit' else credit_sum - debit_sum,
+            'credit': debit_sum - credit_sum if adjust_type == 'credit' else 0.0,
+        }
+        line_ids.append(adjust_credit)
 
 
 class HrPayslipWorkedDays(models.Model):
