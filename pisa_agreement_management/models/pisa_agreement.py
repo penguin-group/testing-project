@@ -14,11 +14,11 @@ class PisaAgreement(models.Model):
         stage = self.env['agreement.stage'].search([('active', '=', True)], order="sequence", limit=1).id
         return stage if stage else False
 
-    name = fields.Char(string="Agreement Name", required=True, default="New Agreement")
-    partner_ids = fields.Many2many('res.partner', string="Partner", required=False)
-    signature_date = fields.Date(string="Signature Date", required=False)
-    start_date = fields.Date(string="Start Date", required=False)
-    end_date = fields.Date(string="End Date", required=False)
+    name = fields.Char(string="Agreement Name", required=True, default="New Agreement", tracking=True)
+    partner_ids = fields.Many2many('res.partner', string="Partner", required=False, tracking=True)
+    signature_date = fields.Date(string="Signature Date", required=False, tracking=True)
+    start_date = fields.Date(string="Start Date", required=False, tracking=True)
+    end_date = fields.Date(string="End Date", required=False, tracking=True)
     company_id = fields.Many2one('res.company', string="Company", default=lambda self: self.env.company, required=False)
     stage_id = fields.Many2one("agreement.stage",
                                string="Stage",
@@ -31,12 +31,12 @@ class PisaAgreement(models.Model):
                                group_expand='_read_group_expand_full'  # Always display all stages even if some of them have no records (!)
     )
     sequence = fields.Integer(default=10)
-    key_obligations = fields.Text(string="Key Obligations")
+    key_obligations = fields.Text(string="Key Obligations", tracking=True)
 
-    agreement_type = fields.Many2one('agreement.type', string="Agreement Type")
-    legal_process_type = fields.Many2one('legal.process.type', string="Legal Process Type")
-    renewal_terms = fields.Many2one("agreement.renewal.term", string="Renewal Terms")
-    jurisdiction = fields.Many2one("agreement.jurisdiction", string="Jurisdiction")
+    agreement_type = fields.Many2one('agreement.type', string="Agreement Type", tracking=True)
+    legal_process_type = fields.Many2one('legal.process.type', string="Legal Process Type", tracking=True)
+    renewal_terms = fields.Many2one("agreement.renewal.term", string="Renewal Terms", tracking=True)
+    jurisdiction = fields.Many2one("agreement.jurisdiction", string="Jurisdiction", tracking=True)
 
     related_agreements = fields.Many2many(
         'pisa.agreement',
@@ -44,7 +44,8 @@ class PisaAgreement(models.Model):
         'agreement_id',
         'related_agreement_id',
         string="Related Agreements",
-        help="Agreements that are related to this one"
+        help="Agreements that are related to this one",
+        tracking=True
     )
-    file_location = fields.Char(string="File Location (URL)")
-    milestone_ids = fields.One2many('agreement.milestone', "agreement_id", string="Milestone")
+    file_location = fields.Char(string="File Location (URL)", tracking=True)
+    milestone_ids = fields.One2many('agreement.milestone', "agreement_id", string="Milestone", tracking=True)
