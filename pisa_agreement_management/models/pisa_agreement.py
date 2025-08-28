@@ -46,3 +46,4 @@ class PisaAgreement(models.Model):
         string="Related Agreements",
         help="Agreements that are related to this one"
     )
+    file_location = fields.Char(string="File Location (URL)")
