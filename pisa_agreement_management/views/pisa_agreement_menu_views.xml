@@ -6,8 +6,11 @@
     <menuitem id="menu_pisa_agreement_config" name="Settings" sequence="15" parent="pisa_agreement_menu_root"/>
 
     <menuitem id="menuitem_pisa_agreements" name="View Agreements" parent="menu_pisa_agreement" sequence="10" action="action_pisa_agreement"/>
+
     <menuitem id="menuitem_agreement_types" name="Agreement Types" parent="menu_pisa_agreement_config" sequence="20" action="action_agreement_types"/>
     <menuitem id="menuitem_legal_process_types" name="Legal Process Types" parent="menu_pisa_agreement_config" sequence="30" action="action_legal_process_types"/>
-    <menuitem id="menuitem_pisa_agreement_stages" name="View Agreement Stages" parent="menu_pisa_agreement_config" sequence="40" action="action_agreement_stage"/>
+    <menuitem id="menuitem_pisa_agreement_stages" name="Agreement Stages" parent="menu_pisa_agreement_config" sequence="40" action="action_agreement_stage"/>
+    <menuitem id="menuitem_pisa_agreement_renewal_term" name="Renewal Terms" parent="menu_pisa_agreement_config" sequence="50" action="action_agreement_renewal_term"/>
+    <menuitem id="menuitem_pisa_agreement_jurisdiction" name="Jurisdictions" parent="menu_pisa_agreement_config" sequence="60" action="action_agreement_jurisdiction"/>
 
 </odoo>
