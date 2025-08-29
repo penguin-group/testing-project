@@ -24,12 +24,15 @@
         'sale',
         'sales_team',
         'helpdesk',
-        'queue_job'
+        'queue_job',
+        'crm',
+        'sale_management'
     ],
 
     'data': [
         'security/custom_roles_security.xml',      
         'security/ir.model.access.csv',
+        'data/sales_tags_data.xml',
         'data/repair_fault_data.xml',
         'data/repair_initial_state_data.xml',
         'data/repair_tags_data.xml',
