@@ -52,6 +52,23 @@ class ConsolidateQuotationsWizard(models.TransientModel):
             ],
         })
 
+        tag_not_consolidated = self.env.ref("pisa_repair.crm_tag_not_consolidated", raise_if_not_found=False)
+        tag_consolidated = self.env.ref("pisa_repair.crm_tag_consolidated", raise_if_not_found=False)
+        tag_global_consolidated = self.env.ref("pisa_repair.crm_tag_global_consolidated", raise_if_not_found=False)
+
+
+        for quotation in self.quotation_ids:
+            updates = []
+            if tag_not_consolidated and tag_not_consolidated in quotation.tag_ids:
+                updates.append((3, tag_not_consolidated.id)) 
+            if tag_consolidated and tag_consolidated not in quotation.tag_ids:
+                updates.append((4, tag_consolidated.id))
+            if updates:
+                quotation.write({'tag_ids': updates})
+
+        if tag_global_consolidated:
+            main_quotation.write({'tag_ids': [(4, tag_global_consolidated.id)]})
+
         return {
             'type': 'ir.actions.act_window',
             'name': 'Consolidated Quotation',

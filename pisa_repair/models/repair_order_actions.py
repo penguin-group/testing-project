@@ -106,6 +106,13 @@ class RepairOrderActions(models.Model):
             
         result = super().action_create_sale_order() # Call Odoo's original function
 
+
+        if isinstance(result, dict) and result.get("res_id"):
+            sale_order = self.env['sale.order'].browse(result['res_id'])
+            tag_not_consolidated = self.env.ref("pisa_repair.crm_tag_not_consolidated", raise_if_not_found=False)
+            if tag_not_consolidated:
+                sale_order.write({'tag_ids': [(4, tag_not_consolidated.id)]})
+
         tag_to_add_xmlid = 'pisa_repair.quotation_created'
         tag_to_remove_xmlid = 'pisa_repair.under_diagnosis'
         self._manage_tags(tag_to_add_xmlid=tag_to_add_xmlid, tag_to_remove_xmlid=tag_to_remove_xmlid)
