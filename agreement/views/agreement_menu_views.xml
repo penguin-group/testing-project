@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="agreement_menu_root" name="Agreements"/>
+
+    <menuitem id="menu_agreement" name="Agreements" sequence="10" parent="agreement_menu_root"/>
+    <menuitem id="menu_agreement_config" name="Settings" sequence="15" parent="agreement_menu_root"/>
+
+    <menuitem id="menuitem_agreements" name="View Agreements" parent="menu_agreement" sequence="10" action="action_agreement"/>
+
+    <menuitem id="menuitem_agreement_types" name="Agreement Types" parent="menu_agreement_config" sequence="20" action="action_agreement_types"/>
+    <menuitem id="menuitem_agreement_legal_process_types" name="Legal Process Types" parent="menu_agreement_config" sequence="30" action="action_agreement_legal_process_types"/>
+    <menuitem id="menuitem_agreement_stages" name="Agreement Stages" parent="menu_agreement_config" sequence="40" action="action_agreement_stage"/>
+    <menuitem id="menuitem_agreement_renewal_term" name="Renewal Terms" parent="menu_agreement_config" sequence="50" action="action_agreement_renewal_term"/>
+    <menuitem id="menuitem_agreement_jurisdiction" name="Jurisdictions" parent="menu_agreement_config" sequence="60" action="action_agreement_jurisdiction"/>
+    <menuitem id="menuitem_agreement_tag" name="Agreement Tags" parent="menu_agreement_config" sequence="70" action="action_agreement_tag"/>
+    <menuitem id="menuitem_agreement_milestone" name="Agreement Milestones" parent="menu_agreement_config" sequence="80" action="action_agreement_milestone"/>
+
+</odoo>

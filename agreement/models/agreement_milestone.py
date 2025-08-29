@@ -6,6 +6,6 @@ class AgreementMilestone(models.Model):
     _description = "Milestone"
 
     name = fields.Char("Name", required=True)
-    deadline = fields.Date("Deadline", required=True)
+    deadline = fields.Date("Deadline")
     is_reached = fields.Boolean("Is Reached", default=False)
-    agreement_id = fields.Many2one("pisa.agreement", string="Related Agreement")
+    agreement_id = fields.Many2one("agreement", string="Related Agreement")
