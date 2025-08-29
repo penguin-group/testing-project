@@ -1,7 +1,7 @@
 from odoo import models, api, fields
 
 
-class LegalProcessType(models.Model):
-    _name = 'legal.process.type'
+class AgreementLegalProcessType(models.Model):
+    _name = 'agreement.legal.process.type'
 
     name = fields.Char(string='Legal Process Type', required=True)

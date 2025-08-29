@@ -1,5 +1,5 @@
 {
-    "name": "PISA Agreement Management",
+    "name": "Agreement",
     "summary": "Implements agreement management.",
     "version": "18.0.1.0.0",
     "website": "https://penguin.digital",
@@ -11,14 +11,14 @@
     "data": [
         "security/ir.model.access.csv",
         "data/agreement_stages.xml",
-        "views/pisa_agreement_views.xml",
+        "views/agreement_views.xml",
         "views/agreement_type_views.xml",
         "views/agreement_stage_views.xml",
-        "views/legal_process_type_views.xml",
+        "views/agreement_legal_process_views.xml",
         "views/agreement_jurisdiction_views.xml",
         "views/agreement_renewal_term_views.xml",
         "views/agreement_tag_views.xml",
         "views/agreement_milestone_views.xml",
-        "views/pisa_agreement_menu_views.xml",
+        "views/agreement_menu_views.xml",
     ]
 }

@@ -1,8 +1,8 @@
 from odoo import models, api, fields
 
 
-class PisaAgreement(models.Model):
-    _name = 'pisa.agreement'
+class Agreement(models.Model):
+    _name = 'agreement'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = 'Agreement'
     _order = 'sequence, id'
@@ -34,13 +34,13 @@ class PisaAgreement(models.Model):
     key_obligations = fields.Text(string="Key Obligations", tracking=True)
 
     agreement_type = fields.Many2one('agreement.type', string="Agreement Type", tracking=True)
-    legal_process_type = fields.Many2one('legal.process.type', string="Legal Process Type", tracking=True)
+    legal_process_type = fields.Many2one('agreement.legal.process.type', string="Legal Process Type", tracking=True)
     renewal_terms = fields.Many2one("agreement.renewal.term", string="Renewal Terms", tracking=True)
     jurisdiction = fields.Many2one("agreement.jurisdiction", string="Jurisdiction", tracking=True)
 
     related_agreements = fields.Many2many(
-        'pisa.agreement',
-        'pisa_agreement_rel',
+        'agreement',
+        'agreement_rel',
         'agreement_id',
         'related_agreement_id',
         string="Related Agreements",

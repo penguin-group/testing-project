@@ -1,7 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_pisa_agreement,access_pisa_agreement,model_pisa_agreement,base.group_user,1,1,1,1
-access_pisa_agreement_type,access_pisa_agreement_type,model_agreement_type,base.group_user,1,1,1,1
-access_legal_process_type,access_legal_process_type,model_legal_process_type,base.group_user,1,1,1,1
+access_agreement,access_agreement,model_agreement,base.group_user,1,1,1,1
+access_agreement_type,access_agreement_type,model_agreement_type,base.group_user,1,1,1,1
+access_agreement_legal_process_type,access_agreement_legal_process_type,model_agreement_legal_process_type,base.group_user,1,1,1,1
 access_agreement_stage,access_agreement_stage,model_agreement_stage,base.group_user,1,1,1,1
 access_agreement_renewal_term,access_agreement_renewal_term,model_agreement_renewal_term,base.group_user,1,1,1,1
 access_agreement_jurisdiction,access_agreement_jurisdiction,model_agreement_jurisdiction,base.group_user,1,1,1,1

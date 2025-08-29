@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <record id="action_pisa_agreement" model="ir.actions.act_window">
-        <field name="name">Pisa Agreements</field>
-        <field name="res_model">pisa.agreement</field>
+    <record id="action_agreement" model="ir.actions.act_window">
+        <field name="name">Agreements</field>
+        <field name="res_model">agreement</field>
         <field name="view_mode">kanban,list,form</field>
     </record>
 
-    <record id="view_pisa_agreement_list" model="ir.ui.view">
-        <field name="name">pisa.agreement.list</field>
-        <field name="model">pisa.agreement</field>
+    <record id="view_agreement_list" model="ir.ui.view">
+        <field name="name">agreement.list</field>
+        <field name="model">agreement</field>
         <field name="arch" type="xml">
             <list>
                 <field name="name"/>
@@ -17,9 +17,9 @@
         </field>
     </record>
 
-    <record id="view_pisa_agreement_form" model="ir.ui.view">
-        <field name="name">pisa.agreement.form</field>
-        <field name="model">pisa.agreement</field>
+    <record id="view_agreement_form" model="ir.ui.view">
+        <field name="name">agreement.form</field>
+        <field name="model">agreement</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -60,7 +60,6 @@
                             <field name="milestone_ids">
                                 <list editable="bottom">
                                     <field name="name" />
-                                    <field name="agreement_id" readonly="1" />
                                     <field name="deadline" />
                                     <field name="is_reached" />
                                 </list>
@@ -74,9 +73,9 @@
         </field>
     </record>
 
-    <record id="view_pisa_agreement_kanban" model="ir.ui.view">
-       <field name="name">pisa.agreement.kanban</field>
-       <field name="model">pisa.agreement</field>
+    <record id="view_agreement_kanban" model="ir.ui.view">
+       <field name="name">agreement.kanban</field>
+       <field name="model">agreement</field>
        <field name="arch" type="xml">
            <kanban class="o_kanban_mobile"
                    default_group_by="stage_id"
