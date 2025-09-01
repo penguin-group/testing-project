@@ -6,7 +6,6 @@
         <field name="arch" type="xml">
             <list create="false">
                 <field name="year"/>
-                <field name="name"/>
                 <field name="report_type"/>
                 <field name="xlsx_filename" invisible="1" column_invisible="1"/>
                 <field name="xlsx_output" string="XLSX File" widget="binary" filename="xlsx_filename"/>
