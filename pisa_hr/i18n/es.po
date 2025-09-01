@@ -1,0 +1,54 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* pisa_hr
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-25 14:04+0000\n"
+"PO-Revision-Date: 2025-08-25 14:04+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: pisa_hr
+#: model:ir.model.fields,field_description:pisa_hr.field_hr_contract__analytic_account_id
+msgid "Analytic Account"
+msgstr "Cuenta analítica"
+
+#. module: pisa_hr
+#: model:ir.model.fields,field_description:pisa_hr.field_hr_department__department_analytic_account_id
+msgid "Analytic account for this department"
+msgstr "Cuenta analítica para este departamento"
+
+#. module: pisa_hr
+#: model:ir.model,name:pisa_hr.model_hr_department
+msgid "Department"
+msgstr "Departamento"
+
+#. module: pisa_hr
+#: model:ir.model,name:pisa_hr.model_hr_contract
+msgid "Employee Contract"
+msgstr "Contrato del empleado"
+
+#. module: pisa_hr
+#. odoo-python
+#: code:addons/pisa_hr/models/hr_contract.py:0
+#: model:ir.model.fields,field_description:pisa_hr.field_hr_contract__sync_with_department_analytic_acc
+#: model_terms:ir.ui.view,arch_db:pisa_hr.hr_contract_view_form_inherit
+msgid "Use Analytic Account from Department"
+msgstr "Usar cuenta analítica del departamento"
+
+#. module: pisa_hr
+#. odoo-python
+#: code:addons/pisa_hr/models/hr_contract.py:0
+#: model:ir.model.fields,help:pisa_hr.field_hr_contract__sync_with_department_analytic_acc
+#: model_terms:ir.ui.view,arch_db:pisa_hr.hr_contract_view_form_inherit
+msgid ""
+"When checked, the analytic account will automatically sync with the "
+"department's analytic account"
+msgstr "Si se selecciona, la cuenta analítica se sincronizará automáticamente con la del departamento."

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_contract_view_form_inherit" model="ir.ui.view">
+        <field name="name">hr.contract.form.inherit</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_payroll_account.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='analytic_account_id']" position="before">
+                <field name="sync_with_department_analytic_acc"
+                       string="Use Analytic Account from Department"
+                       help="When checked, the analytic account will automatically sync with the department's analytic account"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

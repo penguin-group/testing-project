@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Contract Form View Extension -->
+        <record id="view_contract_form_py_payroll" model="ir.ui.view">
+            <field name="name">hr.contract.form.py.payroll</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+            <field name="arch" type="xml">
+                
+                <!-- Add currency field to salary info -->
+                <xpath expr="//field[@name='contract_type_id']" position="after">
+                    <field name="contract_currency_id" options="{'no_create': True, 'no_open': True}"/>
+                </xpath>
+
+                <!-- Add Paraguay Payroll information section -->
+                <xpath expr="//group[@name='salary_info']" position="after">
+                    <group string="Paraguay - Nómina" name="py_payroll_info">
+                        <div class="alert alert-info" role="status">
+                            <strong>💡 Deductions &amp; Allowances:</strong><br/>
+                            Use <strong>Salary Attachments</strong> for recurring deductions and allowances:<br/>
+                            • Medical Insurance (Seguro Médico)<br/>
+                            • Court Garnishments (Embargo Judicial)<br/>
+                            • Family Allowances (Bonificación Familiar)<br/>
+                            • Other deductions (Training, Parking, Loans)<br/><br/>
+                            Go to: <em>Payroll > Salary Attachments</em>
+                        </div>
+                        
+                        <group string="Currency Information" name="currency_info">
+                            <div class="alert alert-warning" role="status" invisible="contract_currency_id == company_id.currency_id">
+                                <strong>⚠️ Multi-Currency Contract:</strong><br/>
+                                This contract uses a different currency than the company currency.<br/>
+                                Payroll calculations will use the contract currency and be converted to company currency for accounting entries.
+                            </div>
+                        </group>
+                    </group>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>
