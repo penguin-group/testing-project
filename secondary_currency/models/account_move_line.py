@@ -42,6 +42,7 @@ class AccountMoveLine(models.Model):
             else:
                 line.secondary_balance = 0
 
+    @api.onchange('amount_currency', 'currency_id')
     def _inverse_amount_currency(self):
         """ Extend the method to compute secondary currency balance """
         super(AccountMoveLine, self)._inverse_amount_currency()
