@@ -6,3 +6,4 @@ class AgreementJurisdiction(models.Model):
     _description = "Jurisdiction"
 
     name = fields.Char("Name", required=True)
+    active = fields.Boolean(default=True)

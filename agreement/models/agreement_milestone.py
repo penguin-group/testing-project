@@ -9,3 +9,4 @@ class AgreementMilestone(models.Model):
     deadline = fields.Date("Deadline")
     is_reached = fields.Boolean("Is Reached", default=False)
     agreement_id = fields.Many2one("agreement", string="Related Agreement")
+    active = fields.Boolean(default=True)
