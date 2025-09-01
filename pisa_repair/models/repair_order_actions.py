@@ -13,11 +13,7 @@ class RepairOrderActions(models.Model):
     _inherit = 'repair.order'
 
     def action_next_state(self):
-        self.ensure_one()
-
-        if self.state == 'under_repair' and self.is_in_repair and not (self.repair_note or '').strip():
-            raise UserError(_("You must fill in the Repair Note before moving to the next stage."))
-        
+        self.ensure_one()        
         
         self = self.with_context(skip_custom_write=True)
 
@@ -99,10 +95,6 @@ class RepairOrderActions(models.Model):
     def action_create_sale_order(self):
         """Executes Odoo's original function and adds the 'Quotation Created' tag,
         only if there is a diagnostic_note."""
-
-        for record in self:
-            if not (record.diagnostic_note or "").strip():
-                raise ValidationError(_("You must fill in the Diagnostic Note before creating a quotation."))
             
         result = super().action_create_sale_order() # Call Odoo's original function
 
