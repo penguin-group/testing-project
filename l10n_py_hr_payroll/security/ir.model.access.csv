@@ -7,3 +7,6 @@ access_hr_payroll_structure_user,hr.payroll.structure.user,hr_payroll.model_hr_p
 access_hr_payroll_structure_manager,hr.payroll.structure.manager,hr_payroll.model_hr_payroll_structure,hr_payroll.group_hr_payroll_manager,1,1,1,1
 access_hr_salary_rule_user,hr.salary.rule.user,hr_payroll.model_hr_salary_rule,hr_payroll.group_hr_payroll_user,1,0,0,0
 access_hr_salary_rule_manager,hr.salary.rule.manager,hr_payroll.model_hr_salary_rule,hr_payroll.group_hr_payroll_manager,1,1,1,1
+access_hr_employee_child_user,hr.employee.child.user,model_hr_employee_child,hr.group_hr_user,1,1,1,1
+access_hr_employee_child_manager,hr.employee.child.manager,model_hr_employee_child,hr.group_hr_manager,1,1,1,1
+access_hr_employee_child_employee,hr.employee.child.employee,model_hr_employee_child,base.group_user,1,0,0,0
