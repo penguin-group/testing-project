@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Salary Attachment Form View - Add Currency Support -->
+        <record id="hr_salary_attachment_view_form_currency" model="ir.ui.view">
+            <field name="name">hr.salary.attachment.form.currency</field>
+            <field name="model">hr.salary.attachment</field>
+            <field name="inherit_id" ref="hr_payroll.hr_salary_attachment_view_form"/>
+            <field name="arch" type="xml">
+                
+                <!-- Add currency information in a notification box for multi-currency attachments -->
+                <!-- <div role="alert" class="alert alert-warning text-center" invisible="not has_similar_attachment">
+                    <field name="has_similar_attachment_warning"/>
+                    <field name="has_similar_attachment" invisible="1"/>
+                </div> -->
+                <xpath expr="//header" position="inside">
+                    <div class="alert alert-info" role="alert" invisible="not is_multi_currency">
+                        <div>
+                            <strong>Multi-Currency Attachment:</strong>
+                            This attachment uses <field name="attachment_currency_id" nolabel="1" readonly="1" class="d-inline"/> 
+                            while your company uses <field name="company_currency_id" nolabel="1" readonly="1" class="d-inline"/>.
+                            Amounts will be converted using the payroll closing date exchange rate.
+                        </div>
+                    </div>
+                </xpath>
+                
+                <!-- Add currency field after company -->
+                <xpath expr="//field[@name='monthly_amount']" position="after">
+                    <field name="attachment_currency_id" readonly="0" options="{'no_create': True, 'no_create_edit': True}"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="is_multi_currency" invisible="1"/>
+                    <field name="company_currency_id" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Salary Attachment List View - Add Currency Support -->
+        <record id="hr_salary_attachment_view_list_currency" model="ir.ui.view">
+            <field name="name">hr.salary.attachment.list.currency</field>
+            <field name="model">hr.salary.attachment</field>
+            <field name="inherit_id" ref="hr_payroll.hr_salary_attachment_view_tree"/>
+            <field name="arch" type="xml">
+                
+                <!-- Make currency visible -->
+                <xpath expr="//field[@name='currency_id']" position="attributes">
+                    <attribute name="column_invisible">False</attribute>
+                    <attribute name="optional">show</attribute>
+                    <attribute name="string">Currency</attribute>
+                </xpath>
+                
+                <!-- Add multi-currency indicator -->
+                <xpath expr="//field[@name='is_refund']" position="after">
+                    <field name="is_multi_currency" string="Multi-Curr" 
+                           widget="boolean_toggle" optional="hide"/>
+                </xpath>
+
+            </field>
+        </record>
+
+        <!-- Salary Attachment Search View - Add Currency Filter -->
+        <record id="hr_salary_attachment_view_search_currency" model="ir.ui.view">
+            <field name="name">hr.salary.attachment.search.currency</field>
+            <field name="model">hr.salary.attachment</field>
+            <field name="inherit_id" ref="hr_payroll.hr_salary_attachment_view_search"/>
+            <field name="arch" type="xml">
+                
+                <!-- Add currency filters after existing filters -->
+                <xpath expr="//filter[@name='search_is_refund']" position="after">
+                    <separator/>
+                    <filter name="filter_multi_currency" string="Multi-Currency" 
+                            domain="[('is_multi_currency', '=', True)]"/>
+                    <filter name="filter_company_currency" string="Company Currency" 
+                            domain="[('is_multi_currency', '=', False)]"/>
+                </xpath>
+                
+                <!-- Add currency grouping after existing group filters -->
+                <xpath expr="//filter[@name='state']" position="after">
+                    <filter string="Currency" name="group_currency" 
+                            context="{'group_by': 'currency_id'}"/>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

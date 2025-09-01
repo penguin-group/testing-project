@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Add Payroll Closing Date to Settings -->
+    <record id="res_config_settings_view_form_inherit_payroll" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.payroll.closing</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="hr_payroll.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Add after YTD Reset Date setting -->
+            <xpath expr="//setting[@id='ytd_reset_date']" position="after">
+                <setting string="Payroll Closing Day" id="payroll_closing_day"
+                    title="Day of each month when payroll closes (e.g., 20 = 20th of each month). No payroll operations can be confirmed before this day each month.">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <field name="payroll_closing_day" class="w-100"/>
+                        </div>
+                        <div class="col-md-9 d-flex align-items-center">
+                            <span class="text-muted">Day of each month (1-31, or 0 to disable)</span>
+                        </div>
+                    </div>
+                    <div class="mt8">
+                        <div class="alert alert-info" role="status">
+                            <strong>🔒 Payroll Period Protection:</strong><br/>
+                            • <strong>Example:</strong> Setting "25" means July 2025 payroll can only be processed after July 25, 2025<br/>
+                            • <strong>Period Based Logic:</strong> Each payroll period is locked until the closing day of that period<br/>
+                            • <strong>Example Scenarios:</strong><br/>
+                            &#160;&#160;- Today is Aug 8, processing July payroll: ✅ Allowed (July 25 has passed)<br/>
+                            &#160;&#160;- Today is July 20, processing July payroll: ❌ Blocked (July 25 hasn't passed)<br/>
+                            • Prevents early processing of current month payroll<br/>
+                            • Allows processing of previous months once their closing day has passed<br/>
+                            • Automatically handles February (28/29 days) and 31-day months<br/>
+                            • Set to <strong>0</strong> to disable payroll closing protection
+                        </div>
+                    </div>
+                </setting>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
