@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="pisa_hr_hr_employee_form_skills_restrict" model="ir.ui.view">
+        <field name="name">hr.employee.view.form.skills.restrict</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='employee_skill_ids']" position="attributes">
+                <attribute name="groups">hr.group_hr_user</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="pisa_hr_hr_employee_public_form_skills_restrict" model="ir.ui.view">
+        <field name="name">hr.employee.public.view.form.skills.restrict</field>
+        <field name="model">hr.employee.public</field>
+        <field name="inherit_id" ref="hr.hr_employee_public_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='employee_skill_ids']" position="attributes">
+                <attribute name="groups">hr.group_hr_user</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="pisa_hr_res_users_form_skills_restrict" model="ir.ui.view">
+        <field name="name">res.users.view.form.skills.restrict</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="hr.res_users_view_form_profile"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='employee_skill_ids']" position="attributes">
+                <attribute name="groups">hr.group_hr_user</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

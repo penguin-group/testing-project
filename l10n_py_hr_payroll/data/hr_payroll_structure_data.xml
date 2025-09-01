@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Main Payroll Structure for Paraguay Monthly Salary -->
+        <record id="hr_payroll_structure_py_employee_salary" model="hr.payroll.structure">
+            <field name="name">Liquidación Mensual Paraguay</field>
+            <field name="code">PY_MONTHLY</field>
+            <field name="country_id" ref="base.py"/>
+            <field name="type_id" ref="structure_type_employee_py"/>
+            <field name="payslip_name">Recibo de Salario</field>
+            <field name="use_worked_day_lines" eval="True"/>
+            <field name="journal_id" ref="account_journal_payroll_py"/>
+            <field name="unpaid_work_entry_type_ids" eval="[
+                (4, ref('hr_work_entry_contract.work_entry_type_unpaid_leave')),
+            ]"/>
+            <field name="rule_ids" eval="[]"/>  <!-- Start with empty rules, add only what we need -->
+            <field name="note">Estructura de nómina para empleados en Paraguay. Incluye: Salario básico proporcional, Horas extras diurnas y nocturnas, Recargos nocturnos, Trabajo en feriados, Bonificación familiar, Subsidio de guardería, IPS empleado (9%), Descuentos varios.</field>
+        </record>
+
+        <!-- Holiday/Bonus Structure for Paraguay -->
+        <record id="hr_payroll_structure_py_holiday_bonus" model="hr.payroll.structure">
+            <field name="name">Aguinaldo Paraguay</field>
+            <field name="code">PY_HOLIDAY_BONUS</field>
+            <field name="country_id" ref="base.py"/>
+            <field name="type_id" ref="structure_type_employee_py"/>
+            <field name="payslip_name">Aguinaldo</field>
+            <field name="use_worked_day_lines" eval="False"/>
+            <field name="note">Estructura para el cálculo del aguinaldo en Paraguay. Basado en la suma de todos los importes deducibles de IPS del año.</field>
+        </record>
+
+        <!-- Vacation Structure for Paraguay -->
+        <record id="hr_payroll_structure_py_vacation" model="hr.payroll.structure">
+            <field name="name">Vacaciones Paraguay</field>
+            <field name="code">PY_VACATION</field>
+            <field name="country_id" ref="base.py"/>
+            <field name="type_id" ref="structure_type_employee_py"/>
+            <field name="payslip_name">Liquidación de Vacaciones</field>
+            <field name="use_worked_day_lines" eval="False"/>
+            <field name="note">Estructura para la liquidación de vacaciones en Paraguay. Cálculo basado en días de vacaciones tomados.</field>
+        </record>
+
+    </data>
+</odoo>
