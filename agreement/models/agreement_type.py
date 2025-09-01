@@ -5,3 +5,4 @@ class AgreementType(models.Model):
     _name = 'agreement.type'
 
     name = fields.Char(string='Type Name', required=True)
+    active = fields.Boolean(default=True)

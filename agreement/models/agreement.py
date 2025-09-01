@@ -32,6 +32,7 @@ class Agreement(models.Model):
     )
     sequence = fields.Integer(default=10)
     key_obligations = fields.Text(string="Key Obligations", tracking=True)
+    active = fields.Boolean(default=True)
 
     agreement_type = fields.Many2one('agreement.type', string="Agreement Type", tracking=True)
     legal_process_type = fields.Many2one('agreement.legal.process.type', string="Legal Process Type", tracking=True)

@@ -6,3 +6,4 @@ class AgreementTag(models.Model):
     _description = 'Agreement Tags'
 
     name = fields.Char(string="Agreement Tag", required=True)
+    active = fields.Boolean(default=True)
