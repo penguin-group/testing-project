@@ -25,7 +25,7 @@
     """,
 
     'author': "Penguin Infrastructure S.A.",
-    'maintainers': ["Penguin Infrastructure S.A."],
+    'maintainers': ["William Eckerleben"],
     'website': "https://penguin.digital",
     'category': 'Human Resources/Payroll',
     'version': '18.0.1.0.0',
