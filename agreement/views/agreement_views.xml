@@ -56,7 +56,7 @@
                             </group>
                             <field name="related_agreements" />
                         </page>
-                        <page string="Milestones">
+                        <page string="Agreement Milestones">
                             <field name="milestone_ids">
                                 <list editable="bottom">
                                     <field name="name" />
