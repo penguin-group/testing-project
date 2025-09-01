@@ -12,3 +12,4 @@ access_repair_final_resolution_user,access_repair_final_resolution_user,model_re
 access_repair_steps_user,access_repair_steps_user,model_repair_steps,base.group_user,1,1,1,1
 access_repair_order_steps_rel,access_repair_order_steps_rel,model_repair_order_steps_rel,base.group_user,1,1,1,1
 access_repair_external_service,access_repair_external_service,model_repair_external_service,,1,1,1,1
+access_pisa_repair_diagnosis_line_user,pisa.repair.diagnosis.line user,model_pisa_repair_diagnosis_line,base.group_user,1,1,1,1
