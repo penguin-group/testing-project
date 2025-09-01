@@ -2,6 +2,7 @@
     "name": "Agreement",
     "summary": "Implements agreement management.",
     "version": "18.0.1.0.0",
+    "category": "Agreement",
     "website": "https://penguin.digital",
     'author': "Penguin Infrastructure",
     'maintainers': ['David Páez'],
@@ -10,6 +11,7 @@
     "depends": ["base", "web", "mail"],
     "data": [
         "security/ir.model.access.csv",
+        "security/access_groups.xml",
         "data/agreement_stages.xml",
         "views/agreement_views.xml",
         "views/agreement_type_views.xml",
