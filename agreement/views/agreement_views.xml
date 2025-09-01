@@ -37,6 +37,7 @@
                             <field name="signature_date"/>
                             <field name="start_date" widget="daterange" options="{'end_date_field': 'end_date'}" />
                             <field name="end_date" invisible="end_date != False"/>
+                            <field name="code" />
                             <field name="company_id"/>
                         </group>
                         <group>
