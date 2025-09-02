@@ -73,8 +73,17 @@ class HrReportsMtess(models.Model):
         })
 
     def _generate_employees_data(self, worksheet, first_date, last_date):
-        worksheet.write('A1', 'Employee Name')
-        worksheet.write('B1', 'Department')
+        # Define headers
+        headers = [
+            "Nropatronal", "Documento", "Nombre", "Apellido", "Sexo", "Estadocivil",
+            "Fechanac", "Nacionalidad", "Domicilio", "Fechanacmenor", "hijosmenores",
+            "cargo", "profesion", "fechaentrada", "horariotrabajo", "menorescapa",
+            "menoresescolar", "fechasalida", "motivosalida", "Estado"
+        ]
+
+        # Write headers to the first row
+        for col_num, header in enumerate(headers):
+            worksheet.write(0, col_num, header)
 
 
     def _generate_salaries_data(self, worksheet, first_date, last_date):
