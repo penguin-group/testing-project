@@ -14,7 +14,7 @@
     'version': '18.0.1.0.0',
     'license': "OPL-1", 
 
-    'depends': ['base', 'hr_payroll'],
+    'depends': ['base', 'l10n_py_hr_payroll'],
 
     'data': [
         'security/ir.model.access.csv',
