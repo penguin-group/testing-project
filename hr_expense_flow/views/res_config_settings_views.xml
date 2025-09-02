@@ -35,6 +35,10 @@
                         <field name="clearing_journal_id" />
                     </setting>
 
+                    <setting company_dependent="1" string="Transient account for employee reimbursement">
+                        <field name="emp_reimbursement_transient_account_id" />
+                    </setting>
+
                 </xpath>
 
                 <xpath expr="//app[@name='hr_expense']/block[2]/setting[3]" position="replace">

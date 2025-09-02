@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Inherit Form View -->
+        <record id="view_task_form2_inherited" model="ir.ui.view">
+            <field name="name">view.task.form2.inherited</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_form2"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='project']" position="after">
+                    <field name="task_code"/>
+                </xpath>
+                
+            </field>
+        </record>
+        
+        <!-- Inherit List View -->
+        <record id="open_view_all_tasks_list_view_inherited" model="ir.ui.view">
+            <field name="name">open.view.all.tasks.list.view.inherited</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.open_view_all_tasks_list_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="before">
+                    <field name="task_code"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Inherit Kanban View -->
+        <record id="view_task_kanban_inherited" model="ir.ui.view">
+            <field name="name">view.task.kanban.inherited</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_kanban"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='name']" position="before">
+                    <field name="task_code" class="fs-6"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="pisa_hr_view_hr_department_form_inherit" model="ir.ui.view">
+            <field name="name">pisa.hr.department.form.inherit</field>
+            <field name="model">hr.department</field>
+            <field name="inherit_id" ref="hr.view_department_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='color']" position="before">
+                    <field name="department_analytic_account_id" invisible="False"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

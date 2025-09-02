@@ -21,3 +21,8 @@ class ResCompany(models.Model):
         domain="[('type', '=', 'general')]",
         help="The company's default journal used when creating the clearing entry.",
     )
+
+    emp_reimbursement_transient_account_id = fields.Many2one(
+        "account.account", string="Transient account for employee reimbursement",
+        check_company=True
+    )
