@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding = "utf-8"?>
+<odoo>
+   <record id="res_config_settings_agreement_view_form" model="ir.ui.view">
+       <field name="name">res.config.settings.agreement.view.form</field>
+       <field name="model">res.config.settings</field>
+       <field name="priority" eval="15"/>
+       <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+       <field name="arch" type="xml">
+           <xpath expr="//form" position="inside">
+               <app data-string="Agreement"
+                    string="Agreement" name="agreement_settings">
+                   <block title="Notifications"
+                          name="agreement_notification_settings">
+                       <setting string="Reminder Rules"
+                                help="Select how often users should be notified about an agreement's end date."
+                                id="agreement_reminder_rule_setting">
+                           <div class="d-flex">
+                               <field id="notify_ten_days_prior" name="notify_ten_days_prior" class="ml16" />
+                               <label for="notify_ten_days_prior" class="o_light_label" />
+                           </div>
+
+                           <div class="d-flex">
+                               <field id="notify_one_day_prior" name="notify_one_day_prior" class="ml16" />
+                               <label for="notify_one_day_prior" class="o_light_label" />
+                           </div>
+
+                           <div class="d-flex">
+                               <field id="notify_on_the_date" name="notify_on_the_date" class="ml16" />
+                               <label for="notify_on_the_date" class="o_light_label" />
+                           </div>
+
+                       </setting>
+                   </block>
+               </app>
+           </xpath>
+       </field>
+   </record>
+</odoo>
