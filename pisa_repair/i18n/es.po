@@ -1536,3 +1536,4 @@ msgstr "Nota de diagnóstico"
 #: model:ir.model.fields,field_description:pisa_repair.field_pisa_repair_diagnosis_line__repair_note
 msgid "Repair Note"
 msgstr "Nota de reparación"
+

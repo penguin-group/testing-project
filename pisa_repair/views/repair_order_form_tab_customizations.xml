@@ -74,6 +74,7 @@
                         </field>
                     </group>
 
+
                     <group>
                         <field name="internal_notes"
                             placeholder="Add internal notes."
@@ -88,13 +89,16 @@
                 </page>
             </xpath>
 
+
             <xpath expr="//page[@name='microelectronics_data']//field" position="attributes">
                 <attribute name="readonly">under_warranty or not is_validated or state != 'under_repair' or not is_micro</attribute>
             </xpath>
 
+
             <xpath expr="//page[@name='repair_notes']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
+
 
             <xpath expr="//page[@name='page_miscellaneous']" position="attributes">
                 <attribute name="invisible">1</attribute>

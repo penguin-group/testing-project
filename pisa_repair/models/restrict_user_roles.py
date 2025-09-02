@@ -44,6 +44,7 @@ class ResUsers(models.Model):
                 })
 
             if ((is_micro or is_mining) and not is_micro_leader) and group_admin and group_admin in groups:
+
                 user.with_context(bypass_write=True).write({
                     'groups_id': [(3, group_admin.id)]
                 })

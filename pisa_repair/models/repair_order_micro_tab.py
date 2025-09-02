@@ -9,6 +9,7 @@ class RepairOrderFields(models.Model):
         string="Diagnosis & Repair"
     )
 
+
     diagnostic_note = fields.Text(string="Diagnostic Note")
     repair_note = fields.Text(string="Repair Note")
 
@@ -54,6 +55,7 @@ class RepairOrderFields(models.Model):
             tag_names = { (name or '').strip().lower() for name in record.tag_ids.mapped('name') }
             record.is_in_diagnostic = ('under diagnosis' in tag_names) or ('under_diagnosis' in tag_names)
 
+
     @api.depends('tag_ids', 'tag_ids.name', 'state')
     def _compute_is_in_repair(self):
         for record in self:
@@ -98,7 +100,6 @@ class RepairDiagnosisLine(models.Model):
     name = fields.Char(string='Description', compute='_compute_name', store=False)
 
 
-    # === NUEVO: relateds para controlar columnas según el padre ===
     parent_is_validated = fields.Boolean(related='repair_id.is_validated', store=False)
     parent_is_in_diagnostic = fields.Boolean(related='repair_id.is_in_diagnostic', store=False)
     parent_is_in_repair = fields.Boolean(related='repair_id.is_in_repair', store=False)
@@ -108,3 +109,4 @@ class RepairDiagnosisLine(models.Model):
         for r in self:
             parts = [r.item or '', r.repair_type or '', r.sn or '']
             r.name = ' | '.join([p for p in parts if p])
+
