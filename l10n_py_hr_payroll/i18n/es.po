@@ -1,0 +1,272 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* pisa_hr_payroll
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: pisa_hr_payroll
+#: model:hr.salary.rule.category,name:pisa_hr_payroll.hr_salary_rule_category_advances_py
+msgid "Anticipos"
+msgstr "Anticipos"
+
+#. module: pisa_hr_payroll
+#: model:hr.salary.rule.category,name:pisa_hr_payroll.hr_salary_rule_category_allowances_py
+msgid "Asignaciones"
+msgstr "Asignaciones"
+
+#. module: pisa_hr_payroll
+#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_bonus
+msgid "Bono"
+msgstr "Bono"
+
+#. module: pisa_hr_payroll
+#: model:hr.employee.child,field:age
+msgid "Age"
+msgstr "Edad"
+
+#. module: pisa_hr_payroll
+#: model:hr.employee.child,field:date_of_birth
+msgid "Date of Birth"
+msgstr "Fecha de Nacimiento"
+
+#. module: pisa_hr_payroll
+#: model:hr.employee.child,field:name
+msgid "Full Name"
+msgstr "Nombre Completo"
+
+#. module: pisa_hr_payroll
+#: model:hr.employee.child,field:identification_number
+msgid "ID Number"
+msgstr "Número de Cédula"
+
+#. module: pisa_hr_payroll
+#: model:hr.employee.child,field:is_dependent
+msgid "Is Dependent"
+msgstr "Es Dependiente"
+
+#. module: pisa_hr_payroll
+#: model:hr.employee.child,field:notes
+msgid "Notes"
+msgstr "Notas"
+
+#. module: pisa_hr_payroll
+#: view:hr.employee.form:pisa_hr_payroll.view_employee_form_py_payroll
+msgid "Children Details"
+msgstr "Detalles de los Hijos"
+
+#. module: pisa_hr_payroll
+#: model:hr.employee,field:children_ids
+msgid "Children"
+msgstr "Hijos"
+
+#. module: pisa_hr_payroll
+#: model:hr.salary.rule.category,name:pisa_hr_payroll.hr_salary_rule_category_family_py
+msgid "Beneficios Familiares"
+msgstr "Beneficios Familiares"
+
+
+
+#. module: pisa_hr_payroll
+#: model:ir.actions.act_window,name:pisa_hr_payroll.action_hr_salary_rule_category_py
+msgid "Categorías de Reglas Paraguay"
+msgstr "Categorías de Reglas Paraguay"
+
+#. module: pisa_hr_payroll
+#: model:ir.ui.menu,name:pisa_hr_payroll.menu_hr_payroll_py_config
+msgid "Configuración Paraguay"
+msgstr "Configuración Paraguay"
+
+#. module: pisa_hr_payroll
+#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_solidarity
+msgid "Contribución Solidaria"
+msgstr "Contribución Solidaria"
+
+
+
+#. module: pisa_hr_payroll
+#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_english_deduction
+msgid "Descuento Clases de Inglés"
+msgstr "Descuento Clases de Inglés"
+
+#. module: pisa_hr_payroll
+#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_training_deduction
+msgid "Descuento Capacitación"
+msgstr "Descuento Capacitación"
+
+#. module: pisa_hr_payroll
+#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_parking_deduction
+msgid "Descuento Estacionamiento"
+msgstr "Descuento Estacionamiento"
+
+#. module: pisa_hr_payroll
+#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_loan_deduction
+msgid "Descuento Préstamo"
+msgstr "Descuento Préstamo"
+
+#. module: pisa_hr_payroll
+#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_vacation_days
+msgid "Días de Vacaciones"
+msgstr "Días de Vacaciones"
+
+#. module: pisa_hr_payroll
+#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_medical_leave_days
+msgid "Días de Licencia Médica"
+msgstr "Días de Licencia Médica"
+
+#. module: pisa_hr_payroll
+#: model:hr.salary.rule.category,name:pisa_hr_payroll.hr_salary_rule_category_garnishment_py
+msgid "Embargo Judicial"
+msgstr "Embargo Judicial"
+
+#. module: pisa_hr_payroll
+#: model:ir.actions.act_window,name:pisa_hr_payroll.action_hr_payroll_structure_py
+msgid "Estructuras de Nómina Paraguay"
+msgstr "Estructuras de Nómina Paraguay"
+
+
+
+#. module: pisa_hr_payroll
+#: model:hr.salary.rule.category,name:pisa_hr_payroll.hr_salary_rule_category_ips_py
+msgid "IPS (Seguridad Social)"
+msgstr "IPS (Seguridad Social)"
+
+#. module: pisa_hr_payroll
+#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_holiday_day_hours
+msgid "Horas Feriado Diurno"
+msgstr "Horas Feriado Diurno"
+
+#. module: pisa_hr_payroll
+#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_holiday_night_hours
+msgid "Horas Feriado Nocturno"
+msgstr "Horas Feriado Nocturno"
+
+#. module: pisa_hr_payroll
+#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_overtime_day_hours
+msgid "Horas Extras Diurnas"
+msgstr "Horas Extras Diurnas"
+
+#. module: pisa_hr_payroll
+#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_overtime_night_hours
+msgid "Horas Extras Nocturnas"
+msgstr "Horas Extras Nocturnas"
+
+#. module: pisa_hr_payroll
+#: model:hr.salary.rule.category,name:pisa_hr_payroll.hr_salary_rule_category_overtime_py
+msgid "Horas Extras y Recargos"
+msgstr "Horas Extras y Recargos"
+
+#. module: pisa_hr_payroll
+#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_night_surcharge_hours
+msgid "Horas Recargo Nocturno"
+msgstr "Horas Recargo Nocturno"
+
+
+
+#. module: pisa_hr_payroll
+#: model:hr.payroll.structure,name:pisa_hr_payroll.hr_payroll_structure_py_employee_salary
+msgid "Liquidación Mensual Paraguay"
+msgstr "Liquidación Mensual Paraguay"
+
+#. module: pisa_hr_payroll
+#: model:hr.salary.rule.category,name:pisa_hr_payroll.hr_salary_rule_category_other_deductions_py
+msgid "Otros Descuentos"
+msgstr "Otros Descuentos"
+
+#. module: pisa_hr_payroll
+#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_other_income
+msgid "Otros Ingresos"
+msgstr "Otros Ingresos"
+
+#. module: pisa_hr_payroll
+#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_other_non_deductible
+msgid "Otros Ingresos No Deducibles"
+msgstr "Otros Ingresos No Deducibles"
+
+
+
+#. module: pisa_hr_payroll
+#: model:ir.actions.act_window,name:pisa_hr_payroll.action_hr_rule_parameter_py
+msgid "Parámetros Paraguay"
+msgstr "Parámetros Paraguay"
+
+#. module: pisa_hr_payroll
+#: model:ir.actions.act_window,name:pisa_hr_payroll.action_hr_salary_rule_py
+msgid "Reglas Salariales Paraguay"
+msgstr "Reglas Salariales Paraguay"
+
+#. module: pisa_hr_payroll
+#: model:ir.actions.report,name:pisa_hr_payroll.action_report_payslip_py
+msgid "Recibo de Salario Paraguay"
+msgstr "Recibo de Salario Paraguay"
+
+#. module: pisa_hr_payroll
+#: model:hr.payroll.structure,payslip_name:pisa_hr_payroll.hr_payroll_structure_py_employee_salary
+msgid "Recibo de Salario"
+msgstr "Recibo de Salario"
+
+#. module: pisa_hr_payroll
+#: model:hr.salary.rule.category,name:pisa_hr_payroll.hr_salary_rule_category_basic_py
+msgid "Salario Básico"
+msgstr "Salario Básico"
+
+#. module: pisa_hr_payroll
+#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_salary_advance
+msgid "Anticipo de Salario"
+msgstr "Anticipo de Salario"
+
+#. module: pisa_hr_payroll
+#: model:hr.salary.rule.category,name:pisa_hr_payroll.hr_salary_rule_category_medical_py
+msgid "Seguro Médico"
+msgstr "Seguro Médico"
+
+#. module: pisa_hr_payroll
+#: model:hr.salary.rule.category,name:pisa_hr_payroll.hr_salary_rule_category_solidarity_py
+msgid "Solidaridad"
+msgstr "Solidaridad"
+
+#. module: pisa_hr_payroll
+#: model:ir.actions.act_window,name:pisa_hr_payroll.action_hr_payslip_input_type_py
+msgid "Tipos de Input Paraguay"
+msgstr "Tipos de Input Paraguay"
+
+#. module: pisa_hr_payroll
+#: model:hr.salary.rule.category,name:pisa_hr_payroll.hr_salary_rule_category_total_deductions_py
+msgid "Total Descuentos"
+msgstr "Total Descuentos"
+
+#. module: pisa_hr_payroll
+#: model:hr.salary.rule.category,name:pisa_hr_payroll.hr_salary_rule_category_total_income_py
+msgid "Total Ingresos"
+msgstr "Total Ingresos"
+
+#. module: pisa_hr_payroll
+#: model:hr.salary.rule.category,name:pisa_hr_payroll.hr_salary_rule_category_ips_base_py
+msgid "Total Base IPS"
+msgstr "Total Base IPS"
+
+
+
+
+
+#. module: pisa_hr_payroll
+#: model:hr.salary.rule.category,name:pisa_hr_payroll.hr_salary_rule_category_vacation_py
+msgid "Vacaciones y Licencias"
+msgstr "Vacaciones y Licencias"
+
+#. module: pisa_hr_payroll
+#: code:addons/pisa_hr_payroll/models/hr_employee.py:0
+msgid "Children under 3 cannot be more than children under 17"
+msgstr "Los hijos menores de 3 años no pueden ser más que los hijos menores de 17 años"
+
+#. module: pisa_hr_payroll
+#: code:addons/pisa_hr_payroll/models/hr_contract.py:0
+msgid "Court garnishment cannot exceed 25% of salary"
+msgstr "El embargo judicial no puede exceder el 25% del salario"

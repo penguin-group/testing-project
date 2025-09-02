@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Allowances Category -->
+        <record id="hr_salary_rule_category_allowances_py" model="hr.salary.rule.category">
+            <field name="name">Asignaciones</field>
+            <field name="code">ALLOW_PY</field>
+        </record>
+
+        <!-- Overtime and Extra Hours Category -->
+        <record id="hr_salary_rule_category_overtime_py" model="hr.salary.rule.category">
+            <field name="name">Horas Extras y Recargos</field>
+            <field name="code">OVERTIME_PY</field>
+        </record>
+
+        <!-- Family Benefits Category -->
+        <record id="hr_salary_rule_category_family_py" model="hr.salary.rule.category">
+            <field name="name">Beneficios Familiares</field>
+            <field name="code">FAMILY_PY</field>
+        </record>
+
+        <!-- Vacation and Leave Category -->
+        <record id="hr_salary_rule_category_vacation_py" model="hr.salary.rule.category">
+            <field name="name">Vacaciones y Licencias</field>
+            <field name="code">VACATION_PY</field>
+        </record>
+
+        <!-- IPS (Social Security) Category -->
+        <record id="hr_salary_rule_category_ips_py" model="hr.salary.rule.category">
+            <field name="name">IPS (Seguridad Social)</field>
+            <field name="code">IPS_PY</field>
+        </record>
+
+        <!-- Advances Category -->
+        <record id="hr_salary_rule_category_advances_py" model="hr.salary.rule.category">
+            <field name="name">Anticipos</field>
+            <field name="code">ADVANCES_PY</field>
+        </record>
+
+        <!-- Court Garnishments Category -->
+        <record id="hr_salary_rule_category_garnishment_py" model="hr.salary.rule.category">
+            <field name="name">Embargo Judicial</field>
+            <field name="code">GARNISH_PY</field>
+        </record>
+
+        <!-- Medical Insurance Category -->
+        <record id="hr_salary_rule_category_medical_py" model="hr.salary.rule.category">
+            <field name="name">Seguro Médico</field>
+            <field name="code">MEDICAL_PY</field>
+        </record>
+
+        <!-- Other Deductions Category -->
+        <record id="hr_salary_rule_category_other_deductions_py" model="hr.salary.rule.category">
+            <field name="name">Otros Descuentos</field>
+            <field name="code">OTHER_DED_PY</field>
+        </record>
+
+        <!-- Solidarity Contributions Category -->
+        <record id="hr_salary_rule_category_solidarity_py" model="hr.salary.rule.category">
+            <field name="name">Solidaridad</field>
+            <field name="code">SOLIDARITY_PY</field>
+        </record>
+
+        <!-- Total Base IPS Category (for reporting) -->
+        <record id="hr_salary_rule_category_ips_base_py" model="hr.salary.rule.category">
+            <field name="name">Total Base IPS</field>
+            <field name="code">IPS_BASE_PY</field>
+        </record>
+
+        <!-- Net Salary Before Deductions -->
+        <record id="hr_salary_rule_category_net_before_deductions_py" model="hr.salary.rule.category">
+            <field name="name">Salario Neto (antes de descuentos)</field>
+            <field name="code">NET_BEFORE_DED_PY</field>
+        </record>
+
+        <!-- Non-Deductible Income Category -->
+        <record id="hr_salary_rule_category_non_deductible_py" model="hr.salary.rule.category">
+            <field name="name">Ingresos No Deducibles</field>
+            <field name="code">NON_DED_PY</field>
+        </record>
+
+        <!-- Total Deductions Category -->
+        <record id="hr_salary_rule_category_total_deductions_py" model="hr.salary.rule.category">
+            <field name="name">Total Descuentos</field>
+            <field name="code">TOTAL_DED_PY</field>
+        </record>
+
+        <!-- Provisions Category (for monthly provisions) -->
+        <record id="hr_salary_rule_category_provisions_py" model="hr.salary.rule.category">
+            <field name="name">Provisiones</field>
+            <field name="code">PROVISIONS_PY</field>
+        </record>
+
+        <!-- Employer Contributions Category -->
+        <record id="hr_salary_rule_category_employer_contributions_py" model="hr.salary.rule.category">
+            <field name="name">Aportes Patronales</field>
+            <field name="code">EMPLOYER_CONTRIB_PY</field>
+        </record>
+
+    </data>
+</odoo>
