@@ -37,6 +37,10 @@
                     </group>
                 </xpath>
 
+                <xpath expr="//field[@name='date_end']" position="after">
+                    <field name="end_reason" invisible="not date_end" required="date_end"/>
+                </xpath>
+
             </field>
         </record>
 

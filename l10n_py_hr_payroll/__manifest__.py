@@ -59,6 +59,7 @@
         "views/hr_payroll_structure_views.xml",
         "views/hr_salary_attachment_views.xml",
         "views/res_config_settings_views.xml",
+        "views/hr_employee_views.xml",
     ],
 
     'demo': [

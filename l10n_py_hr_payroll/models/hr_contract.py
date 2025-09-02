@@ -29,6 +29,10 @@ class HrContract(models.Model):
         store=True,
         help="Currency used for payroll calculations (from contract currency)"
     )
+
+    end_reason = fields.Char(
+        string="End Reason"
+    )
     
     # Override the currency_id to use our contract currency
     @api.depends('contract_currency_id')
