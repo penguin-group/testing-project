@@ -34,20 +34,22 @@ class ResUsers(models.Model):
             groups = user.groups_id
 
             is_noc = group_noc in groups
-            is_micro_like = (group_micro in groups) or (group_micro_leader in groups)
+            is_micro = group_micro in groups
+            is_micro_leader = group_micro_leader in groups
             is_mining = group_mining in groups
 
-            if is_noc and group_admin not in groups:
+            if (is_noc or is_micro_leader) and group_admin and group_admin not in groups:
                 user.with_context(bypass_write=True).write({
                     'groups_id': [(4, group_admin.id)]
                 })
 
-            if (is_micro_like or is_mining) and group_admin in groups:
+            if ((is_micro or is_mining) and not is_micro_leader) and group_admin and group_admin in groups:
+
                 user.with_context(bypass_write=True).write({
                     'groups_id': [(3, group_admin.id)]
                 })
 
-            if is_micro_like and group_sales_user and group_sales_user not in groups:
+            if (is_micro or is_micro_leader) and group_sales_user and group_sales_user not in groups:
                 user.with_context(bypass_write=True).write({
                     'groups_id': [(4, group_sales_user.id)]
                 })

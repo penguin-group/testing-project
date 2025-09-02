@@ -1419,17 +1419,121 @@ msgstr "Cancelar Reparación"
 msgid "Create Quotation"
 msgstr "Crear Cotización"
 
-# Mensajes Python que mencionaste en otros métodos (UserError/confirm)
 #. module: pisa_repair
-#. odoo-python
-#: code:addons/pisa_repair/models/repair_order_fields.py:0
-#, python-format
-msgid "You must fill in the Diagnostic Note before creating a quotation."
-msgstr "Debe completar la Nota de diagnóstico antes de crear una cotización."
+#: model:ir.model,name:pisa_repair.model_pisa_repair_diagnosis_line
+msgid "Diagnosis & Repair"
+msgstr "Diagnóstico y Reparación"
 
 #. module: pisa_repair
-#. odoo-python
-#: code:addons/pisa_repair/models/repair_order_actions.py:0
-#, python-format
-msgid "You must fill in the Repair Note before moving to the next stage."
-msgstr "Debe completar la Nota de reparación antes de pasar a la siguiente etapa."
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__repair_diag_line_ids
+msgid "Diagnosis & Repair"
+msgstr "Diagnóstico y Reparación"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.repair_order_form_tab_customizations
+msgid "Diagnosis &amp; Repair"
+msgstr "Diagnóstico y Reparación"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.repair_order_form_tab_customizations
+msgid "Operations (Materials)"
+msgstr "Operaciones (Insumos)"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_pisa_repair_diagnosis_line__sn
+msgid "SN / Serial"
+msgstr "SN / Serial"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_pisa_repair_diagnosis_line__diagnostic
+msgid "Diagnosis Note"
+msgstr "Nota de Diagnóstico"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_pisa_repair_diagnosis_line__repair_note
+msgid "Repair Note"
+msgstr "Nota de reparación"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_pisa_repair_diagnosis_line__repair_type
+msgid "Repair Type"
+msgstr "Tipo de reparación"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_pisa_repair_diagnosis_line__name
+msgid "Description"
+msgstr "Descripción"
+
+# --- Placeholders (view terms) ---
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.repair_order_form_tab_customizations
+msgid "Describe the diagnosis"
+msgstr "Describe el diagnóstico"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.repair_order_form_tab_customizations
+msgid "Describe the repair performed"
+msgstr "Describe la reparación realizada"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.repair_order_form_tab_customizations
+msgid "Add internal notes."
+msgstr "Agregar notas internas."
+
+# --- Column headings / labels used in the same view (por si no están ya en base) ---
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.repair_order_form_tab_customizations
+msgid "Repair Type"
+msgstr "Tipo de reparación"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.repair_order_form_tab_customizations
+msgid "Repair Type"
+msgstr "Tipo de reparación"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.repair_order_form_tab_customizations
+msgid "Add a line"
+msgstr "Agregar una línea"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.repair_order_form_tab_customizations
+msgid "Catalog"
+msgstr "Catálogo"
+
+# --- Selection values for Repair Type (repair_type) ---
+#. module: pisa_repair
+#: model:ir.model.fields.selection,name:pisa_repair.selection__pisa_repair_diagnosis_line__repair_type__repair
+msgid "Repair"
+msgstr "Reparación"
+
+#. module: pisa_repair
+#: model:ir.model.fields.selection,name:pisa_repair.selection__pisa_repair_diagnosis_line__repair_type__replace_new
+msgid "Replace (New)"
+msgstr "Reemplazo (nuevo)"
+
+#. module: pisa_repair
+#: model:ir.model.fields.selection,name:pisa_repair.selection__pisa_repair_diagnosis_line__repair_type__replace_used
+msgid "Replace (Used)"
+msgstr "Reemplazo (usado)"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.repair_order_form_tab_customizations
+msgid "Diagnosis Note"
+msgstr "Nota de diagnóstico"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.repair_order_form_tab_customizations
+msgid "Repair Note"
+msgstr "Nota de reparación"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_pisa_repair_diagnosis_line__diagnostic
+msgid "Diagnosis Note"
+msgstr "Nota de diagnóstico"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_pisa_repair_diagnosis_line__repair_note
+msgid "Repair Note"
+msgstr "Nota de reparación"
+
