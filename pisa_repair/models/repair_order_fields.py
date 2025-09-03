@@ -45,6 +45,12 @@ class RepairOrderFields(models.Model):
         compute='_compute_is_micro', 
         store=False
     )
+
+    donated_component_ids = fields.One2many(
+        "repair.donated.component",
+        "ticket_origin_id",
+        string="Componentes Donados",
+    )
            
     tag_names = fields.Char(compute='_compute_tag_names', store=False)
 

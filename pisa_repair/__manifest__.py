@@ -62,6 +62,7 @@
         'reports/saleorder_report.xml', 
         'wizards/consolidate_quotations_view.xml',
         'wizards/ticket_validation_views.xml',
+        'wizards/repair_donate_component_wizard.xml',
     ],
 
     'assets': {

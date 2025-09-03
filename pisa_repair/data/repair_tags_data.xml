@@ -79,5 +79,10 @@
             <field name="name">Scrapped</field>
             <field name="color">1</field>  <!-- Red -->
         </record>
+
+        <record id="donor" model="repair.tags">
+            <field name="name">Donor</field>
+            <field name="color">10</field> 
+        </record>
     </data>
 </odoo>
