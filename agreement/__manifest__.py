@@ -2,6 +2,7 @@
     "name": "Agreement",
     "summary": "Legal agreements management for Odoo.",
     "version": "18.0.1.0.0",
+    "license": "OPL-1",
     "category": "Agreement",
     "website": "https://penguin.digital",
     'author': "Penguin Infrastructure",
