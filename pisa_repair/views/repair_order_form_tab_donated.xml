@@ -1,0 +1,34 @@
+<odoo>
+    <record id="repair_order_form_tab_donated_components" model="ir.ui.view">
+        <field name="name">repair.order.form.tab.donated.components</field>
+        <field name="model">repair.order</field>
+        <field name="inherit_id" ref="repair.view_repair_order_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Insertamos después de la pestaña 'microelectronics_data' -->
+            <xpath expr="//page[@name='microelectronics_data']" position="after">
+                <page name="donated_components" string="Donated Components" invisible="not has_donor_tag">
+                    <field name="donated_component_ids" readonly="1">
+                        <list string="Donated Components">
+                            <field name="name" string="Component"/>
+                            <field name="serial_number" string="Serial Number"/>
+                            <field name="description" string="Description"/>
+                            <field name="available" string="Available"/>
+                            <field name="ticket_dest_id" string="Destination Ticket"/>
+                        </list>
+                        <form string="Donated Component">
+                            <group>
+                                <field name="name"/>
+                                <field name="serial_number"/>
+                                <field name="description"/>
+                                <field name="available"/>
+                                <field name="ticket_dest_id" string="Destination Ticket"/>
+                            </group>
+                        </form>
+                    </field>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

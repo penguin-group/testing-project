@@ -49,7 +49,12 @@ class RepairOrderFields(models.Model):
     donated_component_ids = fields.One2many(
         "repair.donated.component",
         "ticket_origin_id",
-        string="Componentes Donados",
+        string="Donated Components"
+    )
+
+    has_donor_tag = fields.Boolean(
+        compute="_compute_has_donor_tag",
+        store=False
     )
            
     tag_names = fields.Char(compute='_compute_tag_names', store=False)
@@ -216,3 +221,8 @@ class RepairOrderFields(models.Model):
                 
             else:
                 record.lot_display = ''
+
+    def _compute_has_donor_tag(self):
+        donor_tag = self.env.ref("pisa_repair.donor", raise_if_not_found=False)
+        for record in self:
+            record.has_donor_tag = donor_tag in record.tag_ids if donor_tag else False
