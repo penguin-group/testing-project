@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mail_template_notification_agreement" model="mail.template">
+            <field name="name">Agreement End Date Approaching</field>
+            <field name="model_id" ref="agreement.model_agreement"/>
+            <field name="subject">Agreement {{ object.name }}.</field>
+            <field name="email_from">{{ user.email_formatted }}</field>
+            <field name="email_to">${email_to or ''}</field>
+            <field name="body_html" type="html">
+                <table border="0" cellpadding="0" cellspacing="0" style="width:100%; margin:0px auto;"><tbody>
+                    <tr><td valign="top" style="text-align: left; font-size: 14px;">
+                        <p>
+                            The end date for this agreement is
+                            <bold t-esc="object.end_date" t-options="{'widget': 'date', 'format': 'dd MMMM YYYY'}"></bold>
+                        </p>
+                        <a t-attf-href="/web?#id={{ object.id }}&amp;view_type=form&amp;model=agreement"
+                           style="background-color: #714B67; color: white; padding: 0.5rem 1.625rem; border-radius: 5px; ">
+                            View Agreement
+                        </a>
+                    </td></tr>
+                </tbody></table>
+            </field>
+        </record>
+
+        <record id="mail_template_notification_milestone" model="mail.template">
+            <field name="name">Milestone Deadline Approaching</field>
+            <field name="model_id" ref="agreement.model_agreement_milestone"/>
+            <field name="subject">Milestones {{ object.name }}</field>
+            <field name="email_from">{{ user.email_formatted }}</field>
+            <field name="email_to">${email_to or ''}</field>
+            <field name="body_html" type="html">
+                <table border="0" cellpadding="0" cellspacing="0" style="width:100%; margin:0px auto;"><tbody>
+                    <tr><td valign="top" style="text-align: left; font-size: 14px;">
+                        <p>
+                            The deadline for this milestone is
+                            <bold t-esc="object.deadline" t-options="{'widget': 'date', 'format': 'dd MMMM YYYY'}"></bold>
+                        </p>
+
+                        <a t-attf-href="/web?#id={{ object.id }}&amp;view_type=form&amp;model=agreement.milestone"
+                           style="background-color: #714B67; color: white; padding: 0.5rem 1.625rem; border-radius: 5px; ">
+                            View Milestone
+                        </a>
+                    </td></tr>
+                </tbody></table>
+            </field>
+        </record>
+    </data>
+</odoo>

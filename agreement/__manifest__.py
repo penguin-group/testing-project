@@ -10,9 +10,11 @@
     "installable": True,
     "depends": ["base", "web", "mail"],
     "data": [
-        "security/ir.model.access.csv",
         "security/access_groups.xml",
+        "security/ir.model.access.csv",
         "data/agreement_stages.xml",
+        "data/ir_cron_data.xml",
+        "data/email_template.xml",
         "views/agreement_views.xml",
         "views/agreement_type_views.xml",
         "views/agreement_stage_views.xml",
