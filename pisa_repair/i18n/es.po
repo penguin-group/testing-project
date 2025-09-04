@@ -1537,3 +1537,68 @@ msgstr "Nota de diagnóstico"
 msgid "Repair Note"
 msgstr "Nota de reparación"
 
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_order_form_custom_buttons
+msgid "Start Testing"
+msgstr "Iniciar Testing"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_order_form_custom_buttons
+msgid "Finish Testing"
+msgstr "Finalizar Testing"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_order_form_custom_buttons
+msgid "Back to Under Diagnosis"
+msgstr "Volver a Diagnóstico"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_order_form_custom_buttons
+msgid "Back to Under Repair"
+msgstr "Volver a Reparación"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__is_in_testing
+msgid "Is in Testing"
+msgstr "Está en Testing"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__is_testing_passed
+msgid "Testing Passed"
+msgstr "Testing aprobado"
+
+#. module: pisa_repair
+#: model:repair.tags,name:pisa_repair.testing
+msgid "Testing"
+msgstr "Testing"
+
+#. module: pisa_repair
+#: model:repair.tags,name:pisa_repair.testing_passed
+msgid "Testing Passed"
+msgstr "Testing aprobado"
+
+# Mensajes posteados desde Python (usar :0 como línea)
+#. module: pisa_repair
+#: code:addons/pisa_repair/models/repair_order_micro_tab.py:0
+msgid "Testing started."
+msgstr "Testing iniciado."
+
+#. module: pisa_repair
+#: code:addons/pisa_repair/models/repair_order_micro_tab.py:0
+msgid "Testing finished and approved."
+msgstr "Testing finalizado y aprobado."
+
+#. module: pisa_repair
+#: code:addons/pisa_repair/models/repair_order_micro_tab.py:0
+msgid "Testing failed: back to Under Repair."
+msgstr "Testing fallido: volver a Reparación."
+
+#. module: pisa_repair
+#: code:addons/pisa_repair/models/repair_order_micro_tab.py:0
+msgid "Testing failed: back to Under Diagnosis."
+msgstr "Testing fallido: volver a Diagnóstico."
+
+#. module: pisa_repair
+#: code:addons/pisa_repair/models/repair_order_micro_tab.py:0
+msgid "You can start testing only when 'under_repair' tag is set."
+msgstr "Solo puedes iniciar Testing cuando la etiqueta 'under_repair' esté establecida."

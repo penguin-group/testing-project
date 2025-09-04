@@ -58,6 +58,16 @@
             <field name="color">6</field>  <!-- Purple -->
         </record>
 
+        <record id="testing" model="repair.tags">
+            <field name="name">Testing</field>
+            <field name="color">6</field>  <!-- Purple -->
+        </record>
+
+        <record id="testing_passed" model="repair.tags">
+            <field name="name">Testing Passed</field>
+            <field name="color">10</field> <!-- Dark Green -->
+        </record>
+
         <!-- Repair Service Stage -->
 
         <record id="ready_for_deployment" model="repair.tags">
