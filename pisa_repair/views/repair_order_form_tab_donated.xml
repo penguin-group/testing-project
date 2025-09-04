@@ -13,7 +13,7 @@
                             <field name="name" string="Component"/>
                             <field name="serial_number" string="Serial Number"/>
                             <field name="description" string="Description"/>
-                            <field name="available" string="Available"/>
+                            <field name="used" string="Used"/>
                             <field name="ticket_dest_id" string="Destination Ticket"/>
                         </list>
                         <form string="Donated Component">
@@ -21,7 +21,7 @@
                                 <field name="name"/>
                                 <field name="serial_number"/>
                                 <field name="description"/>
-                                <field name="available"/>
+                                <field name="used"/>
                                 <field name="ticket_dest_id" string="Destination Ticket"/>
                             </group>
                         </form>

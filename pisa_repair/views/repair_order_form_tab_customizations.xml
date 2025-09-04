@@ -74,6 +74,25 @@
                         </field>
                     </group>
 
+                    <group>
+                        <separator string="Consumed Donated Components" colspan="4"/>
+                        <field name="consumed_component_ids" readonly="0">
+                            <list editable="bottom" string="Consumed Components">
+                                <field name="donated_component_id" domain="[('used', '=', False)]"/>
+                                    <field name="serial_number"/>
+                                    <field name="description"/>
+                                <field name="ticket_origin_id"/>
+                            </list>
+                            <form string="Consumed Component">
+                                <group>
+                                    <field name="donated_component_id" domain="[('used', '=', False)]"/>
+                                    <field name="serial_number"/>
+                                    <field name="description"/>
+                                    <field name="ticket_origin_id"/>
+                                </group>
+                            </form>
+                        </field>
+                    </group>
 
                     <group>
                         <field name="internal_notes"

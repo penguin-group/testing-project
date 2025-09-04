@@ -52,6 +52,12 @@ class RepairOrderFields(models.Model):
         string="Donated Components"
     )
 
+    consumed_component_ids = fields.One2many(
+        "repair.consumed.component",
+        "repair_order_id",
+        string="Consumed Components"
+    )
+
     has_donor_tag = fields.Boolean(
         compute="_compute_has_donor_tag",
         store=False

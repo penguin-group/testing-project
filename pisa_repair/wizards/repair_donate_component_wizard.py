@@ -1,4 +1,6 @@
-from odoo import models, fields
+from odoo import models, fields, api
+from odoo.exceptions import ValidationError
+from odoo import _
 
 class RepairDonateComponentWizard(models.TransientModel):
     _name = "repair.donate.component.wizard"
@@ -54,3 +56,11 @@ class RepairDonateComponentLine(models.TransientModel):
     ], string="Component", required=True)
     serial_number = fields.Char("Serial number")
     description = fields.Text("Description")
+
+    @api.constrains("name", "wizard_id")
+    def _check_unique_component_per_wizard(self):
+        for rec in self:
+            if rec.name and rec.wizard_id:
+                duplicates = rec.wizard_id.component_ids.filtered(lambda l: l.name == rec.name)
+                if len(duplicates) > 1:
+                    raise ValidationError(_("The component '%s' is already selected in this wizard.") % rec.name)

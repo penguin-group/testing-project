@@ -14,9 +14,9 @@ class RepairDonatedComponent(models.Model):
     ], string="Component", required=True)
     serial_number = fields.Char("Serial Number")
     description = fields.Text("Description")
-    available = fields.Boolean(
-        string="Available",
-        compute="_compute_is_available",
+    used = fields.Boolean(
+        string="Used",
+        compute="_compute_is_used",
         store=True
     )
 
@@ -28,13 +28,11 @@ class RepairDonatedComponent(models.Model):
     )
 
     @api.depends("ticket_dest_id")
-    def _compute_is_available(self):
-        """Si hay ticket destino, está disponible = True, si no, False."""
+    def _compute_is_used(self):
         for rec in self:
-            rec.available = True if rec.ticket_dest_id else False
+            rec.used = True if rec.ticket_dest_id else False
 
     @api.onchange("ticket_dest_id")
     def _onchange_ticket_dest_id(self):
-        """Refrescar en la vista cuando se selecciona/quita un ticket destino."""
         for rec in self:
-            rec.available = True if rec.ticket_dest_id else False
+            rec.used = True if rec.ticket_dest_id else False

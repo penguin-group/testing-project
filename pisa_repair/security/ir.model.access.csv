@@ -16,3 +16,4 @@ access_pisa_repair_diagnosis_line_user,pisa.repair.diagnosis.line user,model_pis
 access_repair_donate_component_wizard,access.repair.donate.component.wizard,model_repair_donate_component_wizard,,1,1,1,1
 access_repair_donate_component_line,access.repair.donate.component.line,model_repair_donate_component_line,,1,1,1,1
 access_repair_donated_component,access.repair.donated.component,model_repair_donated_component,,1,1,1,1
+access_repair_consumed_component,access.repair.consumed.component,model_repair_consumed_component,,1,1,1,1
