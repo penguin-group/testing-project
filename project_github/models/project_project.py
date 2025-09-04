@@ -17,15 +17,13 @@ class Project(models.Model):
 
     @api.onchange('is_development_project', 'company_id')
     def _onchange_development_project(self):
-        """Update available repositories"""
+        domain = [('id', '=', False)]  # No repos available by default           
+        
         if self.is_development_project and self.company_id and self.company_id.github_token:
             self._sync_github_repos()
+            domain = [('company_id', '=', self.company_id.id if self.company_id else False)]
+            self.is_development_project = True
         
-        # Set domain for repo field
-        domain = [('company_id', '=', self.company_id.id if self.company_id else False)]
-        if not self.is_development_project:
-            domain = [('id', '=', False)]  # No repos available
-            
         return {'domain': {'repo': domain}}
     
     def _sync_github_repos(self):
