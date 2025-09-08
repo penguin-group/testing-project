@@ -6,14 +6,74 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-01 17:09+0000\n"
-"PO-Revision-Date: 2025-09-01 17:09+0000\n"
+"POT-Creation-Date: 2025-09-08 16:24+0000\n"
+"PO-Revision-Date: 2025-09-08 16:24+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: agreement
+#: model:mail.template,body_html:agreement.mail_template_notification_milestone
+msgid ""
+"<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%; margin:0px auto;\"><tbody>\n"
+"                    <tr><td valign=\"top\" style=\"text-align: left; font-size: 14px;\">\n"
+"                        <p style=\"font-size: 1.25rem\">\n"
+"                            The deadline for this milestone is\n"
+"                            <bold t-esc=\"ctx.get('date_str')\"/>\n"
+"                        </p>\n"
+"\n"
+"                        <a t-attf-href=\"/web?#id={{ object.id }}&amp;view_type=form&amp;model=agreement.milestone\" style=\"background-color: #714B67; color: white; padding: 0.8rem 1.625rem; border-radius: 5px;                                 text-decoration: none;\">\n"
+"                            View Milestone\n"
+"                        </a>\n"
+"                    </td></tr>\n"
+"                </tbody></table>\n"
+"            "
+msgstr ""
+"<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%; margin:0px auto;\"><tbody>\n"
+"                    <tr><td valign=\"top\" style=\"text-align: left; font-size: 14px;\">\n"
+"                        <p style=\"font-size: 1.25rem\">\n"
+"                            La fecha límite para este hito es:\n"
+"                            <bold t-esc=\"ctx.get('date_str')\"/>\n"
+"                        </p>\n"
+"\n"
+"                        <a t-attf-href=\"/web?#id={{ object.id }}&amp;view_type=form&amp;model=agreement.milestone\" style=\"background-color: #714B67; color: white; padding: 0.8rem 1.625rem; border-radius: 5px;                                 text-decoration: none;\">\n"
+"                            Ver Hito\n"
+"                        </a>\n"
+"                    </td></tr>\n"
+"                </tbody></table>\n"
+"            "
+
+#. module: agreement
+#: model:mail.template,body_html:agreement.mail_template_notification_agreement
+msgid ""
+"<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%; margin:0px auto;\"><tbody>\n"
+"                    <tr><td valign=\"top\" style=\"text-align: left; font-size: 14px;\">\n"
+"                        <p style=\"font-size: 1.25rem\">\n"
+"                            The end date for this agreement is\n"
+"                            <bold t-esc=\"ctx.get('date_str')\"/>\n"
+"                        </p>\n"
+"                        <a t-attf-href=\"/web?#id={{ object.id }}&amp;view_type=form&amp;model=agreement\" style=\"background-color: #714B67; color: white; padding: 0.8rem 1.625rem; border-radius: 5px;                                 text-decoration: none;\">\n"
+"                            View Agreement\n"
+"                        </a>\n"
+"                    </td></tr>\n"
+"                </tbody></table>\n"
+"            "
+msgstr ""
+"<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%; margin:0px auto;\"><tbody>\n"
+"                    <tr><td valign=\"top\" style=\"text-align: left; font-size: 14px;\">\n"
+"                        <p style=\"font-size: 1.25rem\">\n"
+"                            Este acuerdo finaliza el\n"
+"                            <bold t-esc=\"ctx.get('date_str')\"/>\n"
+"                        </p>\n"
+"                        <a t-attf-href=\"/web?#id={{ object.id }}&amp;view_type=form&amp;model=agreement\" style=\"background-color: #714B67; color: white; padding: 0.8rem 1.625rem; border-radius: 5px;                                 text-decoration: none;\">\n"
+"                            Ver Acuerdo\n"
+"                        </a>\n"
+"                    </td></tr>\n"
+"                </tbody></table>\n"
+"            "
 
 #. module: agreement
 #: model:ir.model.fields,field_description:agreement.field_agreement__message_needaction
@@ -54,10 +114,18 @@ msgid "Activity Type Icon"
 msgstr "Ícono de Tipo de Actividad"
 
 #. module: agreement
+#. odoo-python
+#: code:addons/agreement/models/agreement.py:0
 #: model:ir.model,name:agreement.model_agreement
 #: model:ir.module.category,name:agreement.module_category_agreement
+#: model_terms:ir.ui.view,arch_db:agreement.res_config_settings_agreement_view_form
 msgid "Agreement"
 msgstr "Acuerdo"
+
+#. module: agreement
+#: model:mail.template,name:agreement.mail_template_notification_agreement
+msgid "Agreement End Date Approaching"
+msgstr "Se acerca la fecha de finalización de acuerdo"
 
 #. module: agreement
 #: model:ir.ui.menu,name:agreement.menuitem_agreement_milestone
@@ -146,6 +214,11 @@ msgid "Company"
 msgstr "Compañía"
 
 #. module: agreement
+#: model:ir.model,name:agreement.model_res_config_settings
+msgid "Config Settings"
+msgstr "Ajustes de configuración"
+
+#. module: agreement
 #: model:ir.model.fields,field_description:agreement.field_agreement__create_uid
 #: model:ir.model.fields,field_description:agreement.field_agreement_jurisdiction__create_uid
 #: model:ir.model.fields,field_description:agreement.field_agreement_legal_process_type__create_uid
@@ -168,6 +241,11 @@ msgstr "Creado por"
 #: model:ir.model.fields,field_description:agreement.field_agreement_type__create_date
 msgid "Created on"
 msgstr "Creado el"
+
+#. module: agreement
+#: model:ir.actions.server,name:agreement.agreement_date_checkkk_ir_actions_server
+msgid "Daily Agreement Date Check"
+msgstr ""
 
 #. module: agreement
 #: model:ir.model.fields,field_description:agreement.field_agreement_milestone__deadline
@@ -340,7 +418,7 @@ msgstr "Tipos de proceso legal"
 #. module: agreement
 #: model:ir.model.fields,field_description:agreement.field_agreement__message_has_error
 msgid "Message Delivery error"
-msgstr ""
+msgstr "Error de envío de mensaje"
 
 #. module: agreement
 #: model:ir.model.fields,field_description:agreement.field_agreement__message_ids
@@ -348,11 +426,18 @@ msgid "Messages"
 msgstr "Error de envío de mensaje"
 
 #. module: agreement
+#. odoo-python
+#: code:addons/agreement/models/agreement.py:0
 #: model:ir.actions.act_window,name:agreement.action_agreement_milestone
 #: model:ir.model,name:agreement.model_agreement_milestone
 #: model:ir.model.fields,field_description:agreement.field_agreement__milestone_ids
 msgid "Milestone"
 msgstr "Hito"
+
+#. module: agreement
+#: model:mail.template,name:agreement.mail_template_notification_milestone
+msgid "Milestone Deadline Approaching"
+msgstr "Se acerca la fecha límite del hito"
 
 #. module: agreement
 #: model:agreement.stage,name:agreement.agreement_stage_missing_info
@@ -386,6 +471,26 @@ msgstr "Resumen de la siguiente activida"
 #: model:ir.model.fields,field_description:agreement.field_agreement__activity_type_id
 msgid "Next Activity Type"
 msgstr "Tipo de la siguiente actividad"
+
+#. module: agreement
+#: model_terms:ir.ui.view,arch_db:agreement.res_config_settings_agreement_view_form
+msgid "Notifications"
+msgstr "Notificaciones"
+
+#. module: agreement
+#: model:ir.model.fields,field_description:agreement.field_res_config_settings__notify_one_day_prior
+msgid "Notify 1 day prior"
+msgstr "Notificar 1 día antes"
+
+#. module: agreement
+#: model:ir.model.fields,field_description:agreement.field_res_config_settings__notify_ten_days_prior
+msgid "Notify 10 days prior"
+msgstr "Notificar 10 días antes"
+
+#. module: agreement
+#: model:ir.model.fields,field_description:agreement.field_res_config_settings__notify_on_the_date
+msgid "Notify on the date"
+msgstr "Notificar en la fecha"
 
 #. module: agreement
 #: model:ir.model.fields,field_description:agreement.field_agreement__message_needaction_counter
@@ -423,6 +528,11 @@ msgid "Related Agreements"
 msgstr "Acuerdos relacionados"
 
 #. module: agreement
+#: model_terms:ir.ui.view,arch_db:agreement.res_config_settings_agreement_view_form
+msgid "Reminder Rules"
+msgstr "Reglas de Recordatorio"
+
+#. module: agreement
 #: model:ir.model,name:agreement.model_agreement_renewal_term
 msgid "Renewal Term"
 msgstr "Término de renovación"
@@ -438,6 +548,14 @@ msgstr "Términos de renovación"
 #: model:ir.model.fields,field_description:agreement.field_agreement__activity_user_id
 msgid "Responsible User"
 msgstr "Usuario responsable"
+
+#. module: agreement
+#: model_terms:ir.ui.view,arch_db:agreement.res_config_settings_agreement_view_form
+msgid ""
+"Select how often users should be notified about an agreement's end date."
+msgstr ""
+"Selecciona cada cuánto tiempo los usuarios deben ser notificados sobre la "
+"fecha de finalización de un acuerdo."
 
 #. module: agreement
 #: model:ir.model.fields,field_description:agreement.field_agreement__sequence
@@ -507,3 +625,15 @@ msgstr "En revisión"
 #: model:ir.ui.menu,name:agreement.menuitem_agreements
 msgid "View Agreements"
 msgstr "Ver acuerdos"
+
+#. module: agreement
+#. odoo-python
+#: code:addons/agreement/models/agreement.py:0
+msgid "days."
+msgstr "días."
+
+#. module: agreement
+#. odoo-python
+#: code:addons/agreement/models/agreement.py:0
+msgid "ends in"
+msgstr "finaliza en"

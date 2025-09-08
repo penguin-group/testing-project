@@ -1,6 +1,9 @@
-from odoo import models, api, fields
+from odoo import models, api, fields, _
 from datetime import datetime
+from odoo.tools.misc import format_date
+import logging
 
+_logger = logging.getLogger(__name__)
 
 class Agreement(models.Model):
     _name = 'agreement'
@@ -53,13 +56,20 @@ class Agreement(models.Model):
     file_location = fields.Char(string="File Location (URL)", tracking=True)
     milestone_ids = fields.One2many('agreement.milestone', "agreement_id", string="Milestone", tracking=True)
 
-    def retrieve_users_to_be_notified(self, agreement):
-        users = []
-        users += self.env.ref('agreement.group_agreement_legal_officer', raise_if_not_found=True).users.ids
-        users += self.env.ref('agreement.group_agreement_admin', raise_if_not_found=True).users.ids
-        users += agreement.message_partner_ids.ids
-        users = list(set(users))
-        return users
+    def retrieve_partners_to_be_notified(self, agreement):
+        """Checks access groups and agreement following and returns all the relevant users to send the notification to."""
+        partners = []
+        agreement_legal_officers = self.env.ref('agreement.group_agreement_legal_officer', raise_if_not_found=True).users
+        agreement_admins = self.env.ref('agreement.group_agreement_admin', raise_if_not_found=True).users
+        allowed_users = [*agreement_admins, *agreement_legal_officers]
+
+        for user in allowed_users:
+            if user.partner_id:
+                partners.append(user.partner_id.id)
+
+        partners += agreement.message_partner_ids.ids  # followers of the agreement
+        partners = list(set(partners))  # remove any duplicate ids
+        return partners
 
     def check_agreement_approaching_dates(self):
         """Method called by a cron job which compares today's date
@@ -80,11 +90,11 @@ class Agreement(models.Model):
             if ((amount_of_days_before_end_date == 0 and notify_on_the_date) or
                 (amount_of_days_before_end_date == -1 and notify_one_day_prior) or
                 (amount_of_days_before_end_date == -10 and notify_ten_days_prior)):
-                user_ids = self.retrieve_users_to_be_notified(agreement)
+                partner_ids = self.retrieve_partners_to_be_notified(agreement)
                 self.send_email_notification(agreement,
                                              amount_of_days_before_end_date,
                                              'agreement.mail_template_notification_agreement',
-                                             user_ids)
+                                             partner_ids)
 
             for milestone in agreement.milestone_ids:
                 if not milestone.deadline:
@@ -96,34 +106,37 @@ class Agreement(models.Model):
                         (amount_of_days_before_deadline == -10 and notify_ten_days_prior)):
                     # agreement.milestone doesn't have followers. Notifications related to
                     # a milestone's deadline are sent to the agreement followers.
-                    user_ids = self.retrieve_users_to_be_notified(agreement)
+                    partner_ids = self.retrieve_partners_to_be_notified(agreement)
                     self.send_email_notification(milestone,
                                                  amount_of_days_before_deadline,
                                                  'agreement.mail_template_notification_milestone',
-                                                 user_ids)
+                                                 partner_ids)
 
-    def send_email_notification(self, record, amount_of_days_before_end_date, template_id, user_ids):
+    def send_email_notification(self, record, amount_of_days_before_end_date, template_id, partner_ids):
         """Sends an email notification to the relevant users (chosen based on access groups and following)."""
         template = self.env.ref(template_id)
 
         match amount_of_days_before_end_date:  # Customize subject depending on model of record and amount of days left
             case -10:
-                template.subject = f"{'Milestone' if record._name == 'agreement.milestone' else 'Agreement'} {record.name} ends in {abs(amount_of_days_before_end_date)} days."
+                template.subject = f"{_('Milestone') if record._name == 'agreement.milestone' else _('Agreement')} {record.name} {_('ends in') + " " + str(abs(amount_of_days_before_end_date)) + " " + _('days.')}"
             case -1:
-                template.subject = f"{'Milestone' if record._name == 'agreement.milestone' else 'Agreement'} {record.name} ends tomorrow."
+                template.subject = f"{_('Milestone') if record._name == 'agreement.milestone' else _('Agreement')} {record.name} ends tomorrow."
             case 0:
-                template.subject = f"{'Milestone' if record._name == 'agreement.milestone' else 'Agreement'} {record.name} ends today."
+                template.subject = f"{_('Milestone') if record._name == 'agreement.milestone' else _('Agreement')} {record.name} ends today."
 
-        # email_addresses = []
-        # users = self.env['res.partner'].browse(user_ids)
-        # for user in users:
-        #     if user.email:
-        #         email_addresses.append(user.email)
-        #     else:
-        #         print(f"{user.name} does not have an email address.")
 
-        template.send_mail(record.id,
-                           email_layout_xmlid="mail.mail_notification_light",
-                           email_values={'email_to':"david.jacquet@penguin.digital"},
-                           force_send=True)
+        partners = self.env['res.partner'].browse(partner_ids)
+        for partner in partners:
+            template.lang = partner.lang
+            if partner.email:
+                final_date = record.end_date if 'end_date' in record else record.deadline
+                date_str = format_date(self.env, final_date, date_format='long', lang_code=partner.lang)
+                template.with_context(date_str=date_str).send_mail(record.id,
+                                                                   email_layout_xmlid="mail.mail_notification_light",
+                                                                   email_values={'email_to': partner.email},
+                                                                   force_send=True)
+            else:
+                _logger.warning(f"{partner.name} does not have an email address. Notification not sent for agreement with ID {record.id}.")
+
+
 
