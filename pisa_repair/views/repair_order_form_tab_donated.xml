@@ -7,7 +7,8 @@
 
             <!-- Insertamos después de la pestaña 'microelectronics_data' -->
             <xpath expr="//page[@name='microelectronics_data']" position="after">
-                <page name="donated_components" string="Donated Components" invisible="not has_donor_tag">
+                
+                <page name="donated_components" string="Donated Components"  invisible="not is_micro or ('donor' not in tag_names and 'scrapped' not in tag_names)" >
                     <field name="donated_component_ids" readonly="1">
                         <list string="Donated Components">
                             <field name="name" string="Component"/>
@@ -16,15 +17,7 @@
                             <field name="used" string="Used"/>
                             <field name="ticket_dest_id" string="Destination Ticket"/>
                         </list>
-                        <form string="Donated Component">
-                            <group>
-                                <field name="name"/>
-                                <field name="serial_number"/>
-                                <field name="description"/>
-                                <field name="used"/>
-                                <field name="ticket_dest_id" string="Destination Ticket"/>
-                            </group>
-                        </form>
+
                     </field>
                 </page>
             </xpath>

@@ -1,5 +1,6 @@
 from odoo import models, fields, api, _
 
+
 class RepairOrderFields(models.Model):
     _inherit = 'repair.order'
 
@@ -123,6 +124,27 @@ class RepairOrderFields(models.Model):
         ondelete='restrict'
     )
 
+    def write(self, vals):
+        res = super().write(vals)
+
+        if self.env.context.get("skip_update_donor_scrapped_tags"):
+            return res
+
+        # Si se consumió un componente donado desde otro ticket
+        consumed_lines = vals.get("consumed_component_ids", [])
+        for cmd in consumed_lines:
+            if len(cmd) >= 3 and "donated_component_id" in cmd[2]:
+                donated_comp = self.env["repair.donated.component"].browse(cmd[2]["donated_component_id"])
+                if donated_comp and donated_comp.ticket_origin_id:
+                    origin_order = donated_comp.ticket_origin_id
+                    origin_order.with_context(skip_update_donor_scrapped_tags=True)._update_donor_scrapped_tags()
+
+        # Además, seguimos revisando el propio ticket en caso de ser origen
+        for order in self:
+            order.with_context(skip_update_donor_scrapped_tags=True)._update_donor_scrapped_tags()
+
+        return res
+
     @api.model_create_multi
     def create(self, vals_list):
         records = super(RepairOrderFields, self).create(vals_list)
@@ -232,3 +254,33 @@ class RepairOrderFields(models.Model):
         donor_tag = self.env.ref("pisa_repair.donor", raise_if_not_found=False)
         for record in self:
             record.has_donor_tag = donor_tag in record.tag_ids if donor_tag else False
+
+    def _update_donor_scrapped_tags(self):
+        scrapped_tag = self.env.ref("pisa_repair.scrapped", raise_if_not_found=False)
+        donor_tag = self.env.ref("pisa_repair.donor", raise_if_not_found=False)
+
+        for order in self:
+            if not order.donated_component_ids:
+                continue
+
+            all_used = all(comp.used for comp in order.donated_component_ids)
+          
+
+            if all_used:
+                if scrapped_tag and scrapped_tag not in order.tag_ids:
+                    order.with_context(skip_update_donor_scrapped_tags=True).write({
+                        "tag_ids": [(4, scrapped_tag.id)]
+                    })
+                if donor_tag and donor_tag in order.tag_ids:
+                    order.with_context(skip_update_donor_scrapped_tags=True).write({
+                        "tag_ids": [(3, donor_tag.id)]
+                    })
+            else:
+                if donor_tag and donor_tag not in order.tag_ids:
+                    order.with_context(skip_update_donor_scrapped_tags=True).write({
+                        "tag_ids": [(4, donor_tag.id)]
+                    })
+                if scrapped_tag and scrapped_tag in order.tag_ids:
+                    order.with_context(skip_update_donor_scrapped_tags=True).write({
+                        "tag_ids": [(3, scrapped_tag.id)]
+                    })

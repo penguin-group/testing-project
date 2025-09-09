@@ -32,11 +32,11 @@ class RepairConsumedComponent(models.Model):
 
     @api.onchange("donated_component_id")
     def _onchange_donated_component_id(self):
-        """Al seleccionar un componente, lo marco como usado y asigno ticket destino."""
         for rec in self:
             if rec.donated_component_id:
                 rec.donated_component_id.used = True
                 rec.donated_component_id.ticket_dest_id = rec.repair_order_id
+                rec.donated_component_id.ticket_origin_id._update_donor_scrapped_tags()
             else:
                 rec.donated_component_id.used = False
                 rec.donated_component_id.ticket_dest_id = False
@@ -48,6 +48,7 @@ class RepairConsumedComponent(models.Model):
             if rec.donated_component_id:
                 rec.donated_component_id.used = True
                 rec.donated_component_id.ticket_dest_id = rec.repair_order_id
+                rec.donated_component_id.ticket_origin_id._update_donor_scrapped_tags()
         return records
     
     def write(self, vals):
@@ -56,11 +57,13 @@ class RepairConsumedComponent(models.Model):
             if rec.donated_component_id:
                 rec.donated_component_id.used = True
                 rec.donated_component_id.ticket_dest_id = rec.repair_order_id
+                rec.donated_component_id.ticket_origin_id._update_donor_scrapped_tags()
         return res
 
     def unlink(self):
         for rec in self:
             if rec.donated_component_id:
                 rec.donated_component_id.used = False
-                rec.donated_component_id.ticket_dest_id = False 
+                rec.donated_component_id.ticket_dest_id = False
+                rec.donated_component_id.ticket_origin_id._update_donor_scrapped_tags()
         return super().unlink()

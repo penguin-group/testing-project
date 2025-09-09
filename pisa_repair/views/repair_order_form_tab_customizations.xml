@@ -76,7 +76,7 @@
 
                     <group>
                         <separator string="Consumed Donated Components" colspan="4"/>
-                        <field name="consumed_component_ids" readonly="0">
+                        <field name="consumed_component_ids" readonly="not is_validated or not is_in_repair or not is_micro" invisible="has_donor_tag or 'scrapped' in tag_names">
                             <list editable="bottom" string="Consumed Components">
                                 <field name="donated_component_id" domain="[('used', '=', False)]"/>
                                     <field name="serial_number"/>
