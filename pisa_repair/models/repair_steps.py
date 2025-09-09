@@ -8,7 +8,7 @@ class RepairStep(models.Model):
     _rec_name = 'name'
     _order = 'sequence, id'
 
-    name = fields.Char(string="Steps", required=True, index=True)
+    name = fields.Char(string="Steps", required=True, index=True, translate=True)
 
     type = fields.Selection([
         ('hydro', 'Hydro'),
