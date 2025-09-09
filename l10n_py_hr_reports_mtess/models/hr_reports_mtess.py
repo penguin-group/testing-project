@@ -3,6 +3,8 @@ import base64
 import io
 from datetime import date
 import xlsxwriter
+from ..utils.employee_report_data import EmployeeReportData
+from ..utils.salary_report_data import SalaryReportData
 
 
 class HrReportsMtess(models.Model):
@@ -73,22 +75,69 @@ class HrReportsMtess(models.Model):
         })
 
     def _generate_employees_data(self, worksheet, first_date, last_date):
-        # Define headers
         headers = [
             "Nropatronal", "Documento", "Nombre", "Apellido", "Sexo", "Estadocivil",
             "Fechanac", "Nacionalidad", "Domicilio", "Fechanacmenor", "hijosmenores",
             "cargo", "profesion", "fechaentrada", "horariotrabajo", "menorescapa",
             "menoresescolar", "fechasalida", "motivosalida", "Estado"
         ]
+        data = EmployeeReportData(self.env, first_date, last_date)
 
-        # Write headers to the first row
-        for col_num, header in enumerate(headers):
-            worksheet.write(0, col_num, header)
+        # EmployeeReportEmployee attributes in order
+        fields = [
+            "patronal_number", "identification_number", "first_name", "last_name",
+            "gender", "marital_status", "birth_date", "nationality", "address",
+            "minor_birth_date", "minor_children", "job_title", "profession",
+            "date_start", "work_schedule", "minor_date_start", "minor_school_status",
+            "date_end", "end_reason"
+        ]
+
+        # Write headers
+        for col, h in enumerate(headers):
+            worksheet.write(0, col, h)
+
+        # Write data rows
+        for row, emp in enumerate(data.employees, start=1):
+            values = [getattr(emp, f) for f in fields]
+            for col, val in enumerate(values):
+                worksheet.write(row, col, val)
 
 
     def _generate_salaries_data(self, worksheet, first_date, last_date):
-        worksheet.write('A1', 'Employee Name')
-        worksheet.write('B1', 'Department')
+        headers = [
+            "Nropatronal","documento","formadepago","importeunitario",
+           "h_ene","s_ene","h_feb","s_feb","h_mar","s_mar","h_abr","s_abr",
+           "h_may","s_may","h_jun","s_jun","h_jul","s_jul","h_ago","s_ago",
+           "h_set","s_set","h_oct","s_oct","h_nov","s_nov","h_dic","s_dic",
+           "h_50","s_50","h_100","s_100","Aguinaldo","Beneficios",
+           "Bonificaciones","Vacaciones","total_h","total_s","totalgeneral"
+        ]
+        data = SalaryReportData(self.env, first_date, last_date)
+
+        # SalaryReportData attributes in order
+        fields = [
+            "patronal_number", "identification_number", "wage_type", "wage",
+            "hours_january", "salary_january", "hours_february", "salary_february",
+            "hours_march", "salary_march", "hours_april", "salary_april",
+            "hours_may", "salary_may", "hours_june", "salary_june",
+            "hours_july", "salary_july", "hours_august", "salary_august",
+            "hours_september", "salary_september", "hours_october", "salary_october",
+            "hours_november", "salary_november", "hours_december", "salary_december",
+            "overtime_hours_50", "overtime_total_50", "overtime_hours_100", "overtime_total_100",
+            "year_end_bonus", "benefits", "family_allowance", "vacation_pay",
+            "hours_total", "salaries_total", "total"
+        ]
+
+        # Write headers
+        for col, h in enumerate(headers):
+            worksheet.write(0, col, h)
+
+        # Write data rows
+        for row, sal in enumerate(data.salaries, start=1):
+            values = [getattr(sal, f) for f in fields]
+            for col, val in enumerate(values):
+                worksheet.write(row, col, val)
+
 
     def _generate_summary_data(self, worksheet, first_date, last_date):
         worksheet.write('A1', 'Employee Name')
