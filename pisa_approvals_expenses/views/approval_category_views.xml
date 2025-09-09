@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="approval_category_view_form_inherit" model="ir.ui.view">
+        <field name="name">approval.category.view.form.inherit</field>
+        <field name="model">approval.category</field>
+        <field name="inherit_id" ref="approvals.approval_category_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='has_location']" position="after">
+                <field name="has_currency" widget="radio" options="{'horizontal': true}" />
+                <field name="has_bank_account" />
+            </xpath>
+        </field>
+    </record>
+</odoo>
