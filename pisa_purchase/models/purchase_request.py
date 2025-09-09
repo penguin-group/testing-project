@@ -7,13 +7,19 @@ class PurchaseRequest(models.Model):
     project_id = fields.Many2one("project.project", string="Project")
     request_assistance = fields.Boolean(string="Request Assistance")
     off_budget = fields.Boolean(string="Off-Budget", tracking=True)
+    
+    # Redefine the field to remove the 'related' attribute.
+    # We make it a standard Many2one field that stores its own value.
     currency_id = fields.Many2one(
-        "res.currency",
-        string="Currency",
-        tracking=True,
-        default=lambda self: self.company_id.currency_id,
+        'res.currency',
+        string='Currency',
+        related=False,
+        required=True,
         store=True,
+        readonly=False,
+        default=lambda self: self.env.company.currency_id.id
     )
+
     currency_old = fields.Char()
 
     def _link_attachments_to_purchase_order(self, purchase_order):
