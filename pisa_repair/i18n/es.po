@@ -250,6 +250,48 @@ msgid "Initial State"
 msgstr "Estado Inicial"
 
 #. module: pisa_repair
+#: model:repair.steps,name:pisa_repair.step_check_water_valves
+msgid "Verification of water inlet and outlet valves"
+msgstr "Verificación de las válvulas de entrada y salida de agua"
+
+#. module: pisa_repair
+#: model:repair.steps,name:pisa_repair.step_check_water_hoses
+msgid "Verification of water inlet and outlet hoses"
+msgstr "Verificación de las mangueras de entrada y salida de agua"
+
+#. module: pisa_repair
+#: model:repair.steps,name:pisa_repair.step_check_miner_fans
+msgid "Verification of miner fans"
+msgstr "Verificación de los ventiladores del minero"
+
+#. module: pisa_repair
+#: model:repair.steps,name:pisa_repair.step_check_heat_wall
+msgid "Verification of heat wall"
+msgstr "Verificación de la pared de calor"
+
+#. module: pisa_repair
+#: model:repair.steps,name:pisa_repair.step_check_oil_temp
+msgid "Verification of oil inlet and outlet temperature"
+msgstr "Verificación de la temperatura de entrada y salida de aceite"
+
+#. module: pisa_repair
+#: model:repair.steps,name:pisa_repair.step_check_electrical_connections
+msgid "Verification of electrical connections"
+msgstr "Verificación de las conexiones eléctricas"
+
+#. module: pisa_repair
+#: model:repair.steps,name:pisa_repair.step_check_network_link
+msgid "Verification of network link with tester"
+msgstr "Verificación del enlace de red con probador"
+
+#. module: pisa_repair
+#: model:repair.steps,name:pisa_repair.step_machine_restart
+msgid "Machine restart"
+msgstr "Reinicio de la máquina"
+
+
+
+#. module: pisa_repair
 #: model:ir.model.fields,field_description:pisa_repair.field_repair_order__replaced_components
 #: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_replaced_components_form
 #: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_replaced_components_tree
