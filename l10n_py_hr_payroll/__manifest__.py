@@ -61,6 +61,8 @@
         "views/res_config_settings_views.xml",
         "views/hr_employee_views.xml",
         "views/res_company_views.xml",
+        'views/hr_job_views.xml',
+
     ],
 
     'demo': [
