@@ -6,8 +6,18 @@
         <field name="inherit_id" ref="approvals.approval_category_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='has_location']" position="after">
-                <field name="has_currency" widget="radio" options="{'horizontal': true}" />
-                <field name="has_bank_account" />
+                <field name="has_currency"
+                       widget="radio"
+                       options="{'horizontal': true}"
+                       readonly="approval_type == 'create_vendor_bill_adv'" />
+                <field name="has_bank_account"
+                       widget="radio"
+                       options="{'horizontal': true}"
+                       readonly="approval_type == 'create_vendor_bill_adv'"/>
+            </xpath>
+
+            <xpath expr="//field[@name='has_amount']" position="attributes">
+                <attribute name="readonly">approval_type == 'create_vendor_bill_adv'</attribute>
             </xpath>
         </field>
     </record>
