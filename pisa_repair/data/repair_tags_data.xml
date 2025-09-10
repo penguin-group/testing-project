@@ -16,6 +16,21 @@
             <field name="color">2</field>  <!-- Blue -->
         </record>
 
+        <record id="pending_to_receive" model="repair.tags">
+            <field name="name">Pending to Receive</field>
+            <field name="color">4</field>  <!-- Light Blue -->
+        </record>
+
+        <record id="received" model="repair.tags">
+            <field name="name">Received</field>
+            <field name="color">10</field>  <!-- Dark Green -->
+        </record>
+
+        <record id="not_received" model="repair.tags">
+            <field name="name">Not Received</field>
+            <field name="color">1</field> <!-- Red -->
+        </record>
+
         <!-- Repair Service Stage under repair -->
 
         <record id="pending_of_diagnosis" model="repair.tags">

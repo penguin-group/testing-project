@@ -10,11 +10,11 @@
                 <page name="mining_data" string="Mining Data" invisible="is_invisible">
                     <group>
                         <field name="initial_state" widget="many2many_tags" 
-                            readonly="state != 'confirmed' or is_validated == False or not is_mining"/>
+                            readonly="state != 'confirmed' or is_validated == False or not is_mining or 'pending to receive' in tag_names"/>
                     </group>
 
                     <div>
-                        <field name="performed_steps_rel_ids">
+                        <field name="performed_steps_rel_ids" readonly="'pending to receive' in tag_names">
                             <list editable="bottom" create="0" delete="0">
                                 <field name="step_id"
                                     context="{'default_type': parent.lot_repair_type}"
@@ -29,25 +29,25 @@
 
                     <group>
                         <field name="needs_rest"
-                            readonly="not all_steps_completed or state != 'confirmed' or is_validated == False or end_rest or (start_rest and needs_rest)" />
+                            readonly="not all_steps_completed or state != 'confirmed' or is_validated == False or end_rest or (start_rest and needs_rest) or 'pending to receive' in tag_names" />
                         <field name="replaced_components" widget="many2many_tags" 
-                            readonly="state != 'confirmed' or is_validated == False or not is_mining"/>
+                            readonly="state != 'confirmed' or is_validated == False or not is_mining or 'pending to receive' in tag_names"/>
                         <field name="final_resolution" widget="many2many_tags" 
-                            readonly="state != 'confirmed' or is_validated == False or not is_mining"/>
+                            readonly="state != 'confirmed' or is_validated == False or not is_mining or 'pending to receive' in tag_names"/>
                         <field name="evidence_image"
-                            readonly="state != 'confirmed' or is_validated == False" />
+                            readonly="state != 'confirmed' or is_validated == False or 'pending to receive' in tag_names" />
                         <field name="extraction"
-                            readonly="state != 'confirmed' or is_validated == False" />
+                            readonly="state != 'confirmed' or is_validated == False or 'pending to receive' in tag_names" />
                         <button name="action_start_rest"
                             string="Start Rest"
                             type="object"
                             class="oe_highlight"
-                            invisible="needs_rest == False or resting == True or is_validated == False or start_rest != False" />
+                            invisible="needs_rest == False or resting == True or is_validated == False or start_rest != False or 'pending to receive' in tag_names" />
                         <button name="action_end_rest"
                             string="End Rest"
                             type="object"
                             class="oe_highlight"
-                            invisible="resting == False or is_validated == False or end_rest != False" />
+                            invisible="resting == False or is_validated == False or end_rest != False or 'pending to receive' in tag_names" />
                     </group>
                 </page>
             </notebook>
