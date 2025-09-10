@@ -60,6 +60,18 @@
         </field>
     </record>
 
+    <!-- Inherit List View -->
+    <record id="view_task_tree2_inherited" model="ir.ui.view">
+        <field name="name">project.task.list.inherited</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_tree2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="task_code"/>
+            </xpath>
+        </field>
+    </record>
+
         <!-- Inherit Kanban View -->
         <record id="view_task_kanban_inherited" model="ir.ui.view">
             <field name="name">view.task.kanban.inherited</field>
