@@ -17,6 +17,18 @@
                        required="has_bank_account == 'required'" />
             </xpath>
 
+            <div name="button_box" position="inside">
+                <button class="oe_stat_button"
+                        type="object"
+                        icon="fa-pencil-square-o"
+                        name="action_view_vendor_bill"
+                        invisible="request_status != 'approved' and category_id.approval_type != 'create_vendor_bill_adv'">
+                    <div>
+                        <span class="o_stat_text">Vendor Bill</span>
+                    </div>
+                </button>
+            </div>
         </field>
+
     </record>
 </odoo>

@@ -10,6 +10,7 @@
     "depends": ["approvals", "hr_expense_flow"],
     "data": [
         "views/approval_category_views.xml",
-        "views/approval_request_views.xml"
+        "views/approval_request_views.xml",
+        "views/account_move_views.xml",
     ]
 }

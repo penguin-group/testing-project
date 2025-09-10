@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="account_move_view_form_inherit" model="ir.ui.view">
+        <field name="name">account.move.view.form.inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button class="oe_stat_button"
+                        type="object"
+                        icon="fa-pencil-square-o"
+                        name="action_view_approval"
+                        invisible="approval_id == False">
+                    <div>
+                        <span class="o_stat_text">Approval Req.</span>
+                    </div>
+                </button>
+            </div>
+        </field>
+
+    </record>
+</odoo>
