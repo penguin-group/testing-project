@@ -18,6 +18,6 @@ class ApprovalCategory(models.Model):
         super(ApprovalCategory, self)._onchange_approval_type()
 
         if self.approval_type == 'create_vendor_bill_adv':
-            self.has_currency = 'required'
-            self.has_amount = 'required'
-            self.has_bank_account = 'required'
+            self.has_currency = self.has_amount = self.has_bank_account = 'required'
+        else:
+            self.has_currency = self.has_bank_account = 'no'
