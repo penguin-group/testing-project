@@ -1,4 +1,5 @@
-from odoo import models, api, fields
+from odoo import models, _, fields
+from odoo.exceptions import UserError
 
 
 class ApprovalRequest(models.Model):
@@ -17,3 +18,10 @@ class ApprovalRequest(models.Model):
         domain="[('partner_id', '=', req_owner_related_partner_id)]",
         string="Bank Account"
     )
+
+    def action_confirm(self):
+        super(ApprovalRequest, self).action_confirm()
+
+        if self.currency_id.name != self.bank_account_id.currency_id.name:
+            raise UserError(_("The approval request's currency (%s) doesn't match the bank account's currency (%s).",
+                              self.currency_id.name, self.bank_account_id.currency_id.name))
