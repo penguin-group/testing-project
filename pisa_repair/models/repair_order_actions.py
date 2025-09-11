@@ -29,6 +29,15 @@ class RepairOrderActions(models.Model):
             raise UserError(_("The repair order is already in the final state."))
         if self.state not in next_states:
             raise UserError(_("The transition to the next state is invalid."))
+        
+        if self.scrapped:
+            return {
+                "type": "ir.actions.act_window",
+                "res_model": "repair.donate.component.wizard",
+                "view_mode": "form",
+                "target": "new",
+                "context": {"active_id": self.id},
+        }
 
         previous_state = self.state  
         required_fields_valid = self._validate_required_fields()

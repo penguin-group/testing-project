@@ -44,6 +44,7 @@
         'views/repair_steps_views.xml',
         'views/repair_order_form_tab_noc_view.xml',
         'views/repair_order_form_tab_mining_view.xml',
+        'views/repair_order_form_tab_donated.xml',
         'views/repair_order_customizations.xml',
         'views/repair_order_kanban_view.xml',
         'views/repair_order_list_view_custom.xml',
@@ -62,6 +63,7 @@
         'reports/saleorder_report.xml', 
         'wizards/consolidate_quotations_view.xml',
         'wizards/ticket_validation_views.xml',
+        'wizards/repair_donate_component_wizard.xml',
     ],
 
     'assets': {

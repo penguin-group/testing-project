@@ -1,5 +1,5 @@
 <odoo>
-  <data noupdate="0">
+  <data noupdate="1">
 
     <record id="crm_tag_not_consolidated" model="crm.tag">
       <field name="name">Not consolidated</field>

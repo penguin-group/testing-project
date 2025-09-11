@@ -1,5 +1,5 @@
 <odoo>
-    <data>
+    <data noupdate="1">
         <record id="group_noc" model="res.groups">
             <field name="name">Noc</field>
             <field name="category_id" ref="base.module_category_inventory_inventory" />

@@ -1498,9 +1498,44 @@ msgid "Diagnosis &amp; Repair"
 msgstr "Diagnóstico y Reparación"
 
 #. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.repair_order__consumed_component_ids
+msgid "Consumed Components"
+msgstr "Componentes consumidos"
+
+#. module: pisa_repair
 #: model_terms:ir.ui.view,arch_db:pisa_repair.repair_order_form_tab_customizations
 msgid "Operations (Materials)"
 msgstr "Operaciones (Insumos)"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.repair_order_form_tab_customizations
+msgid "Consumed Donated Components"
+msgstr "Componentes donados consumidos"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_order__consumed_component_ids
+msgid "Consumed Components"
+msgstr "Componentes Consumidos"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_consumed_component__donated_component_id
+msgid "Component"
+msgstr "Componente"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_consumed_component__serial_number
+msgid "Serial Number"
+msgstr "Número de Serie"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_consumed_component__description
+msgid "Description"
+msgstr "Descripción"
+
+#. module: pisa_repair
+#: model:ir.model.fields,field_description:pisa_repair.field_repair_consumed_component__ticket_origin_id
+msgid "Origin Ticket"
+msgstr "Ticket de Origen"
 
 #. module: pisa_repair
 #: model:ir.model.fields,field_description:pisa_repair.field_pisa_repair_diagnosis_line__sn
