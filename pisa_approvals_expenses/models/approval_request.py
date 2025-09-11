@@ -19,6 +19,7 @@ class ApprovalRequest(models.Model):
         string="Bank Account"
     )
     related_vendor_bill = fields.Many2one("account.move", string="Vendor Bills")
+    request_status = fields.Selection(selection_add=[('paid', 'Paid')])
 
     def action_confirm(self):
         super(ApprovalRequest, self).action_confirm()
@@ -72,7 +73,7 @@ class ApprovalRequest(models.Model):
         super(ApprovalRequest, self).action_approve()
 
         if self.category_id.approval_type == 'create_vendor_bill_adv':
-            move = self._create_employee_reimbursement_invoice(self.amount)
+            move = self._create_employee_advancement_invoice(self.amount)
             move.approval_id = self.id
             self.related_vendor_bill = move.id
 

@@ -1,4 +1,4 @@
-from odoo import fields, models, _
+from odoo import fields, models, _, api
 
 
 class AccountMove(models.Model):
@@ -16,3 +16,11 @@ class AccountMove(models.Model):
             "name": _("Approval Request"),
             'view_mode': 'list,form',
         }
+
+    @api.depends('amount_residual', 'move_type', 'state', 'company_id', 'matched_payment_ids.state')
+    def _compute_payment_state(self):
+        super(AccountMove, self)._compute_payment_state()
+
+        for move in self:
+            if move.move_type == 'in_invoice' and 'approval_id' in move:
+                move.approval_id.request_status = 'paid'
