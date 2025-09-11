@@ -289,6 +289,27 @@ msgstr "Verificación del enlace de red con probador"
 msgid "Machine restart"
 msgstr "Reinicio de la máquina"
 
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_order_form_custom_buttons
+msgid "Send to Micro"
+msgstr "Enviar a Micro"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_order_form_custom_buttons
+msgid "Not Received"
+msgstr "No Recibido"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_order_form_custom_buttons
+msgid "This will mark the unit as 'Received' and move to the next stage. Continue?"
+msgstr "Esto marcará la unidad como 'Recibida' y pasará a la siguiente etapa. ¿Continuar?"
+
+#. module: pisa_repair
+#: model_terms:ir.ui.view,arch_db:pisa_repair.view_repair_order_form_custom_buttons
+msgid "This will remove 'Pending to Receive' and set 'Not Received'. Responsibility returns to Mining. Continue?"
+msgstr "Se quitará 'Pending to Receive' y se establecerá 'Not Received'. La responsabilidad vuelve a Mining. ¿Continuar?"
+
+
 
 
 #. module: pisa_repair
