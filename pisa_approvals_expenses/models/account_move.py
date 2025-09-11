@@ -22,5 +22,5 @@ class AccountMove(models.Model):
         super(AccountMove, self)._compute_payment_state()
 
         for move in self:
-            if move.move_type == 'in_invoice' and 'approval_id' in move:
+            if move.move_type == 'in_invoice' and move.payment_state == 'paid' and move.approval_id:
                 move.approval_id.request_status = 'paid'
