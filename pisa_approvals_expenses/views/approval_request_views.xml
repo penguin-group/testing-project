@@ -22,7 +22,7 @@
                         type="object"
                         icon="fa-pencil-square-o"
                         name="action_view_vendor_bill"
-                        invisible="request_status != 'approved' and category_id.approval_type != 'create_vendor_bill_adv'">
+                        invisible="request_status not in ['approved', 'paid'] and category_id.approval_type != 'create_vendor_bill_adv'">
                     <div>
                         <span class="o_stat_text">Vendor Bill</span>
                     </div>
