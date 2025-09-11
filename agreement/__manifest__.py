@@ -1,0 +1,27 @@
+{
+    "name": "Agreement",
+    "summary": "Legal agreements management for Odoo.",
+    "version": "18.0.1.0.0",
+    "license": "OPL-1",
+    "category": "Agreement",
+    "website": "https://penguin.digital",
+    'author': "Penguin Infrastructure",
+    'maintainers': ['David Páez'],
+    "application": True,
+    "installable": True,
+    "depends": ["base", "web", "mail"],
+    "data": [
+        "security/access_groups.xml",
+        "security/ir.model.access.csv",
+        "data/agreement_stages.xml",
+        "views/agreement_views.xml",
+        "views/agreement_type_views.xml",
+        "views/agreement_stage_views.xml",
+        "views/agreement_legal_process_views.xml",
+        "views/agreement_jurisdiction_views.xml",
+        "views/agreement_renewal_term_views.xml",
+        "views/agreement_tag_views.xml",
+        "views/agreement_milestone_views.xml",
+        "views/agreement_menu_views.xml",
+    ]
+}

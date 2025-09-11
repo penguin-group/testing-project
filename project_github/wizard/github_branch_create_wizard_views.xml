@@ -1,0 +1,22 @@
+<odoo>
+    <record id="github_branch_create_wizard_form" model="ir.ui.view">
+        <field name="name">github.branch.create.wizard.form</field>
+        <field name="model">github.branch.create.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create a new branch">
+                <sheet>
+                    <group>
+                        <field name="task_id" invisible="1"/>
+                        <field name="source_branch_id"
+                            options="{'no_create': True, 'no_open': True}"/>
+                        <field name="new_branch_name"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_create_branch" string="Create Branch" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

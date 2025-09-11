@@ -25,7 +25,6 @@ Project managers can only view and manage the projects they have created, ensuri
         'security/project_security.xml',
         'security/ir.model.access.csv',
         'views/project_menus.xml',
-        'views/project_task_views.xml',
     ],
     'assets': {
         'web.assets_backend': [
