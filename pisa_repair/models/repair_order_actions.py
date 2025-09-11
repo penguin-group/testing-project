@@ -29,6 +29,15 @@ class RepairOrderActions(models.Model):
             raise UserError(_("The repair order is already in the final state."))
         if self.state not in next_states:
             raise UserError(_("The transition to the next state is invalid."))
+        
+        if self.scrapped:
+            return {
+                "type": "ir.actions.act_window",
+                "res_model": "repair.donate.component.wizard",
+                "view_mode": "form",
+                "target": "new",
+                "context": {"active_id": self.id},
+        }
 
         previous_state = self.state  
         required_fields_valid = self._validate_required_fields()
@@ -37,6 +46,28 @@ class RepairOrderActions(models.Model):
             next_state = next_states[self.state]
         else:
             next_state = 'done'
+
+
+        # Pending to receive to Received
+        try:
+            tag_pending = self.env.ref('pisa_repair.pending_to_receive', raise_if_not_found=False)
+        except Exception:
+            tag_pending = None
+
+        if (
+            self.state == 'confirmed'
+            and self.env.user.has_group('pisa_repair.group_micro')
+            and tag_pending
+            and tag_pending.id in self.tag_ids.ids
+        ):
+            self._manage_tags(
+                tag_to_add_xmlid='pisa_repair.received',
+                tag_to_remove_xmlid='pisa_repair.pending_to_receive,pisa_repair.not_received'
+            )
+            self.message_post(
+                body=_("Unit received in micro stock."),
+                subtype_xmlid="mail.mt_note",
+            )
 
         # Assign tags based on the state
         tag_transitions = {
@@ -79,6 +110,43 @@ class RepairOrderActions(models.Model):
 
         self.state = next_state if not required_fields_valid else self.state
 
+    
+    def action_mark_pending_to_receive(self):
+        self.ensure_one()
+        if self.state != 'confirmed':
+            raise UserError(_("This action is only available when the order is In Progress (confirmed)."))
+        if not self.extraction:
+            raise UserError(_("Mark 'Will Extraction Be Necessary' first."))
+
+        self._manage_tags(
+            tag_to_add_xmlid='pisa_repair.pending_to_receive',
+            tag_to_remove_xmlid='pisa_repair.not_received'
+        )
+
+        self.message_post(
+            body=_("The unit is pending to be received."),
+            subtype_xmlid="mail.mt_note",
+        )
+        return True
+    
+    def action_mark_not_received(self):
+        self.ensure_one()
+
+        if self.state != 'confirmed':
+            raise UserError(_("This action is only available when the order is In Progress (confirmed)."))
+
+        if not self.env.user.has_group('pisa_repair.group_micro'):
+            raise UserError(_("Only Micro can mark this as not received."))
+
+        self._manage_tags(
+            tag_to_add_xmlid='pisa_repair.not_received',
+            tag_to_remove_xmlid='pisa_repair.pending_to_receive'
+        )
+        self.message_post(
+            body=_("Unit was not received by Micro."),
+            subtype_xmlid="mail.mt_note",
+        )
+        return True
 
     def action_start_diagnosis(self):
         tag_to_add_xmlid = 'pisa_repair.under_diagnosis'

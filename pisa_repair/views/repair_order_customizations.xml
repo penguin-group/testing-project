@@ -138,9 +138,17 @@
                     type="object"
                     string="Cancel Repair"
                     class="btn-secondary"
-                    invisible="state in ['done', 'draft', 'cancel', 'ready_for_deployment'] or scrapped"
+                    invisible="state in ['done', 'draft', 'cancel', 'ready_for_deployment'] or scrapped or 'pending to receive' in tag_names"
                     groups="pisa_repair.group_noc,pisa_repair.group_micro"
                     confirm="Are you sure you want to cancel this repair?" />
+
+                <button name="action_mark_not_received"
+                    type="object"
+                    string="Not Received"
+                    class="btn-secondary"
+                    confirm="This will remove 'Pending to Receive' and set 'Not Received'. Responsibility returns to Mining. Continue?"
+                    invisible="state != 'confirmed' or not is_micro or 'pending to receive' not in tag_names"/>
+
                 <button name="action_create_sale_order"
                     type="object"
                     string="Create Quotation"
@@ -153,10 +161,10 @@
                     class="btn-primary"
                     invisible="is_validated or 
                         (is_noc) or
-                        (under_warranty and (is_noc or is_micro)) or
+                        (under_warranty and (is_noc)) or
                         (is_mining and state == 'under_repair' and not (state == 'under_repair' and under_warranty)) or
                         (not is_mining and state == 'draft') or
-                        (is_micro and state != 'under_repair')" />
+                        (is_micro and state != 'under_repair' and 'pending to receive' not in tag_names)" />
                 <button name="action_next_state"
                     type="object"
                     string="Next Stage"
@@ -172,7 +180,9 @@
                         'under diagnosis' in tag_names or
                         ('under repair' not in tag_names and not under_warranty)) and state == 'under_repair'))
                         or (scrapped and state == 'under_repair') or (not extraction and state == 'confirmed')
-                        or (is_micro and state == 'under_repair' and not is_testing_passed)"/>
+                        or (is_micro and state == 'under_repair' and not is_testing_passed)
+                        or (extraction and state == 'confirmed' and 'pending to receive' not in tag_names)
+                        or (state == 'confirmed' and 'pending to receive' in tag_names and not is_micro)"/>
 
                     <button name="action_next_state"
                     type="object"
@@ -188,6 +198,19 @@
                     class="btn-primary"
                     invisible="state != 'under_repair' or not is_validated or not scrapped or 'under_diagnosis' in tag_names or (is_micro and state == 'under_repair' and not is_testing_passed)"
                     confirm="If the product is marked as scrapped, the order will be directly set to 'Done'. Do you want to proceed?"/>
+
+                    <button name="action_mark_pending_to_receive"
+                        type="object"
+                        string="Send to Micro"
+                        class="btn-primary"
+                        invisible="not is_validated or state != 'confirmed' or not extraction or 'pending to receive' in tag_names"/>
+
+                    <button name="action_next_state"
+                        type="object"
+                        string="Next Stage"
+                        class="btn-primary"
+                        confirm="This will mark the unit as 'Received' and move to the next stage. Continue?"
+                        invisible="not is_validated or state != 'confirmed' or not is_micro or 'pending to receive' not in tag_names"/>
             </xpath>
 
 

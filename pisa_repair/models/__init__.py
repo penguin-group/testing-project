@@ -20,3 +20,5 @@ from . import repair_external_service
 from . import stock_move_patch
 from . import product_template
 from . import sale_advance_payment_inv
+from . import repair_donated_component
+from . import repair_consumed_component
