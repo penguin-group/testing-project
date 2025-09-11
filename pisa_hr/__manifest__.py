@@ -21,6 +21,7 @@
     'depends': ['base', 'account', 'web', 'hr', 'hr_payroll_account'],
 
     "data": [
+        "security/hr_security.xml",
         "views/hr_views.xml",
         "views/hr_department_views.xml",
         "views/hr_contract.xml"
