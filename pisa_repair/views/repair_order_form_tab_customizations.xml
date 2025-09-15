@@ -101,7 +101,7 @@
                     </group>
 
                     <group>
-                        <field name="scrapped" string="Is the product scrapped?"
+                        <field name="scrapped"
                             invisible="'under diagnosis' not in tag_names and 'not approved' not in tag_names"
                             readonly="under_warranty or not is_validated or state != 'under_repair' or not is_micro"/>
                     </group>
