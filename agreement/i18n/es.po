@@ -418,7 +418,7 @@ msgstr "Tipos de proceso legal"
 #. module: agreement
 #: model:ir.model.fields,field_description:agreement.field_agreement__message_has_error
 msgid "Message Delivery error"
-msgstr "Error de envío de mensaje"
+msgstr ""
 
 #. module: agreement
 #: model:ir.model.fields,field_description:agreement.field_agreement__message_ids

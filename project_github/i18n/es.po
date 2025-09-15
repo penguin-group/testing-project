@@ -1,0 +1,474 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* project_github
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-28 01:02+0000\n"
+"PO-Revision-Date: 2025-08-28 01:02+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: project_github
+#: model_terms:ir.ui.view,arch_db:project_github.view_task_form2_inherit
+msgid ""
+"<span class=\"o_stat_text\">\n"
+"                            Branches\n"
+"                        </span>"
+msgstr "<span class=\"o_stat_text\">\n                            Ramas\n                        </span>"
+
+#. module: project_github
+#: model_terms:ir.ui.view,arch_db:project_github.view_task_form2_inherit
+msgid ""
+"<span class=\"o_stat_text\">\n"
+"                            Commits\n"
+"                        </span>"
+msgstr "<span class=\"o_stat_text\">\n                            Commits\n                        </span>"
+
+#. module: project_github
+#: model_terms:ir.ui.view,arch_db:project_github.view_task_form2_inherit
+msgid ""
+"<span class=\"o_stat_text\">\n"
+"                            Pull Requests\n"
+"                        </span>"
+msgstr "<span class=\"o_stat_text\">\n                            Solicitudes de Extracción\n                        </span>"
+
+#. module: project_github
+#. odoo-python
+#: code:addons/project_github/wizard/github_branch_create_wizard.py:0
+msgid "An error occurred: %s"
+msgstr "Ocurrió un error: %s"
+
+#. module: project_github
+#. odoo-python
+#: code:addons/project_github/wizard/github_branch_create_wizard.py:0
+msgid "An unexpected GitHub error occurred: %s"
+msgstr "Ocurrió un error inesperado de GitHub: %s"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_github_commit__author_name
+msgid "Author"
+msgstr "Autor"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_github_commit__author_email
+msgid "Author Email"
+msgstr "Correo electrónico del autor"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_github_branch__name
+msgid "Branch Name"
+msgstr "Nombre de la rama"
+
+#. module: project_github
+#: model:ir.model.fields,help:project_github.field_project_task__branch_ids
+msgid "Branches associated with this task in GitHub."
+msgstr "Ramas asociadas a esta tarea en GitHub."
+
+#. module: project_github
+#: model_terms:ir.ui.view,arch_db:project_github.github_branch_create_wizard_form
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: project_github
+#: model:ir.model.fields,help:project_github.field_project_project__is_development_project
+msgid "Check this box if the project is a development project."
+msgstr "Marque esta casilla si el proyecto es un proyecto de desarrollo."
+
+#. module: project_github
+#: model:ir.model.fields.selection,name:project_github.selection__github_pull_request__state__closed
+msgid "Closed"
+msgstr "Cerrado"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_project_task__task_code
+msgid "Code"
+msgstr "Código"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_project_task__commit_count
+msgid "Commit Count"
+msgstr "Cantidad de confirmaciones"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_github_commit__commit_date
+msgid "Commit Date"
+msgstr "Fecha de confirmación"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_github_commit__name
+msgid "Commit Message"
+msgstr "Mensaje de confirmación"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_github_branch__commit_sha
+msgid "Commit SHA"
+msgstr "SHA de confirmación"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_github_commit__url
+#: model:ir.model.fields,field_description:project_github.field_github_pull_request__url
+msgid "Commit URL"
+msgstr "URL de confirmación"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_project_task__commit_ids
+msgid "Commits"
+msgstr "Confirmaciones"
+
+#. module: project_github
+#: model:ir.model.fields,help:project_github.field_project_task__commit_ids
+msgid "Commits associated with this task in GitHub."
+msgstr "Confirmaciones asociadas a esta tarea en GitHub."
+
+#. module: project_github
+#: model:ir.model,name:project_github.model_res_company
+msgid "Companies"
+msgstr "Compañías"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_github_repository__company_id
+msgid "Company"
+msgstr "Compañía"
+
+#. module: project_github
+#: model:ir.model,name:project_github.model_res_config_settings
+msgid "Config Settings"
+msgstr "Ajustes de configuración"
+
+#. module: project_github
+#: model_terms:ir.ui.view,arch_db:project_github.github_branch_create_wizard_form
+msgid "Create Branch"
+msgstr "Crear rama"
+
+#. module: project_github
+#: model_terms:ir.ui.view,arch_db:project_github.view_task_form2_inherit
+msgid "Create GitHub Branch"
+msgstr "Crear rama de GitHub"
+
+#. module: project_github
+#: model_terms:ir.ui.view,arch_db:project_github.github_branch_create_wizard_form
+msgid "Create a new branch"
+msgstr "Crear una nueva rama"
+
+#. module: project_github
+#: model:ir.model,name:project_github.model_github_branch_create_wizard
+msgid "Create a new branch from a task"
+msgstr "Crear una nueva rama desde una tarea"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_github_branch_create_wizard__source_branch_id
+msgid "Create from branch"
+msgstr "Crear desde la rama"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_github_branch__create_uid
+#: model:ir.model.fields,field_description:project_github.field_github_branch_create_wizard__create_uid
+#: model:ir.model.fields,field_description:project_github.field_github_commit__create_uid
+#: model:ir.model.fields,field_description:project_github.field_github_pull_request__create_uid
+#: model:ir.model.fields,field_description:project_github.field_github_repository__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_github_branch__create_date
+#: model:ir.model.fields,field_description:project_github.field_github_branch_create_wizard__create_date
+#: model:ir.model.fields,field_description:project_github.field_github_commit__create_date
+#: model:ir.model.fields,field_description:project_github.field_github_pull_request__create_date
+#: model:ir.model.fields,field_description:project_github.field_github_repository__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_github_branch__display_name
+#: model:ir.model.fields,field_description:project_github.field_github_branch_create_wizard__display_name
+#: model:ir.model.fields,field_description:project_github.field_github_commit__display_name
+#: model:ir.model.fields,field_description:project_github.field_github_pull_request__display_name
+#: model:ir.model.fields,field_description:project_github.field_github_repository__display_name
+msgid "Display Name"
+msgstr "Nombre para mostrar"
+
+#. module: project_github
+#: model_terms:ir.ui.view,arch_db:project_github.edit_project_inherit
+msgid "Enable development project features."
+msgstr "Habilitar funciones de proyecto de desarrollo."
+
+#. module: project_github
+#. odoo-python
+#: code:addons/project_github/wizard/github_branch_create_wizard.py:0
+msgid "Failed to create branch: %s"
+msgstr "No se pudo crear la rama: %s"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_github_repository__full_name
+msgid "Full Name"
+msgstr "Nombre completo"
+
+#. module: project_github
+#: model:ir.model,name:project_github.model_github_branch
+msgid "GitHub Branch"
+msgstr "Rama de GitHub"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_project_task__branch_count
+msgid "GitHub Branch Count"
+msgstr "Cantidad de ramas de GitHub"
+
+#. module: project_github
+#: model:ir.actions.act_window,name:project_github.github_branch_action
+#: model:ir.model.fields,field_description:project_github.field_project_task__branch_ids
+#: model_terms:ir.ui.view,arch_db:project_github.github_branch_list_view
+msgid "GitHub Branches"
+msgstr "Ramas de GitHub"
+
+#. module: project_github
+#: model:ir.model,name:project_github.model_github_commit
+msgid "GitHub Commit"
+msgstr "Confirmación de GitHub"
+
+#. module: project_github
+#: model:ir.actions.act_window,name:project_github.github_commit_action
+#: model_terms:ir.ui.view,arch_db:project_github.github_commit_list_view
+msgid "GitHub Commits"
+msgstr "Confirmaciones de GitHub"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_res_company__github_organization
+#: model:ir.model.fields,field_description:project_github.field_res_config_settings__github_organization
+msgid "GitHub Organization"
+msgstr "Organización de GitHub"
+
+#. module: project_github
+#: model:ir.model,name:project_github.model_github_pull_request
+#: model_terms:ir.ui.view,arch_db:project_github.github_pull_request_list_view
+msgid "GitHub Pull Request"
+msgstr "Solicitud de extracción de GitHub"
+
+#. module: project_github
+#: model:ir.actions.act_window,name:project_github.github_pull_request_action
+msgid "GitHub Pull Requests"
+msgstr "Solicitudes de extracción de GitHub"
+
+#. module: project_github
+#: model:ir.model,name:project_github.model_github_repository
+msgid "GitHub Repository"
+msgstr "Repositorio de GitHub"
+
+#. module: project_github
+#: model_terms:ir.ui.view,arch_db:project_github.res_config_settings_view_form_github
+msgid "Github"
+msgstr "Github"
+
+#. module: project_github
+#: model_terms:ir.ui.view,arch_db:project_github.res_config_settings_view_form_github
+msgid "Github Organization for API access"
+msgstr "Organización de Github para acceso API"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_res_company__github_token
+#: model:ir.model.fields,field_description:project_github.field_res_config_settings__github_token
+msgid "Github Token"
+msgstr "Token de Github"
+
+#. module: project_github
+#: model_terms:ir.ui.view,arch_db:project_github.res_config_settings_view_form_github
+msgid "Github Token for API access"
+msgstr "Token de Github para acceso API"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_github_branch__id
+#: model:ir.model.fields,field_description:project_github.field_github_branch_create_wizard__id
+#: model:ir.model.fields,field_description:project_github.field_github_commit__id
+#: model:ir.model.fields,field_description:project_github.field_github_pull_request__id
+#: model:ir.model.fields,field_description:project_github.field_github_repository__id
+msgid "ID"
+msgstr "ID"
+
+#. module: project_github
+#: model:ir.model.fields,help:project_github.field_project_task__is_development_task
+msgid "Indicates if this task is part of a development project."
+msgstr "Indica si esta tarea es parte de un proyecto de desarrollo."
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_project_project__is_development_project
+msgid "Is Development Project"
+msgstr "Es proyecto de desarrollo"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_project_task__is_development_task
+msgid "Is Development Task"
+msgstr "Es tarea de desarrollo"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_github_branch__last_updated
+msgid "Last Updated"
+msgstr "Última actualización"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_github_branch__write_uid
+#: model:ir.model.fields,field_description:project_github.field_github_branch_create_wizard__write_uid
+#: model:ir.model.fields,field_description:project_github.field_github_commit__write_uid
+#: model:ir.model.fields,field_description:project_github.field_github_pull_request__write_uid
+#: model:ir.model.fields,field_description:project_github.field_github_repository__write_uid
+msgid "Last Updated by"
+msgstr "Actualizado por"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_github_branch__write_date
+#: model:ir.model.fields,field_description:project_github.field_github_branch_create_wizard__write_date
+#: model:ir.model.fields,field_description:project_github.field_github_commit__write_date
+#: model:ir.model.fields,field_description:project_github.field_github_pull_request__write_date
+#: model:ir.model.fields,field_description:project_github.field_github_repository__write_date
+msgid "Last Updated on"
+msgstr "Actualizado el"
+
+#. module: project_github
+#: model:ir.model.fields.selection,name:project_github.selection__github_pull_request__state__merged
+msgid "Merged"
+msgstr "Fusionado"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_github_branch_create_wizard__new_branch_name
+msgid "New branch name"
+msgstr "Nombre de la nueva rama"
+
+#. module: project_github
+#: model:ir.model.fields,help:project_github.field_project_task__branch_count
+msgid "Number of GitHub branches associated with this task."
+msgstr "Número de ramas de GitHub asociadas a esta tarea."
+
+#. module: project_github
+#: model:ir.model.fields,help:project_github.field_project_task__commit_count
+msgid "Number of commits associated with this task."
+msgstr "Número de confirmaciones asociadas a esta tarea."
+
+#. module: project_github
+#: model:ir.model.fields,help:project_github.field_project_task__pull_request_count
+msgid "Number of pull requests associated with this task."
+msgstr "Número de solicitudes de extracción asociadas a esta tarea."
+
+#. module: project_github
+#: model:ir.model.fields.selection,name:project_github.selection__github_pull_request__state__open
+#: model_terms:ir.ui.view,arch_db:project_github.github_branch_list_view
+#: model_terms:ir.ui.view,arch_db:project_github.github_commit_list_view
+#: model_terms:ir.ui.view,arch_db:project_github.github_pull_request_list_view
+msgid "Open"
+msgstr "Abierto"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_github_repository__organization
+msgid "Organization"
+msgstr "Organización"
+
+#. module: project_github
+#: model:ir.model,name:project_github.model_project_project
+#: model:ir.model.fields,field_description:project_github.field_github_branch__project_id
+#: model:ir.model.fields,field_description:project_github.field_github_repository__project_id
+msgid "Project"
+msgstr "Proyecto"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_project_task__pull_request_count
+msgid "Pull Request Count"
+msgstr "Cantidad de solicitudes de extracción"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_github_pull_request__number
+msgid "Pull Request Number"
+msgstr "Número de solicitud de extracción"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_project_task__pull_request_ids
+msgid "Pull Requests"
+msgstr "Solicitudes de extracción"
+
+#. module: project_github
+#: model:ir.model.fields,help:project_github.field_project_task__pull_request_ids
+msgid "Pull requests associated with this task in GitHub."
+msgstr "Solicitudes de extracción asociadas a esta tarea en GitHub."
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_project_project__repo
+msgid "Repository"
+msgstr "Repositorio"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_github_repository__name
+msgid "Repository Name"
+msgstr "Nombre del repositorio"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_github_commit__sha
+msgid "SHA"
+msgstr "SHA"
+
+#. module: project_github
+#: model_terms:ir.ui.view,arch_db:project_github.edit_project_inherit
+msgid "Software Development"
+msgstr "Desarrollo de software"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_github_pull_request__state
+msgid "State"
+msgstr "Estado"
+
+#. module: project_github
+#: model:ir.actions.server,name:project_github.ir_cron_sync_github_data_ir_actions_server
+msgid "Sync GitHub Data"
+msgstr "Sincronizar datos de GitHub"
+
+#. module: project_github
+#: model:ir.model,name:project_github.model_project_task
+#: model:ir.model.fields,field_description:project_github.field_github_branch_create_wizard__task_id
+#: model:ir.model.fields,field_description:project_github.field_github_commit__task_id
+#: model:ir.model.fields,field_description:project_github.field_github_pull_request__task_id
+msgid "Task"
+msgstr "Tarea"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_github_branch__task_id
+msgid "Task associated with this branch"
+msgstr "Tarea asociada a esta rama"
+
+#. module: project_github
+#: model:ir.model.fields,help:project_github.field_res_company__github_organization
+#: model:ir.model.fields,help:project_github.field_res_config_settings__github_organization
+msgid "The GitHub organization associated with this company."
+msgstr "La organización de GitHub asociada a esta compañía."
+
+#. module: project_github
+#: model:ir.model.fields,help:project_github.field_github_branch__commit_sha
+msgid "The SHA of the latest commit on this branch."
+msgstr "El SHA de la última confirmación en esta rama."
+
+#. module: project_github
+#. odoo-python
+#: code:addons/project_github/wizard/github_branch_create_wizard.py:0
+msgid "The branch contains an invalid character."
+msgstr "La rama contiene un carácter no válido."
+
+#. module: project_github
+#: model:ir.model.fields,help:project_github.field_github_branch__last_updated
+msgid "The last time this branch was updated."
+msgstr "La última vez que se actualizó esta rama."
+
+#. module: project_github
+#: model:ir.model.fields,help:project_github.field_github_branch__project_id
+msgid "The project this branch belongs to."
+msgstr "El proyecto al que pertenece esta rama."
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_github_pull_request__name
+msgid "Title"
+msgstr "Título"
+
+#. module: project_github
+#: model:ir.model.fields,field_description:project_github.field_github_branch__url
+msgid "URL"
+msgstr "URL"
