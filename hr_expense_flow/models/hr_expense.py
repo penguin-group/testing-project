@@ -244,7 +244,8 @@ class HrExpense(models.Model):
         }
         clearing_entry = self.env['account.move'].sudo().create(move_vals)
         clearing_entry.line_ids._inverse_amount_currency()
-        clearing_entry.action_post()
+        if self.payment_mode != 'credit_card':  # entry should not be posted if payment was made with credit card
+            clearing_entry.action_post()
         return clearing_entry
 
     def _create_employee_reimbursement_invoice(self, amount, date=None):
