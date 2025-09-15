@@ -196,7 +196,7 @@
                     type="object"
                     string="Next Stage"
                     class="btn-primary"
-                    invisible="state != 'under_repair' or not is_validated or not scrapped or 'under_diagnosis' in tag_names or (is_micro and state == 'under_repair' and not is_testing_passed)"
+                    invisible="state != 'under_repair' or not is_validated or not scrapped or 'under_diagnosis' in tag_names or (not is_micro and state == 'under_repair')"
                     confirm="If the product is marked as scrapped, the order will be directly set to 'Done'. Do you want to proceed?"/>
 
                     <button name="action_mark_pending_to_receive"

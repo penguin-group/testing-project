@@ -282,9 +282,9 @@ class RepairOrderActions(models.Model):
     
     def get_miner_counts_by_container(self, container_name):
         """
-        Obtiene el total de mineros en el contenedor, la cantidad de mineros válidos
-        (sin órdenes en estados inválidos y sin estar marcados como 'scrapped'),
-        así como el hashrate nominal y el consumo teórico.
+        Gets the total number of miners in the container, the number of valid miners
+        (without orders in invalid states and not marked as 'scrapped'),
+        as well as the nominal hashrate and the theoretical power consumption.
         """
 
         allowed_states = ('draft', 'confirmed', 'ready_for_deployment', 'done')
@@ -347,8 +347,13 @@ class RepairOrderActions(models.Model):
         token = param.get_param('ICS_Token')
 
         if not url or not token:
-            ics_logger.warning("URL or TOKEN not found")
+            ics_logger.warning("[ICS] URL or TOKEN not found")
             return
+        else:
+            safe_token = token[-5:] if token else "N/A"
+            ics_logger.info(f"""[ICS] URL and TOKEN found
+                URL: {url}
+                TOKEN: ...{safe_token}""")
 
         headers = {
             "Authorization": f"Bearer {token}",
@@ -358,8 +363,10 @@ class RepairOrderActions(models.Model):
         try:
             container = container or self.lot_id.container
             if not container:
-                ics_logger.warning("Container not found")
+                ics_logger.warning("[ICS] Container not found")
                 return
+            else:
+                ics_logger.info(f"[ICS] Container found: {container}")
 
             ALL_STATES = ['draft', 'confirmed', 'under_repair', 'ready_for_deployment', 'done', 'cancel']
             IGNORED_TAGS = ["Open", "In Progress", "Ready for Deployment", "Done", "Cancelled"]
@@ -369,13 +376,16 @@ class RepairOrderActions(models.Model):
                 fields=['state'],
                 groupby=['state']
             )
+            ics_logger.debug("[ICS] Grouped data from read_group: %s", grouped_data)
+
             state_summary = {g['state']: g.get('state_count', 0) for g in grouped_data}
             for state in ALL_STATES:
                 state_summary.setdefault(state, 0)
+            ics_logger.info("[ICS] State summary: %s", state_summary)
 
             counts = self.get_miner_counts_by_container(container)
             ics_logger.info(
-                "Total mineros: %s - Válidos: %s - Hashrate Nominal: %s - Consumo Teórico: %s",
+                "[ICS] Total mineros: %s - Válidos: %s - Hashrate Nominal: %s - Consumo Teórico: %s",
                 counts['total_miners'],
                 counts['valid_miners'],
                 counts['hashrate_nominal'],
@@ -402,6 +412,7 @@ class RepairOrderActions(models.Model):
             ]).mapped('name')
 
             tag_summary = {tag: tag_rows.get(tag, 0) for tag in all_tags}
+            ics_logger.info("[ICS] Tag summary: %s", tag_summary)
 
             data = [{
                 "Container": container,
@@ -412,23 +423,43 @@ class RepairOrderActions(models.Model):
                 "Status": state_summary,
                 "Tags": tag_summary
             }]
+            ics_logger.info("[ICS] Payload to send: %s", json.dumps(data, indent=2))
+
 
             post_response = requests.post(url, headers=headers, json=data, timeout=10, verify=False)
+            ics_logger.info(
+                "[ICS] POST response -> status: %s | body: %s",
+                post_response.status_code,
+                post_response.text
+            )
             post_response.raise_for_status()
 
-        except requests.exceptions.RequestException as e:
-            ics_logger.warning(f"[ICS] Failed to POST to ICS for container {container}: {e}")
-            raise RetryableJobError(f"Temporary ICS POST failure: {e}")
+        except Exception as e:
+            ics_logger.error(
+                "[ICS] Failed to POST to ICS for container %s: %s",
+                container,
+                str(e),
+                exc_info=True
+            )
+            raise RetryableJobError(f"[ICS] Temporary ICS POST failure: {e}")
 
     def _send_state_update_to_ics(self, container=None):
-        ics_logger.info("Enqueuing ICS job for RO %s", self.name)
-        (
-            self.sudo()
-            .with_delay(
-                description=f"ICS sync for {self.lot_id.container}",
-                channel="root.ics",
-                priority=30,
-                max_retries=15
+        ics_logger.info("[ICS] Enqueuing ICS job for RO %s", self.name)
+        try:
+            (
+                self.sudo()
+                .with_delay(
+                    description=f"ICS sync for {self.lot_id.container}",
+                    channel="root.ics",
+                    priority=30,
+                    max_retries=15
+                )
+                ._perform_state_update_to_ics(container)
             )
-            ._perform_state_update_to_ics(container)
-        )
+        except Exception as e:
+            ics_logger.error(
+                "[ICS] Failed to enqueue ICS job for RO %s: %s",
+                self.name,
+                str(e),
+                exc_info=True
+            )
