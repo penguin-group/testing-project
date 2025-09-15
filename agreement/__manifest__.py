@@ -24,7 +24,7 @@
         "views/agreement_renewal_term_views.xml",
         "views/agreement_tag_views.xml",
         "views/agreement_milestone_views.xml",
-        "views/agreement_menu_views.xml",
         "views/res_config_settings_views.xml",
+        "views/agreement_menu_views.xml",
     ]
 }
