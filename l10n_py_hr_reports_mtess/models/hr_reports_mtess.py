@@ -2,9 +2,11 @@ from odoo import models, fields, api, _
 import base64
 import io
 from datetime import date
+from odoo.exceptions import UserError
 import xlsxwriter
 from ..utils.employee_report_data import EmployeeReportData
 from ..utils.salary_report_data import SalaryReportData
+from ..utils.summary_report_data import SummaryReportData
 
 
 class HrReportsMtess(models.Model):
@@ -29,12 +31,34 @@ class HrReportsMtess(models.Model):
         ('salaries', 'Planilla de Sueldos y Jornales'),
         ('summary', 'Resumen General de Personal Ocupado'),
     ], string='Report Type', required=True, default='employees')
+    data = fields.Json("Data")
     xlsx_output = fields.Binary(string='Archivo', )
     xlsx_filename = fields.Char(string='Nombre del Archivo', compute="_compute_filename", store=True)
     company_id = fields.Many2one(
         comodel_name="res.company",
         string="Compañía",
         default=lambda self: self.env.company)
+
+    employees_report_headers = [
+        "Nropatronal", "Documento", "Nombre", "Apellido", "Sexo", "Estadocivil",
+        "Fechanac", "Nacionalidad", "Domicilio", "Fechanacmenor", "hijosmenores",
+        "cargo", "profesion", "fechaentrada", "horariotrabajo", "menorescapa",
+        "menoresescolar", "fechasalida", "motivosalida", "Estado"
+    ]
+
+    salaries_report_headers = [
+        "Nropatronal","documento","formadepago","importeunitario",
+        "h_ene","s_ene","h_feb","s_feb","h_mar","s_mar","h_abr","s_abr",
+        "h_may","s_may","h_jun","s_jun","h_jul","s_jul","h_ago","s_ago",
+        "h_set","s_set","h_oct","s_oct","h_nov","s_nov","h_dic","s_dic",
+        "h_50","s_50","h_100","s_100","Aguinaldo","Beneficios",
+        "Bonificaciones","Vacaciones","total_h","total_s","totalgeneral"
+    ]
+    summary_report_headers = [
+        "Nropatronal", "anho", "supjefesvarones", "supjefesmujeres",
+        "empleadosvarones", "empleadosmujeres", "obrerosvarones", "obrerosmujeres",
+        "menoresvarones", "menoresmujeres", "orden"
+    ]
 
     @api.depends('year', 'report_type')
     def _compute_name(self):
@@ -60,11 +84,10 @@ class HrReportsMtess(models.Model):
         workbook = xlsxwriter.Workbook(output, {'in_memory': True})
         worksheet = workbook.add_worksheet(report_title)
 
-        first_date = date(int(self.year), 1, 1)
-        last_date = date(int(self.year), 12, 31)
+        headers = getattr(self, f"{self.report_type}_report_headers")
 
-        writer = getattr(self, f"_generate_{self.report_type}_data", None)
-        writer and writer(worksheet, first_date, last_date)
+        self._populate_data()
+        self._write_to_worksheet(worksheet, headers, self.data)
 
         workbook.close()
         output.seek(0)
@@ -74,71 +97,30 @@ class HrReportsMtess(models.Model):
             'xlsx_output': base64.b64encode(file_content),
         })
 
-    def _generate_employees_data(self, worksheet, first_date, last_date):
-        headers = [
-            "Nropatronal", "Documento", "Nombre", "Apellido", "Sexo", "Estadocivil",
-            "Fechanac", "Nacionalidad", "Domicilio", "Fechanacmenor", "hijosmenores",
-            "cargo", "profesion", "fechaentrada", "horariotrabajo", "menorescapa",
-            "menoresescolar", "fechasalida", "motivosalida", "Estado"
-        ]
-        data = EmployeeReportData(self.env, first_date, last_date)
+    def _populate_data(self):
+        first_date = date(int(self.year), 1, 1)
+        last_date = date(int(self.year), 12, 31)
 
-        # EmployeeReportEmployee attributes in order
-        fields = [
-            "patronal_number", "identification_number", "first_name", "last_name",
-            "gender", "marital_status", "birth_date", "nationality", "address",
-            "minor_birth_date", "minor_children", "job_title", "profession",
-            "date_start", "work_schedule", "minor_date_start", "minor_school_status",
-            "date_end", "end_reason"
-        ]
+        self.data = [] # default
 
+        report_map = {
+            'employees': (EmployeeReportData, 'employees'),
+            'salaries': (SalaryReportData, 'salaries'),
+            'summary': (SummaryReportData, 'summary')
+        }
+
+        if self.report_type in report_map:
+            cls, attr = report_map[self.report_type]
+            report_data = cls(self.env, first_date, last_date)
+            self.data = getattr(report_data, attr)
+
+
+    def _write_to_worksheet(self, worksheet, headers, data):
         # Write headers
-        for col, h in enumerate(headers):
-            worksheet.write(0, col, h)
+        for col, header in enumerate(headers):
+            worksheet.write(0, col, header)
 
-        # Write data rows
-        for row, emp in enumerate(data.employees, start=1):
-            values = [getattr(emp, f) for f in fields]
-            for col, val in enumerate(values):
-                worksheet.write(row, col, val)
-
-
-    def _generate_salaries_data(self, worksheet, first_date, last_date):
-        headers = [
-            "Nropatronal","documento","formadepago","importeunitario",
-           "h_ene","s_ene","h_feb","s_feb","h_mar","s_mar","h_abr","s_abr",
-           "h_may","s_may","h_jun","s_jun","h_jul","s_jul","h_ago","s_ago",
-           "h_set","s_set","h_oct","s_oct","h_nov","s_nov","h_dic","s_dic",
-           "h_50","s_50","h_100","s_100","Aguinaldo","Beneficios",
-           "Bonificaciones","Vacaciones","total_h","total_s","totalgeneral"
-        ]
-        data = SalaryReportData(self.env, first_date, last_date)
-
-        # SalaryReportData attributes in order
-        fields = [
-            "patronal_number", "identification_number", "wage_type", "wage",
-            "hours_january", "salary_january", "hours_february", "salary_february",
-            "hours_march", "salary_march", "hours_april", "salary_april",
-            "hours_may", "salary_may", "hours_june", "salary_june",
-            "hours_july", "salary_july", "hours_august", "salary_august",
-            "hours_september", "salary_september", "hours_october", "salary_october",
-            "hours_november", "salary_november", "hours_december", "salary_december",
-            "overtime_hours_50", "overtime_total_50", "overtime_hours_100", "overtime_total_100",
-            "year_end_bonus", "benefits", "family_allowance", "vacation_pay",
-            "hours_total", "salaries_total", "total"
-        ]
-
-        # Write headers
-        for col, h in enumerate(headers):
-            worksheet.write(0, col, h)
-
-        # Write data rows
-        for row, sal in enumerate(data.salaries, start=1):
-            values = [getattr(sal, f) for f in fields]
-            for col, val in enumerate(values):
-                worksheet.write(row, col, val)
-
-
-    def _generate_summary_data(self, worksheet, first_date, last_date):
-        worksheet.write('A1', 'Employee Name')
-        worksheet.write('B1', 'Department')
+        # Write rows
+        for row, record in enumerate(data, start=1):
+            for col, header in enumerate(headers):
+                worksheet.write(row, col, record.get(header, ""))

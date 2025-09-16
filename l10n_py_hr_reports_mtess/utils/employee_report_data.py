@@ -9,26 +9,34 @@ class EmployeeReportEmployee:
         age = employee._get_age()
         is_minor = age > 0 and age < 18
         
-        self.patronal_number = contract.branch_id.mtess_patronal_number or ""
-        self.identification_number = employee.identification_id or ""
-        self.first_name = partner.firstname or ""
-        self.last_name = partner.lastname or ""
-        self.gender = 'M' if employee.gender == 'male' else 'F'
-        self.marital_status = self._get_marital_status(employee.marital)
-        self.birth_date = employee.birthday.strftime("%Y-%m-%d") or None
-        self.nationality = employee.country_id.name or ""
-        self.address = self._get_address(employee)
-        self.minor_birth_date = birth_date if is_minor else ""
-        self.minor_children = employee.children or 0
-        self.job_title = employee.job_id.name or ""
-        self.profession = employee.profession or ""
-        self.date_start = contract.date_start.strftime("%Y-%m-%d")
-        self.work_schedule = contract.resource_calendar_id.name if is_minor and contract.resource_calendar_id else ""
-        self.minor_date_start = contract.date_start.strftime("%Y-%m-%d") if is_minor else ""
-        self.minor_school_status = employee.minor_employee_school_status or ""
-        self.date_end = contract.date_end.strftime("%Y-%m-%d") if contract.date_end else ""
-        self.end_reason = contract.end_reason or ""
+        self.data = self.employee_to_json(employee, contract, partner, birth_date, is_minor)
 
+    def employee_to_json(self, employee, contract, partner, birth_date, is_minor):
+        data = {
+            "odoo_id": employee.id,
+            "Nropatronal": contract.branch_id.mtess_patronal_number or "",
+            "Documento": employee.identification_id or "",
+            "Nombre": partner.firstname or "",
+            "Apellido": partner.lastname or "",
+            "Sexo": 'M' if employee.gender == 'male' else 'F',
+            "Estadocivil": self._get_marital_status(employee.marital),
+            "Fechanac": employee.birthday.strftime("%Y-%m-%d") if employee.birthday else "",
+            "Nacionalidad": employee.country_id.name or "",
+            "Domicilio": self._get_address(employee),
+            "Fechanacmenor": birth_date if is_minor else "",
+            "hijosmenores": employee.children or 0,
+            "cargo": employee.job_id.name or "",
+            "profesion": employee.profession or "",
+            "fechaentrada": contract.date_start.strftime("%Y-%m-%d"),
+            "horariotrabajo": contract.resource_calendar_id.name if is_minor and contract.resource_calendar_id else "",
+            "menorescapa": contract.date_start.strftime("%Y-%m-%d") if is_minor else "",
+            "menoresescolar": employee.minor_employee_school_status or "",
+            "fechasalida": contract.date_end.strftime("%Y-%m-%d") if contract.date_end else "",
+            "motivosalida": contract.end_reason or "",
+            "Estado": "Activo" if not contract.date_end else "Inactivo",
+        }
+        return data
+    
     def _get_marital_status(self, odoo_marital):
         """Map Odoo marital status to report values."""
         mapping = {
@@ -49,7 +57,6 @@ class EmployeeReportEmployee:
         return " + ".join(part for part in parts if part).strip()
 
 
-
 class EmployeeReportData:
     """
     Aggregates employees and their contracts for a given period.
@@ -64,7 +71,7 @@ class EmployeeReportData:
     def _load_employees(self):
         Contract = self.env['hr.contract']
 
-        # contracts overlapping the period
+        # contracts in the period
         contracts = Contract.search([
             ('date_start', '<=', self.end_date),
             '|',
@@ -75,5 +82,6 @@ class EmployeeReportData:
         employees = []
         for contract in contracts.filtered(lambda c: c.employee_id):
             emp = contract.employee_id
-            employees.append(EmployeeReportEmployee(emp, contract))
+            employee = EmployeeReportEmployee(emp, contract)
+            employees.append(employee.data)
         return employees

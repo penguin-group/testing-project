@@ -18,49 +18,67 @@ class SalaryReportSalary:
         employee = contract.employee_id
         year_hours = self._get_year_hours(year, employee)
         year_salaries = self._get_year_salaries()
+        
+        self.salaries = self.payroll_to_json(employee, contract, year_hours, year_salaries)
+
+        
+    def payroll_to_json(self, employee, contract, year_hours, year_salaries):
         wage_types = {'monthly': 'M', 'hourly': 'J'}
         wage_days = {'monthly': 30, 'hourly': 26}
-        
-        self.patronal_number = contract.branch_id.mtess_patronal_number or ""
-        self.identification_number = employee.identification_id or ""
-        self.wage_type = wage_types.get(contract.wage_type, 'M')
-        self.wage = contract.wage / wage_days.get(contract.wage_type, 30) if contract.wage else 0
-        self.hours_january = year_hours['january']
-        self.salary_january = year_salaries['january']
-        self.hours_february = year_hours['february']
-        self.salary_february = year_salaries['february']
-        self.hours_march = year_hours['march']
-        self.salary_march = year_salaries['march']
-        self.hours_april = year_hours['april']
-        self.salary_april = year_salaries['april']
-        self.hours_may = year_hours['may']
-        self.salary_may = year_salaries['may']
-        self.hours_june = year_hours['june']
-        self.salary_june = year_salaries['june']
-        self.hours_july = year_hours['july']
-        self.salary_july = year_salaries['july']
-        self.hours_august = year_hours['august']
-        self.salary_august = year_salaries['august']
-        self.hours_september = year_hours['september']
-        self.salary_september = year_salaries['september']
-        self.hours_october = year_hours['october']
-        self.salary_october = year_salaries['october']
-        self.hours_november = year_hours['november']
-        self.salary_november = year_salaries['november']
-        self.hours_december = year_hours['december']
-        self.salary_december = year_salaries['december']
-        self.overtime_hours_50 = self._get_quantity_by_code('OVERTIME_DAY_PY')
-        self.overtime_total_50 = self._get_total_by_code(['OVERTIME_DAY_PY'])
-        self.overtime_hours_100 = self._get_quantity_by_code('OVERTIME_NIGHT_PY')
-        self.overtime_total_100 = self._get_total_by_code(['OVERTIME_NIGHT_PY'])
-        self.year_end_bonus = self._get_total_by_code(['AGUINALDO_PY', 'AGUINALDO_PROP_PY'])
-        self.benefits = self._get_total_by_code(['NOTICE_PAY_PY', 'SEVERANCE_PY'])
-        self.family_allowance = self._get_total_by_code(['FAMILY_ALLOW_PY'])
-        self.vacation_pay = self._get_total_by_code(['VACATION_PROP_PY'])
-        self.hours_total = sum(year_hours.values())
-        self.salaries_total = sum(year_salaries.values())
-        self.total = self.salaries_total + self.year_end_bonus + self.benefits + self.family_allowance + self.vacation_pay
-        
+
+        data = {
+            "odoo_id": employee.id,
+            "Nropatronal": contract.branch_id.mtess_patronal_number or "",
+            "documento": employee.identification_id or "",
+            "formadepago": wage_types.get(contract.wage_type, 'M'),
+            "importeunitario": contract.wage / wage_days.get(contract.wage_type, 30) if contract.wage else 0,
+
+            "h_ene": year_hours['january'],
+            "s_ene": year_salaries['january'],
+            "h_feb": year_hours['february'],
+            "s_feb": year_salaries['february'],
+            "h_mar": year_hours['march'],
+            "s_mar": year_salaries['march'],
+            "h_abr": year_hours['april'],
+            "s_abr": year_salaries['april'],
+            "h_may": year_hours['may'],
+            "s_may": year_salaries['may'],
+            "h_jun": year_hours['june'],
+            "s_jun": year_salaries['june'],
+            "h_jul": year_hours['july'],
+            "s_jul": year_salaries['july'],
+            "h_ago": year_hours['august'],
+            "s_ago": year_salaries['august'],
+            "h_set": year_hours['september'],
+            "s_set": year_salaries['september'],
+            "h_oct": year_hours['october'],
+            "s_oct": year_salaries['october'],
+            "h_nov": year_hours['november'],
+            "s_nov": year_salaries['november'],
+            "h_dic": year_hours['december'],
+            "s_dic": year_salaries['december'],
+
+            "h_50": self._get_quantity_by_code('OVERTIME_DAY_PY'),
+            "s_50": self._get_total_by_code(['OVERTIME_DAY_PY']),
+            "h_100": self._get_quantity_by_code('OVERTIME_NIGHT_PY'),
+            "s_100": self._get_total_by_code(['OVERTIME_NIGHT_PY']),
+
+            "Aguinaldo": self._get_total_by_code(['AGUINALDO_PY', 'AGUINALDO_PROP_PY']),
+            "Beneficios": self._get_total_by_code(['NOTICE_PAY_PY', 'SEVERANCE_PY']),
+            "Bonificaciones": self._get_total_by_code(['FAMILY_ALLOW_PY']),
+            "Vacaciones": self._get_total_by_code(['VACATION_PROP_PY']),
+
+            "total_h": sum(year_hours.values()),
+            "total_s": sum(year_salaries.values()),
+            "totalgeneral": sum(year_salaries.values())
+                            + self._get_total_by_code(['AGUINALDO_PY', 'AGUINALDO_PROP_PY'])
+                            + self._get_total_by_code(['NOTICE_PAY_PY', 'SEVERANCE_PY'])
+                            + self._get_total_by_code(['FAMILY_ALLOW_PY'])
+                            + self._get_total_by_code(['VACATION_PROP_PY']),
+        }
+        return data
+
+    
     def _get_year_hours(self, year, employee):
         hours = {}
         for month in range(1, 13):
@@ -139,6 +157,6 @@ class SalaryReportData:
         contracts = payslips.mapped('contract_id')
         for contract in contracts:
             contract_payslips = payslips.filtered(lambda p: p.contract_id.id == contract.id)
-            salaries.append(SalaryReportSalary(self.env, contract_payslips, year=self.start_date.year))
+            salaries.append(SalaryReportSalary(self.env, contract_payslips, year=self.start_date.year).salaries)
     
         return salaries
