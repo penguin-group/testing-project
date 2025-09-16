@@ -128,13 +128,32 @@ class SalaryReportSalary:
         payslip = self._get_payslip(month)
         if not payslip:
             return 0
-        return sum(line.total for line in payslip.line_ids if line.code == 'BASIC')
+        lines = payslip.line_ids.filtered(lambda l: l.code == 'BASIC')
+        return self._get_total_in_pyg(lines)
 
     def _get_quantity_by_code(self, code):
         return sum(self.payslips.line_ids.filtered(lambda line: line.code == code).mapped('quantity'))
 
     def _get_total_by_code(self, code):
-        return sum(self.payslips.line_ids.filtered(lambda line: line.code in code).mapped('total'))
+        lines = self.payslips.line_ids.filtered(lambda l: l.code in code)
+        return self._get_total_in_pyg(lines)
+
+    def _get_total_in_pyg(self, payslip_lines):
+        totals = []
+        pyg_currency = self.env.ref('base.PYG')
+        for line in payslip_lines:
+            if line.currency_id == pyg_currency:
+                totals.append(line.total)
+            else:
+                total = line.currency_id._convert(
+                    line.total,
+                    pyg_currency,
+                    self.env.company,
+                    line.slip_id.date,
+                )
+                totals.append(total)
+        return sum(totals)
+
 
 
 class SalaryReportData:
