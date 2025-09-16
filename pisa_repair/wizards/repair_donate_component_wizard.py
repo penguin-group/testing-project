@@ -52,7 +52,9 @@ class RepairDonateComponentLine(models.TransientModel):
         ('hash', 'Hash'),
         ('data_cable', 'Data Cable'),
         ('cooling_plate_psu', 'Cooling Plate PSU'),
-        ('cooling_plate_hash', 'Cooling Plate Hash'),
+        ('cooling_plate_hash_1', 'Cooling Plate Hash_1'),
+        ('cooling_plate_hash_2', 'Cooling Plate Hash_2'),
+        ('cooling_plate_hash_3', 'Cooling Plate Hash_3'),
     ], string="Component", required=True)
     serial_number = fields.Char("Serial number")
     description = fields.Text("Description")
