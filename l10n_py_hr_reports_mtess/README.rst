@@ -3,15 +3,37 @@ MTESS Reports
 ====================
 
 Overview
+========
+This module adds the **MTESS reports** functionality to the
+*Payroll > Reports* menu in Odoo.  
+It generates the official spreadsheets required by the Paraguayan
+Ministry of Labor (MTESS):
+
+* **Planilla de Empleados y Obreros**
+* **Planilla de Sueldos y Jornales**
+* **Resumen General de Personal Ocupado**
 
 Key Features
 ============
-- 
+* New menu entry under *Payroll > Reporting > MTESS Reports*
+* Wizard to select year and generate reports
+* Automatic generation of all three MTESS spreadsheets
+* Results are grouped by year in the list view
+* Exportable for compliance purposes
 
 Usage
 =====
-1. Install the module as usual from the Apps menu.
-2. 
+1. Navigate to *Payroll > Reporting > MTESS Reports*.
+2. Press the **Generate Report** button.
+3. In the **Generate MTESS Report** wizard:
+   * Select the **Year**.
+   * Press **Generate Report**.
+4. Three reports will be created:
+   * Planilla de Empleados y Obreros
+   * Planilla de Sueldos y Jornales
+   * Resumen General de Personal Ocupado
+5. The list view is grouped by year for easier navigation.
+
 
 Bug Tracker
 ===========
