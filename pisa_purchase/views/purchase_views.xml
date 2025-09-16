@@ -22,6 +22,13 @@
                 <attribute name="options">{'no_create': True, 'no_create_edit': True}</attribute>
             </xpath>
 
+            <xpath expr="//button[@name='button_cancel']" position="attributes">
+                <attribute name="confirm-title">Double-Check Before Cancelling</attribute>
+                <attribute name="confirm">Your Purchase Order is already validated.&#10;Cancelling might affect accounting and you will also lose all validations.&#10;&#10;Do you still want to cancel?</attribute>
+                <attribute name="confirm-label">Cancel PO</attribute>
+                <attribute name="cancel-label">Keep PO</attribute>
+            </xpath>
+
         </field>
     </record>
 
