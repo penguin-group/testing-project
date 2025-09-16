@@ -29,6 +29,16 @@ class HrContract(models.Model):
         store=True,
         help="Currency used for payroll calculations (from contract currency)"
     )
+
+    end_reason = fields.Char(
+        string="End Reason"
+    )
+    branch_id = fields.Many2one(
+        'res.company',
+        domain="[('parent_id', '=', company_id)]",
+        string="Branch",
+        help="Branch associated with this contract"
+    )
     
     # Override the currency_id to use our contract currency
     @api.depends('contract_currency_id')
