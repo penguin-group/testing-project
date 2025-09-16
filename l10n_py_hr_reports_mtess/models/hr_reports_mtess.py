@@ -32,11 +32,11 @@ class HrReportsMtess(models.Model):
         ('summary', 'Resumen General de Personal Ocupado'),
     ], string='Report Type', required=True, default='employees')
     data = fields.Json("Data")
-    xlsx_output = fields.Binary(string='Archivo', )
-    xlsx_filename = fields.Char(string='Nombre del Archivo', compute="_compute_filename", store=True)
+    xlsx_output = fields.Binary(string='File', )
+    xlsx_filename = fields.Char(string='File Name', compute="_compute_filename", store=True)
     company_id = fields.Many2one(
         comodel_name="res.company",
-        string="Compañía",
+        string="Company",
         default=lambda self: self.env.company)
 
     employees_report_headers = [
