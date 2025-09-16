@@ -77,20 +77,20 @@
                     <group>
                         <separator string="Consumed Donated Components" colspan="4"/>
                         <field name="consumed_component_ids" readonly="not is_validated or not is_in_repair or not is_micro" invisible="has_donor_tag or 'scrapped' in tag_names">
-                            <list editable="bottom" string="Consumed Components">
-                                <field name="donated_component_id" domain="[('used', '=', False)]"/>
+                            <list editable="bottom" delete="false" string="Consumed Components">
+                                <field name="donated_component_id"
+                                domain="[('used', '=', False)]"
+                                options="{'no_create': True, 'no_create_edit': True}"
+                                context="{'search_default_filter_by_serial': 1}"/>
                                 <field name="serial_number"/>
                                 <field name="description"/>
                                 <field name="ticket_origin_id"/>
+                                <button name="action_remove_component" 
+                                    invisible="not is_validated or not is_in_repair or not is_micro"
+                                    type="object"
+                                    icon="fa-trash"
+                                    string=" "/>
                             </list>
-                            <form string="Consumed Component">
-                                <group>
-                                    <field name="donated_component_id" domain="[('used', '=', False)]"/>
-                                    <field name="serial_number"/>
-                                    <field name="description"/>
-                                    <field name="ticket_origin_id"/>
-                                </group>
-                            </form>
                         </field>
                     </group>
 
@@ -126,6 +126,31 @@
                 <attribute name="invisible">1</attribute>
             </xpath>
 
+        </field>
+    </record>
+
+    <record id="view_repair_donated_component_tree" model="ir.ui.view">
+        <field name="name">repair.donated.component.tree</field>
+        <field name="model">repair.donated.component</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name" string="Component"/>
+                <field name="serial_number" string="Serial Number"/>
+                <field name="description"/>
+                 <field name="ticket_origin_id"/>
+
+            </list>
+        </field>
+    </record>
+
+    <record id="view_repair_donated_component_search" model="ir.ui.view">
+        <field name="name">repair.donated.component.search</field>
+        <field name="model">repair.donated.component</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="serial_number" string="Serial Number"/>
+            </search>
         </field>
     </record>
 </odoo>

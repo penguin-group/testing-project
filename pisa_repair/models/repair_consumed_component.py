@@ -11,7 +11,7 @@ class RepairConsumedComponent(models.Model):
         "repair.donated.component",
         string="Component",
         required=True,
-        domain="[('used', '=', False)]",  # solo los libres
+        domain="[('used', '=', False)]",
     )
     ticket_origin_id = fields.Many2one(
         related="donated_component_id.ticket_origin_id",
@@ -29,6 +29,10 @@ class RepairConsumedComponent(models.Model):
         related="donated_component_id.description",
         string="Description", store=False, readonly=True
     )
+
+    is_validated = fields.Boolean(related="repair_order_id.is_validated", store=False)
+    is_in_repair = fields.Boolean(related="repair_order_id.is_in_repair", store=False)
+    is_micro = fields.Boolean(related="repair_order_id.is_micro", store=False)
 
     @api.onchange("donated_component_id")
     def _onchange_donated_component_id(self):
@@ -67,3 +71,13 @@ class RepairConsumedComponent(models.Model):
                 rec.donated_component_id.ticket_dest_id = False
                 rec.donated_component_id.ticket_origin_id._update_donor_scrapped_tags()
         return super().unlink()
+    
+    def action_remove_component(self):
+        for rec in self:
+            if rec.donated_component_id:
+                rec.donated_component_id.used = False
+                rec.donated_component_id.ticket_dest_id = False
+            if rec.id:
+                rec.unlink()
+            else:
+                pass
