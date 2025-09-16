@@ -342,6 +342,7 @@ class RepairOrderActions(models.Model):
 
     
     def _perform_state_update_to_ics(self, container=None):
+        ics_logger.info("[ICS] ENTRY _perform_state_update_to_ics")
         param = self.env['ir.config_parameter'].sudo()
         url = param.get_param('ICS_Url')
         token = param.get_param('ICS_Token')
@@ -446,6 +447,7 @@ class RepairOrderActions(models.Model):
     def _send_state_update_to_ics(self, container=None):
         ics_logger.info("[ICS] Enqueuing ICS job for RO %s", self.name)
         try:
+            ics_logger.info("[ICS] START _send_state_update_to_ics")
             (
                 self.sudo()
                 .with_delay(
@@ -456,6 +458,7 @@ class RepairOrderActions(models.Model):
                 )
                 ._perform_state_update_to_ics(container)
             )
+            ics_logger.info("[ICS] END _send_state_update_to_ics")
         except Exception as e:
             ics_logger.error(
                 "[ICS] Failed to enqueue ICS job for RO %s: %s",
