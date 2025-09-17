@@ -7,7 +7,7 @@ class HrReportsMtessWizard(models.TransientModel):
 
     year = fields.Selection(
         [(str(y), str(y)) for y in range(2000, fields.Date.today().year)],
-        string='Año',
+        string='Year',
         required=True,
         default=lambda self: str(fields.Date.today().year - 1)
     )
@@ -27,4 +27,4 @@ class HrReportsMtessWizard(models.TransientModel):
             'view_mode': 'list',
             'target': 'current',
             'context': {'group_by': ['year']},
-            }   
+        }   

@@ -1,0 +1,22 @@
+<odoo>
+    <record id="view_hr_reports_ips_wizard_form" model="ir.ui.view">
+        <field name="name">hr.reports.ips.wizard.form</field>
+        <field name="model">hr.reports.ips.wizard</field>
+        <field name="arch" type="xml">
+            <form string="IPS Report Wizard">
+                <group>
+                    <group>
+                        <field name="year"/>
+                    </group>
+                    <group>
+                        <field name="month"/>
+                    </group>
+                </group>
+                <footer>
+                    <button string="Generate Report" type="object" name="action_generate_report" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

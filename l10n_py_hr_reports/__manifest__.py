@@ -25,7 +25,9 @@
     'data': [
         'security/ir.model.access.csv',
         'views/hr_reports_mtess_views.xml',
+        'views/hr_reports_ips_views.xml',
         'wizard/hr_reports_mtess_wizard_views.xml',
+        'wizard/hr_reports_mtess_ips_views.xml',
     ],
 
     'assets': {

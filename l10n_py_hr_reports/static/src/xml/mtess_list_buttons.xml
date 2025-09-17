@@ -2,9 +2,14 @@
 <templates>
     <t t-name="l10n_py_hr_reports.ListButtons" t-inherit="web.ListView" t-inherit-mode="extension">
         <xpath expr="//t[@t-set-slot='control-panel-create-button']" position="inside">
-            <button type="button" t-if="model.root.resModel == 'hr.reports.mtess'" class="btn btn-primary o_list_button_add" data-hotkey="g" t-on-click="onGenerateButtonClick" data-bounce-button="">
-                Generate Reports
+            <button type="button" t-if="model.root.resModel == 'hr.reports.mtess'" class="btn btn-primary o_list_button_add" data-hotkey="g" t-on-click="onMTESSGenerateButtonClick" data-bounce-button="">
+                Generate
             </button>
+
+            <button type="button" t-if="model.root.resModel == 'hr.reports.ips'" class="btn btn-primary o_list_button_add" data-hotkey="g" t-on-click="onIPSGenerateButtonClick" data-bounce-button="">
+                Generate
+            </button>
+
         </xpath>
     </t>
 </templates>
