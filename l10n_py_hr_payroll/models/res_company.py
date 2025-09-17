@@ -19,6 +19,9 @@ class ResCompany(models.Model):
              "No payroll operations can be confirmed before this day each month. "
              "Set to 0 to disable payroll closing protection."
     )
+
+    ips_patronal_number = fields.Char(string="Patronal Number IPS")
+    mtess_patronal_number = fields.Char(string="Patronal Number MTESS")
     
     @api.constrains('payroll_closing_day')
     def _check_payroll_closing_day(self):
