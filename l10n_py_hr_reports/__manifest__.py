@@ -1,10 +1,16 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Paraguay HR Reports",
+    'name': "Paraguayan HR Reports",
 
-    'summary': "", 
+    'summary': "Generates official HR reports required by Paraguayan Authorities.", 
 
     'description': """
+        This module provides wizard-based generation of three mandatory Paraguayan labor reports: 
+            Employee and Workers Report (Planilla de Empleados y Obreros), 
+            Salaries and Wages Report (Planilla de Sueldos y Jornales), 
+            and General Summary of Occupied Personnel (Resumen General de Personal Ocupado). 
+        Features include year selection, XLSX export with proper formatting, 
+        and integration under Payroll > Reporting menu with grouped list views for better organization.
     """,
 
     'author': "Penguin Infrastructure",
