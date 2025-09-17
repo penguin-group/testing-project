@@ -43,7 +43,7 @@ class Agreement(models.Model):
     legal_process_type = fields.Many2one('agreement.legal.process.type', string="Legal Process Type", tracking=True)
     renewal_terms = fields.Many2one("agreement.renewal.term", string="Renewal Terms", tracking=True)
     jurisdiction = fields.Many2one("agreement.jurisdiction", string="Jurisdiction", tracking=True)
-
+    tag_ids = fields.One2many("agreement.tag", "agreement_id", string="Agreement Tag")
     related_agreements = fields.Many2many(
         'agreement',
         'agreement_rel',

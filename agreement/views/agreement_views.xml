@@ -52,6 +52,7 @@
                             <field name="legal_process_type"/>
                             <field name="renewal_terms"/>
                             <field name="jurisdiction"/>
+                            <field name="tag_ids" widget="many2many_tags"/>
                         </group>
                     </group>
                     <notebook>
