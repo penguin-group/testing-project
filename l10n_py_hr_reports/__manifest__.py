@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "MTESS Reports",
+    'name': "Paraguay HR Reports",
 
-    'summary': "",
+    'summary': "", 
 
     'description': """
     """,
@@ -24,9 +24,8 @@
 
     'assets': {
         'web.assets_backend': [
-            'l10n_py_hr_reports_mtess/static/src/js/mtess_list_controller.js',
-            'l10n_py_hr_reports_mtess/static/src/xml/mtess_list_buttons.xml',
+            'l10n_py_hr_reports/static/src/js/mtess_list_controller.js',
+            'l10n_py_hr_reports/static/src/xml/mtess_list_buttons.xml',
         ],
     },
 }
-
