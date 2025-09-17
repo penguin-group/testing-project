@@ -102,6 +102,10 @@ class PurchaseOrder(models.Model):
         """Wizard to double-check before cancelling a PO."""
         self.ensure_one()
 
+        # If the PO is not in a validated state, cancel directly.
+        if self.state not in ('purchase', 'done'):
+            return self.button_cancel()
+
         return {
             'name': _('Double-check before cancelling'),
             'type': 'ir.actions.act_window',
