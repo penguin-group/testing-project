@@ -13,6 +13,7 @@
     "data": [
         "security/access_groups.xml",
         "security/ir.model.access.csv",
+        "security/agreement_security.xml",
         "data/agreement_stages.xml",
         "data/ir_cron_data.xml",
         "data/email_template.xml",
