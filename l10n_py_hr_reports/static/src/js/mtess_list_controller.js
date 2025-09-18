@@ -10,8 +10,7 @@ patch(ListController.prototype, {
         super.setup();
     },
 
-    onGenerateButtonClick() {
-        console.log("Generate Reports button clicked");
+    onMTESSGenerateButtonClick() {
         this.action.doAction({
             type: 'ir.actions.act_window',
             res_model: 'hr.reports.mtess.wizard',
@@ -19,5 +18,16 @@ patch(ListController.prototype, {
             views: [[false, 'form']],
             target: 'new',
         });
+    },
+
+    onIPSGenerateButtonClick() {
+        this.action.doAction({
+            type: 'ir.actions.act_window',
+            res_model: 'hr.reports.ips.wizard',
+            name: 'Generate IPS Report',
+            views: [[false, 'form']],
+            target: 'new',
+        });
     }
+
 });
