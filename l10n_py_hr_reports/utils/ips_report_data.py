@@ -98,7 +98,8 @@ class IPSReportData:
         end_date = start_date + relativedelta(day=31)
         payslips = self.env['hr.payslip'].search([
             ('date_from', '<=', start_date),
-            ('date_to', '>=', end_date)
+            ('date_to', '>=', end_date),
+            ('company_id', '=', self.env.company.id)
         ])
         contracts = payslips.mapped('contract_id')
         for contract in contracts:
