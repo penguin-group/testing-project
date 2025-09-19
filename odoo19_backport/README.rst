@@ -123,7 +123,7 @@ Authors
 Contributors
 ~~~~~~~~~~~~
 
-* David Páez <david.jacquet@penguin.digital>
+* José E. González <jose.gonzalez@penguin.digital>
 
 Maintainers
 ~~~~~~~~~~~
