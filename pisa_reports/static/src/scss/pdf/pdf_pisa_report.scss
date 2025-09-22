@@ -62,24 +62,15 @@
             background-color: #ffffff;
             font-family: 'Inter', serif;
 
-            tr > th:first-child { width:80% }
-            tr > th:last-child {
-                border: 0;
-                text-align: right;
-                padding-right: 0px;
-            }
-            > tr:last-child th:last-child {
-                font-weight: bold;
-                
-                text-align: right;
-                padding-right: 0px;
-            }
-            > tr:not(:last-child) th:not(:first-child) {
-                border: 0;
-                text-align: right;
-                padding-right: 0px;
+            /* First column takes 80% */
+            tr th:first-child {
+                width: 80%;
             }
 
+            /* All cells of the last row */
+            tr:last-child th {
+                text-align: center;
+            }
         }
 
         > tbody {
@@ -125,6 +116,13 @@
                     border-bottom: 1px solid #CACADD;
                     .o_line_name_level { padding-left: 0px }
                 }
+            }
+
+            .o_cell_td > .o_line_cell_value_number {
+                display: block;
+                text-align: right;
+                min-width: 100px;
+                width: 100px;
             }
         }
     }
