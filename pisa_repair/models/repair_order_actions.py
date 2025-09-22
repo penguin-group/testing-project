@@ -117,16 +117,20 @@ class RepairOrderActions(models.Model):
             raise UserError(_("This action is only available when the order is In Progress (confirmed)."))
         if not self.extraction:
             raise UserError(_("Mark 'Will Extraction Be Necessary' first."))
+        
+        required_fields_valid = self._validate_required_fields()
+        
+        if not required_fields_valid:
+            self._manage_tags(
+                tag_to_add_xmlid='pisa_repair.pending_to_receive',
+                tag_to_remove_xmlid='pisa_repair.not_received'
+            )
 
-        self._manage_tags(
-            tag_to_add_xmlid='pisa_repair.pending_to_receive',
-            tag_to_remove_xmlid='pisa_repair.not_received'
-        )
+            self.message_post(
+                body=_("The unit is pending to be received."),
+                subtype_xmlid="mail.mt_note",
+            )
 
-        self.message_post(
-            body=_("The unit is pending to be received."),
-            subtype_xmlid="mail.mt_note",
-        )
         return True
     
     def action_mark_not_received(self):
