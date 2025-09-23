@@ -97,3 +97,10 @@ class PurchaseOrder(models.Model):
                 unlinked_po.with_context(no_reciprocal=True).write({
                     'extra_cost_po_ids': [(3, self.id)]
                 })
+
+    def _validate_tier(self, tiers=False):
+        super(PurchaseOrder, self)._validate_tier()
+
+        if all(r.status == 'approved' for r in self.review_ids):
+            self.state = 'purchase'
+
