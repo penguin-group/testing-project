@@ -16,7 +16,7 @@
     'version': '18.0.1.3.0',
     'license': "OPL-1",
 
-    'depends': ['base', 'purchase_requisition', 'purchase_tier_validation', 'purchase_request_tier_validation', 'stock', 'completion_certificates', 'project', 'account', 'purchase_request'],
+    'depends': ['base', 'purchase_requisition', 'purchase_tier_validation', 'purchase_request_tier_validation', 'stock', 'completion_certificates', 'project', 'account', 'purchase_request', 'mail'],
 
     'data': [
         'security/ir.model.access.csv',
