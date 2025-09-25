@@ -1,0 +1,23 @@
+<odoo>
+    <template id="portal_sale_order_inherit" inherit_id="sale.sale_order_portal_content"
+        name="Add Lot Serial to Portal">
+
+        <xpath expr="//thead/tr/th[@id='product_name_header']" position="after">
+            <t t-if="sale_order.is_consolidated">
+                <th class="text-start">Lot/Serial Number</th>
+            </t>
+        </xpath>
+
+        <xpath expr="//tbody/t/tr/t/td[@id='product_name']" position="after">
+            <t t-if="sale_order.is_consolidated">
+                <td class="text-start">
+                    <t t-if="line.lot_serial">
+                        <span t-esc="line.lot_serial" />
+                    </t>
+                </td>
+            </t>
+
+        </xpath>
+
+    </template>
+</odoo>

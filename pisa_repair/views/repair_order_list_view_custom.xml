@@ -1,0 +1,38 @@
+<odoo>
+    <record id="view_repair_order_list_custom" model="ir.ui.view">
+        <field name="name">repair.order.list.custom</field>
+        <field name="model">repair.order</field>
+        <field name="inherit_id" ref="repair.view_repair_order_tree" />
+        <field name="arch" type="xml">
+
+            <xpath expr="//list" position="replace">
+                <list edit="0" string="Repair Orders" decoration-info="state == 'draft'"
+                    create="1" delete="0" expand="1">
+
+                    <field name="name" readonly="1" string="Repair Reference" />
+                    <field name="schedule_date" string="Scheduled Date" widget="remaining_days"
+                        readonly="1" />
+                    <field name="product_id" string="Product to Repair" readonly="1" />
+                    <field name="lot_id" string="Serial Number" readonly="1" groups="pisa_repair.group_noc" />
+                    <field name="lot_ref" string="Position" readonly="1" />
+                    <field name="state" class="col-6 text-end"
+                        widget="label_selection"
+                        readonly="1"
+                        options="{'classes': {
+                               'draft': 'info',
+                               'confirmed': 'light',
+                               'under_repair': 'warning',
+                               'ready_for_deployment': 'dark',
+                               'done': 'success',
+                               'cancel': 'danger'
+                           }}" />
+                    <field name="tag_ids" widget="many2many_tags"
+                        options="{'color_field': 'color'}"
+                        class="col-12 text-center" />
+
+                </list>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>
