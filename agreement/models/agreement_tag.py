@@ -7,3 +7,4 @@ class AgreementTag(models.Model):
 
     name = fields.Char(string="Agreement Tag", required=True)
     active = fields.Boolean(default=True)
+    agreement_id = fields.Many2one("agreement", string="Related Agreement")

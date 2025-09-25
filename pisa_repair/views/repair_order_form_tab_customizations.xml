@@ -1,0 +1,156 @@
+<odoo>
+    <record id="repair_order_form_tab_customizations" model="ir.ui.view">
+        <field name="name">repair.order.form.tab.customizations</field>
+        <field name="model">repair.order</field>
+        <field name="inherit_id" ref="repair.view_repair_order_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//page[@name='parts']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//page[@name='mining_data']" position="after">
+                <page name="microelectronics_data" string="Microelectronics Data"
+                    invisible="under_warranty or state == 'draft' or state == 'confirmed' or is_mining">
+
+                    <group>
+                        <separator string="Diagnosis &amp; Repair" colspan="4" />
+                        <field name="repair_diag_line_ids"
+                            readonly="under_warranty or not is_validated or not (is_in_diagnostic or is_in_repair) or not is_micro">
+                            <list string="Diagnosis &amp; Repair" editable="bottom">
+                                <field name="item" required="1" />
+                                <field name="sn" string="SN / Serial" />
+
+                                <field name="diagnostic" string="Diagnosis Note"
+                                    readonly="not parent_is_in_diagnostic" />
+
+                                <field name="repair_note" string="Repair Note"
+                                    readonly="not parent_is_in_repair" />
+
+                                <field name="repair_type" string="Repair Type" required="1"/>
+                            </list>
+                            <form string="Diagnosis &amp; Repair">
+                                <group>
+                                    <field name="item" required="1" />
+                                    <field name="repair_type" string="Repair Action" required="1" />
+                                    <field name="sn" string="SN / Serial" />
+                                </group>
+                                <group>
+                                    <field name="diagnostic" string="Diagnosis Note"
+                                        placeholder="Describe the diagnosis"
+                                        readonly="not parent_is_in_diagnostic" required="1" />
+                                    <field name="repair_note" string="Repair Note"
+                                        placeholder="Describe the repair performed"
+                                        readonly="not parent_is_in_repair" />
+                                </group>
+                            </form>
+                        </field>
+                    </group>
+
+                    <div class="mt16"/>
+
+                    <group>
+                        <separator string="Operations (Materials)" colspan="4"/>
+                        <field name="move_ids" readonly="state == 'cancel' or state == 'done' or not is_validated"
+                            context="{'default_repair_id': id, 'default_product_uom_qty': 1, 'default_company_id': company_id, 'default_date': schedule_date, 'default_repair_line_type': 'insumo'}">
+                            <list string="Operations" editable="bottom">
+                                <control>
+                                    <create string="Add a line"/>
+                                    <button name="action_add_from_catalog_repair" string="Catalog" type="object"
+                                        class="px-4 btn-link" context="{'order_id': parent.id}"/>
+                                </control>
+                                <field name="repair_line_type" required="1" string="Insumo"/>
+                                <field name="product_id" context="{'default_is_storable': True}" required="1"
+                                    readonly="(state != 'draft' and not additional) or move_lines_count &gt; 0" string="Producto"/>
+                                <field name="description_picking" string="Description" optional="hide"/>
+                                <field name="date" optional="hide"/>
+                                <field name="product_uom_qty" string="Demand" readonly="state in ('done', 'cancel')"/>
+                                <field name="forecast_availability" string="Forecasted" column_invisible="parent.state in ('draft', 'done')" widget="forecast_widget"/>
+                                <field name="quantity" string="Done" readonly="not product_id"/>
+                                <field name="product_uom" readonly="state != 'draft' and not additional" options="{'no_open': True, 'no_create': True}"
+                                    string="Unit of Measure" groups="uom.group_uom"/>
+                                <field name="picked" string="Used"/>
+                            </list>
+                        </field>
+                    </group>
+
+                    <group>
+                        <separator string="Consumed Donated Components" colspan="4"/>
+                        <field name="consumed_component_ids" readonly="not is_validated or not is_in_repair or not is_micro" invisible="has_donor_tag or 'scrapped' in tag_names">
+                            <list editable="bottom" delete="false" string="Consumed Components">
+                                <field name="donated_component_id"
+                                domain="[('used', '=', False)]"
+                                options="{'no_create': True, 'no_create_edit': True}"
+                                context="{'search_default_filter_by_serial': 1}"/>
+                                <field name="serial_number"/>
+                                <field name="description"/>
+                                <field name="ticket_origin_id"/>
+                                <button name="action_remove_component" 
+                                    invisible="not is_validated or not is_in_repair or not is_micro"
+                                    type="object"
+                                    icon="fa-trash"
+                                    string=" "/>
+                            </list>
+                        </field>
+                    </group>
+
+                    <group>
+                        <field name="internal_notes"
+                            placeholder="Add internal notes."
+                            readonly="under_warranty or not is_validated or state != 'under_repair' or not is_micro"/>
+                    </group>
+
+                    <group>
+                        <field name="scrapped"
+                            invisible="'under diagnosis' not in tag_names and 'not approved' not in tag_names"
+                            readonly="under_warranty or not is_validated or state != 'under_repair' or not is_micro"/>
+                    </group>
+                </page>
+            </xpath>
+
+
+            <xpath expr="//page[@name='microelectronics_data']//field" position="attributes">
+                <attribute name="readonly">under_warranty or not is_validated or state != 'under_repair' or not is_micro</attribute>
+            </xpath>
+
+            <xpath expr="//page[@name='microelectronics_data']//field[@name='repair_diag_line_ids']" position="attributes">
+                <attribute name="readonly">under_warranty or not is_validated or not is_micro or not (is_in_diagnostic or is_in_repair)</attribute>
+            </xpath>
+
+            <xpath expr="//page[@name='repair_notes']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+
+            <xpath expr="//page[@name='page_miscellaneous']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="view_repair_donated_component_tree" model="ir.ui.view">
+        <field name="name">repair.donated.component.tree</field>
+        <field name="model">repair.donated.component</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name" string="Component"/>
+                <field name="serial_number" string="Serial Number"/>
+                <field name="description"/>
+                 <field name="ticket_origin_id"/>
+
+            </list>
+        </field>
+    </record>
+
+    <record id="view_repair_donated_component_search" model="ir.ui.view">
+        <field name="name">repair.donated.component.search</field>
+        <field name="model">repair.donated.component</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="serial_number" string="Serial Number"/>
+            </search>
+        </field>
+    </record>
+</odoo>

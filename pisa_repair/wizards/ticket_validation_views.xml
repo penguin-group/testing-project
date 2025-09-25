@@ -1,0 +1,27 @@
+<odoo>
+    <record id="view_ticket_validation_wizard_form" model="ir.ui.view">
+        <field name="name">ticket.validation.wizard.form</field>
+        <field name="model">ticket.validation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Warning">
+                <sheet>
+                    <div class="o_form_label" style="text-align: center; margin: 10px;">
+                        <h3>Enter the Serial Number of the machine.</h3>
+                    </div>
+                    <group>
+                        <field class="serial_number_wrapper" name="input_field" string="Input Data" required="1"/>
+                        <field name="repair_order_id" invisible="1"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Validate" type="object" name="proceed_action" class="btn-primary" />
+                    <button string="Cancel"
+                        special="cancel"
+                        class="btn-secondary"
+                        type="object"
+                        name="cancel_action" />
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
