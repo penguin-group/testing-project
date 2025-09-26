@@ -8,52 +8,55 @@ import requests
 from odoo import fields, models, tools
 from odoo.exceptions import UserError
 from odoo.tools.translate import _
-import cloudscraper 
-
+import cloudscraper
 
 
 _logger = logging.getLogger(__name__)
 
 
 class ResCompany(models.Model):
-    _inherit = 'res.company'
+    _inherit = "res.company"
 
     inventory_book_base_report_bs = fields.Many2one(
-        'account.report',
-        string='Base Report for Balance Sheet',
+        "account.report",
+        string="Base Report for Balance Sheet",
     )
     inventory_book_base_report_is = fields.Many2one(
-        'account.report',
-        string='Base Report for Income Statement',
+        "account.report",
+        string="Base Report for Income Statement",
     )
     show_inventory_book_base_report_bs_details = fields.Boolean(
-        string='Show Account Details',
-        default=True
+        string="Show Account Details", default=True
     )
 
     def in_paraguay(self):
         py_menu_ext_ids = [
-            'l10n_py.book_registration_report_menu',
-            'l10n_py.book_registration_menu',
-            'l10n_py.invoice_authorization_menu',
-            'l10n_py.report_res90_menu',
-            'l10n_py.report_vat_purchase_wizard_menu',
-            'l10n_py.report_vat_sale_wizard_menu',
+            "l10n_py.book_registration_report_menu",
+            "l10n_py.book_registration_menu",
+            "l10n_py.invoice_authorization_menu",
+            "l10n_py.report_res90_menu",
+            "l10n_py.report_vat_purchase_wizard_menu",
+            "l10n_py.report_vat_sale_wizard_menu",
         ]
-        py_menu_ids = self.env['ir.ui.menu'].browse([self.env.ref(py_menu_ext_id).id for py_menu_ext_id in py_menu_ext_ids])
-        in_paraguay = self.env.company.country_code == 'PY'
+        py_menu_ids = self.env["ir.ui.menu"].browse(
+            [self.env.ref(py_menu_ext_id).id for py_menu_ext_id in py_menu_ext_ids]
+        )
+        in_paraguay = self.env.company.country_code == "PY"
         if in_paraguay:
-            py_menu_ids.sudo().write({
-                'show': True,
-            })
+            py_menu_ids.sudo().write(
+                {
+                    "show": True,
+                }
+            )
         else:
-            py_menu_ids.sudo().write({
-            'show': False,
-            })
+            py_menu_ids.sudo().write(
+                {
+                    "show": False,
+                }
+            )
         return in_paraguay
 
-
-    '''
+    """
     This code extends the native currency rate automation in Odoo 
     by integrating the Central Bank of Paraguay (BCP) as a currency provider. 
     It automatically fetches the exchange rates (buy/sell) from the BCP website, 
@@ -65,202 +68,275 @@ class ResCompany(models.Model):
     - Supports PYG as main or secondary currency
     - Automatically populates both selling and buying rates
     - Notifies the finance team on failure via popup and email
-    '''
-
+    """
 
     currency_provider = fields.Selection(
-        selection_add=[('bcp', '[PY] BCP')],
-        string="Currency Provider"
+        selection_add=[("bcp", "[PY] BCP")], string="Currency Provider"
     )
 
-
     def _parse_bcp_data(self, available_currencies):
-        _logger.info("Executing _parse_bcp_data for l10n_py")
+        """Base BCP parser implementation."""
+        _logger.info("Executing _parse_bcp_data")
 
         result = {}
-        currency_names = available_currencies.mapped('name')
+        currency_names = available_currencies.mapped("name")
+        base_currency = self.currency_id.name
 
-        try:
-            url = self.env['ir.config_parameter'].sudo().get_param('bcp.exchange.url')
-            headers = {
-                "User-Agent": "Mozilla/5.0",
-                'Content-Type': 'application/x-www-form-urlencoded',
-            }
-
-            # Always post with yesterday's date
-            today = fields.Date.context_today(self)
-            yesterday = today - timedelta(days=1)
-            formatted_yesterday = yesterday.strftime('%Y-%m-%d')
-
-            scraper = cloudscraper.create_scraper()
-            response = scraper.post(url, data={'fecha': formatted_yesterday}, headers=headers, timeout=15)
-            _logger.info("BCP Response status: %s", response.status_code)
-            response.raise_for_status()
-
-            soup = BeautifulSoup(response.content, 'html.parser')
-            table = soup.find('table', class_='table')
-            if not table:
-                raise ValueError("Exchange table not found in BCP response")
-
-            tfoot = table.find('tfoot')
-            closing_row = tfoot.find('tr') if tfoot else None
-            if not closing_row:
-                raise ValueError("Closing row not found in BCP response")
-
-            cols = closing_row.find_all(['td', 'th'])
-            if len(cols) < 3:
-                raise ValueError("Incomplete closing row found")
-
-            # Extract and validate the actual published date
-            closing_label = cols[0].get_text(strip=True)  # e.g. "Cierre 03/06"
-            try:
-                closing_str = closing_label.split()[-1]
-                actual_date = datetime.strptime(closing_str + f'/{datetime.today().year}', '%d/%m/%Y').date()
-            except Exception as e:
-                raise ValueError(f"Could not parse closing date from label: '{closing_label}'")
-
-            if actual_date != yesterday:
-                raise ValueError(f"Expected exchange rate for {yesterday}, but found closing date {actual_date}")
-
-            # Parse exchange values
-            buying_rate = float(cols[1].get_text(strip=True).replace('.', '').replace(',', '.'))
-            selling_rate = float(cols[2].get_text(strip=True).replace('.', '').replace(',', '.'))
-
-            _logger.info("📅 Valid exchange date confirmed: %s", actual_date)
-
-            if buying_rate <= 0 or selling_rate <= 0:
-                raise ValueError("Invalid exchange rate values")
-
-            base_currency = self.currency_id.name
-            if base_currency != 'PYG':
-                _logger.warning("Base currency %s is not PYG. Skipping.", base_currency)
-                return {}
-
-            if 'USD' in currency_names:
-                result['USD'] = {
-                    'rate': round(1 / buying_rate, 10),
-                    'company_rate': round(1 / buying_rate, 10),
-                    'inverse_company_rate': buying_rate,
-                    'buying_rate': round(1 / selling_rate, 10),
-                    'buying_company_rate': round(1 / selling_rate, 10),
-                    'buying_inverse_company_rate': selling_rate,
-                    'date': actual_date,
-                }
-
-            result['PYG'] = {
-                'rate': 1.0,
-                'company_rate': 1.0,
-                'inverse_company_rate': 1.0,
-                'buying_rate': 1.0,
-                'buying_company_rate': 1.0,
-                'buying_inverse_company_rate': 1.0,
-                'date': actual_date,
-            }
-
-            _logger.info("✅ Final parsed exchange data: %s", result)
-            return result
-
-        except Exception as e:
-            _logger.exception("Error parsing BCP rates: %s", e)
+        if base_currency not in ["USD", "PYG"]:
+            _logger.warning(
+                "Base currency %s not supported for BCP parser.", base_currency
+            )
             return {}
 
+        try:
+            exchange_data = self._fetch_bcp_exchange_data()
+            if not exchange_data:
+                return {}
 
+            return self._process_exchange_data(
+                exchange_data, currency_names, base_currency
+            )
 
+        except Exception as e:
+            _logger.exception("Error in BCP parser: %s", e)
+            self._notify_finance_team_error(e, provider="BCP")
+            return {}
 
-    def _generate_currency_rates(self, parsed_data):
-        """Generate currency rates for the company based on parsed data from BCP."""
-        Currency = self.env['res.currency']
-        CurrencyRate = self.env['res.currency.rate']
-        
-        if not parsed_data:
-            _logger.warning("Parsed data is empty. Skipping currency rate generation.")
-            return
+    def _fetch_bcp_exchange_data(self):
+        """Fetch exchange data from BCP."""
+        today = fields.Date.context_today(self)
+        yesterday = today - timedelta(days=1)
+        formatted_yesterday = yesterday.strftime("%Y-%m-%d")
 
-        for company in self:
-            try:
-                company_currency_code = company.currency_id.name
-                company_currency_info = parsed_data.get(company_currency_code)
+        url = self.env["ir.config_parameter"].sudo().get_param("bcp.exchange.url")
+        headers = self._get_bcp_headers()
 
-                if not company_currency_info:
-                    raise UserError(
-                        f"Base currency ({company_currency_code}) is missing from provider response."
-                    )
+        scraper = cloudscraper.create_scraper(
+            browser={"browser": "chrome", "platform": "darwin", "mobile": False},
+            delay=10,
+        )
 
-                base_rate = company_currency_info.get('rate', 1.0)
+        response = scraper.post(
+            url, data={"fecha": formatted_yesterday}, headers=headers, timeout=30
+        )
+        _logger.info("BCP Response status: %s", response.status_code)
+        response.raise_for_status()
 
-                for code, values in parsed_data.items():
-                    currency = Currency.search([('name', '=', code)], limit=1)
-                    if not currency:
-                        continue
+        return self._parse_bcp_response(response, yesterday)
 
-                    raw_rate = values.get('rate', 1.0)
-                    date = values.get('date')
+    def _get_bcp_headers(self):
+        """Get headers for BCP request."""
+        return {
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.5",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Connection": "keep-alive",
+            "Upgrade-Insecure-Requests": "1",
+        }
 
-                    if code == company_currency_code:
-                        final_rate = 1.0
-                    else:
-                        final_rate = raw_rate / base_rate if base_rate else raw_rate
+    def _parse_bcp_response(self, response, expected_date):
+        """Parse BCP response and extract exchange rates."""
+        soup = BeautifulSoup(response.content, "html.parser")
+        table = soup.find("table", class_="table")
+        if not table:
+            raise ValueError("Exchange table not found in BCP response")
 
-                    rate_vals = {
-                        'currency_id': currency.id,
-                        'company_id': company.id,
-                        'name': date,
-                        'rate': final_rate,
+        closing_row = self._find_closing_row(table)
+        if not closing_row:
+            raise ValueError("No valid closing row found")
+
+        actual_date = self._validate_exchange_date(closing_row, expected_date)
+        buying_rate, selling_rate = self._extract_rates(closing_row)
+
+        return {
+            "date": actual_date,
+            "buying_rate": buying_rate,
+            "selling_rate": selling_rate,
+        }
+
+    def _process_exchange_data(self, exchange_data, currency_names, base_currency):
+        """Process exchange data based on base currency."""
+        result = {}
+
+        if base_currency == "USD":
+            result = self._process_usd_based(exchange_data, currency_names)
+        elif base_currency == "PYG":
+            result = self._process_pyg_based(exchange_data, currency_names)
+
+        _logger.info("Final parsed exchange data: %s", result)
+        return result
+
+    def _process_usd_based(self, exchange_data, currency_names):
+        """Process exchange data for USD-based companies."""
+        Currency = self.env["res.currency"].sudo()
+        CurrencyRate = self.env["res.currency.rate"].sudo()
+
+        result = {}
+        if "PYG" in currency_names:
+            currency = Currency.search([("name", "=", "PYG")], limit=1)
+            if currency:
+                CurrencyRate.create(
+                    {
+                        "currency_id": currency.id,
+                        "company_id": self.id,
+                        "name": exchange_data["date"],
+                        "company_rate": exchange_data["selling_rate"],
+                        "buying_company_rate": exchange_data["buying_rate"],
                     }
+                )
+        return result
 
-                    buying_company_rate = values.get('buying_company_rate')
-                    buying_inverse_company_rate = values.get('buying_inverse_company_rate')
+    def _process_pyg_based(self, exchange_data, currency_names):
+        """Process exchange data for PYG-based companies."""
+        Currency = self.env["res.currency"].sudo()
+        CurrencyRate = self.env["res.currency.rate"].sudo()
 
-                    if buying_company_rate:
-                        rate_vals['buying_company_rate'] = buying_company_rate
-                    if buying_inverse_company_rate:
-                        rate_vals['buying_inverse_company_rate'] = buying_inverse_company_rate
-
-                    existing = CurrencyRate.search([
-                        ('currency_id', '=', currency.id),
-                        ('company_id', '=', company.id),
-                        ('name', '=', date),
-                    ], limit=1)
-
-                    if existing:
-                        existing.write(rate_vals)
-                    else:
-                        CurrencyRate.create(rate_vals)
-
-                _logger.info("Currency rates generated successfully for company %s.", company.name)
-                _logger.warning("Parsed data dict at generate: %s", parsed_data)
-
-            except UserError as e:
-                _logger.exception("User error during currency rate generation: %s", e)
-                raise
-            except ValueError as e:
-                _logger.exception("Value error during currency rate generation: %s", e)
-                raise
-            except Exception as e:
-                _logger.exception("Unexpected error during currency rate generation: %s", e)
-                raise
+        result = {}
+        if "USD" in currency_names:
+            currency = Currency.search([("name", "=", "USD")], limit=1)
+            if currency:
+                CurrencyRate.create(
+                    {
+                        "currency_id": currency.id,
+                        "company_id": self.id,
+                        "name": exchange_data["date"],
+                        "inverse_company_rate": exchange_data["selling_rate"],
+                        "buying_inverse_company_rate": exchange_data["buying_rate"],
+                    }
+                )
+        return result
 
     def _notify_finance_team_error(self, error, provider="BCP"):
         """Notify the finance team about an error in fetching exchange rates."""
 
-        group = self.env.ref('account.group_account_user', raise_if_not_found=False)
+        group = self.env.ref("account.group_account_user", raise_if_not_found=False)
         if not group:
             return
 
         for user in group.users:
             try:
 
-                template = self.env.ref('l10n_py.bcp_exchange_rate_error_notification_l10n')
-                template.sudo().send_mail(template.id, force_send=True)
-
+                template = self.env.ref(
+                    "l10n_py.bcp_exchange_rate_error_notification_l10"
+                )
+                template.with_context(
+                    provider=provider,
+                    error=error,
+                ).sudo().send_mail(self.id, force_send=True)
 
                 if user.partner_id:
                     user.partner_id.sudo().message_notify(
-                        subject=_("Exchange Rate Error Notification"),
-                        body=_("An error occurred while updating exchange rates. Please check your email for details."),
+                        subject=("Exchange Rate Error Notification"),
+                        body=(
+                            "An error occurred while updating exchange rates. Please check your email for details."
+                        ),
                         partner_ids=[user.partner_id.id],
-                        model_description=_("Exchange Rate Error")
+                        model_description=("Exchange Rate Error"),
                     )
 
             except Exception as notify_err:
                 _logger.exception("Failed to notify finance team: %s", notify_err)
+
+    def _find_closing_row(self, table):
+        """Find the closing exchange rate row in the BCP table.
+
+        Args:
+            table: BeautifulSoup table element
+
+        Returns:
+            BeautifulSoup row element or None if not found
+        """
+        try:
+            # Look for the last row with numeric values
+            rows = table.find_all("tr")
+            for row in reversed(rows):
+                cells = row.find_all("td")
+                if len(cells) >= 3:  # Need at least 3 cells (date, buy, sell)
+                    # Check if second and third cells contain numeric values
+                    try:
+                        float(
+                            cells[1]
+                            .get_text()
+                            .strip()
+                            .replace(".", "")
+                            .replace(",", ".")
+                        )
+                        float(
+                            cells[2]
+                            .get_text()
+                            .strip()
+                            .replace(".", "")
+                            .replace(",", ".")
+                        )
+                        return row
+                    except (ValueError, IndexError):
+                        continue
+            return None
+
+        except Exception as e:
+            _logger.error("Error finding closing row: %s", str(e))
+            return None
+
+    def _validate_exchange_date(self, row, expected_date):
+        """Validate and parse the exchange rate date from row.
+
+        Args:
+            row: BeautifulSoup row element
+            expected_date: datetime.date object of expected date
+
+        Returns:
+            datetime.date object of actual exchange rate date
+
+        Raises:
+            ValueError if the actual date does not match the expected date.
+        """
+        try:
+            date_cell = row.find("td")
+            if not date_cell:
+                raise ValueError("Date cell is missing.")
+
+            date_text = date_cell.get_text().strip()
+            actual_date = datetime.strptime(date_text, "%d/%m/%Y").date()
+
+            # Check for exact match
+            if actual_date != expected_date:
+                raise ValueError(
+                    "Exchange rate date (%s) does not match expected date (%s)",
+                    actual_date,
+                    expected_date,
+                )
+
+            return actual_date
+
+        except Exception as e:
+            _logger.error("Error parsing date: %s. Using expected date.", str(e))
+            return expected_date
+
+    def _extract_rates(self, row):
+        """Extract buying and selling rates from row.
+
+        Args:
+            row: BeautifulSoup row element
+
+        Returns:
+            tuple(float, float) - (buying_rate, selling_rate)
+        """
+        cells = row.find_all("td")
+        if len(cells) < 3:
+            raise ValueError("Row does not contain enough cells for rates")
+
+        try:
+            # Convert string rates to float (handle Paraguayan number format)
+            buying_text = cells[1].get_text().strip().replace(".", "").replace(",", ".")
+            selling_text = (
+                cells[2].get_text().strip().replace(".", "").replace(",", ".")
+            )
+
+            buying_rate = float(buying_text)
+            selling_rate = float(selling_text)
+
+            return buying_rate, selling_rate
+
+        except (ValueError, IndexError) as e:
+            raise ValueError(f"Failed to parse rates from row: {str(e)}")
