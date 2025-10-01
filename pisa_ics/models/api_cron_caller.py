@@ -1,9 +1,6 @@
 from odoo import models, api
 import requests
-import logging
 import json
-
-api_cron_logger = logging.getLogger('api_cron_caller')
 
 class ApiCronCaller(models.Model):
     _name = 'api.cron.caller'
@@ -20,10 +17,6 @@ class ApiCronCaller(models.Model):
         url = f'{host}/login'
 
         if not email or not password or not host:
-            api_cron_logger.error('Configuration not found.')
-            api_cron_logger.error(f'ICS_Email: {email}')
-            api_cron_logger.error(f'ICS_Host: {host}')
-            api_cron_logger.error(f'ICS_Password: {password}')
             return
 
         headers = {
@@ -43,10 +36,5 @@ class ApiCronCaller(models.Model):
                 token = data.get('token')
                 if token:
                     params.set_param('ICS_Token', token)
-                    api_cron_logger.info('Token successfully updated.')
-                else:
-                    api_cron_logger.warning('Token not found in the response.')
-            else:
-                api_cron_logger.warning('Error code: %s', response.status_code)
         except Exception as e:
-            api_cron_logger.error('Error while calling the API: %s', str(e))
+            pass
