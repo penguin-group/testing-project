@@ -1,0 +1,25 @@
+<odoo>
+    <record id="view_sale_order_list_hide_total_for_micro" model="ir.ui.view">
+        <field name="name">sale.order.list.micro.hidden</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_quotation_tree_with_onboarding" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='amount_total']" position="replace">
+                <field name="amount_total" groups="!pisa_repair.group_micro" sum="Total" />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_sale_order_kanban_hide_total_micro" model="ir.ui.view">
+        <field name="name">sale.order.kanban.hide.total.micro</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_quotation_kanban_with_onboarding" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='amount_total']" position="replace">
+                <div class="o_field_widget o_readonly_modifier o_field_monetary fw-bolder ms-auto flex-shrink-0" groups="!pisa_repair.group_micro">
+                    <field name="amount_total" />
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

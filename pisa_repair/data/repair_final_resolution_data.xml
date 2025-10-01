@@ -1,0 +1,75 @@
+<odoo>
+    <data noupdate="1">
+
+        <record id="resolution_network_reconnected" model="repair.final.resolution">
+            <field name="name">Network cable reconnected</field>
+        </record>
+        <record id="resolution_network_cable_replaced" model="repair.final.resolution">
+            <field name="name">Network cable replaced</field>
+        </record>
+        <record id="resolution_power_cable_changed" model="repair.final.resolution">
+            <field name="name">Power cable replaced</field>
+        </record>
+        <record id="resolution_switch_restarted" model="repair.final.resolution">
+            <field name="name">Switch restarted</field>
+        </record>
+        <record id="resolution_switch_port_changed" model="repair.final.resolution">
+            <field name="name">Switch port changed</field>
+        </record>
+        <record id="resolution_psu_reconnected" model="repair.final.resolution">
+            <field name="name">Power supply disconnected and reconnected</field>
+        </record>
+        <record id="resolution_miner_restarted" model="repair.final.resolution">
+            <field name="name">Miner physically restarted</field>
+        </record>
+        <record id="resolution_breaker_reactivated" model="repair.final.resolution">
+            <field name="name">Breaker reactivated</field>
+        </record>
+        <record id="resolution_fan_replaced" model="repair.final.resolution">
+            <field name="name">Miner fan replaced</field>
+        </record>
+        <record id="resolution_dust_cleaned" model="repair.final.resolution">
+            <field name="name">Miner dust cleaned</field>
+        </record>
+        <record id="resolution_heatwall_adjusted" model="repair.final.resolution">
+            <field name="name">Heat wall repositioned</field>
+        </record>
+        <record id="resolution_position_optimized" model="repair.final.resolution">
+            <field name="name">Miner repositioned to improve airflow</field>
+        </record>
+        <record id="resolution_valves_opened" model="repair.final.resolution">
+            <field name="name">Water valves opened</field>
+        </record>
+        <record id="resolution_hoses_replaced" model="repair.final.resolution">
+            <field name="name">Hoses replaced</field>
+        </record>
+        <record id="resolution_oil_refilled" model="repair.final.resolution">
+            <field name="name">Oil level refilled</field>
+        </record>
+        <record id="resolution_miner_restarted_soft" model="repair.final.resolution">
+            <field name="name">Miner restarted</field>
+        </record>
+        <record id="resolution_miner_power_reset" model="repair.final.resolution">
+            <field name="name">Miner disconnected and reconnected</field>
+        </record>
+        <record id="resolution_miner_repositioned" model="repair.final.resolution">
+            <field name="name">Miner repositioned</field>
+        </record>
+        <record id="resolution_firmware_flashed" model="repair.final.resolution">
+            <field name="name">Firmware flashed</field>
+        </record>
+        <record id="resolution_dust_cleaned_2" model="repair.final.resolution">
+            <field name="name">Miner dust cleaned</field>
+        </record>
+        <record id="resolution_sent_to_maintenance" model="repair.final.resolution">
+            <field name="name">Referred to maintenance</field>
+        </record>
+        <record id="resolution_sent_to_networking" model="repair.final.resolution">
+            <field name="name">Referred to networking</field>
+        </record>
+        <record id="resolution_unit_ok" model="repair.final.resolution">
+            <field name="name">Miner working properly</field>
+        </record>
+
+    </data>
+</odoo>

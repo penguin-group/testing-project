@@ -1,0 +1,17 @@
+<odoo>
+    <data noupdate="1">
+
+        <record id="repair_external_service_enmos" model="repair.external.service">
+            <field name="name">Enmos S.A.</field>
+        </record>
+
+        <record id="repair_external_service_global_hash" model="repair.external.service">
+            <field name="name">Global Hash</field>
+        </record>
+
+        <record id="repair_external_service_metax" model="repair.external.service">
+            <field name="name">MetaX</field>
+        </record>
+
+    </data>
+</odoo>

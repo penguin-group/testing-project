@@ -1,0 +1,137 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* pisa_approvals_expenses
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-09-11 17:14+0000\n"
+"PO-Revision-Date: 2025-09-11 17:14+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: pisa_approvals_expenses
+#: model_terms:ir.ui.view,arch_db:pisa_approvals_expenses.account_move_view_form_inherit
+msgid "<span class=\"o_stat_text\">Approval Req.</span>"
+msgstr "<span class=\"o_stat_text\">Solicitud de Aprobación</span>"
+
+#. module: pisa_approvals_expenses
+#: model_terms:ir.ui.view,arch_db:pisa_approvals_expenses.approval_request_view_form_inherit
+msgid "<span class=\"o_stat_text\">Vendor Bill</span>"
+msgstr "<span class=\"o_stat_text\">Factura de Proveedor</span>"
+
+#. module: pisa_approvals_expenses
+#: model:ir.model.fields,help:pisa_approvals_expenses.field_approval_category__approval_type
+msgid ""
+"Allows you to define which documents you would like to create once the "
+"request has been approved"
+msgstr ""
+"Le permite definir qué documentos le gustaría crear una vez que se apruebe "
+"la solicitud"
+
+#. module: pisa_approvals_expenses
+#: model:ir.model,name:pisa_approvals_expenses.model_approval_category
+msgid "Approval Category"
+msgstr "Categoría de aprobación"
+
+#. module: pisa_approvals_expenses
+#. odoo-python
+#: code:addons/pisa_approvals_expenses/models/account_move.py:0
+#: model:ir.model,name:pisa_approvals_expenses.model_approval_request
+msgid "Approval Request"
+msgstr "Solicitud de aprobación"
+
+#. module: pisa_approvals_expenses
+#: model:ir.model.fields,field_description:pisa_approvals_expenses.field_approval_category__approval_type
+msgid "Approval Type"
+msgstr "Tipo de aprobación"
+
+#. module: pisa_approvals_expenses
+#: model:ir.model.fields,field_description:pisa_approvals_expenses.field_approval_category__has_bank_account
+#: model:ir.model.fields,field_description:pisa_approvals_expenses.field_approval_request__bank_account_id
+#: model:ir.model.fields,field_description:pisa_approvals_expenses.field_approval_request__has_bank_account
+msgid "Bank Account"
+msgstr "Cuenta bancaria"
+
+#. module: pisa_approvals_expenses
+#: model:ir.model.fields.selection,name:pisa_approvals_expenses.selection__approval_category__approval_type__create_vendor_bill_adv
+msgid "Create Vendor Bill for Advancement"
+msgstr "Crear Factura de Proveedor por Adelanto"
+
+#. module: pisa_approvals_expenses
+#: model:ir.model.fields,field_description:pisa_approvals_expenses.field_approval_category__has_currency
+#: model:ir.model.fields,field_description:pisa_approvals_expenses.field_approval_request__currency_id
+#: model:ir.model.fields,field_description:pisa_approvals_expenses.field_approval_request__has_currency
+msgid "Currency"
+msgstr "Moneda"
+
+#. module: pisa_approvals_expenses
+#: model:ir.model,name:pisa_approvals_expenses.model_account_move
+msgid "Journal Entry"
+msgstr "Asiento contable"
+
+#. module: pisa_approvals_expenses
+#: model:ir.model.fields.selection,name:pisa_approvals_expenses.selection__approval_category__has_bank_account__no
+#: model:ir.model.fields.selection,name:pisa_approvals_expenses.selection__approval_category__has_currency__no
+msgid "None"
+msgstr "Ninguno"
+
+#. module: pisa_approvals_expenses
+#: model:ir.model.fields.selection,name:pisa_approvals_expenses.selection__approval_category__has_bank_account__optional
+#: model:ir.model.fields.selection,name:pisa_approvals_expenses.selection__approval_category__has_currency__optional
+msgid "Optional"
+msgstr "Opcional"
+
+#. module: pisa_approvals_expenses
+#: model:ir.model.fields.selection,name:pisa_approvals_expenses.selection__approval_request__request_status__paid
+msgid "Paid"
+msgstr "Pagado"
+
+#. module: pisa_approvals_expenses
+#: model:ir.model.fields,help:pisa_approvals_expenses.field_approval_request__req_owner_related_partner_id
+msgid "Partner-related data of the user"
+msgstr "Datos de usuario relacionados al contacto"
+
+#. module: pisa_approvals_expenses
+#: model:ir.model.fields,field_description:pisa_approvals_expenses.field_approval_request__req_owner_related_partner_id
+msgid "Related Partner"
+msgstr "Contacto Relacionado"
+
+#. module: pisa_approvals_expenses
+#: model:ir.model.fields,field_description:pisa_approvals_expenses.field_account_bank_statement_line__approval_id
+#: model:ir.model.fields,field_description:pisa_approvals_expenses.field_account_move__approval_id
+msgid "Related approval request"
+msgstr "Solicitud de aprobación relacionada"
+
+#. module: pisa_approvals_expenses
+#: model:ir.model.fields,field_description:pisa_approvals_expenses.field_approval_request__request_status
+msgid "Request Status"
+msgstr "Estado de la solicitud"
+
+#. module: pisa_approvals_expenses
+#: model:ir.model.fields.selection,name:pisa_approvals_expenses.selection__approval_category__has_bank_account__required
+#: model:ir.model.fields.selection,name:pisa_approvals_expenses.selection__approval_category__has_currency__required
+msgid "Required"
+msgstr "Requerido"
+
+#. module: pisa_approvals_expenses
+#. odoo-python
+#: code:addons/pisa_approvals_expenses/models/approval_request.py:0
+msgid ""
+"The approval request's currency (%s) doesn't match the bank account's "
+"currency (%s)."
+msgstr ""
+"La moneda de la solicitud de aprobación (%s) no es igual a la moneda "
+"de la cuenta bancaria (%s)."
+
+#. module: pisa_approvals_expenses
+#. odoo-python
+#: code:addons/pisa_approvals_expenses/models/approval_request.py:0
+#: model:ir.model.fields,field_description:pisa_approvals_expenses.field_approval_request__related_vendor_bill
+msgid "Vendor Bills"
+msgstr "Factura de Proveedor"

@@ -1,0 +1,28 @@
+<data>
+    <template id="report_saleorder_inherit" inherit_id="sale.report_saleorder_document"
+        priority="100">
+
+        <xpath expr="//thead/tr/th[@name='th_description']" position="after">
+            <t t-if="doc.is_consolidated">
+                <th name="th_lot_serial" class="text-start">Lot/Serial Number</th>
+            </t>
+        </xpath>
+
+        <xpath expr="//tbody[@class='sale_tbody']/t/tr/t/td[@name='td_name']" position="after">
+            <t t-if="doc.is_consolidated">
+                <td name="td_lot_serial"
+                    style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 120px;">
+                    <t t-if="line.lot_serial">
+                        <span
+                            style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"
+                            t-esc="line.lot_serial" />
+                    </t>
+                    <t t-else="">
+                        <span>N/A</span>
+                    </t>
+                </td>
+            </t>
+        </xpath>
+
+    </template>
+</data>
