@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<odoo>
+    <template id="report_payslip_lang_inherit" inherit_id="hr_payroll.report_payslip_lang">
+        <t t-foreach="docs" position="replace">
+            <t t-foreach="[1, 2]" t-as="copy_number">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="o" t-value="o.with_context(lang=o.employee_id.lang or o.env.lang)"/>
+                    <t t-call="hr_payroll.report_payslip" t-lang="o.env.lang"/>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_payslip_inherit" inherit_id="hr_payroll.report_payslip">
+        <!-- Remove marital, children and address data -->
+        <div id="employee_marital" position="replace">
+            <t t-set="dummy" t-value="false"/>
+        </div>
+        <div id="employee_person_in_charge" position="replace">
+            <t t-set="dummy" t-value="false"/>
+        </div>
+        <div id="employee_private_address" position="replace">
+            <t t-set="dummy" t-value="false"/>
+        </div>
+
+        <!-- Paraguayan data -->
+         <h2 id="payslip_name" position="before">
+            <div>
+                <strong class="me-2">IPS Patronal Number:</strong>
+                <span t-field="o.contract_id.branch_id.ips_patronal_number"/>
+            </div>
+            <div>
+                <strong class="me-2">MTESS Patronal Number:</strong>
+                <span t-field="o.contract_id.branch_id.mtess_patronal_number"/>
+            </div>
+            <div>
+                <span>According to the ART. 235-236</span>
+                <span>Labor Code</span><br/>
+                <t t-if="copy_number == 1">
+                    <strong class="me-2">ORIGINAL</strong>
+                </t>
+                <t t-if="copy_number == 2">
+                    <strong class="me-2">DUPLICATE</strong>
+                </t>
+            </div>
+        </h2>
+
+        <div id="to_pay" position="after">
+            <div class="row" style="margin-top:100px;">
+                <div class="col-4 text-center">
+                    <div style="border-top:1px solid #000; width:80%; margin:20px auto 0 auto;"></div>
+                    <div>Date of Payment</div>
+                </div>
+                <div class="col-4 text-center">
+                    <div style="border-top:1px solid #000; width:80%; margin:20px auto 0 auto;"></div>
+                    <div>Employer Signature</div>
+                </div>
+                <div class="col-4 text-center">
+                    <div style="border-top:1px solid #000; width:80%; margin:20px auto 0 auto;"></div>
+                    <div>Employee Signature</div>
+                </div>
+            </div>
+        </div>
+    </template>
+</odoo>

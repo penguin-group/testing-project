@@ -63,6 +63,7 @@
         "views/res_company_views.xml",
         'views/hr_job_views.xml',
 
+        "views/report_payslip_templates.xml",
     ],
 
     'demo': [

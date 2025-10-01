@@ -1,272 +1,663 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* pisa_hr_payroll
+# 	* l10n_py_hr_payroll
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 18.0\n"
+"Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"Language: es\n"
+"POT-Creation-Date: 2025-10-01 20:04+0000\n"
+"PO-Revision-Date: 2025-10-01 20:04+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
 
-#. module: pisa_hr_payroll
-#: model:hr.salary.rule.category,name:pisa_hr_payroll.hr_salary_rule_category_advances_py
+#. module: l10n_py_hr_payroll
+#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.hr_salary_attachment_view_form_currency
+msgid ""
+".\n"
+"                            Amounts will be converted using the payroll closing date exchange rate."
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.res_config_settings_view_form_inherit_payroll
+msgid ""
+"<span class=\"text-muted\">Day of each month (1-31, or 0 to disable)</span>"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.report_payslip_inherit
+msgid ""
+"<span>According to the ART. 235-236</span>\n"
+"                <span>Labor Code</span><br/>"
+msgstr ""
+"<span>Conforme al ART. 235-236</span>\n"
+"                <span>Código del trabajo</span><br/>"
+
+#. module: l10n_py_hr_payroll
+#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.report_payslip_inherit
+msgid "<strong class=\"me-2\">DUPLICATE</strong>"
+msgstr "<strong class=\"me-2\">DUPLICADO</strong>"
+
+#. module: l10n_py_hr_payroll
+#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.report_payslip_inherit
+msgid "<strong class=\"me-2\">IPS Patronal Number:</strong>"
+msgstr "<strong class=\"me-2\">Número Patronal IPS:</strong>"
+
+#. module: l10n_py_hr_payroll
+#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.report_payslip_inherit
+msgid "<strong class=\"me-2\">MTESS Patronal Number:</strong>"
+msgstr "<strong class=\"me-2\">Número Patronal MTESS:</strong>"
+
+#. module: l10n_py_hr_payroll
+#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.report_payslip_inherit
+msgid "<strong class=\"me-2\">ORIGINAL</strong>"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.hr_salary_attachment_view_form_currency
+msgid ""
+"<strong>Multi-Currency Attachment:</strong>\n"
+"                            This attachment uses"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.view_contract_form_py_payroll
+msgid ""
+"<strong>⚠️ Multi-Currency Contract:</strong><br/>\n"
+"                                This contract uses a different currency than the company currency.<br/>\n"
+"                                Payroll calculations will use the contract currency and be converted to company currency for accounting entries."
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.view_contract_form_py_payroll
+msgid ""
+"<strong>💡 Deductions &amp; Allowances:</strong><br/>\n"
+"                            Use <strong>Salary Attachments</strong> for recurring deductions and allowances:<br/>\n"
+"                            • Medical Insurance (Seguro Médico)<br/>\n"
+"                            • Court Garnishments (Embargo Judicial)<br/>\n"
+"                            • Family Allowances (Bonificación Familiar)<br/>\n"
+"                            • Other deductions (Training, Parking, Loans)<br/><br/>\n"
+"                            Go to: <em>Payroll &gt; Salary Attachments</em>"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.view_hr_payroll_structure_form_py
+msgid ""
+"<strong>📊 Contabilidad Paraguay:</strong><br/>\n"
+"                        Esta estructura utiliza el diario <strong>\"Nómina Paraguay (NOM)\"</strong> para registrar los asientos contables de nómina.<br/>\n"
+"                        Los asientos se generan automáticamente al confirmar las liquidaciones."
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.res_config_settings_view_form_inherit_payroll
+msgid ""
+"<strong>🔒 Payroll Period Protection:</strong><br/>\n"
+"                            • <strong>Example:</strong> Setting \"25\" means July 2025 payroll can only be processed after July 25, 2025<br/>\n"
+"                            • <strong>Period Based Logic:</strong> Each payroll period is locked until the closing day of that period<br/>\n"
+"                            • <strong>Example Scenarios:</strong><br/>\n"
+"                              - Today is Aug 8, processing July payroll: ✅ Allowed (July 25 has passed)<br/>\n"
+"                              - Today is July 20, processing July payroll: ❌ Blocked (July 25 hasn't passed)<br/>\n"
+"                            • Prevents early processing of current month payroll<br/>\n"
+"                            • Allows processing of previous months once their closing day has passed<br/>\n"
+"                            • Automatically handles February (28/29 days) and 31-day months<br/>\n"
+"                            • Set to <strong>0</strong> to disable payroll closing protection"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_aop_employer_py
+msgid "AOP 16,5%"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#. odoo-python
+#: code:addons/l10n_py_hr_payroll/models/hr_payslip.py:0
+msgid "Adjustment Entry"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#. odoo-python
+#: code:addons/l10n_py_hr_payroll/models/hr_payslip.py:0
+msgid "Adjustment Entry - Net Payable"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:hr.payroll.structure,payslip_name:l10n_py_hr_payroll.hr_payroll_structure_py_holiday_bonus
+#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_aguinaldo_py
+msgid "Aguinaldo"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_aguinaldo_proportional_py
+msgid "Aguinaldo Proporcional"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,help:l10n_py_hr_payroll.field_hr_salary_attachment__monthly_amount
+msgid "Amount to pay each payslip in attachment currency."
+msgstr "Importe a pagar en cada recibo de nómina."
+
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_advance_py
+#: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_advances_py
 msgid "Anticipos"
-msgstr "Anticipos"
+msgstr ""
 
-#. module: pisa_hr_payroll
-#: model:hr.salary.rule.category,name:pisa_hr_payroll.hr_salary_rule_category_allowances_py
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_employer_contributions_py
+msgid "Aportes Patronales"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_allowances_py
 msgid "Asignaciones"
-msgstr "Asignaciones"
+msgstr ""
 
-#. module: pisa_hr_payroll
-#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_bonus
-msgid "Bono"
-msgstr "Bono"
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_hr_salary_attachment__attachment_currency_id
+msgid "Attachment Currency"
+msgstr ""
 
-#. module: pisa_hr_payroll
-#: model:hr.employee.child,field:age
-msgid "Age"
-msgstr "Edad"
-
-#. module: pisa_hr_payroll
-#: model:hr.employee.child,field:date_of_birth
-msgid "Date of Birth"
-msgstr "Fecha de Nacimiento"
-
-#. module: pisa_hr_payroll
-#: model:hr.employee.child,field:name
-msgid "Full Name"
-msgstr "Nombre Completo"
-
-#. module: pisa_hr_payroll
-#: model:hr.employee.child,field:identification_number
-msgid "ID Number"
-msgstr "Número de Cédula"
-
-#. module: pisa_hr_payroll
-#: model:hr.employee.child,field:is_dependent
-msgid "Is Dependent"
-msgstr "Es Dependiente"
-
-#. module: pisa_hr_payroll
-#: model:hr.employee.child,field:notes
-msgid "Notes"
-msgstr "Notas"
-
-#. module: pisa_hr_payroll
-#: view:hr.employee.form:pisa_hr_payroll.view_employee_form_py_payroll
-msgid "Children Details"
-msgstr "Detalles de los Hijos"
-
-#. module: pisa_hr_payroll
-#: model:hr.employee,field:children_ids
-msgid "Children"
-msgstr "Hijos"
-
-#. module: pisa_hr_payroll
-#: model:hr.salary.rule.category,name:pisa_hr_payroll.hr_salary_rule_category_family_py
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_family_py
 msgid "Beneficios Familiares"
-msgstr "Beneficios Familiares"
+msgstr ""
 
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_family_allowance_py
+msgid "Bonificación Familiar"
+msgstr ""
 
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_bonus_py
+msgid "Bono"
+msgstr ""
 
-#. module: pisa_hr_payroll
-#: model:ir.actions.act_window,name:pisa_hr_payroll.action_hr_salary_rule_category_py
-msgid "Categorías de Reglas Paraguay"
-msgstr "Categorías de Reglas Paraguay"
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_hr_contract__branch_id
+msgid "Branch"
+msgstr ""
 
-#. module: pisa_hr_payroll
-#: model:ir.ui.menu,name:pisa_hr_payroll.menu_hr_payroll_py_config
-msgid "Configuración Paraguay"
-msgstr "Configuración Paraguay"
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,help:l10n_py_hr_payroll.field_hr_contract__branch_id
+msgid "Branch associated with this contract"
+msgstr ""
 
-#. module: pisa_hr_payroll
-#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_solidarity
-msgid "Contribución Solidaria"
-msgstr "Contribución Solidaria"
+#. module: l10n_py_hr_payroll
+#. odoo-python
+#: code:addons/l10n_py_hr_payroll/models/hr_payslip_run.py:0
+msgid ""
+"Cannot confirm batch '%s'.\n"
+"Today (%s) is on or before the payroll closing day (%s) for the payslip period (%s).\n"
+"Payroll operations for %s %s are only allowed after %s.\n"
+"\n"
+"Please either:\n"
+"• Wait until after %s to confirm this batch\n"
+"• Contact your administrator to adjust the payroll closing day in Settings > Payroll"
+msgstr ""
 
+#. module: l10n_py_hr_payroll
+#. odoo-python
+#: code:addons/l10n_py_hr_payroll/models/hr_payslip.py:0
+msgid ""
+"Cannot confirm payslip for %s.\n"
+"Today (%s) is on or before the payroll closing day (%s) for the payslip period (%s).\n"
+"Payroll operations for %s %s are only allowed after %s.\n"
+"\n"
+"Please either:\n"
+"• Wait until after %s to confirm this payslip\n"
+"• Contact your administrator to adjust the payroll closing day in Settings > Payroll"
+msgstr ""
 
+#. module: l10n_py_hr_payroll
+#. odoo-python
+#: code:addons/l10n_py_hr_payroll/models/hr_payslip_account.py:0
+msgid ""
+"Cannot create accounting entries for payslip of %s.\n"
+"Today (%s) is on or before the payroll closing day (%s) for the payslip period (%s).\n"
+"Accounting entries for %s %s are only allowed after %s.\n"
+"\n"
+"Please either:\n"
+"• Wait until after %s to create accounting entries\n"
+"• Contact your administrator to adjust the payroll closing day in Settings > Payroll"
+msgstr ""
 
-#. module: pisa_hr_payroll
-#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_english_deduction
-msgid "Descuento Clases de Inglés"
-msgstr "Descuento Clases de Inglés"
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_training_py
+msgid "Capacitación"
+msgstr ""
 
-#. module: pisa_hr_payroll
-#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_training_deduction
-msgid "Descuento Capacitación"
-msgstr "Descuento Capacitación"
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,help:l10n_py_hr_payroll.field_hr_job__is_manager
+msgid "Check if the job position is for a managerial role."
+msgstr ""
 
-#. module: pisa_hr_payroll
-#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_parking_deduction
-msgid "Descuento Estacionamiento"
-msgstr "Descuento Estacionamiento"
+#. module: l10n_py_hr_payroll
+#: model:ir.model,name:l10n_py_hr_payroll.model_res_company
+msgid "Companies"
+msgstr "Compañías"
 
-#. module: pisa_hr_payroll
-#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_loan_deduction
-msgid "Descuento Préstamo"
-msgstr "Descuento Préstamo"
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_hr_salary_attachment__company_currency_id
+#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.hr_salary_attachment_view_search_currency
+msgid "Company Currency"
+msgstr ""
 
-#. module: pisa_hr_payroll
-#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_vacation_days
-msgid "Días de Vacaciones"
-msgstr "Días de Vacaciones"
+#. module: l10n_py_hr_payroll
+#: model:ir.model,name:l10n_py_hr_payroll.model_res_config_settings
+msgid "Config Settings"
+msgstr "Ajustes de configuración"
 
-#. module: pisa_hr_payroll
-#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_medical_leave_days
-msgid "Días de Licencia Médica"
-msgstr "Días de Licencia Médica"
+#. module: l10n_py_hr_payroll
+#: model:ir.model,name:l10n_py_hr_payroll.model_res_partner
+msgid "Contact"
+msgstr "Contacto"
 
-#. module: pisa_hr_payroll
-#: model:hr.salary.rule.category,name:pisa_hr_payroll.hr_salary_rule_category_garnishment_py
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_hr_contract__contract_currency_id
+#: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_hr_payslip__currency_id
+msgid "Contract Currency"
+msgstr "Moneda"
+
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_hr_contract__currency_id
+#: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_hr_salary_attachment__currency_id
+#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.hr_salary_attachment_view_list_currency
+#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.hr_salary_attachment_view_search_currency
+msgid "Currency"
+msgstr "Moneda"
+
+#. module: l10n_py_hr_payroll
+#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.view_contract_form_py_payroll
+msgid "Currency Information"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,help:l10n_py_hr_payroll.field_hr_contract__contract_currency_id
+#: model:ir.model.fields,help:l10n_py_hr_payroll.field_hr_payslip__currency_id
+msgid "Currency for this contract. Can be different from company currency."
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,help:l10n_py_hr_payroll.field_hr_salary_attachment__attachment_currency_id
+msgid ""
+"Currency for this salary attachment. Can be different from company currency."
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,help:l10n_py_hr_payroll.field_hr_salary_attachment__currency_id
+msgid "Currency used for payroll calculations (from attachment currency)"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,help:l10n_py_hr_payroll.field_hr_contract__currency_id
+msgid "Currency used for payroll calculations (from contract currency)"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.report_payslip_inherit
+msgid "Date of Payment"
+msgstr "FECHA DE PAGO"
+
+#. module: l10n_py_hr_payroll
+#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.res_config_settings_view_form_inherit_payroll
+msgid ""
+"Day of each month when payroll closes (e.g., 20 = 20th of each month). No "
+"payroll operations can be confirmed before this day each month."
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,help:l10n_py_hr_payroll.field_res_company__payroll_closing_day
+#: model:ir.model.fields,help:l10n_py_hr_payroll.field_res_config_settings__payroll_closing_day
+msgid ""
+"Day of each month when payroll closes (e.g., 20 = 20th of each month). No "
+"payroll operations can be confirmed before this day each month. Set to 0 to "
+"disable payroll closing protection."
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_garnishment_py
+#: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_garnishment_py
 msgid "Embargo Judicial"
-msgstr "Embargo Judicial"
+msgstr ""
 
-#. module: pisa_hr_payroll
-#: model:ir.actions.act_window,name:pisa_hr_payroll.action_hr_payroll_structure_py
-msgid "Estructuras de Nómina Paraguay"
-msgstr "Estructuras de Nómina Paraguay"
+#. module: l10n_py_hr_payroll
+#: model:ir.model,name:l10n_py_hr_payroll.model_hr_employee
+msgid "Employee"
+msgstr "Empleado"
 
+#. module: l10n_py_hr_payroll
+#: model:ir.model,name:l10n_py_hr_payroll.model_hr_contract
+msgid "Employee Contract"
+msgstr "Contrato del empleado"
 
+#. module: l10n_py_hr_payroll
+#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.report_payslip_inherit
+msgid "Employee Signature"
+msgstr "FIRMA EMPLEADO"
 
-#. module: pisa_hr_payroll
-#: model:hr.salary.rule.category,name:pisa_hr_payroll.hr_salary_rule_category_ips_py
-msgid "IPS (Seguridad Social)"
-msgstr "IPS (Seguridad Social)"
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,help:l10n_py_hr_payroll.field_hr_contract__wage
+msgid "Employee's monthly gross wage in contract currency."
+msgstr "Salario bruto mensual por empleado."
 
-#. module: pisa_hr_payroll
-#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_holiday_day_hours
-msgid "Horas Feriado Diurno"
-msgstr "Horas Feriado Diurno"
+#. module: l10n_py_hr_payroll
+#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.report_payslip_inherit
+msgid "Employer Signature"
+msgstr "FIRMA EMPLEADOR"
 
-#. module: pisa_hr_payroll
-#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_holiday_night_hours
-msgid "Horas Feriado Nocturno"
-msgstr "Horas Feriado Nocturno"
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_hr_contract__end_reason
+msgid "End Reason"
+msgstr ""
 
-#. module: pisa_hr_payroll
-#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_overtime_day_hours
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_parking_py
+msgid "Estacionamiento"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_holiday_day_py
+msgid "Feriado Diurno"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_res_partner__firstname
+#: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_res_users__firstname
+msgid "First Name"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_daycare_allowance_py
+msgid "Guardería"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_overtime_day_py
 msgid "Horas Extras Diurnas"
-msgstr "Horas Extras Diurnas"
+msgstr ""
 
-#. module: pisa_hr_payroll
-#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_overtime_night_hours
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_overtime_night_py
 msgid "Horas Extras Nocturnas"
-msgstr "Horas Extras Nocturnas"
+msgstr ""
 
-#. module: pisa_hr_payroll
-#: model:hr.salary.rule.category,name:pisa_hr_payroll.hr_salary_rule_category_overtime_py
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_overtime_py
 msgid "Horas Extras y Recargos"
-msgstr "Horas Extras y Recargos"
+msgstr ""
 
-#. module: pisa_hr_payroll
-#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_night_surcharge_hours
-msgid "Horas Recargo Nocturno"
-msgstr "Horas Recargo Nocturno"
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_ips_py
+msgid "IPS (Seguridad Social)"
+msgstr ""
 
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_ips_employee_py
+msgid "IPS 9%"
+msgstr ""
 
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_severance_py
+msgid "Indemnización"
+msgstr ""
 
-#. module: pisa_hr_payroll
-#: model:hr.payroll.structure,name:pisa_hr_payroll.hr_payroll_structure_py_employee_salary
-msgid "Liquidación Mensual Paraguay"
-msgstr "Liquidación Mensual Paraguay"
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_non_deductible_py
+msgid "Ingresos No Deducibles"
+msgstr ""
 
-#. module: pisa_hr_payroll
-#: model:hr.salary.rule.category,name:pisa_hr_payroll.hr_salary_rule_category_other_deductions_py
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_hr_job__is_manager
+msgid "Is Manager"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:ir.model,name:l10n_py_hr_payroll.model_hr_job
+msgid "Job Position"
+msgstr "Puesto de trabajo"
+
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_res_partner__lastname
+#: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_res_users__lastname
+msgid "Last Name"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_medical_leave_py
+msgid "Licencias"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:hr.payroll.structure,payslip_name:l10n_py_hr_payroll.hr_payroll_structure_py_vacation
+msgid "Liquidación de Vacaciones"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_hr_employee__minor_employee_school_status
+#: model:ir.model.fields,help:l10n_py_hr_payroll.field_hr_employee__minor_employee_school_status
+msgid "Minor's school situation, if applicable"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_hr_salary_attachment__monthly_amount_company
+msgid "Monthly Amount (Company Currency)"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.hr_salary_attachment_view_list_currency
+msgid "Multi-Curr"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_hr_salary_attachment__is_multi_currency
+#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.hr_salary_attachment_view_search_currency
+msgid "Multi-Currency"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:account.journal,name:l10n_py_hr_payroll.account_journal_payroll_py
+msgid "Nómina Paraguay"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_other_deductions_py
+#: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_other_deductions_py
 msgid "Otros Descuentos"
-msgstr "Otros Descuentos"
+msgstr ""
 
-#. module: pisa_hr_payroll
-#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_other_income
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_other_income_py
 msgid "Otros Ingresos"
-msgstr "Otros Ingresos"
+msgstr ""
 
-#. module: pisa_hr_payroll
-#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_other_non_deductible
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_other_non_deductible_py
 msgid "Otros Ingresos No Deducibles"
-msgstr "Otros Ingresos No Deducibles"
+msgstr ""
 
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_hr_salary_attachment__paid_amount
+msgid "Paid Amount"
+msgstr "Importe pagado"
 
+#. module: l10n_py_hr_payroll
+#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.view_employee_form_paraguay
+msgid "Paraguay"
+msgstr ""
 
-#. module: pisa_hr_payroll
-#: model:ir.actions.act_window,name:pisa_hr_payroll.action_hr_rule_parameter_py
-msgid "Parámetros Paraguay"
-msgstr "Parámetros Paraguay"
+#. module: l10n_py_hr_payroll
+#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.view_contract_form_py_payroll
+msgid "Paraguay - Nómina"
+msgstr ""
 
-#. module: pisa_hr_payroll
-#: model:ir.actions.act_window,name:pisa_hr_payroll.action_hr_salary_rule_py
-msgid "Reglas Salariales Paraguay"
-msgstr "Reglas Salariales Paraguay"
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_res_company__ips_patronal_number
+msgid "Patronal Number IPS"
+msgstr ""
 
-#. module: pisa_hr_payroll
-#: model:ir.actions.report,name:pisa_hr_payroll.action_report_payslip_py
-msgid "Recibo de Salario Paraguay"
-msgstr "Recibo de Salario Paraguay"
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_res_company__mtess_patronal_number
+msgid "Patronal Number MTESS"
+msgstr ""
 
-#. module: pisa_hr_payroll
-#: model:hr.payroll.structure,payslip_name:pisa_hr_payroll.hr_payroll_structure_py_employee_salary
+#. module: l10n_py_hr_payroll
+#: model:ir.model,name:l10n_py_hr_payroll.model_hr_payslip
+msgid "Pay Slip"
+msgstr "Recibo de nómina"
+
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_res_company__payroll_closing_day
+#: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_res_config_settings__payroll_closing_day
+#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.res_config_settings_view_form_inherit_payroll
+msgid "Payroll Closing Day"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_hr_salary_attachment__monthly_amount
+msgid "Payslip Amount"
+msgstr "Importe del recibo de nómina"
+
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,help:l10n_py_hr_payroll.field_hr_salary_attachment__monthly_amount_company
+msgid "Payslip Amount in company currency for reference"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:ir.model,name:l10n_py_hr_payroll.model_hr_payslip_run
+msgid "Payslip Batches"
+msgstr "Lotes de recibos de nómina"
+
+#. module: l10n_py_hr_payroll
+#: model:ir.model,name:l10n_py_hr_payroll.model_hr_payslip_line
+msgid "Payslip Line"
+msgstr "Línea de recibo de nómina"
+
+#. module: l10n_py_hr_payroll
+#: model:ir.model,name:l10n_py_hr_payroll.model_hr_payslip_worked_days
+msgid "Payslip Worked Days"
+msgstr "Días trabajados en el recibo de nómina"
+
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_notice_pay_py
+msgid "Pre aviso"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_hr_employee__profession
+msgid "Profession"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_provisions_py
+msgid "Provisiones"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_loan_py
+msgid "Préstamo"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_night_surcharge_py
+msgid "Recargos Nocturnos"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:hr.payroll.structure,payslip_name:l10n_py_hr_payroll.hr_payroll_structure_py_employee_salary
 msgid "Recibo de Salario"
-msgstr "Recibo de Salario"
+msgstr ""
 
-#. module: pisa_hr_payroll
-#: model:hr.salary.rule.category,name:pisa_hr_payroll.hr_salary_rule_category_basic_py
-msgid "Salario Básico"
-msgstr "Salario Básico"
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_net_before_deductions_py
+msgid "Salario Neto (antes de descuentos)"
+msgstr ""
 
-#. module: pisa_hr_payroll
-#: model:hr.payslip.input.type,name:pisa_hr_payroll.payslip_input_salary_advance
-msgid "Anticipo de Salario"
-msgstr "Anticipo de Salario"
+#. module: l10n_py_hr_payroll
+#: model:ir.model,name:l10n_py_hr_payroll.model_hr_salary_attachment
+msgid "Salary Attachment"
+msgstr "Embargo de salario"
 
-#. module: pisa_hr_payroll
-#: model:hr.salary.rule.category,name:pisa_hr_payroll.hr_salary_rule_category_medical_py
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_medical_insurance_py
+#: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_medical_py
 msgid "Seguro Médico"
-msgstr "Seguro Médico"
+msgstr ""
 
-#. module: pisa_hr_payroll
-#: model:hr.salary.rule.category,name:pisa_hr_payroll.hr_salary_rule_category_solidarity_py
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_solidarity_py
+#: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_solidarity_py
 msgid "Solidaridad"
-msgstr "Solidaridad"
+msgstr ""
 
-#. module: pisa_hr_payroll
-#: model:ir.actions.act_window,name:pisa_hr_payroll.action_hr_payslip_input_type_py
-msgid "Tipos de Input Paraguay"
-msgstr "Tipos de Input Paraguay"
+#. module: l10n_py_hr_payroll
+#. odoo-python
+#: code:addons/l10n_py_hr_payroll/models/hr_payslip.py:0
+msgid ""
+"The Expense Journal \"%s\" has not properly configured the default Account!"
+msgstr ""
 
-#. module: pisa_hr_payroll
-#: model:hr.salary.rule.category,name:pisa_hr_payroll.hr_salary_rule_category_total_deductions_py
-msgid "Total Descuentos"
-msgstr "Total Descuentos"
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_hr_salary_attachment__total_amount
+msgid "Total Amount"
+msgstr "Importe total"
 
-#. module: pisa_hr_payroll
-#: model:hr.salary.rule.category,name:pisa_hr_payroll.hr_salary_rule_category_total_income_py
-msgid "Total Ingresos"
-msgstr "Total Ingresos"
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_hr_salary_attachment__total_amount_company
+msgid "Total Amount (Company Currency)"
+msgstr ""
 
-#. module: pisa_hr_payroll
-#: model:hr.salary.rule.category,name:pisa_hr_payroll.hr_salary_rule_category_ips_base_py
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_ips_base_py
+#: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_ips_base_py
 msgid "Total Base IPS"
-msgstr "Total Base IPS"
+msgstr ""
 
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_total_deductions_py
+#: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_total_deductions_py
+msgid "Total Descuentos"
+msgstr ""
 
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,help:l10n_py_hr_payroll.field_hr_salary_attachment__total_amount_company
+msgid "Total amount in company currency for reference"
+msgstr ""
 
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,help:l10n_py_hr_payroll.field_hr_salary_attachment__total_amount
+msgid "Total amount to be paid in attachment currency."
+msgstr "Importe total que debe ser pagado"
 
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,help:l10n_py_hr_payroll.field_hr_salary_attachment__is_multi_currency
+msgid "True if attachment currency differs from company currency"
+msgstr ""
 
-#. module: pisa_hr_payroll
-#: model:hr.salary.rule.category,name:pisa_hr_payroll.hr_salary_rule_category_vacation_py
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_vacation_py
+msgid "Vacaciones"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_vacation_proportional_py
+msgid "Vacaciones Proporcionales"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_vacation_py
 msgid "Vacaciones y Licencias"
-msgstr "Vacaciones y Licencias"
+msgstr ""
 
-#. module: pisa_hr_payroll
-#: code:addons/pisa_hr_payroll/models/hr_employee.py:0
-msgid "Children under 3 cannot be more than children under 17"
-msgstr "Los hijos menores de 3 años no pueden ser más que los hijos menores de 17 años"
+#. module: l10n_py_hr_payroll
+#: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_hr_contract__wage
+msgid "Wage"
+msgstr "Salario"
 
-#. module: pisa_hr_payroll
-#: code:addons/pisa_hr_payroll/models/hr_contract.py:0
-msgid "Court garnishment cannot exceed 25% of salary"
-msgstr "El embargo judicial no puede exceder el 25% del salario"
+#. module: l10n_py_hr_payroll
+#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.hr_salary_attachment_view_form_currency
+msgid "while your company uses"
+msgstr ""
