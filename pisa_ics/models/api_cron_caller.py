@@ -1,6 +1,9 @@
 from odoo import models, api
 import requests
 import json
+import logging
+
+_logger = logging.getLogger(__name__)
 
 class ApiCronCaller(models.Model):
     _name = 'api.cron.caller'
@@ -8,7 +11,6 @@ class ApiCronCaller(models.Model):
 
     @api.model
     def call_external_api(self):
-
         params = self.env['ir.config_parameter'].sudo()
         email = params.get_param('ICS_Email')
         password = params.get_param('ICS_Password')
@@ -17,6 +19,7 @@ class ApiCronCaller(models.Model):
         url = f'{host}/login'
 
         if not email or not password or not host:
+            _logger.warning("Incomplete ICS parameters: host=%s, email=%s", host, email)
             return
 
         headers = {
@@ -36,5 +39,11 @@ class ApiCronCaller(models.Model):
                 token = data.get('token')
                 if token:
                     params.set_param('ICS_Token', token)
+                    _logger.info("ICS token updated successfully.")
+                else:
+                    _logger.warning("No token received in the response.")
+            else:
+                _logger.error("❌ Error authenticating with ICS: %s - %s", response.status_code, response.text)
+
         except Exception as e:
-            pass
+            _logger.exception("❌ Error connecting to ICS API: %s", e)
