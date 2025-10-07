@@ -39,6 +39,7 @@
         "views/res_config_settings_views.xml",
         "views/res_currency_views.xml",
         "views/res_partner.xml",
+        "views/res_partner_bank.xml",
         "wizards/invoice_cancel_views.xml",
         "wizards/report_res90_views.xml",
         "wizards/report_vat_purchase_views.xml",

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_partner_bank_form_inherit_account_l10n_py" model="ir.ui.view">
+            <field name="name">res.partner.bank.form.inherit.account.l10n.py</field>
+            <field name="model">res.partner.bank</field>
+            <field name="inherit_id" ref="account.view_partner_bank_form_inherit_account"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="document_type" string="Document Type" invisible="bank_country_code != 'PY'"/>
+                    <field name="partner_document_number" invisible="document_type == False or bank_country_code != 'PY'" />
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>
