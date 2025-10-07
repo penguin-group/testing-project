@@ -1,8 +1,5 @@
 from odoo import models, _
 from odoo.exceptions import UserError, ValidationError
-import logging
-
-ics_logger = logging.getLogger('ics_logger')
 
 class RepairOrderActions(models.Model):
     _inherit = 'repair.order'
