@@ -98,19 +98,19 @@ class ProjectTask(models.Model):
     
     def action_view_github_branches(self):
         """Open the GitHub branches associated with this task."""
-        action = self.env.ref('project_github.github_branch_action').read()[0]
+        action = self.env.ref('project_github.github_branch_action').sudo().read()[0]
         action['domain'] = [('task_id', '=', self.id)]
         return action
 
     def action_view_commits(self):
         """Open the commits associated with this task."""
-        action = self.env.ref('project_github.github_commit_action').read()[0]
+        action = self.env.ref('project_github.github_commit_action').sudo().read()[0]
         action['domain'] = [('task_id', '=', self.id)]
         return action
 
     def action_view_pull_requests(self):
         """Open the pull requests associated with this task."""
-        action = self.env.ref('project_github.github_pull_request_action').read()[0]
+        action = self.env.ref('project_github.github_pull_request_action').sudo().read()[0]
         action['domain'] = [('task_id', '=', self.id)]
         return action
     
