@@ -23,6 +23,7 @@
         'security/purchase_security.xml',
         'views/purchase_views.xml',
         'views/purchase_request_views.xml',
+        'views/purchase_cancel_wizard.xml',
         'views/menu_override.xml',
         'wizard/purchase_currency_wizard_view.xml',
     ],

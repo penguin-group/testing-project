@@ -8,6 +8,11 @@
            <field name="parent_id" ref="base.module_category_agreement" />
        </record>
 
+       <record model="res.groups" id="group_agreement_own_agreements_only">
+           <field name="name">Agreement: Own Agreements Only</field>
+           <field name="category_id" ref="base.module_category_hidden"/>
+       </record>
+
        <record model="res.groups" id="group_agreement_viewer">
            <field name="name">Agreement: Read-only</field>
            <field name="category_id" ref="agreement.module_category_agreement"/>

@@ -1,0 +1,26 @@
+<odoo>
+    <record id="view_consolidate_quotations_wizard" model="ir.ui.view">
+        <field name="name">consolidate.quotations.wizard.form</field>
+        <field name="model">consolidate.quotations.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Consolidate Quotations">
+                <group>
+                    <field name="quotation_ids" widget="many2many_tags" />
+                </group>
+                <footer>
+                    <button string="Consolidate" type="object" name="action_consolidate_quotations"
+                        class="btn-primary" />
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_consolidate_quotations" model="ir.actions.act_window">
+        <field name="name">Consolidate Quotations</field>
+        <field name="res_model">consolidate.quotations.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="sale.model_sale_order" />
+    </record>
+</odoo>

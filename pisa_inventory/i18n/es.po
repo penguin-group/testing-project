@@ -1,0 +1,102 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* pisa_inventory
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-11-20 19:08+0000\n"
+"PO-Revision-Date: 2024-11-20 19:08+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: pisa_inventory
+#: model:ir.model.fields,field_description:pisa_inventory.field_product_template__miner_brand
+msgid "Miner Brand"
+msgstr "Marca del Minero"
+
+#. module: pisa_inventory
+#: model:ir.model.fields,field_description:pisa_inventory.field_product_template__miner_model
+msgid "Miner Model"
+msgstr "Modelo del Minero"
+
+#. module: pisa_inventory
+#: model:ir.model.fields,field_description:pisa_inventory.field_product_template__miner_hashrate_nominal
+msgid "Hashrate Nominal (TH/s)"
+msgstr "Hashrate Nominal (TH/s)"
+
+#. module: pisa_inventory
+#: model:ir.model.fields,field_description:pisa_inventory.field_product_template__miner_theoretical_consumption
+msgid "Theoretical Consumption (W)"
+msgstr "Consumo Teórico (W)"
+
+#. module: pisa_inventory
+#: model:ir.model.fields,field_description:pisa_inventory.field_product_template__miner_input_voltage_minimum
+msgid "Input Voltage Minimum (V)"
+msgstr "Voltaje de Entrada Mínimo (V)"
+
+#. module: pisa_inventory
+#: model:ir.model.fields,field_description:pisa_inventory.field_product_template__miner_input_voltage_maximum
+msgid "Input Voltage Maximum (V)"
+msgstr "Voltaje de Entrada Máximo (V)"
+
+#. module: pisa_inventory
+#: model:ir.model.fields,field_description:pisa_inventory.field_product_template__miner_efficiency
+msgid "Efficiency (J/TH)"
+msgstr "Eficiencia (J/TH)"
+
+#. module: pisa_inventory
+#: model:ir.model.fields,field_description:pisa_inventory.field_product_template__miner_cooling_type
+msgid "Miner Cooling Type"
+msgstr "Tipo de Refrigeración del Minero"
+
+#. module: pisa_inventory
+#: model:ir.model.fields,field_description:pisa_inventory.field_product_template__is_miner_category
+msgid "Is Miner Category"
+msgstr "Es Categoría Minero"
+
+#. module: pisa_inventory
+#: model:ir.model.fields,field_description:pisa_inventory.field_stock_lot__customer
+msgid "Customer"
+msgstr "Cliente"
+
+#. module: pisa_inventory
+#: model:ir.model.fields,help:pisa_inventory.field_stock_lot__customer
+msgid "Name of the customer associated with the batch."
+msgstr "Nombre del cliente asociado con el lote."
+
+#. module: pisa_inventory
+#: model:ir.model.fields,field_description:pisa_inventory.field_stock_lot__container
+msgid "Container"
+msgstr "Contenedor"
+
+#. module: pisa_inventory
+#: model:ir.model.fields,help:pisa_inventory.field_stock_lot__container
+msgid "Identifier of the associated container."
+msgstr "Identificador del contenedor asociado."
+
+#. module: pisa_inventory
+#: model:ir.model.fields,field_description:pisa_inventory.field_stock_lot__miner_waranty_expiration_date
+msgid "Miner Warranty Expiration Date"
+msgstr "Fecha de Expiración de la Garantía del Minero"
+
+#. module: pisa_inventory
+#: model:ir.model.fields,help:pisa_inventory.field_stock_lot__miner_waranty_expiration_date
+msgid "Miner's warranty expiration date."
+msgstr "Fecha de vencimiento de la garantía del minero."
+
+#. module: pisa_inventory
+#: model:ir.model.fields,field_description:pisa_inventory.field_stock_lot__status
+msgid "Status"
+msgstr "Estado"
+
+#. module: pisa_inventory
+#: model:ir.model.fields,help:pisa_inventory.field_stock_lot__status
+msgid "Indicates the status of the miner."
+msgstr "Indica el estado del minero."

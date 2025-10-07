@@ -1,0 +1,11 @@
+<odoo>
+    <record id="product_category_miner" model="product.category">
+        <field name="name">Miner</field>
+        <field name="parent_id" eval="False"/> 
+    </record>
+
+    <record id="product_category_supplies" model="product.category">
+        <field name="name">Supplies</field>
+        <field name="parent_id" eval="False"/>
+    </record>
+</odoo>
