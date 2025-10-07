@@ -43,7 +43,7 @@ class ApiCronCaller(models.Model):
                 else:
                     _logger.warning("No token received in the response.")
             else:
-                _logger.error("❌ Error authenticating with ICS: %s - %s", response.status_code, response.text)
+                _logger.error("Error authenticating with ICS: %s - %s", response.status_code, response.text)
 
         except Exception as e:
-            _logger.exception("❌ Error connecting to ICS API: %s", e)
+            _logger.exception("Error connecting to ICS API: %s", e)
