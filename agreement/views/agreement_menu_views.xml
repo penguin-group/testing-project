@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <menuitem id="agreement_menu_root" name="Agreements"/>
+    <menuitem id="agreement_menu_root" name="Agreements" web_icon="agreement,static/description/icon.png"/>
 
     <menuitem id="menu_agreement" name="Agreements" sequence="10" parent="agreement_menu_root"/>
     <menuitem id="menu_agreement_config" name="Settings" sequence="15" parent="agreement_menu_root"/>
