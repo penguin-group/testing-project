@@ -19,14 +19,6 @@
                                         <field name="repo" class="ps-3 w-100" options="{'no_create': True, 'no_create_edit': True}"/>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-auto pe-0">
-                                        <label for="main_branch_name" class="fw-bold"/>
-                                    </div>
-                                    <div class="col-9 ps-0">
-                                        <field name="main_branch_name" class="ps-3 w-100"/>
-                                    </div>
-                                </div>
                             </div>
                         </setting>
                     </div>

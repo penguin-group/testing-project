@@ -131,7 +131,7 @@ class ProjectTask(models.Model):
 
     def _get_commits(self, repo, branch_name):
         """Get all commits in the branch and filter by message content."""
-        commits = repo.get_commits(sha=branch_name)
+        commits = repo.get_commits(sha=branch_name, since=self.create_date)
         return [commit for commit in commits if self.task_code in commit.commit.message]
 
     
@@ -143,8 +143,6 @@ class ProjectTask(models.Model):
         auth = Auth.Token(self.project_id.company_id.github_token)
         g = Github(auth=auth)
         repo = g.get_repo(self.project_id.repo.full_name)
-
-        repo.get_commits()
 
         new_vals_list = []
         

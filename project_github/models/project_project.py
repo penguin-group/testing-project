@@ -60,11 +60,6 @@ class Project(models.Model):
         string='Repository',
         domain="[('company_id', '=', company_id)]"
     )
-    main_branch_name = fields.Char(
-        string='Main Branch Name',
-        default='main',
-        help="Name of the main branch in the repository (e.g., 'main' or 'master')."
-    )
 
     def _sync_github_branches(self):
         """Sync branches with odoo database"""
