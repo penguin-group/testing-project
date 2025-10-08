@@ -182,7 +182,7 @@ class HrPayslip(models.Model):
                     
         amount_currency_sum = 0
         for line_id in line_ids:
-            amount_currency_sum += line_id['amount_currency']
+            amount_currency_sum += line_id.get('amount_currency', 0)
 
         adjust_credit = {
             'name': _('Adjustment Entry - Net Payable'),
@@ -191,7 +191,7 @@ class HrPayslip(models.Model):
             'journal_id': self.journal_id.id,
             'date': date,
             'currency_id': self.currency_id.id,
-            'amount_currency': -amount_currency_sum,
+            'amount_currency': -amount_currency_sum if amount_currency_sum else credit_sum - debit_sum,
             'debit': 0.0 if adjust_type == 'credit' else credit_sum - debit_sum,
             'credit': debit_sum - credit_sum if adjust_type == 'credit' else 0.0,
         }
