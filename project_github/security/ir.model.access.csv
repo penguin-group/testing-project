@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_github_repository_manager,access.github.repository.manager,project_github.model_github_repository,project.group_project_manager,1,1,1,1
+access_github_repository_user,access.github.repository.user,project_github.model_github_repository,project.group_project_user,1,0,0,0
+access_github_branch_user,access.github.branch.user,project_github.model_github_branch,project.group_project_user,1,1,1,1
+access_github_branch_create_wizard_user,access.github.branch.create.wizard.user,project_github.model_github_branch_create_wizard,project.group_project_user,1,1,1,1
+access_github_commit_user,access.github.commit.user,model_github_commit,project.group_project_user,1,1,1,1
+access_github_pull_request_user,access.github.pull.request.user,model_github_pull_request,project.group_project_user,1,1,1,1

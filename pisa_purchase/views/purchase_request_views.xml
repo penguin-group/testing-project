@@ -12,7 +12,7 @@
                 </field>
 
                 <xpath expr="//field[@name='description']" position="after">
-                    <field name="currency_id" readonly="0" />
+                    <field name="currency_id" readonly="0"/>
                 </xpath>
 
                 <xpath expr="//group[hasclass('oe_subtotal_footer')]/field" position="replace">

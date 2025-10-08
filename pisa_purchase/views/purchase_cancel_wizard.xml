@@ -1,0 +1,21 @@
+<odoo>
+    <record id="view_purchase_cancel_wizard_form" model="ir.ui.view">
+        <field name="name">purchase.cancel.wizard.form</field>
+        <field name="model">purchase.cancel.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <p>Your Purchase Order is already validated.</p>
+                <p>Cancelling might affect accounting and you will also lose all validations.</p>
+                <br/>
+                <p><strong>Do you still want to cancel?</strong></p>
+
+                <field name="purchase_order_id" invisible="1"/>
+
+                <footer>
+                    <button name="action_confirm_cancellation" string="Cancel PO" type="object" class="btn-primary" data-hotkey="q"/>
+                    <button string="Keep PO" class="btn-secondary" special="cancel" data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

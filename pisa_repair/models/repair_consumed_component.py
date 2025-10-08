@@ -1,4 +1,7 @@
 from odoo import models, fields, api
+import logging
+
+_logger = logging.getLogger(__name__)
 
 class RepairConsumedComponent(models.Model):
     _name = "repair.consumed.component"
@@ -80,4 +83,4 @@ class RepairConsumedComponent(models.Model):
             if rec.id:
                 rec.unlink()
             else:
-                pass
+                _logger.warning("Tried to remove a component without a valid record ID.")

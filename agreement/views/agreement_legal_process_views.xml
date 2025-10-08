@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_agreement_legal_process_types" model="ir.actions.act_window">
+        <field name="name">Legal Process Types</field>
+        <field name="res_model">agreement.legal.process.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
