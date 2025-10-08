@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import fields, models, api
-from github import Auth, Github
+from github import Auth, Github, GithubException
 from datetime import datetime
 import logging
 
@@ -129,53 +129,80 @@ class ProjectTask(models.Model):
             },
         }
 
-    def _get_commits_start_date(self, repo, branch_name):
-        """Get the last commit date for this task."""
-        try:
-            last_synced_commit = self.env['github.commit'].search([
-                ('task_id', '=', self.id),
-            ], order='commit_date desc', limit=1)
-            if last_synced_commit:
-                return last_synced_commit.commit_date
-            
-            # There is no last synced commit, so we need to get all the commits from the first commit date
-            base_branch_commit = repo.get_branch(repo.default_branch).commit
-            branch_commit = repo.get_branch(branch_name).commit
-            base_commit = repo.compare(base_branch_commit.sha, branch_commit.sha).merge_base_commit
-            return base_commit.commit.committer.date.replace(tzinfo=None)
-        except Exception as e:
-            _logger.error("Error getting commits start date for task %s: %s", self.id, e)
-            return datetime.now()
+    def _get_commits(self, repo, branch_name):
+        """Get all commits in the branch and filter by message content."""
+        commits = repo.get_commits(sha=branch_name)
+        return [commit for commit in commits if self.task_code in commit.commit.message]
 
     
     def _sync_github_commits(self):
-        """Sync commits with odoo database"""
+        """Sync commits with odoo database."""
         self.ensure_one()
-    
+
+        # Authenticate with GitHub
         auth = Auth.Token(self.project_id.company_id.github_token)
         g = Github(auth=auth)
         repo = g.get_repo(self.project_id.repo.full_name)
 
+        repo.get_commits()
+
         new_vals_list = []
         
         for branch in self.branch_ids:
-            commits = repo.get_commits(sha=branch.name, since=self._get_commits_start_date(repo, branch.name))
-            
-            for commit in commits:
-                naive_commit_date = commit.commit.author.date.replace(tzinfo=None)
+            # Step 1: Find the SHA of the last commit synced for this branch
+            last_commit = self.env['github.commit'].search([
+                ('task_id', '=', self.id),
+            ], order='commit_date desc', limit=1)
+
+            commits_to_process = []
+            try:
+                if not last_commit:
+                    commits_to_process = self._get_commits(repo, branch.name)
+                else:
+                    comparison = repo.compare(base=last_commit.sha, head=branch.name)
+                    commits_to_process = comparison.commits
+            except GithubException as e:
+                # Handle cases where the base commit was part of a force-push or rebase
+                # and no longer exists in the branch's history.
+                _logger.warning(
+                    "Could not compare commits for branch %s starting from %s. "
+                    "Refetching all commits. Error: %s",
+                    branch.name, last_commit.sha, e
+                )
+                commits_to_process = self._get_commits(repo, branch.name)
+
+            for commit in commits_to_process:
+                # The commit date from PyGithub is timezone-aware.
+                # Odoo's Datetime fields expect naive UTC datetime objects.
+                naive_utc_date = commit.commit.author.date.replace(tzinfo=None)
+                
                 new_vals_list.append({
                     'name': commit.commit.message,
                     'sha': commit.sha,
                     'task_id': self.id,
-                    'commit_date': naive_commit_date,
+                    'commit_date': naive_utc_date, # Use the naive datetime
                     'author_name': commit.commit.author.name,
                     'author_email': commit.commit.author.email,
                     'url': commit.html_url,
                 })
-        # Create new commits in a single call
+
+        # Create all new commits in a single database call for efficiency
         if new_vals_list:
-            self.env['github.commit'].create(new_vals_list)
-            self.env.cr.commit()
+            # To avoid creating duplicates if a full refetch happens,
+            # check for existing SHAs before creating.
+            existing_shas = self.env['github.commit'].search_read(
+                [('sha', 'in', [vals['sha'] for vals in new_vals_list])],
+                ['sha']
+            )
+            existing_shas_set = {rec['sha'] for rec in existing_shas}
+            
+            final_vals_list = [
+                vals for vals in new_vals_list if vals['sha'] not in existing_shas_set
+            ]
+
+            if final_vals_list:
+                self.env['github.commit'].create(final_vals_list)
+                self.env.cr.commit()
 
     def _sync_github_pull_requests(self):
         """Sync pull requests with odoo database"""
