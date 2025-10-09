@@ -13,7 +13,10 @@
     "data": [
         "security/access_groups.xml",
         "security/ir.model.access.csv",
+        "security/agreement_security.xml",
         "data/agreement_stages.xml",
+        "data/ir_cron_data.xml",
+        "data/email_template.xml",
         "views/agreement_views.xml",
         "views/agreement_type_views.xml",
         "views/agreement_stage_views.xml",
@@ -22,6 +25,7 @@
         "views/agreement_renewal_term_views.xml",
         "views/agreement_tag_views.xml",
         "views/agreement_milestone_views.xml",
+        "views/res_config_settings_views.xml",
         "views/agreement_menu_views.xml",
     ]
 }

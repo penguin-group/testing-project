@@ -6,3 +6,4 @@ from . import agreement_jurisdiction
 from . import agreement_renewal_term
 from . import agreement_tag
 from . import agreement_milestone
+from . import res_config_settings
