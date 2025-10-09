@@ -26,5 +26,6 @@
         'views/purchase_cancel_wizard.xml',
         'views/menu_override.xml',
         'wizard/purchase_currency_wizard_view.xml',
+        'wizard/create_bill_with_attachment.xml',
     ],
 }

@@ -27,6 +27,12 @@
                 <attribute name="type">object</attribute>
             </xpath>
 
+            <xpath expr="//header" position="inside">
+                <button name="open_wizard_to_create_bill_with_attachment" type="object" invisible="invoice_count > 0 or state != 'done'">
+                    Create Bill and Attach File
+                </button>
+            </xpath>
+
         </field>
     </record>
 
