@@ -3,7 +3,7 @@ from odoo.exceptions import UserError, ValidationError
 from datetime import datetime, timezone
 import logging
 
-ics_logger = logging.getLogger('ics_logger')
+_logger = logging.getLogger(__name__)
 
 class RepairOrderActions(models.Model):
     _inherit = 'repair.order'
@@ -340,15 +340,15 @@ class RepairOrderActions(models.Model):
         }
     
     def insert_data_from_repair_order(self, container=None):
-        ics_logger.info("[ICS] ENTRY _perform_state_update_to_ics")
+        _logger.info("[ICS] ENTRY _perform_state_update_to_ics")
 
         try:
             container = container or self.lot_id.container
             if not container:
-                ics_logger.warning("[ICS] Container not found")
+                _logger.warning("[ICS] Container not found")
                 return
             else:
-                ics_logger.info(f"[ICS] Container found: {container}")
+                _logger.info(f"[ICS] Container found: {container}")
 
             ALL_STATES = ['draft', 'confirmed', 'under_repair', 'ready_for_deployment', 'done', 'cancel']
             IGNORED_TAGS = ["Open", "In Progress", "Ready for Deployment", "Done", "Cancelled"]
@@ -358,15 +358,15 @@ class RepairOrderActions(models.Model):
                 fields=['state'],
                 groupby=['state']
             )
-            ics_logger.debug("[ICS] Grouped data from read_group: %s", grouped_data)
+            _logger.debug("[ICS] Grouped data from read_group: %s", grouped_data)
 
             state_summary = {g['state']: g.get('state_count', 0) for g in grouped_data}
             for state in ALL_STATES:
                 state_summary.setdefault(state, 0)
-            ics_logger.info("[ICS] State summary: %s", state_summary)
+            _logger.info("[ICS] State summary: %s", state_summary)
 
             counts = self.get_miner_counts_by_container(container)
-            ics_logger.info(
+            _logger.info(
                 "[ICS] Total mineros: %s - Válidos: %s - Hashrate Nominal: %s - Consumo Teórico: %s",
                 counts['total_miners'],
                 counts['valid_miners'],
@@ -394,7 +394,7 @@ class RepairOrderActions(models.Model):
             ]).mapped('name')
 
             tag_summary = {tag: tag_rows.get(tag, 0) for tag in all_tags}
-            ics_logger.info("[ICS] Tag summary: %s", tag_summary)
+            _logger.info("[ICS] Tag summary: %s", tag_summary)
 
             data = [{
                 "Container": container,
@@ -413,7 +413,7 @@ class RepairOrderActions(models.Model):
             })
 
         except Exception as e:
-            ics_logger.error(
+            _logger.error(
                 "[ICS] Failed to POST to ICS for container %s: %s",
                 container,
                 str(e),
