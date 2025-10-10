@@ -230,8 +230,8 @@ class PurchaseOrder(models.Model):
 
         if self.state == 'done':
             self.message_post(
-                subject=f"[Action Required] Create Bill for Validated {self.name}",
-                body=f"{self.name} has been confirmed. Create the bill and attach the relevant documents.",
+                subject=_("[Action Required] Create Bill for Validated %s") % self.name,
+                body=_("%s has been confirmed. Create the bill and attach the relevant documents.") % self.name,
                 message_type="notification",
                 partner_ids=[self.assignee_id.partner_id.id],  # recipient
                 email_layout_xmlid="mail.mail_notification_layout"
