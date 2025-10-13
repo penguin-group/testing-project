@@ -49,8 +49,8 @@
                     <attribute name="groups">account.group_account_readonly,pisa_account.group_account_jr_accountant,pisa_account.group_account_sr_finance</attribute>
                 </xpath>
 
-                <xpath expr="//div[@name='journal_div']/span[1]" position="attributes">
-                    <attribute name="groups">account.group_account_readonly,pisa_account.group_account_jr_accountant,pisa_account.group_account_sr_finance</attribute>
+                <xpath expr="//div[@name='journal_div']/div[@name='in_and_refresh_button_div']" position="attributes">
+                    <attribute name="groups">base.group_multi_currency,account.group_account_readonly,pisa_account.group_account_jr_accountant,pisa_account.group_account_sr_finance</attribute>
                 </xpath>
 
                 <xpath expr="//div[@name='currency_div']" position="attributes">
