@@ -28,5 +28,7 @@
         'views/menu_override.xml',
         'wizard/purchase_currency_wizard_view.xml',
         'wizard/purchase_requisition_cancel_wizard.xml',
+        'wizard/purchase_request_reset_wizard.xml',
+        'wizard/purchase_request_reject_wizard.xml',
     ],
 }
