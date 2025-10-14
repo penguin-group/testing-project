@@ -116,6 +116,13 @@ class PurchaseOrder(models.Model):
             'target': 'new',
             'context': {'default_purchase_order_id': self.id},
         }
+    def _validate_tier(self, tiers=False):
+        super(PurchaseOrder, self)._validate_tier()
+
+        if all(r.status == 'approved' for r in self.review_ids):
+            self.state = 'purchase'
+
+
 
     def action_create_invoice(self):
         """
