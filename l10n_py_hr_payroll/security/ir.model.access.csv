@@ -7,3 +7,6 @@ access_hr_payroll_structure_user,hr.payroll.structure.user,hr_payroll.model_hr_p
 access_hr_payroll_structure_manager,hr.payroll.structure.manager,hr_payroll.model_hr_payroll_structure,hr_payroll.group_hr_payroll_manager,1,1,1,1
 access_hr_salary_rule_user,hr.salary.rule.user,hr_payroll.model_hr_salary_rule,hr_payroll.group_hr_payroll_user,1,0,0,0
 access_hr_salary_rule_manager,hr.salary.rule.manager,hr_payroll.model_hr_salary_rule,hr_payroll.group_hr_payroll_manager,1,1,1,1
+access_hr_payroll_account_move_user,hr.payroll.account.move.user,account.model_account_move,hr_payroll.group_hr_payroll_user,1,1,1,1
+access_hr_payroll_account_move_line_user,hr.payroll.account.move.line.user,account.model_account_move_line,hr_payroll.group_hr_payroll_user,1,1,1,0
+access_hr_payroll_account_journal_user,hr.payroll.account.journal.user,account.model_account_journal,hr_payroll.group_hr_payroll_user,1,0,0,0

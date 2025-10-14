@@ -19,6 +19,7 @@ Features
 ========
 
 * **Limit read access to employee skills:** Only HR officers and admins can see skills.
+* **Auto-Set PIN:** The employee's PIN is computed automatically based on the generated badge.
 
 Overview
 ========
@@ -64,6 +65,7 @@ Contributors
 ~~~~~~~~~~~~
 
 * David Páez <david.jacquet@penguin.digital>
+* José E. González <jose.gonzalez@penguin.digital>
 
 Maintainers
 ~~~~~~~~~~~
