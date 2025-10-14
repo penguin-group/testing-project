@@ -7,8 +7,7 @@
             <field name="inherit_id" ref="account.view_partner_bank_form_inherit_account"/>
             <field name="arch" type="xml">
                 <field name="partner_id" position="after">
-                    <field name="document_type" string="Document Type" invisible="bank_country_code != 'PY'"/>
-                    <field name="partner_document_number" invisible="document_type == False or bank_country_code != 'PY'" />
+                    <field name="partner_document_number" invisible="bank_country_code != 'PY'" />
                 </field>
             </field>
         </record>
