@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-25 14:04+0000\n"
-"PO-Revision-Date: 2025-08-25 14:04+0000\n"
+"POT-Creation-Date: 2025-09-23 13:52+0000\n"
+"PO-Revision-Date: 2025-09-23 13:52+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -31,24 +31,43 @@ msgid "Department"
 msgstr "Departamento"
 
 #. module: pisa_hr
+#: model:ir.model,name:pisa_hr.model_hr_employee
+msgid "Employee"
+msgstr "Empleado"
+
+#. module: pisa_hr
 #: model:ir.model,name:pisa_hr.model_hr_contract
 msgid "Employee Contract"
 msgstr "Contrato del empleado"
 
 #. module: pisa_hr
-#. odoo-python
-#: code:addons/pisa_hr/models/hr_contract.py:0
+#: model:ir.model.fields,field_description:pisa_hr.field_hr_employee__pin
+msgid "PIN"
+msgstr ""
+
+#. module: pisa_hr
+#: model:ir.model.fields,help:pisa_hr.field_hr_employee__pin
+msgid ""
+"PIN used to Check In/Out in the Kiosk Mode of the Attendance application (if"
+" enabled in Configuration) and to change the cashier in the Point of Sale "
+"application."
+msgstr ""
+"PIN que se utiliza para el registro de entrada/salida en el modo quiosco de "
+"la aplicación Asistencias (si se habilita en Configuración) y para cambiar "
+"el cajero en la aplicación Punto de venta."
+
+#. module: pisa_hr
 #: model:ir.model.fields,field_description:pisa_hr.field_hr_contract__sync_with_department_analytic_acc
 #: model_terms:ir.ui.view,arch_db:pisa_hr.hr_contract_view_form_inherit
 msgid "Use Analytic Account from Department"
 msgstr "Usar cuenta analítica del departamento"
 
 #. module: pisa_hr
-#. odoo-python
-#: code:addons/pisa_hr/models/hr_contract.py:0
 #: model:ir.model.fields,help:pisa_hr.field_hr_contract__sync_with_department_analytic_acc
 #: model_terms:ir.ui.view,arch_db:pisa_hr.hr_contract_view_form_inherit
 msgid ""
 "When checked, the analytic account will automatically sync with the "
 "department's analytic account"
-msgstr "Si se selecciona, la cuenta analítica se sincronizará automáticamente con la del departamento."
+msgstr ""
+"Si se selecciona, la cuenta analítica se sincronizará automáticamente con la"
+" del departamento."
