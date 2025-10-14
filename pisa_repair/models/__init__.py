@@ -22,3 +22,4 @@ from . import product_template
 from . import sale_advance_payment_inv
 from . import repair_donated_component
 from . import repair_consumed_component
+from . import repair_order_cron

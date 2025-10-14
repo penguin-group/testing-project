@@ -39,6 +39,7 @@
         'data/repair_replaced_components_data.xml',
         'data/repair_steps_data.xml',         
         'data/repair_external_service.xml',  
+        'data/repair_ics_data_cron.xml',
         'views/repair_steps_views.xml',
         'views/repair_order_form_tab_noc_view.xml',
         'views/repair_order_form_tab_mining_view.xml',

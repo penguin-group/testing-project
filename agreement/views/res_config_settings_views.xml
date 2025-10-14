@@ -8,7 +8,7 @@
        <field name="arch" type="xml">
            <xpath expr="//form" position="inside">
                <app data-string="Agreement"
-                    string="Agreement" name="agreement_settings">
+                    string="Agreement" name="agreement">
                    <block title="Notifications"
                           name="agreement_notification_settings">
                        <setting string="Reminder Rules"
