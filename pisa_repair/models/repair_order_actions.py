@@ -1,5 +1,9 @@
 from odoo import models, _
 from odoo.exceptions import UserError, ValidationError
+from datetime import datetime, timezone
+import logging
+
+_logger = logging.getLogger(__name__)
 
 class RepairOrderActions(models.Model):
     _inherit = 'repair.order'
@@ -276,3 +280,142 @@ class RepairOrderActions(models.Model):
             }
         }
     
+    def get_miner_counts_by_container(self, container_name):
+        """
+        Gets the total number of miners in the container, the number of valid miners
+        (without orders in invalid states and not marked as 'scrapped'),
+        as well as the nominal hashrate and the theoretical power consumption.
+        """
+
+        allowed_states = ('draft', 'confirmed', 'ready_for_deployment', 'done')
+
+        query = """
+            WITH relevant_lots AS (
+                SELECT 
+                    sl.id AS lot_id,
+                    pt.miner_hashrate_nominal,
+                    pt.miner_theoretical_consumption
+                FROM stock_lot sl
+                JOIN product_product pp ON sl.product_id = pp.id
+                JOIN product_template pt ON pp.product_tmpl_id = pt.id
+                WHERE sl.container ILIKE %s
+            ),
+            lots_with_invalid_orders AS (
+                SELECT DISTINCT lot_id
+                FROM repair_order
+                WHERE lot_id IS NOT NULL
+                AND state NOT IN %s
+            ),
+            lots_with_scrapped_orders AS (
+                SELECT DISTINCT lot_id
+                FROM repair_order
+                WHERE lot_id IS NOT NULL
+                AND scrapped IS TRUE
+            ),
+            valid_lots AS (
+                SELECT *
+                FROM relevant_lots
+                WHERE lot_id NOT IN (
+                    SELECT lot_id FROM lots_with_invalid_orders
+                    UNION
+                    SELECT lot_id FROM lots_with_scrapped_orders
+                )
+            )
+            SELECT
+                (SELECT COUNT(*) FROM relevant_lots) AS total_miners,
+                (SELECT COUNT(*) FROM valid_lots) AS valid_miners,
+                COALESCE(SUM(valid_lots.miner_hashrate_nominal), 0) AS hashrate_nominal,
+                COALESCE(SUM(valid_lots.miner_theoretical_consumption), 0) AS theoretical_consumption
+            FROM valid_lots;
+        """
+
+        self.env.cr.execute(query, [f'%{container_name}%', allowed_states])
+        result = self.env.cr.fetchone()
+
+        return {
+            'total_miners': result[0],
+            'valid_miners': result[1],
+            'hashrate_nominal': result[2],
+            'theoretical_consumption': result[3],
+        }
+    
+    def insert_data_from_repair_order(self, container=None):
+        _logger.info("[ICS] ENTRY _perform_state_update_to_ics")
+
+        try:
+            container = container or self.lot_id.container
+            if not container:
+                _logger.warning("[ICS] Container not found")
+                return
+            else:
+                _logger.info(f"[ICS] Container found: {container}")
+
+            ALL_STATES = ['draft', 'confirmed', 'under_repair', 'ready_for_deployment', 'done', 'cancel']
+            IGNORED_TAGS = ["Open", "In Progress", "Ready for Deployment", "Done", "Cancelled"]
+
+            grouped_data = self.env['repair.order'].read_group(
+                domain=[('lot_id.container', 'ilike', container)],
+                fields=['state'],
+                groupby=['state']
+            )
+            _logger.debug("[ICS] Grouped data from read_group: %s", grouped_data)
+
+            state_summary = {g['state']: g.get('state_count', 0) for g in grouped_data}
+            for state in ALL_STATES:
+                state_summary.setdefault(state, 0)
+            _logger.info("[ICS] State summary: %s", state_summary)
+
+            counts = self.get_miner_counts_by_container(container)
+            _logger.info(
+                "[ICS] Total mineros: %s - Válidos: %s - Hashrate Nominal: %s - Consumo Teórico: %s",
+                counts['total_miners'],
+                counts['valid_miners'],
+                counts['hashrate_nominal'],
+                counts['theoretical_consumption']
+            )
+
+            for state in ALL_STATES:
+                state_summary.setdefault(state, 0)
+
+            self.env.cr.execute("""
+                SELECT rt.name, COUNT(*) AS count
+                FROM repair_order_repair_tags_rel rrel
+                JOIN repair_order ro ON rrel.repair_order_id = ro.id
+                JOIN stock_lot sl ON ro.lot_id = sl.id
+                JOIN repair_tags rt ON rrel.repair_tags_id = rt.id
+                WHERE sl.container ILIKE %s
+                AND rt.name NOT IN %s
+                GROUP BY rt.name
+            """, [f'%{container}%', tuple(IGNORED_TAGS)])
+            tag_rows = dict(self.env.cr.fetchall())
+
+            all_tags = self.env['repair.tags'].search([
+                ('name', 'not in', IGNORED_TAGS)
+            ]).mapped('name')
+
+            tag_summary = {tag: tag_rows.get(tag, 0) for tag in all_tags}
+            _logger.info("[ICS] Tag summary: %s", tag_summary)
+
+            data = [{
+                "Container": container,
+                "CreatedAt": datetime.now(timezone.utc).isoformat(),
+                "TotalMiners": counts['valid_miners'],
+                "HashrateNominal": counts['hashrate_nominal'],
+                "TheoreticalConsumption": counts['theoretical_consumption'],
+                "Status": state_summary,
+                "Tags": tag_summary
+            }]
+
+            self.env['pisa.ics.data'].sudo().create({
+                'container': container,
+                'data': data,
+                'state': 'pending',
+            })
+
+        except Exception as e:
+            _logger.error(
+                "[ICS] Failed to POST to ICS for container %s: %s",
+                container,
+                str(e),
+                exc_info=True
+            )

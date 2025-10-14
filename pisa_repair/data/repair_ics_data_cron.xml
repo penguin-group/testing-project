@@ -1,0 +1,12 @@
+<odoo>
+    <data noupdate="1">
+        <record id="ir_cron_send_ics_payloads" model="ir.cron">
+            <field name="name">ICS: send pending payloads</field>
+            <field name="model_id" ref="model_pisa_ics_data"/>
+            <field name="state">code</field>
+            <field name="code">model.cron_process_ics_data()</field>
+            <field name="interval_number">5</field>
+            <field name="interval_type">minutes</field>
+        </record>
+    </data>
+</odoo>

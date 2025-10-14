@@ -55,6 +55,7 @@ class RepairOrderFields(models.Model):
                     record.lot_id.location_id = record.origin_location.id
 
     def write(self, vals):
+        should_sync = 'tag_ids' in vals
         lot_updated = 'lot_id' in vals or 'lot_serial_number' in vals
 
         previous_containers = {}
@@ -69,5 +70,16 @@ class RepairOrderFields(models.Model):
                 previous_containers[record.id] = record.lot_id.container
 
         result = super().write(vals)
+
+        for record in self:
+            if lot_updated:
+                record.insert_data_from_repair_order()
+
+                old_container = previous_containers.get(record.id)
+                if old_container and old_container != record.lot_id.container:
+                    record.insert_data_from_repair_order(container=old_container)
+
+            elif should_sync:
+                record.insert_data_from_repair_order()
 
         return result
