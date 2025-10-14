@@ -9,10 +9,11 @@
         
         - Limit who can view an employee's skills.
         - Set an analytic account on a department and propagate it on employee contracts.
+        - The employee's PIN is computed automatically based on the generated badge.
     """,
 
     'author': "Penguin Infrastructure",
-    'maintainers': ['David Páez'],
+    'maintainers': ['David Páez', 'José E. González'],
     'website': "https://penguin.digital",
     'category': 'Human Resources',
     'version': '18.0.1.0.0',

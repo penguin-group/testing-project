@@ -66,6 +66,8 @@ class ApprovalRequest(models.Model):
         if payable_line:
             payable_line.account_id = company.expense_reimbursement_account_id.id
 
+        move._post()
+
         return move
 
     def action_approve(self, approver=None):

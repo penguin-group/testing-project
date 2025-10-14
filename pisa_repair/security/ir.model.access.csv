@@ -17,3 +17,4 @@ access_repair_donate_component_wizard,access.repair.donate.component.wizard,mode
 access_repair_donate_component_line,access.repair.donate.component.line,model_repair_donate_component_line,,1,1,1,1
 access_repair_donated_component,access.repair.donated.component,model_repair_donated_component,,1,1,1,1
 access_repair_consumed_component,access.repair.consumed.component,model_repair_consumed_component,,1,1,1,1
+access_pisa_ics_data_user,Pisa ICS Data user,model_pisa_ics_data,base.group_user,1,1,1,1
