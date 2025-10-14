@@ -7,6 +7,8 @@ class ApprovalRequest(models.Model):
 
     has_bank_account = fields.Selection(related="category_id.has_bank_account")
     has_currency = fields.Selection(related="category_id.has_currency")
+    approval_type = fields.Selection(related="category_id.approval_type")
+
     currency_id = fields.Many2one("res.currency", string="Currency")
     req_owner_related_partner_id = fields.Many2one(
         'res.partner',
