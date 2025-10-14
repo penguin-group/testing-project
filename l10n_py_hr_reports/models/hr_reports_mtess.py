@@ -15,21 +15,21 @@ class HrReportsMtess(models.Model):
     _description = 'MTESS Reports'   
 
     name = fields.Char(
-        string="Nombre",
+        string="Name",
         compute='_compute_name',
         store=True,
         readonly=True
     )
     year = fields.Selection(
         [(str(y), str(y)) for y in range(2000, fields.Date.today().year)],
-        string='Año',
+        string='Year',
         required=True,
         default=lambda self: str(fields.Date.today().year - 1)
     )
     report_type = fields.Selection([
-        ('employees', 'Planilla de Empleados y Obreros'),
-        ('salaries', 'Planilla de Sueldos y Jornales'),
-        ('summary', 'Resumen General de Personal Ocupado'),
+        ('employees', 'Employee and Worker Payroll'),
+        ('salaries', 'Salaries and Wages Payroll'),
+        ('summary', 'General Summary of Employed Personnel')
     ], string='Report Type', required=True, default='employees')
     data = fields.Json("Data")
     xlsx_output = fields.Binary(string='File', )

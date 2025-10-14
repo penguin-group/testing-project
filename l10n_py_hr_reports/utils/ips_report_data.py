@@ -26,17 +26,17 @@ class IPSReportSalary:
         partner = self.employee._get_related_partners()[0]
 
         employee_item = [
-            self.contract.branch_id.ips_patronal_number or "", # Nro. Patronal
-            "", # Nro. Asegurado
-            self.employee.identification_id or "", # C.I.N°
-            partner.lastname, # Apellido
-            partner.firstname, # Nombre
-            "E", # Categoría
-            self._get_worked_days(), # Días Trab.
-            self._get_salary(), # Salario
-            str(self.month) + str(self.year), # Mes/Año
-            0, # Cód. Actividad
-            self._get_salary(net=True), # Salario Real
+            self.contract.branch_id.ips_patronal_number or "",
+            "",
+            self.employee.identification_id or "",
+            partner.lastname,
+            partner.firstname,
+            "E",
+            self._get_worked_days(),
+            self._get_salary(),
+            str(self.month) + str(self.year),
+            0,
+            self._get_salary(net=True),
         ]
 
         return employee_item

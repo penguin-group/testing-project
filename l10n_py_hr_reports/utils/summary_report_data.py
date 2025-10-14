@@ -34,7 +34,7 @@ class SummaryReportData:
         # row_config structure:
         # description, data_type, to_count, incremental_field, is_date
         row_config = [
-            ('CANTIDAD O NÚMERO DE TRABAJADORES', 'employess', True, None, False),
+            ('CANTIDAD O NÚMERO DE TRABAJADORES', 'employees', True, None, False),
             ('TOTAL DE HORAS INCLUYENDO HORAS EXTRAS', 'salaries', False, 'total_h', False),
             ('TOTAL DE SALARIO INCLUYENDO LOS BENEFICIOS', 'salaries', False, 'total_s', False),
             ('CANTIDAD DE ENTRADAS O INGRESOS DE PERSONAL', 'employees', True, 'fechaentrada', True),
@@ -85,23 +85,22 @@ class SummaryReportData:
             else:
                 value = data_row.get(incremental_field, 0)
 
-            if is_manager:  # jefe
+            if is_manager:
                 if sexo == "M":
                     row["supjefesvarones"] += value
                 else:
                     row["supjefesmujeres"] += value
-            elif is_worker:  # obrero
+            elif is_worker:
                 if sexo == "M":
                     row["obrerosvarones"] += value
                 else:
                     row["obrerosmujeres"] += value
-            else:  # empleados
+            else:
                 if sexo == "M":
                     row["empleadosvarones"] += value
                 else:
                     row["empleadosmujeres"] += value
 
-            # menores
             if is_minor:
                 if sexo == "M":
                     row["menoresvarones"] += value
