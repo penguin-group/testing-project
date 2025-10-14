@@ -1,9 +1,9 @@
 from odoo import models, api
 import requests
-import logging
 import json
+import logging
 
-api_cron_logger = logging.getLogger('api_cron_caller')
+_logger = logging.getLogger(__name__)
 
 class ApiCronCaller(models.Model):
     _name = 'api.cron.caller'
@@ -11,7 +11,6 @@ class ApiCronCaller(models.Model):
 
     @api.model
     def call_external_api(self):
-
         params = self.env['ir.config_parameter'].sudo()
         email = params.get_param('ICS_Email')
         password = params.get_param('ICS_Password')
@@ -20,10 +19,7 @@ class ApiCronCaller(models.Model):
         url = f'{host}/login'
 
         if not email or not password or not host:
-            api_cron_logger.error('Configuration not found.')
-            api_cron_logger.error(f'ICS_Email: {email}')
-            api_cron_logger.error(f'ICS_Host: {host}')
-            api_cron_logger.error(f'ICS_Password: {password}')
+            _logger.warning("Incomplete ICS parameters: host=%s, email=%s", host, email)
             return
 
         headers = {
@@ -43,10 +39,11 @@ class ApiCronCaller(models.Model):
                 token = data.get('token')
                 if token:
                     params.set_param('ICS_Token', token)
-                    api_cron_logger.info('Token successfully updated.')
+                    _logger.info("ICS token updated successfully.")
                 else:
-                    api_cron_logger.warning('Token not found in the response.')
+                    _logger.warning("No token received in the response.")
             else:
-                api_cron_logger.warning('Error code: %s', response.status_code)
+                _logger.error("Error authenticating with ICS: %s - %s", response.status_code, response.text)
+
         except Exception as e:
-            api_cron_logger.error('Error while calling the API: %s', str(e))
+            _logger.exception("Error connecting to ICS API: %s", e)
