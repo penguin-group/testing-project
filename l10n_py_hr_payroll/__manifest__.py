@@ -63,13 +63,13 @@
         "views/res_company_views.xml",
         'views/hr_job_views.xml',
 
+        "views/hr_payroll_report.xml",
         "views/report_payslip_templates.xml",
     ],
 
     'demo': [
         # 'demo/demo.xml',
     ],
-    
     'i18n': ['i18n/es.po'],
     
     'installable': True,
