@@ -22,6 +22,11 @@
                 <attribute name="options">{'no_create': True, 'no_create_edit': True}</attribute>
             </xpath>
 
+            <xpath expr="//button[@name='button_cancel']" position="attributes">
+                <attribute name="name">action_cancel_with_confirmation</attribute>
+                <attribute name="type">object</attribute>
+            </xpath>
+
         </field>
     </record>
 

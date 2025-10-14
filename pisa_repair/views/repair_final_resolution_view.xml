@@ -1,0 +1,31 @@
+<odoo>
+    <data>
+        <record id="view_repair_final_resolution_tree" model="ir.ui.view">
+            <field name="name">repair.final.resolution.tree.view</field>
+            <field name="model">repair.final.resolution</field>
+            <field name="arch" type="xml">
+                <list string="Final Resolutions">
+                    <field name="name" />
+                    <button name="unlink" string="Delete" type="object"
+                        class="btn-danger"
+                        confirm="Are you sure you want to delete this record?" />
+                </list>
+            </field>
+        </record>
+
+        <record id="view_repair_final_resolution_form" model="ir.ui.view">
+            <field name="name">repair.final.resolution.form</field>
+            <field name="model">repair.final.resolution</field>
+            <field name="arch" type="xml">
+                <form string="Final Resolution">
+                    <sheet>
+                        <group>
+                            <field name="name" string="Resolution Name" />
+                            <field name="repair_order_ids" invisible="1" />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

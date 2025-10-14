@@ -1,0 +1,63 @@
+<odoo>
+    <record id="view_repair_order_form_datos_noc" model="ir.ui.view">
+        <field name="name">repair.order.form.datos.noc</field>
+        <field name="model">repair.order</field>
+        <field name="inherit_id" ref="repair.view_repair_order_form" />
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page string="NOC Data">
+                    <group>
+                        <!-- Editable for NOC group -->
+
+                        <field name="diagnosed_failure"
+                            groups="pisa_repair.group_noc"
+                            widget="selection"
+                            readonly="1"
+                            invisible="state == 'draft'" />
+
+                        <field name="destination_location"
+                            groups="pisa_repair.group_noc"
+                            readonly="1"
+                            widget="selection"
+                            invisible="state == 'draft'" />
+
+                        <field name="diagnosed_failure"
+                            groups="pisa_repair.group_noc"
+                            widget="many2one"
+                            invisible="state != 'draft'" />
+
+                        <field name="destination_location"
+                            groups="pisa_repair.group_noc"
+                            widget="selection"
+                            invisible="state != 'draft'" />
+
+                        <field name="diagnosed_failure"
+                            readonly="1"
+                            groups="pisa_repair.group_mining,pisa_repair.group_micro"
+                            widget="selection" />
+                        <field name="destination_location"
+                            readonly="1"
+                            groups="pisa_repair.group_mining,pisa_repair.group_micro"
+                            widget="selection" />
+
+                        <field name="external_service_id"
+                            widget="many2one"
+                            invisible="not show_external_service or state != 'draft' or not is_noc" 
+                            required="show_external_service"
+                            />
+
+                        <field name="external_service_id"
+                            widget="selection"
+                            invisible="state == 'draft' and is_noc or not show_external_service" 
+                            readonly="1"/>
+
+                        <!-- Other general fields -->
+                        <field name="origin_location" readonly="1" widget="selection" />
+                        <field name="create_uid" readonly="1" widget="selection" />
+                        <field name="create_date" invisible="1" widget="selection" />
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+</odoo>

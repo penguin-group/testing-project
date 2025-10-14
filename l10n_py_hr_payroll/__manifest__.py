@@ -44,6 +44,7 @@
     "data": [
         # Security
         "security/ir.model.access.csv",
+        "security/account_move_security.xml",
         
         # Data
         "data/account_journal_data.xml",
@@ -59,16 +60,21 @@
         "views/hr_payroll_structure_views.xml",
         "views/hr_salary_attachment_views.xml",
         "views/res_config_settings_views.xml",
+<<<<<<< HEAD
         "views/hr_employee_views.xml",
         "views/res_company_views.xml",
         'views/hr_job_views.xml',
 
+        "views/hr_payroll_report.xml",
+        "views/report_payslip_templates.xml",
+=======
+        "views/account_move_views.xml",
+>>>>>>> 32341fdee9716724fde05708869939ff5abe0498
     ],
 
     'demo': [
         # 'demo/demo.xml',
     ],
-    
     'i18n': ['i18n/es.po'],
     
     'installable': True,

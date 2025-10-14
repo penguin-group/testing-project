@@ -6,14 +6,29 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-27 12:23+0000\n"
-"PO-Revision-Date: 2025-06-27 12:23+0000\n"
+"POT-Creation-Date: 2025-09-17 14:30+0000\n"
+"PO-Revision-Date: 2025-09-17 14:30+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: pisa_purchase
+#: model_terms:ir.ui.view,arch_db:pisa_purchase.view_purchase_cancel_wizard_form
+msgid "<strong>Do you still want to cancel?</strong>"
+msgstr "<strong>¿Aún desea cancelar el pedido?</strong>"
+
+#. module: pisa_purchase
+#: model:ir.model.fields,field_description:pisa_purchase.field_hr_department__department_descendant_ids
+msgid "All Descendant Departments"
+msgstr "Todos los departamentos descendientes"
+
+#. module: pisa_purchase
+#: model_terms:ir.ui.view,arch_db:pisa_purchase.view_purchase_currency_wizard_form
+msgid "Apply"
+msgstr "Aplicar"
 
 #. module: pisa_purchase
 #: model:ir.model.fields,field_description:pisa_purchase.field_purchase_order__assignee_id
@@ -27,14 +42,95 @@ msgid "Attachment added to payment: %s"
 msgstr "Adjunto añadido al pago: %s"
 
 #. module: pisa_purchase
+#: model_terms:ir.ui.view,arch_db:pisa_purchase.view_purchase_currency_wizard_form
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: pisa_purchase
+#: model_terms:ir.ui.view,arch_db:pisa_purchase.view_purchase_cancel_wizard_form
+msgid "Cancel PO"
+msgstr "Cancelar pedido de compra"
+
+#. module: pisa_purchase
+#: model_terms:ir.ui.view,arch_db:pisa_purchase.view_purchase_cancel_wizard_form
+msgid ""
+"Cancelling might affect accounting and you will also lose all validations."
+msgstr ""
+"Cancelarlo podría afectar la contabilidad y perderá todas las validaciones."
+
+#. module: pisa_purchase
 #: model:ir.model,name:pisa_purchase.model_res_partner
 msgid "Contact"
 msgstr "Contacto"
 
 #. module: pisa_purchase
+#: model:ir.model.fields,field_description:pisa_purchase.field_purchase_cancel_wizard__create_uid
+#: model:ir.model.fields,field_description:pisa_purchase.field_purchase_currency_wizard__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: pisa_purchase
+#: model:ir.model.fields,field_description:pisa_purchase.field_purchase_cancel_wizard__create_date
+#: model:ir.model.fields,field_description:pisa_purchase.field_purchase_currency_wizard__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: pisa_purchase
+#: model:ir.model.fields,field_description:pisa_purchase.field_purchase_currency_wizard__currency_id
+#: model:ir.model.fields,field_description:pisa_purchase.field_purchase_request__currency_id
+#: model:ir.model.fields,field_description:pisa_purchase.field_purchase_request_line__currency_id
+msgid "Currency"
+msgstr "Divisa"
+
+#. module: pisa_purchase
+#: model:ir.model.fields,field_description:pisa_purchase.field_purchase_request__currency_old
+msgid "Currency Old"
+msgstr ""
+
+#. module: pisa_purchase
+#: model:ir.model,name:pisa_purchase.model_hr_department
+msgid "Department"
+msgstr "Departamento"
+
+#. module: pisa_purchase
+#: model:ir.model.fields,field_description:pisa_purchase.field_purchase_cancel_wizard__display_name
+#: model:ir.model.fields,field_description:pisa_purchase.field_purchase_currency_wizard__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: pisa_purchase
+#. odoo-python
+#: code:addons/pisa_purchase/models/purchase_order.py:0
+msgid "Double-check before cancelling"
+msgstr "Verifique antes de cancelar"
+
+#. module: pisa_purchase
 #: model:ir.model.fields,field_description:pisa_purchase.field_purchase_order__extra_cost_po_ids
 msgid "Extra Cost POs"
 msgstr "Pedidos de costo extra"
+
+#. module: pisa_purchase
+#: model:ir.model.fields,field_description:pisa_purchase.field_purchase_cancel_wizard__id
+#: model:ir.model.fields,field_description:pisa_purchase.field_purchase_currency_wizard__id
+msgid "ID"
+msgstr ""
+
+#. module: pisa_purchase
+#: model_terms:ir.ui.view,arch_db:pisa_purchase.view_purchase_cancel_wizard_form
+msgid "Keep PO"
+msgstr "Mantener pedido de compra"
+
+#. module: pisa_purchase
+#: model:ir.model.fields,field_description:pisa_purchase.field_purchase_cancel_wizard__write_uid
+#: model:ir.model.fields,field_description:pisa_purchase.field_purchase_currency_wizard__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: pisa_purchase
+#: model:ir.model.fields,field_description:pisa_purchase.field_purchase_cancel_wizard__write_date
+#: model:ir.model.fields,field_description:pisa_purchase.field_purchase_currency_wizard__write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
 
 #. module: pisa_purchase
 #: model:ir.model.fields,help:pisa_purchase.field_purchase_order__extra_cost_po_ids
@@ -44,6 +140,12 @@ msgid ""
 msgstr ""
 "Vincule pedidos de costo extra (aduanas, envío, etc.) a este pedido para un "
 "seguimiento preciso de los costos"
+
+#. module: pisa_purchase
+#. odoo-python
+#: code:addons/pisa_purchase/wizard/purchase_currency_wizard.py:0
+msgid "No purchase orders selected."
+msgstr "Ningún pedido de compra seleccionado."
 
 #. module: pisa_purchase
 #: model:ir.model.fields,field_description:pisa_purchase.field_purchase_order__off_budget
@@ -65,13 +167,29 @@ msgstr "Proyecto"
 
 #. module: pisa_purchase
 #: model:ir.model,name:pisa_purchase.model_purchase_order
+#: model:ir.model.fields,field_description:pisa_purchase.field_purchase_cancel_wizard__purchase_order_id
 msgid "Purchase Order"
 msgstr "Pedido de compra"
 
 #. module: pisa_purchase
+#: model:ir.model,name:pisa_purchase.model_purchase_cancel_wizard
+msgid "Purchase Order Cancel Confirmation Wizard"
+msgstr "Asistente de confirmación de cancelación de un pedido de compra"
+
+#. module: pisa_purchase
+#: model:ir.model,name:pisa_purchase.model_purchase_order_line
+msgid "Purchase Order Line"
+msgstr "Línea de pedido de compra"
+
+#. module: pisa_purchase
 #: model:ir.model,name:pisa_purchase.model_purchase_request
 msgid "Purchase Request"
-msgstr "solicitud de compra"
+msgstr "Solicitud de Compra"
+
+#. module: pisa_purchase
+#: model:ir.model,name:pisa_purchase.model_purchase_request_line
+msgid "Purchase Request Line"
+msgstr "Línea de solicitud de compra"
 
 #. module: pisa_purchase
 #: model:ir.model,name:pisa_purchase.model_purchase_request_line_make_purchase_order
@@ -89,6 +207,23 @@ msgid "Request Procurement Assistance"
 msgstr "Solicitar asistencia de compras"
 
 #. module: pisa_purchase
+#: model:ir.actions.act_window,name:pisa_purchase.action_purchase_currency_wizard
+#: model:ir.actions.server,name:pisa_purchase.action_set_currency_on_purchase_orders
+msgid "Set Currency"
+msgstr "Establecer moneda"
+
+#. module: pisa_purchase
+#: model:ir.model,name:pisa_purchase.model_purchase_currency_wizard
+#: model_terms:ir.ui.view,arch_db:pisa_purchase.view_purchase_currency_wizard_form
+msgid "Set Currency on Purchase Orders"
+msgstr "Establecer moneda en pedidos de compra"
+
+#. module: pisa_purchase
+#: model:ir.model,name:pisa_purchase.model_stock_rule
+msgid "Stock Rule"
+msgstr "Regla de inventario"
+
+#. module: pisa_purchase
 #. odoo-python
 #: code:addons/pisa_purchase/models/purchase_order.py:0
 #: code:addons/pisa_purchase/models/res_partner.py:0
@@ -104,3 +239,8 @@ msgstr "Usuario responsable de esta solicitud de cotización"
 #: model:ir.model,name:pisa_purchase.model_purchase_requisition_create_alternative
 msgid "Wizard to preset values for alternative PO"
 msgstr "Asistente pare presentar valores para un pedido de compra alternativo"
+
+#. module: pisa_purchase
+#: model_terms:ir.ui.view,arch_db:pisa_purchase.view_purchase_cancel_wizard_form
+msgid "Your Purchase Order is already validated."
+msgstr "Su pedido de compra ya está validado."

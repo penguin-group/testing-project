@@ -1,0 +1,20 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_noc_group,access_noc_group,base.model_res_users,pisa_repair.group_noc,1,1,1,1
+access_mining_group,access_mining_group,base.model_res_users,pisa_repair.group_mining,1,1,1,1
+access_micro_group,access_micro_group,base.model_res_users,pisa_repair.group_micro,1,1,1,1
+access_ticket_validation_wizard_global,access_ticket_validation_wizard_global,model_ticket_validation_wizard,,1,1,1,1
+access_consolidate_quotations_wizard,access_consolidate_quotations_wizard,model_consolidate_quotations_wizard,base.group_user,1,1,1,1
+access_repair_fault_user,access_repair_fault_user,model_repair_fault,base.group_user,1,1,1,1
+access_repair_order_tag_history,access_repair_order_tag_history,model_repair_order_tag_history,,1,1,1,1
+access_repair_initial_state_user,access_repair_initial_state_user,model_repair_initial_state,base.group_user,1,1,1,1
+access_repair_replaced_components_user,access_repair_replaced_components_user,model_repair_replaced_components,base.group_user,1,1,1,1
+access_repair_final_resolution_user,access_repair_final_resolution_user,model_repair_final_resolution,base.group_user,1,1,1,1
+access_repair_steps_user,access_repair_steps_user,model_repair_steps,base.group_user,1,1,1,1
+access_repair_order_steps_rel,access_repair_order_steps_rel,model_repair_order_steps_rel,base.group_user,1,1,1,1
+access_repair_external_service,access_repair_external_service,model_repair_external_service,,1,1,1,1
+access_pisa_repair_diagnosis_line_user,pisa.repair.diagnosis.line user,model_pisa_repair_diagnosis_line,base.group_user,1,1,1,1
+access_repair_donate_component_wizard,access.repair.donate.component.wizard,model_repair_donate_component_wizard,,1,1,1,1
+access_repair_donate_component_line,access.repair.donate.component.line,model_repair_donate_component_line,,1,1,1,1
+access_repair_donated_component,access.repair.donated.component,model_repair_donated_component,,1,1,1,1
+access_repair_consumed_component,access.repair.consumed.component,model_repair_consumed_component,,1,1,1,1
+access_pisa_ics_data_user,Pisa ICS Data user,model_pisa_ics_data,base.group_user,1,1,1,1

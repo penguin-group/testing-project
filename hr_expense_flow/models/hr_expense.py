@@ -77,9 +77,6 @@ class HrExpense(models.Model):
                 expense.petty_cash_account_ids = expense.employee_id.department_id.petty_cash_account_ids
             else:
                 expense.petty_cash_account_ids = self.env['account.account']
-            # Reset employee if payment mode is not own_account or company_account
-            if expense.payment_mode not in ['own_account', 'company_account']:
-                expense.employee_id = expense._default_employee_id()
 
     @api.constrains('payment_mode')
     def _check_petty_cash_constraints(self):
@@ -244,7 +241,8 @@ class HrExpense(models.Model):
         }
         clearing_entry = self.env['account.move'].sudo().create(move_vals)
         clearing_entry.line_ids._inverse_amount_currency()
-        clearing_entry.action_post()
+        if self.payment_mode != 'credit_card':  # entry should not be posted if payment was made with credit card
+            clearing_entry.action_post()
         return clearing_entry
 
     def _create_employee_reimbursement_invoice(self, amount, date=None):

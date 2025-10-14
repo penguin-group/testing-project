@@ -28,6 +28,7 @@ Features
 * **Default Kanban View Grouped by Stage**: When entering the module, the user sees the agreements grouped by their stage.
 * **Users May Create Their Own Agreement Types**: On a "Settings" menu, the user is able to create, edit, and remove legal process types, terms, tags, agreement types, etc.
 * **Agreements Have Relevant Milestones**: An agreement can be expanded with relevant milestones created by the user in order to track deadlines and to check if the milestone was reached or not.
+* **Automated email notifications**: Legal officers and admins get notifications to know about incoming deadlines related to agreements and milestones.
 
 
 Overview
