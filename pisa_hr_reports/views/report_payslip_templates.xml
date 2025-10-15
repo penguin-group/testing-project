@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <template id="report_payslip_paraguay">
+    <template id="hr_payroll_report_paraguay">
         <t t-foreach="[1, 2]" t-as="copy_number">
             <t t-call="web.basic_layout">
                 <t t-foreach="docs" t-as="o">
                     <t t-set="o" t-value="o.with_context(lang=o.employee_id.lang or o.env.lang)"/>
-                    <t t-call="l10n_py_hr_payroll.report_payslip_paraguay_document" t-lang="o.env.lang"/>
+                    <t t-call="pisa_hr_reports.report_payslip_paraguay_document" t-lang="o.env.lang"/>
                 </t>
             </t>
         </t>

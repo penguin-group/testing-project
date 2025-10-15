@@ -1,0 +1,120 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* pisa_hr_reports
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-15 20:42+0000\n"
+"PO-Revision-Date: 2025-10-15 20:42+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: pisa_hr_reports
+#: model:ir.actions.report,print_report_name:pisa_hr_reports.action_report_payslip_paraguay
+msgid "'Payslip - %s' % (object.name)"
+msgstr "'Recibo de Salario - %s' % (object.name)"
+
+#. module: pisa_hr_reports
+#: model_terms:ir.ui.view,arch_db:pisa_hr_reports.report_payslip_paraguay_document
+msgid "<span>Date of Payment</span>"
+msgstr "<span>Fecha de pago</span>"
+
+#. module: pisa_hr_reports
+#: model_terms:ir.ui.view,arch_db:pisa_hr_reports.report_payslip_paraguay_document
+msgid "<strong>Basic Salary</strong>"
+msgstr "<strong>Salario Básico</strong>"
+
+#. module: pisa_hr_reports
+#: model_terms:ir.ui.view,arch_db:pisa_hr_reports.report_payslip_paraguay_document
+msgid "<strong>CONCEPTS</strong>"
+msgstr "<strong>CONCEPTOS</strong>"
+
+#. module: pisa_hr_reports
+#: model_terms:ir.ui.view,arch_db:pisa_hr_reports.report_payslip_paraguay_document
+msgid "<strong>DUPLICATE</strong>"
+msgstr "<strong>DUPLICADO</strong>"
+
+#. module: pisa_hr_reports
+#: model_terms:ir.ui.view,arch_db:pisa_hr_reports.report_payslip_paraguay_document
+msgid "<strong>Department</strong>"
+msgstr "<strong>Departamento</strong>"
+
+#. module: pisa_hr_reports
+#: model_terms:ir.ui.view,arch_db:pisa_hr_reports.report_payslip_paraguay_document
+msgid "<strong>Employer:</strong>"
+msgstr "<strong>Empleador: </strong>"
+
+#. module: pisa_hr_reports
+#: model_terms:ir.ui.view,arch_db:pisa_hr_reports.report_payslip_paraguay_document
+msgid "<strong>IPS Patronal Number:</strong>"
+msgstr "<strong>Núm. Patronal IPS: </strong>"
+
+#. module: pisa_hr_reports
+#: model_terms:ir.ui.view,arch_db:pisa_hr_reports.report_payslip_paraguay_document
+msgid "<strong>MTESS Patronal Number:</strong>"
+msgstr "<strong>Nro. Patronal MTESS: </strong>"
+
+#. module: pisa_hr_reports
+#: model_terms:ir.ui.view,arch_db:pisa_hr_reports.report_payslip_paraguay_document
+msgid "<strong>NET SALARY</strong>"
+msgstr "<strong>SALARIO NETO</strong>"
+
+#. module: pisa_hr_reports
+#: model_terms:ir.ui.view,arch_db:pisa_hr_reports.report_payslip_paraguay_document
+msgid "<strong>Name and Lastname</strong>"
+msgstr "<strong>Nombre y Apellido</strong>"
+
+#. module: pisa_hr_reports
+#: model_terms:ir.ui.view,arch_db:pisa_hr_reports.report_payslip_paraguay_document
+msgid "<strong>ORIGINAL</strong>"
+msgstr "<strong>ORIGINAL</strong>"
+
+#. module: pisa_hr_reports
+#: model_terms:ir.ui.view,arch_db:pisa_hr_reports.report_payslip_paraguay_document
+msgid "<strong>PAYMENT PERIOD</strong>"
+msgstr "<strong>PERIODO DE PAGO</strong>"
+
+#. module: pisa_hr_reports
+#: model_terms:ir.ui.view,arch_db:pisa_hr_reports.report_payslip_paraguay_document
+msgid "Employee Signature"
+msgstr "Firma del Empleado"
+
+#. module: pisa_hr_reports
+#: model_terms:ir.ui.view,arch_db:pisa_hr_reports.report_payslip_paraguay_document
+msgid "Employer Signature"
+msgstr "Firma del Empleador"
+
+#. module: pisa_hr_reports
+#: model_terms:ir.ui.view,arch_db:pisa_hr_reports.report_payslip_paraguay_document
+msgid ""
+"In accordance with Articles 235-236<br/>\n"
+"                        Labor Code<br/>"
+msgstr ""
+"Según los artículos 235-236<br/>\n"
+"                        Código Laboral<br/>"
+
+#. module: pisa_hr_reports
+#: model_terms:ir.ui.view,arch_db:pisa_hr_reports.report_payslip_paraguay_document
+msgid "Logo"
+msgstr ""
+
+#. module: pisa_hr_reports
+#: model:ir.actions.report,name:pisa_hr_reports.action_report_payslip_paraguay
+msgid "Payslip Paraguay"
+msgstr "Recibo de Salario - Paraguay"
+
+#. module: pisa_hr_reports
+#: model_terms:ir.ui.view,arch_db:pisa_hr_reports.report_payslip_paraguay_document
+msgid "SALARY PAYSLIP"
+msgstr "RECIBO DE SALARIO"
+
+#. module: pisa_hr_reports
+#: model_terms:ir.ui.view,arch_db:pisa_hr_reports.report_payslip_paraguay_document
+msgid "Total"
+msgstr ""

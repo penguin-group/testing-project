@@ -1,26 +1,19 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # 	* l10n_py_hr_payroll
-# 	* l10n_py_hr_payroll
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
-"Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-14 17:16+0000\n"
-"PO-Revision-Date: 2025-10-14 17:16+0000\n"
+"POT-Creation-Date: 2025-10-15 20:41+0000\n"
+"PO-Revision-Date: 2025-10-15 20:41+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
-
-#. module: l10n_py_hr_payroll
-#: model:ir.actions.report,print_report_name:l10n_py_hr_payroll.action_report_payslip_paraguay
-msgid "'Payslip - %s' % (object.name)"
-msgstr "'Recibo de Nómina - %s' % (object.name)"
 
 #. module: l10n_py_hr_payroll
 #: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.hr_salary_attachment_view_form_currency
@@ -36,71 +29,11 @@ msgid ""
 msgstr ""
 
 #. module: l10n_py_hr_payroll
-#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.report_payslip_paraguay_document
-msgid "<span>Date of Payment</span>"
-msgstr "<span>Fecha de Pago</span>"
-
-#. module: l10n_py_hr_payroll
-#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.report_payslip_paraguay_document
-msgid "<strong>Basic Salary</strong>"
-msgstr "<strong>Salario Básico</strong>"
-
-#. module: l10n_py_hr_payroll
-#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.report_payslip_paraguay_document
-msgid "<strong>CONCEPTS</strong>"
-msgstr "<strong>CONCEPTOS</strong>"
-
-#. module: l10n_py_hr_payroll
-#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.report_payslip_paraguay_document
-msgid "<strong>DUPLICATE</strong>"
-msgstr "<strong>DUPLICADO</strong>"
-
-#. module: l10n_py_hr_payroll
-#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.report_payslip_paraguay_document
-msgid "<strong>Department</strong>"
-msgstr "<strong>Departamento</strong>"
-
-#. module: l10n_py_hr_payroll
-#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.report_payslip_paraguay_document
-msgid "<strong>Employer:</strong>"
-msgstr "<strong>Empleador: </strong>"
-
-#. module: l10n_py_hr_payroll
-#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.report_payslip_paraguay_document
-msgid "<strong>IPS Patronal Number:</strong>"
-msgstr "<strong>Nro. Patronal IPS: </strong>"
-
-#. module: l10n_py_hr_payroll
-#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.report_payslip_paraguay_document
-msgid "<strong>MTESS Patronal Number:</strong>"
-msgstr "<strong>Nro. Patronal MTESS: </strong>"
-
-#. module: l10n_py_hr_payroll
 #: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.hr_salary_attachment_view_form_currency
 msgid ""
 "<strong>Multi-Currency Attachment:</strong>\n"
 "                            This attachment uses"
 msgstr ""
-
-#. module: l10n_py_hr_payroll
-#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.report_payslip_paraguay_document
-msgid "<strong>NET SALARY</strong>"
-msgstr "<strong>SALARIO NETO</strong>"
-
-#. module: l10n_py_hr_payroll
-#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.report_payslip_paraguay_document
-msgid "<strong>Name and Lastname</strong>"
-msgstr "<strong>Nombre y Apellido</strong>"
-
-#. module: l10n_py_hr_payroll
-#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.report_payslip_paraguay_document
-msgid "<strong>ORIGINAL</strong>"
-msgstr "<strong>ORIGINAL</strong>"
-
-#. module: l10n_py_hr_payroll
-#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.report_payslip_paraguay_document
-msgid "<strong>PAYMENT PERIOD</strong>"
-msgstr "<strong>PERIODO DE PAGO</strong>"
 
 #. module: l10n_py_hr_payroll
 #: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.view_contract_form_py_payroll
@@ -183,15 +116,7 @@ msgstr "Importe a pagar en cada recibo de nómina."
 #: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_advances_py
 msgid "Anticipos"
 msgstr ""
-msgstr ""
 
-#. module: l10n_py_hr_payroll
-#: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_employer_contributions_py
-msgid "Aportes Patronales"
-msgstr ""
-
-#. module: l10n_py_hr_payroll
-#: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_allowances_py
 #. module: l10n_py_hr_payroll
 #: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_employer_contributions_py
 msgid "Aportes Patronales"
@@ -201,15 +126,12 @@ msgstr ""
 #: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_allowances_py
 msgid "Asignaciones"
 msgstr ""
-msgstr ""
 
 #. module: l10n_py_hr_payroll
 #: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_hr_salary_attachment__attachment_currency_id
 msgid "Attachment Currency"
 msgstr ""
 
-#. module: l10n_py_hr_payroll
-#: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_family_py
 #. module: l10n_py_hr_payroll
 #: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_family_py
 msgid "Beneficios Familiares"
@@ -312,6 +234,21 @@ msgid "Contract Currency"
 msgstr "Moneda"
 
 #. module: l10n_py_hr_payroll
+#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.view_account_invoice_contractor_filter
+msgid "Contractor Bills"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model_terms:ir.actions.act_window,help:l10n_py_hr_payroll.action_invoice_based_compensation
+msgid "Create bills for employees who work under invoice-based compensation."
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model_terms:ir.actions.act_window,help:l10n_py_hr_payroll.action_invoice_based_compensation
+msgid "Create your first contractor bill"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
 #: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_hr_contract__currency_id
 #: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_hr_salary_attachment__currency_id
 #: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.hr_salary_attachment_view_list_currency
@@ -365,9 +302,6 @@ msgstr ""
 #. module: l10n_py_hr_payroll
 #: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_garnishment_py
 #: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_garnishment_py
-#. module: l10n_py_hr_payroll
-#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_garnishment_py
-#: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_garnishment_py
 msgid "Embargo Judicial"
 msgstr ""
 
@@ -382,19 +316,9 @@ msgid "Employee Contract"
 msgstr "Contrato del empleado"
 
 #. module: l10n_py_hr_payroll
-#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.report_payslip_paraguay_document
-msgid "Employee Signature"
-msgstr "Firma del Empleado"
-
-#. module: l10n_py_hr_payroll
 #: model:ir.model.fields,help:l10n_py_hr_payroll.field_hr_contract__wage
 msgid "Employee's monthly gross wage in contract currency."
 msgstr "Salario bruto mensual por empleado."
-
-#. module: l10n_py_hr_payroll
-#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.report_payslip_paraguay_document
-msgid "Employer Signature"
-msgstr "Firma del Empleador"
 
 #. module: l10n_py_hr_payroll
 #: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_hr_contract__end_reason
@@ -406,10 +330,6 @@ msgstr ""
 msgid "Estacionamiento"
 msgstr ""
 
-#. module: l10n_py_hr_payroll
-#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_holiday_day_py
-msgid "Feriado Diurno"
-msgstr ""
 #. module: l10n_py_hr_payroll
 #: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_holiday_day_py
 msgid "Feriado Diurno"
@@ -428,31 +348,17 @@ msgstr ""
 
 #. module: l10n_py_hr_payroll
 #: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_overtime_day_py
-#. module: l10n_py_hr_payroll
-#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_overtime_day_py
 msgid "Horas Extras Diurnas"
 msgstr ""
-msgstr ""
 
-#. module: l10n_py_hr_payroll
-#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_overtime_night_py
 #. module: l10n_py_hr_payroll
 #: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_overtime_night_py
 msgid "Horas Extras Nocturnas"
 msgstr ""
-msgstr ""
 
-#. module: l10n_py_hr_payroll
-#: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_overtime_py
 #. module: l10n_py_hr_payroll
 #: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_overtime_py
 msgid "Horas Extras y Recargos"
-msgstr ""
-
-#. module: l10n_py_hr_payroll
-#: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_ips_py
-msgid "IPS (Seguridad Social)"
-msgstr ""
 msgstr ""
 
 #. module: l10n_py_hr_payroll
@@ -466,13 +372,6 @@ msgid "IPS 9%"
 msgstr ""
 
 #. module: l10n_py_hr_payroll
-#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.report_payslip_paraguay_document
-msgid ""
-"In accordance with Articles 235-236<br/>\n"
-"                        Labor Code<br/>"
-msgstr ""
-
-#. module: l10n_py_hr_payroll
 #: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_severance_py
 msgid "Indemnización"
 msgstr ""
@@ -480,6 +379,12 @@ msgstr ""
 #. module: l10n_py_hr_payroll
 #: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_non_deductible_py
 msgid "Ingresos No Deducibles"
+msgstr ""
+
+#. module: l10n_py_hr_payroll
+#: model:ir.actions.act_window,name:l10n_py_hr_payroll.action_invoice_based_compensation
+#: model:ir.ui.menu,name:l10n_py_hr_payroll.menu_invoice_based_compensation
+msgid "Invoice-based Compensation"
 msgstr ""
 
 #. module: l10n_py_hr_payroll
@@ -506,11 +411,6 @@ msgstr ""
 #. module: l10n_py_hr_payroll
 #: model:hr.payroll.structure,payslip_name:l10n_py_hr_payroll.hr_payroll_structure_py_vacation
 msgid "Liquidación de Vacaciones"
-msgstr ""
-
-#. module: l10n_py_hr_payroll
-#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.report_payslip_paraguay_document
-msgid "Logo"
 msgstr ""
 
 #. module: l10n_py_hr_payroll
@@ -543,23 +443,14 @@ msgstr ""
 #. module: l10n_py_hr_payroll
 #: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_other_deductions_py
 #: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_other_deductions_py
-#. module: l10n_py_hr_payroll
-#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_other_deductions_py
-#: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_other_deductions_py
 msgid "Otros Descuentos"
 msgstr ""
-msgstr ""
 
-#. module: l10n_py_hr_payroll
-#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_other_income_py
 #. module: l10n_py_hr_payroll
 #: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_other_income_py
 msgid "Otros Ingresos"
 msgstr ""
-msgstr ""
 
-#. module: l10n_py_hr_payroll
-#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_other_non_deductible_py
 #. module: l10n_py_hr_payroll
 #: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_other_non_deductible_py
 msgid "Otros Ingresos No Deducibles"
@@ -623,11 +514,6 @@ msgid "Payslip Line"
 msgstr "Línea de recibo de nómina"
 
 #. module: l10n_py_hr_payroll
-#: model:ir.actions.report,name:l10n_py_hr_payroll.action_report_payslip_paraguay
-msgid "Payslip Paraguay"
-msgstr "Recibo de Nómina - Paraguay"
-
-#. module: l10n_py_hr_payroll
 #: model:ir.model,name:l10n_py_hr_payroll.model_hr_payslip_worked_days
 msgid "Payslip Worked Days"
 msgstr "Días trabajados en el recibo de nómina"
@@ -663,15 +549,6 @@ msgid "Recibo de Salario"
 msgstr ""
 
 #. module: l10n_py_hr_payroll
-#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.report_payslip_paraguay_document
-msgid "SALARY PAYSLIP"
-msgstr "LIQUIDACIÓN DE SALARIO"
-
-#. module: l10n_py_hr_payroll
-#: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_net_before_deductions_py
-msgid "Salario Neto (antes de descuentos)"
-msgstr ""
-#. module: l10n_py_hr_payroll
 #: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_net_before_deductions_py
 msgid "Salario Neto (antes de descuentos)"
 msgstr ""
@@ -680,29 +557,17 @@ msgstr ""
 #: model:ir.model,name:l10n_py_hr_payroll.model_hr_salary_attachment
 msgid "Salary Attachment"
 msgstr "Embargo de salario"
-#. module: l10n_py_hr_payroll
-#: model:ir.model,name:l10n_py_hr_payroll.model_hr_salary_attachment
-msgid "Salary Attachment"
-msgstr "Embargo de salario"
 
-#. module: l10n_py_hr_payroll
-#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_medical_insurance_py
-#: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_medical_py
 #. module: l10n_py_hr_payroll
 #: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_medical_insurance_py
 #: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_medical_py
 msgid "Seguro Médico"
 msgstr ""
-msgstr ""
 
 #. module: l10n_py_hr_payroll
 #: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_solidarity_py
 #: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_solidarity_py
-#. module: l10n_py_hr_payroll
-#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_solidarity_py
-#: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_solidarity_py
 msgid "Solidaridad"
-msgstr ""
 msgstr ""
 
 #. module: l10n_py_hr_payroll
@@ -713,15 +578,6 @@ msgid ""
 msgstr ""
 
 #. module: l10n_py_hr_payroll
-#: model_terms:ir.ui.view,arch_db:l10n_py_hr_payroll.report_payslip_paraguay_document
-msgid "Total"
-msgstr ""
-
-#. module: l10n_py_hr_payroll
-#: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_hr_salary_attachment__total_amount
-msgid "Total Amount"
-msgstr "Importe total"
-#. module: l10n_py_hr_payroll
 #: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_hr_salary_attachment__total_amount
 msgid "Total Amount"
 msgstr "Importe total"
@@ -731,9 +587,6 @@ msgstr "Importe total"
 msgid "Total Amount (Company Currency)"
 msgstr ""
 
-#. module: l10n_py_hr_payroll
-#: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_ips_base_py
-#: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_ips_base_py
 #. module: l10n_py_hr_payroll
 #: model:hr.salary.rule,name:l10n_py_hr_payroll.hr_salary_rule_ips_base_py
 #: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_ips_base_py
@@ -775,12 +628,7 @@ msgstr ""
 #: model:hr.salary.rule.category,name:l10n_py_hr_payroll.hr_salary_rule_category_vacation_py
 msgid "Vacaciones y Licencias"
 msgstr ""
-msgstr ""
 
-#. module: l10n_py_hr_payroll
-#: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_hr_contract__wage
-msgid "Wage"
-msgstr "Salario"
 #. module: l10n_py_hr_payroll
 #: model:ir.model.fields,field_description:l10n_py_hr_payroll.field_hr_contract__wage
 msgid "Wage"
