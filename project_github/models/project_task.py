@@ -128,6 +128,17 @@ class ProjectTask(models.Model):
                 'default_task_id': self.id,
             },
         }
+    
+    def action_open_github_pr_wizard(self):
+        self.ensure_one()
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Create Pull Request",
+            "res_model": "github.pr.create.wizard",
+            "view_mode": "form",
+            "target": "new",
+            "context": {"default_task_id": self.id},
+        }
 
     def _get_commits_start_date(self, repo, branch_name):
         """Get the last commit date for this task."""
