@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="hr_expense_sheet_view_form_inherit" model="ir.ui.view">
+        <field name="name">hr.expense.sheet.view.form.inherit</field>
+        <field name="model">hr.expense.sheet</field>
+        <field name="inherit_id" ref="hr_expense.view_hr_expense_sheet_form"/>
+        <field name="arch" type="xml">
+            <field name="employee_id" position="after">
+                <field name="employee_user_id" invisible="1"/>
+            </field>
+
+            <xpath expr="//field[@name='employee_id']" position="after">
+                <field name="approval_id"
+                       domain="[('request_owner_id', '=', employee_user_id),
+                               ('request_status', '=', 'new'),
+                               ('approval_type', '=', 'create_vendor_bill_adv')]"
+                       required="True"
+                       invisible="payment_mode != 'company_account'" />
+            </xpath>
+        </field>
+    </record>
+</odoo>
