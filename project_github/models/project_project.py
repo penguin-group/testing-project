@@ -130,7 +130,7 @@ class Project(models.Model):
         """
         # Pattern to match: type/TASK_CODE-description
         # Assumes task code format: LETTERS-NUMBERS (like OI-75, PROJ-123, etc.)
-        pattern = r'^[^/]+/([A-Z]+-\d+)-.*'
+        pattern = r'^(?:[^/]+/)?([A-Z]+-\d+)(?:-.*)?$'
         
         match = re.match(pattern, branch_name)
         if match:
