@@ -37,21 +37,3 @@ class HrExpenseSheet(models.Model):
                 continue
 
             report.outstanding_balance = report.approval_id.related_vendor_bill.amount_total - report.total_amount_currency
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
