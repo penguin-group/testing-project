@@ -60,6 +60,7 @@ class Project(models.Model):
         string='Repository',
         domain="[('company_id', '=', company_id)]"
     )
+    openai_api_key = fields.Char(string="OpenAI API Key", groups="base.group_system")
 
     def _sync_github_branches(self):
         """Sync branches with odoo database"""

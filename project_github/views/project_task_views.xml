@@ -44,6 +44,11 @@
 
             <xpath expr="//header" position="inside">
                 <button name="action_create_github_branch" string="Create GitHub Branch" type="object" class="oe_highlight" invisible="not is_development_task"/>
+                <button name="action_open_github_pr_wizard"
+                    type="object"
+                    string="Create Pull Request"
+                    class="oe_highlight"
+                    invisible="not branch_ids or not is_development_task"/>
             </xpath>
         </field>
     </record>

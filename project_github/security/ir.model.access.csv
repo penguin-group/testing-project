@@ -5,3 +5,4 @@ access_github_branch_user,access.github.branch.user,project_github.model_github_
 access_github_branch_create_wizard_user,access.github.branch.create.wizard.user,project_github.model_github_branch_create_wizard,project.group_project_user,1,1,1,1
 access_github_commit_user,access.github.commit.user,model_github_commit,project.group_project_user,1,1,1,1
 access_github_pull_request_user,access.github.pull.request.user,model_github_pull_request,project.group_project_user,1,1,1,1
+access_github_pr_create_wizard_user,access.github.pr.create.wizard.user,project_github.model_github_pr_create_wizard,project.group_project_user,1,1,1,1
