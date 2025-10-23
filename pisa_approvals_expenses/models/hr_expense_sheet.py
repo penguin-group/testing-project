@@ -5,6 +5,10 @@ from odoo.exceptions import UserError
 class HrExpenseSheet(models.Model):
     _inherit = 'hr.expense.sheet'
 
+    _sql_constraints = [
+        ('approval_unique', 'UNIQUE (approval_id)', 'This approval is already linked to another expense sheet.')
+    ]
+
     approval_id = fields.Many2one("approval.request",
                                   readonly=False,
                                   string="Approval Request")

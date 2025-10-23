@@ -20,6 +20,9 @@ class ApprovalRequest(models.Model):
     )
     related_vendor_bill = fields.Many2one("account.move", string="Vendor Bills")
     request_status = fields.Selection(selection_add=[('paid', 'Paid')])
+    expense_sheet_ids = fields.One2many(
+        'hr.expense.sheet', 'approval_id', string='Expense Sheets'
+    )
 
     def action_confirm(self):
         super(ApprovalRequest, self).action_confirm()

@@ -13,7 +13,8 @@
                 <field name="approval_id"
                        domain="[('request_owner_id', '=', employee_user_id),
                                ('request_status', '=', 'paid'),
-                               ('approval_type', '=', 'create_vendor_bill_adv')]"
+                               ('approval_type', '=', 'create_vendor_bill_adv'),
+                               ('expense_sheet_ids', '=', False)]"
                        required="True"
                        invisible="payment_mode != 'company_account' or state != 'draft' and approval_id == False" />
             </xpath>
