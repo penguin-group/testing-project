@@ -11,10 +11,12 @@
 
                 <field name="currency_id"
                        invisible="has_currency == 'no'"
-                       required="has_currency == 'required'" />
+                       required="has_currency == 'required'"
+                       readonly="request_status != 'new'" />
                 <field name="bank_account_id"
                        invisible="has_bank_account == 'no'"
-                       required="has_bank_account == 'required'" />
+                       required="has_bank_account == 'required'"
+                       readonly="request_status != 'new'" />
             </xpath>
 
             <div name="button_box" position="inside">
