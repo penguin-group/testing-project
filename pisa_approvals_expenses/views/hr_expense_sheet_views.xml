@@ -16,7 +16,9 @@
                                ('approval_type', '=', 'create_vendor_bill_adv'),
                                ('expense_sheet_ids', '=', False)]"
                        required="True"
-                       invisible="payment_mode != 'company_account' or state != 'draft' and approval_id == False" />
+                       invisible="payment_mode != 'company_account' or state != 'draft' and approval_id == False"
+                       readonly="state != 'draft'"
+                       options="{'no_create': True}" />
             </xpath>
 
             <xpath expr="//group[@class='oe_subtotal_footer']" position="inside">
