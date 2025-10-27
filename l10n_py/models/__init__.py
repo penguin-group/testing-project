@@ -15,3 +15,4 @@ from . import res_config_settings
 from . import res_currency
 from . import res_partner
 from . import res_currency_provider_bcp
+from . import res_partner_bank
