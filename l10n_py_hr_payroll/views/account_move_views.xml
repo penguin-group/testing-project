@@ -27,7 +27,7 @@
         <field name="arch" type="xml">
             <xpath expr="//filter[@name='posted']" position="after">
                 <filter string="Contractor Bills" name="contractor_bills"
-                        domain="[('partner_id.employee_ids.employee_type', '=', 'contractor')]"/>
+                        domain="[('move_type', '=', 'in_invoice'), '|',  ('partner_id.employee_ids.employee_type', '=', 'contractor'), ('partner_id.child_ids.employee_ids.employee_type', '=', 'contractor')]"/>
             </xpath>
         </field>
     </record>
