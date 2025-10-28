@@ -27,6 +27,14 @@
                                         <field name="openai_api_key" class="ps-3 w-100" password="True"/> 
                                     </div>
                                 </div>
+                                <div class="row mt-3">
+                                    <div class="col-auto pe-0">
+                                        <label for="openai_prompt_template" class="fw-bold"/>
+                                    </div>
+                                    <div class="col-9 ps-0">
+                                        <field name="openai_prompt_template" class="ps-3 w-100"/> 
+                                    </div>
+                                </div>
                             </div>
                         </setting>
                     </div>

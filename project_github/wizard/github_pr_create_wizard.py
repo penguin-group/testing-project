@@ -75,14 +75,7 @@ class GithubPRCreateWizard(models.TransientModel):
                 raise UserError("No differences found between the selected branches.")
 
             # Generate AI prompt
-            prompt = (
-                "You are a GitHub assistant. Based on the following git diff, generate a pull request title and description.\n"
-                "Requirements:\n"
-                "- First line must be the title (single line, concise but descriptive)\n"
-                "- Remaining lines must be the description (detailed explanation)\n"
-                "- Do not include any labels, prefixes, or markdown\n\n"
-                f"Diff:\n{diff_text}"
-            )
+            prompt = project.openai_prompt_template % diff_text
 
             client = OpenAI(api_key=project.openai_api_key)
             response = client.chat.completions.create(
@@ -118,13 +111,15 @@ class GithubPRCreateWizard(models.TransientModel):
             }
         
         except GithubException as e:
-            raise UserError(_("An unexpected GitHub error occurred: %s") % e)
+            raise UserError(self._format_github_error(e))
         except Exception as e:
             raise UserError(_("An error occurred: %s") % e)
 
     def action_create_pull_request(self):
         """Create the PR on GitHub."""
         self.ensure_one()
+        if not self.title or not self.description:
+            raise UserError(_("PR title and description must be provided."))
         
         try:
             auth = Auth.Token(self.task_id.project_id.company_id.github_token)
@@ -150,6 +145,44 @@ class GithubPRCreateWizard(models.TransientModel):
             return self.task_id.action_view_pull_requests()
         
         except GithubException as e:
-            raise UserError(_("An unexpected GitHub error occurred: %s") % e)
+            raise UserError(self._format_github_error(e))
         except Exception as e:
             raise UserError(_("An error occurred: %s") % e)
+
+    def _format_github_error(self, exc):
+        """Return a user friendly message for common GitHub API error payloads."""
+        try:
+            data = getattr(exc, "data", None)
+            # Typical PyGithub payload: {'message': 'Validation Failed', 'errors': [{...}], ...}
+            if isinstance(data, dict):
+                errors = data.get("errors") or []
+                msgs = []
+                for er in errors:
+                    resource = er.get("resource")
+                    field = er.get("field")
+                    code = er.get("code")
+                    if resource == "PullRequest" and field in ["head", "base"] and code == "invalid":
+                        branch = getattr(self, f"{field}_branch_id", None) 
+                        msgs.append(
+                            _(
+                                "The head branch '%s' is not a valid remote branch on GitHub. "
+                                "Make sure the branch exists in the repository and has been pushed to GitHub."
+                            ) % branch.name or _("the selected branch")
+                        )
+                    else:
+                        # try to format known pieces, fallback to the whole error dict
+                        piece = ", ".join(f"{k}={v}" for k, v in er.items() if v)
+                        msgs.append(piece or str(er))
+                if msgs:
+                    return _("GitHub error: %s") % ("; ".join(msgs))
+
+                # if no errors list but message present
+                if data.get("message"):
+                    return _("GitHub error: %s") % data.get("message")
+        except Exception:
+            # fall through to generic message on unexpected formats
+            pass
+
+        # Fallback: include original exception string
+        return _("An unexpected GitHub error occurred: %s") % str(exc)
+

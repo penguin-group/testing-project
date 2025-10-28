@@ -62,6 +62,23 @@ class Project(models.Model):
     )
     openai_api_key = fields.Char(string="OpenAI API Key", groups="base.group_system")
 
+    def _get_openai_prompt_template(self):
+        prompt = (
+                "You are a GitHub assistant. Based on the following git diff, generate a pull request title and description.\n"
+                "Requirements:\n"
+                "- First line must be the title (single line, concise but descriptive)\n"
+                "- Remaining lines must be the description (detailed explanation)\n"
+                "- Do not include any labels, prefixes, or markdown\n\n"
+                f"Diff:\n%s"
+            )
+        return prompt
+
+    openai_prompt_template = fields.Text(
+        string="OpenAI Prompt Template",
+        default=_get_openai_prompt_template,
+        groups="base.group_system"
+    )
+
     def _sync_github_branches(self):
         """Sync branches with odoo database"""
         self.ensure_one()
