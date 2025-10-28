@@ -62,9 +62,9 @@
             background-color: #ffffff;
             font-family: 'Inter', serif;
 
-            /* First column takes 80% */
+            /* First column takes 50% */
             tr th:first-child {
-                width: 80%;
+                width: 50%;
             }
 
             /* All cells of the last row */
@@ -121,8 +121,7 @@
             .o_cell_td > .o_line_cell_value_number {
                 display: block;
                 text-align: right;
-                min-width: 100px;
-                width: 100px;
+                width: 140px;
             }
         }
     }
