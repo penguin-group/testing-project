@@ -12,7 +12,7 @@
                         <field name="github_organization"/>
                     </setting>
                     <setting id="github_token" help="Github Token for API access">
-                        <field name="github_token"/>
+                        <field name="github_token" password="True"/>
                     </setting>
                 </block>
             </xpath>

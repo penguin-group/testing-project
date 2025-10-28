@@ -24,7 +24,7 @@
                                         <label for="openai_api_key" class="fw-bold"/>
                                     </div>
                                     <div class="col-9 ps-0">
-                                        <field name="openai_api_key" class="ps-3 w-100"/>
+                                        <field name="openai_api_key" class="ps-3 w-100" password="True"/> 
                                     </div>
                                 </div>
                             </div>

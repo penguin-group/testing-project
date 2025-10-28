@@ -71,12 +71,16 @@ class GithubPRCreateWizard(models.TransientModel):
             diff_text = ""
             for file in comparison.files:
                 diff_text += f"### {file.filename}\n```diff\n{file.patch}\n```\n"
+            if not diff_text:
+                raise UserError("No differences found between the selected branches.")
 
             # Generate AI prompt
             prompt = (
-                "You are a GitHub assistant. "
-                "Based on the following git diff, generate a concise pull request title and description. "
-                "Return plain text only — no labels, prefixes, or markdown formatting.\n\n"
+                "You are a GitHub assistant. Based on the following git diff, generate a pull request title and description.\n"
+                "Requirements:\n"
+                "- First line must be the title (single line, concise but descriptive)\n"
+                "- Remaining lines must be the description (detailed explanation)\n"
+                "- Do not include any labels, prefixes, or markdown\n\n"
                 f"Diff:\n{diff_text}"
             )
 
@@ -84,16 +88,24 @@ class GithubPRCreateWizard(models.TransientModel):
             response = client.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=[
-                    {"role": "system", "content": "You are a helpful GitHub assistant."},
+                    {
+                        "role": "system", 
+                        "content": "You are a helpful GitHub assistant. Respond with exactly: first line = title, remaining lines = description."
+                    },
                     {"role": "user", "content": prompt},
                 ],
+                temperature=0.7,
             )
 
             generated = response.choices[0].message.content or ""
-            lines = generated.split("\n", 1)
-            title = f"[{self.task_id.task_code}] {lines[0].strip().replace("Title: ", "")}"
-            description = lines[1].strip().replace("Description: ", "") if len(lines) > 1 else ""
-
+            lines = generated.strip().split('\n')
+            
+            if not lines or len(lines) < 2:
+                raise UserError(_("Invalid AI response format. Expected title and description but got:\n%s") % generated)
+                
+            title = f"[{self.task_id.task_code}] {lines[0].strip()}"
+            description = '\n'.join(lines[1:]).strip()
+            
             self.title = title
             self.description = description
 
