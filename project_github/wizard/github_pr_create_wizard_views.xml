@@ -1,0 +1,33 @@
+
+<odoo>
+    <record id="view_github_pr_create_wizard_form" model="ir.ui.view">
+        <field name="name">view.github.pr.create.wizard.form</field>
+        <field name="model">github.pr.create.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create Pull Request">
+                <header class="o_form_header">
+                    <button name="action_generate_title_description"
+                            string="Generate Title and Description"
+                            type="object"
+                            class="btn-secondary"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="base_branch_id"/>
+                        <field name="head_branch_id"/>
+                        <field name="title"/>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_create_pull_request"
+                            string="Create Pull Request"
+                            type="object"
+                            class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>
