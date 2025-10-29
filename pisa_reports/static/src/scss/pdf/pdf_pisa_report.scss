@@ -62,24 +62,15 @@
             background-color: #ffffff;
             font-family: 'Inter', serif;
 
-            tr > th:first-child { width:80% }
-            tr > th:last-child {
-                border: 0;
-                text-align: right;
-                padding-right: 0px;
-            }
-            > tr:last-child th:last-child {
-                font-weight: bold;
-                
-                text-align: right;
-                padding-right: 0px;
-            }
-            > tr:not(:last-child) th:not(:first-child) {
-                border: 0;
-                text-align: right;
-                padding-right: 0px;
+            /* First column takes 50% */
+            tr th:first-child {
+                width: 50%;
             }
 
+            /* All cells of the last row */
+            tr:last-child th {
+                text-align: center;
+            }
         }
 
         > tbody {
@@ -97,7 +88,7 @@
             .o_line_level_0 {
                 background-color: #ffffff;
                 color: #0f101f;
-                font-size: 1rem;
+                font-size: 15px;
                 font-weight: bold;
                 border-bottom: 2px solid #0f101f;
 
@@ -125,6 +116,12 @@
                     border-bottom: 1px solid #CACADD;
                     .o_line_name_level { padding-left: 0px }
                 }
+            }
+
+            .o_cell_td > .o_line_cell_value_number {
+                display: block;
+                text-align: right;
+                width: 140px;
             }
         }
     }
