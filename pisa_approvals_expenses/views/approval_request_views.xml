@@ -11,10 +11,12 @@
 
                 <field name="currency_id"
                        invisible="has_currency == 'no'"
-                       required="has_currency == 'required'" />
+                       required="has_currency == 'required'"
+                       readonly="request_status != 'new'" />
                 <field name="bank_account_id"
                        invisible="has_bank_account == 'no'"
-                       required="has_bank_account == 'required'" />
+                       required="has_bank_account == 'required'"
+                       readonly="request_status != 'new'" />
             </xpath>
 
             <div name="button_box" position="inside">
@@ -22,12 +24,26 @@
                         type="object"
                         icon="fa-pencil-square-o"
                         name="action_view_vendor_bill"
-                        invisible="request_status not in ['approved', 'paid'] and category_id.approval_type != 'create_vendor_bill_adv'">
+                        invisible="related_vendor_bill == False">
                     <div>
                         <span class="o_stat_text">Vendor Bill</span>
                     </div>
                 </button>
             </div>
+
+            <xpath expr="//header/field[@name='request_status']" position="replace">
+                <field name="request_status"
+                       widget="statusbar"
+                       statusbar_visible="new,pending,approved,refused"
+                       invisible="approval_type == 'create_vendor_bill_adv'"/>
+
+
+                <field name="request_status"
+                       widget="statusbar"
+                       statusbar_visible="new,pending,approved,refused,paid"
+                       invisible="approval_type != 'create_vendor_bill_adv'"/>
+
+            </xpath>
         </field>
 
     </record>

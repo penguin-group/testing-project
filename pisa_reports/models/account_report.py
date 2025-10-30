@@ -12,7 +12,7 @@ class AccountReport(models.Model):
     ):
         # Override this method to pass the currency selected by the user
         if options and options.get('currencies_selected_name'):
-            currency = self.env['res.currency'].search([('name', '=', options['currencies_selected_name'])], limit=1)
+            currency = self.env['res.currency'].search([('symbol', '=', options['currencies_selected_name'])], limit=1)
 
         return super(AccountReport, self)._build_column_dict(
             col_value, col_data,

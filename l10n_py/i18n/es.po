@@ -616,6 +616,8 @@ msgstr "Nombre mostrado"
 
 #. module: l10n_py
 #: model:ir.model.fields,field_description:l10n_py.field_invoice_authorization__document_type
+#: model:ir.model.fields,field_description:l10n_py.field_res_partner_bank__document_type
+#: model_terms:ir.ui.view,arch_db:l10n_py.view_partner_bank_form_inherit_account_l10n_py
 msgid "Document Type"
 msgstr "Tipo de Documento"
 
@@ -1684,3 +1686,8 @@ msgstr "Error en actualización de tipo de cambio (%s)"
 msgid "<p><strong>Automatically generated error</strong></p><p><strong>Provider:</strong> %s</p><p><strong>Error:</strong> %s</p>"
 msgstr "<p><strong>Error generado automáticamente</strong></p><p><strong>Proveedor:</strong> %s</p><p><strong>Error:</strong> %s</p>"
 
+#. module: l10n_py
+#: model:ir.model.fields,field_description:l10n_py.field_account_setup_bank_manual_config__partner_document_number
+#: model:ir.model.fields,field_description:l10n_py.field_res_partner_bank__partner_document_number
+msgid "Account Holder Doc. Number"
+msgstr "Nro. Documento del Titular"

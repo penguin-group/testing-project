@@ -5,11 +5,7 @@
             <field name="name">Payroll User: See Only Contractor Invoices</field>
             <field name="model_id" ref="account.model_account_move"/>
             <field name="groups" eval="[(4, ref('hr_payroll.group_hr_payroll_user'))]"/>
-            <field name="domain_force">[
-                '|',
-                    ('partner_id.employee_ids.employee_type', '=', 'contractor'),
-                    ('move_type', '!=', 'in_invoice')
-            ]</field>
+            <field name="domain_force">[('move_type', '=', 'in_invoice'), '|',  ('partner_id.employee_ids.employee_type', '=', 'contractor'), ('partner_id.child_ids.employee_ids.employee_type', '=', 'contractor')]</field>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
