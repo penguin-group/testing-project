@@ -4,6 +4,12 @@ from odoo.exceptions import UserError
 import re
 
 
+def sanitize_string(s):
+    """Sanitizes string to be compliant with Git's naming rules."""
+    s = re.sub(r'[^a-zA-Z0-9]+', '-', s)
+    s = s.strip('-/')
+    return s
+
 class GithubBranchCreateWizard(models.TransientModel):
     _name = 'github.branch.create.wizard'
     _description = 'Create a new branch from a task'
@@ -27,16 +33,13 @@ class GithubBranchCreateWizard(models.TransientModel):
                 branch_prefix = next((prefix for prefix in self.task_id.BRANCH_PREFIXES if self.task_id.tag_ids[0].name == prefix), 'feat')
             else:
                 branch_prefix = 'feat'
-            self.new_branch_name = f"{branch_prefix}/{self.task_id.task_code}-{self.task_id.name.replace(' ', '-')}"
+            self.new_branch_name = f"{branch_prefix}/{self.task_id.task_code}-{sanitize_string(self.task_id.name)}"
 
     def action_create_branch(self):
         """Create the branch and close the wizard."""
         self.ensure_one()
-
-        # We replace spaces with hyphens and ensure it's a valid reference name.
-        sanitized_branch_name = re.sub(r'\s+', '-', self.new_branch_name).strip()
         
-        if not sanitized_branch_name:
+        if not self.new_branch_name:
             raise UserError(_("The branch contains an invalid character."))
 
         try:
@@ -47,7 +50,7 @@ class GithubBranchCreateWizard(models.TransientModel):
             source_sha = self.source_branch_id.commit_sha
             
             repo.create_git_ref(
-                ref=f"refs/heads/{sanitized_branch_name}",
+                ref=f"refs/heads/{self.new_branch_name}",
                 sha=source_sha
             )
             
@@ -62,11 +65,11 @@ class GithubBranchCreateWizard(models.TransientModel):
 
         # Create the Odoo record after successful branch creation
         self.env['github.branch'].create({
-            'name': sanitized_branch_name,
+            'name': self.new_branch_name,
             'project_id': self.task_id.project_id.id,
             'task_id': self.task_id.id,
             'commit_sha': source_sha,
-            'url': f"https://github.com/{self.task_id.project_id.repo.full_name}/tree/{sanitized_branch_name}",
+            'url': f"https://github.com/{self.task_id.project_id.repo.full_name}/tree/{self.new_branch_name}",
         })
 
         return {'type': 'ir.actions.act_window_close'}

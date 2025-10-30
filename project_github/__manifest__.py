@@ -28,5 +28,6 @@
         'views/github_commit_views.xml',
         'views/github_pull_request_views.xml',
         'wizard/github_branch_create_wizard_views.xml',
+        'wizard/github_pr_create_wizard_views.xml'
     ],
 }

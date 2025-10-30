@@ -12,6 +12,7 @@
         <field name="arch" type="xml">
             <list string="GitHub Commits" editable="bottom" create="false" edit="false" delete="false">
                 <field name="sha"/>
+                <field name="name" optional="show"/>
                 <field name="commit_date" optional="show"/>
                 <field name="author_name" optional="hide"/>
                 <field name="author_email" optional="hide"/>

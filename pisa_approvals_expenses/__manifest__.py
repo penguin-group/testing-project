@@ -13,5 +13,6 @@
         "views/approval_category_views.xml",
         "views/approval_request_views.xml",
         "views/account_move_views.xml",
+        "views/hr_expense_sheet_views.xml",
     ]
 }
