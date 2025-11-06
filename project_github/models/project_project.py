@@ -60,7 +60,7 @@ class Project(models.Model):
         string='Repository',
         domain="[('company_id', '=', company_id)]"
     )
-    openai_api_key = fields.Char(string="OpenAI API Key", groups="base.group_system")
+    openai_api_key = fields.Char(string="OpenAI API Key")
 
     def _get_openai_prompt_template(self):
         prompt = (
