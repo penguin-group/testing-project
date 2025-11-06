@@ -75,8 +75,7 @@ class Project(models.Model):
 
     openai_prompt_template = fields.Text(
         string="OpenAI Prompt Template",
-        default=_get_openai_prompt_template,
-        groups="base.group_system"
+        default=_get_openai_prompt_template
     )
 
     def _sync_github_branches(self):
