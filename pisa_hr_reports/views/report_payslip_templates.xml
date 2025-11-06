@@ -49,7 +49,7 @@
                         <strong>PAYMENT PERIOD</strong>
                     </div>
                     <div class="col-4">
-                        <span t-out="o.date_from"/> - <span t-out="o.date_to"/>
+                        <span t-out="o.date_from" t-options='{"widget": "date"}'/> - <span t-out="o.date_to" t-options='{"widget": "date"}'/>
                     </div>
                 </div>
                 <div id="employee_info" class="mt-2">
@@ -90,9 +90,10 @@
                         </thead>
                         <tbody id="payslip_lines">
                             <span id="earnings" t-foreach="o.line_ids.filtered(lambda line: line.appears_on_payslip and line.total &gt; 0 and line.salary_rule_id.code != 'NET')" t-as="line">
-                                <tr>
+                                <t t-set="is_total" t-value="line.salary_rule_id.code == 'GROSS'"/>
+                                <tr t-att-class="'fw-bold' if is_total else ''">
                                     <td><span t-field="line.name"/></td>
-                                    <td>+</td>
+                                    <td><span t-out="'=' if is_total else '+'"/></td>
                                     <td class="text-end">
                                         <span t-out="line.total"
                                             t-options='{"widget": "monetary", "display_currency": o.contract_id.contract_currency_id}'/>
@@ -101,18 +102,22 @@
                             </span>
 
                             <span id="discounts" class="mt-1" t-foreach="o.line_ids.filtered(lambda line: line.appears_on_payslip and line.total &lt; 0 and line.salary_rule_id.code != 'NET')" t-as="line">
-                                <tr>
+                                <t t-set="is_total" t-value="line.salary_rule_id.code == 'TOTAL_DED_PY'"/>
+                                <tr t-att-class="'fw-bold' if is_total else ''">
                                     <td><span t-field="line.name"/></td>
-                                    <td>-</td>
+                                    <td><span t-out="'=' if is_total else '-'"/></td>
                                     <td class="text-end">
                                         <span t-out="line.total"
                                             t-options='{"widget": "monetary", "display_currency": o.contract_id.contract_currency_id}'/>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td></td>
+                                </tr>
                             </span>
 
-                            <tr>
-                                <td><strong>NET SALARY</strong></td>
+                            <tr class="fw-bold">
+                                <td>NET SALARY</td>
                                 <td>=</td>
                                 <td class="text-end">
                                     <span t-out="o.line_ids.filtered(lambda line: line.salary_rule_id.code == 'NET').total"
@@ -122,7 +127,7 @@
                         </tbody>
                     </table>
                     <div id="signatures" class="mt-5">
-                        <div class="row">
+                        <div class="row align-items-end" style="min-height: 150px;">
                             <div class="col-1"></div>
                             <div class="col-3 text-center">
                                 <span t-field="o.paid_date"/>

@@ -63,6 +63,8 @@
         "views/hr_employee_views.xml",
         "views/res_company_views.xml",
         'views/hr_job_views.xml',
+        "views/hr_payroll_report.xml",
+        "views/report_payslip_templates.xml",
         "views/account_move_views.xml",
     ],
 
