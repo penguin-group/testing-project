@@ -19,16 +19,16 @@ class HrReportsIPS(models.Model):
         readonly=True
     )
     year = fields.Selection(
-        [(str(y), str(y)) for y in range(2000, fields.Date.today().year)],
+        [(str(y), str(y)) for y in range(2000, fields.Date.today().year + 1)],
         string='Year',
         required=True,
-        default=lambda self: str(fields.Date.today().year - 1)
+        default=lambda self: str(fields.Date.today().year)
     )
     month = fields.Selection(
         [(str(m), str(m)) for m in range(1, 13)],
         string="Month",
         required=True,
-        default=lambda self: str(fields.Date.today().month - 1)
+        default=lambda self: str(fields.Date.today().month)
     )
     data = fields.Json("Data")
     txt_output = fields.Binary(string='File', )
