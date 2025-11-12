@@ -7,6 +7,8 @@ class ApprovalRequest(models.Model):
 
     has_bank_account = fields.Selection(related="category_id.has_bank_account")
     has_currency = fields.Selection(related="category_id.has_currency")
+    approval_type = fields.Selection(related="category_id.approval_type")
+
     currency_id = fields.Many2one("res.currency", string="Currency")
     req_owner_related_partner_id = fields.Many2one(
         'res.partner',
@@ -20,6 +22,9 @@ class ApprovalRequest(models.Model):
     )
     related_vendor_bill = fields.Many2one("account.move", string="Vendor Bills")
     request_status = fields.Selection(selection_add=[('paid', 'Paid')])
+    expense_sheet_ids = fields.One2many(
+        'hr.expense.sheet', 'approval_id', string='Expense Sheets'
+    )
 
     def action_confirm(self):
         super(ApprovalRequest, self).action_confirm()

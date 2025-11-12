@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="hr_expense_sheet_view_form_inherit" model="ir.ui.view">
+        <field name="name">hr.expense.sheet.view.form.inherit</field>
+        <field name="model">hr.expense.sheet</field>
+        <field name="inherit_id" ref="hr_expense.view_hr_expense_sheet_form"/>
+        <field name="arch" type="xml">
+            <field name="employee_id" position="after">
+                <field name="employee_user_id" invisible="1"/>
+            </field>
+
+            <xpath expr="//field[@name='employee_id']" position="after">
+                <field name="approval_id"
+                       domain="[('request_owner_id', '=', employee_user_id),
+                               ('request_status', '=', 'paid'),
+                               ('approval_type', '=', 'create_vendor_bill_adv'),
+                               ('expense_sheet_ids', '=', False)]"
+                       required="True"
+                       invisible="payment_mode != 'company_account' or state != 'draft' and approval_id == False"
+                       readonly="state != 'draft'"
+                       options="{'no_create': True}" />
+            </xpath>
+
+            <xpath expr="//group[@class='oe_subtotal_footer']" position="inside">
+                <field name="approval_amount"
+                       widget="monetary" options="{'currency_field': 'currency_id'}"
+                       invisible="payment_mode != 'company_account' or state != 'draft' and approval_id == False"
+                />
+                <field name="outstanding_balance"
+                       widget="monetary" options="{'currency_field': 'currency_id'}"
+                       decoration-success="outstanding_balance &gt;= 0"
+                       decoration-danger="outstanding_balance &lt; 0"
+                       invisible="payment_mode != 'company_account' or state != 'draft' and approval_id == False"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

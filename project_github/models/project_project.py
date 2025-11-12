@@ -60,6 +60,23 @@ class Project(models.Model):
         string='Repository',
         domain="[('company_id', '=', company_id)]"
     )
+    openai_api_key = fields.Char(string="OpenAI API Key")
+
+    def _get_openai_prompt_template(self):
+        prompt = (
+                "You are a GitHub assistant. Based on the following git diff, generate a pull request title and description.\n"
+                "Requirements:\n"
+                "- First line must be the title (single line, concise but descriptive)\n"
+                "- Remaining lines must be the description (detailed explanation)\n"
+                "- Do not include any labels, prefixes, or markdown\n\n"
+                f"Diff:\n%s"
+            )
+        return prompt
+
+    openai_prompt_template = fields.Text(
+        string="OpenAI Prompt Template",
+        default=_get_openai_prompt_template
+    )
 
     def _sync_github_branches(self):
         """Sync branches with odoo database"""
@@ -130,7 +147,7 @@ class Project(models.Model):
         """
         # Pattern to match: type/TASK_CODE-description
         # Assumes task code format: LETTERS-NUMBERS (like OI-75, PROJ-123, etc.)
-        pattern = r'^[^/]+/([A-Z]+-\d+)-.*'
+        pattern = r'^(?:[^/]+/)?([A-Z]+-\d+)(?:-.*)?$'
         
         match = re.match(pattern, branch_name)
         if match:

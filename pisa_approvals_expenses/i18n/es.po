@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-11 17:14+0000\n"
-"PO-Revision-Date: 2025-09-11 17:14+0000\n"
+"POT-Creation-Date: 2025-10-22 16:10+0000\n"
+"PO-Revision-Date: 2025-10-22 16:10+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -35,6 +35,11 @@ msgstr ""
 "la solicitud"
 
 #. module: pisa_approvals_expenses
+#: model:ir.model.fields,field_description:pisa_approvals_expenses.field_hr_expense_sheet__approval_amount
+msgid "Approval Amount"
+msgstr "Monto de aprobación"
+
+#. module: pisa_approvals_expenses
 #: model:ir.model,name:pisa_approvals_expenses.model_approval_category
 msgid "Approval Category"
 msgstr "Categoría de aprobación"
@@ -43,6 +48,7 @@ msgstr "Categoría de aprobación"
 #. odoo-python
 #: code:addons/pisa_approvals_expenses/models/account_move.py:0
 #: model:ir.model,name:pisa_approvals_expenses.model_approval_request
+#: model:ir.model.fields,field_description:pisa_approvals_expenses.field_hr_expense_sheet__approval_id
 msgid "Approval Request"
 msgstr "Solicitud de aprobación"
 
@@ -71,6 +77,16 @@ msgid "Currency"
 msgstr "Moneda"
 
 #. module: pisa_approvals_expenses
+#: model:ir.model.fields,field_description:pisa_approvals_expenses.field_hr_expense_sheet__employee_user_id
+msgid "Employee's User"
+msgstr ""
+
+#. module: pisa_approvals_expenses
+#: model:ir.model,name:pisa_approvals_expenses.model_hr_expense_sheet
+msgid "Expense Report"
+msgstr "Informe de gastos"
+
+#. module: pisa_approvals_expenses
 #: model:ir.model,name:pisa_approvals_expenses.model_account_move
 msgid "Journal Entry"
 msgstr "Asiento contable"
@@ -86,6 +102,11 @@ msgstr "Ninguno"
 #: model:ir.model.fields.selection,name:pisa_approvals_expenses.selection__approval_category__has_currency__optional
 msgid "Optional"
 msgstr "Opcional"
+
+#. module: pisa_approvals_expenses
+#: model:ir.model.fields,field_description:pisa_approvals_expenses.field_hr_expense_sheet__outstanding_balance
+msgid "Outstanding Balance"
+msgstr "Saldo pendiente"
 
 #. module: pisa_approvals_expenses
 #: model:ir.model.fields.selection,name:pisa_approvals_expenses.selection__approval_request__request_status__paid
@@ -126,8 +147,18 @@ msgid ""
 "The approval request's currency (%s) doesn't match the bank account's "
 "currency (%s)."
 msgstr ""
-"La moneda de la solicitud de aprobación (%s) no es igual a la moneda "
-"de la cuenta bancaria (%s)."
+"La moneda de la solicitud de aprobación (%s) no es igual a la moneda de la "
+"cuenta bancaria (%s)."
+
+#. module: pisa_approvals_expenses
+#. odoo-python
+#: code:addons/pisa_approvals_expenses/models/hr_expense_sheet.py:0
+msgid ""
+"The approval request's currency (%s) doesn't match the expense report's "
+"currency (%s)."
+msgstr ""
+"La moneda de la solicitud de aprobación (%s) no es igual a la moneda del "
+"informe de gastos (%s)."
 
 #. module: pisa_approvals_expenses
 #. odoo-python
