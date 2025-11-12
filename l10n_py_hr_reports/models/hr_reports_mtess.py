@@ -113,6 +113,9 @@ class HrReportsMtess(models.Model):
             cls, attr = report_map[self.report_type]
             report_data = cls(self.env, first_date, last_date)
             self.data = getattr(report_data, attr)
+        
+        if not self.data:
+            raise UserError(_("No data found for the selected year and report type."))
 
 
     def _write_to_worksheet(self, worksheet, headers, data):
