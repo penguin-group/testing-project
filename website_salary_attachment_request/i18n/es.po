@@ -1,0 +1,268 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: website_salary_attachment_request 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-11 00:00+0000\n"
+"PO-Revision-Date: 2025-11-11 00:00+0000\n"
+"Language: es\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.sa_request_page
+msgid "Salary Advance Request"
+msgstr "Solicitud de anticipo de salario"
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.sa_request_page
+msgid "Employee Name *"
+msgstr "Nombre y apellido *"
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.sa_request_page
+msgid "Identification Number *"
+msgstr "N.º de cédula de identidad *"
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.sa_request_page
+msgid "Work Location *"
+msgstr "Sede *"
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.sa_request_page
+msgid "Request Frequency *"
+msgstr "Frecuencia de solicitud *"
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.sa_request_page
+msgid "One-time"
+msgstr "Única vez"
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.sa_request_page
+msgid "Recurring"
+msgstr "Permanente"
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.sa_request_page
+msgid "Requested Amount *"
+msgstr "Monto solicitado *"
+
+#. module: website_salary_attachment_request
+#: code:addons/website_salary_attachment_request/controllers/main.py:0
+msgid "You can request up to %s."
+msgstr "Puedes solicitar hasta %s."
+
+#. module: website_salary_attachment_request
+#: code:addons/website_salary_attachment_request/controllers/main.py:0
+msgid "The requested amount exceeds the allowed maximum (%s)."
+msgstr "El monto solicitado supera el máximo permitido (%s)."
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.sa_request_page
+msgid "Description"
+msgstr "Descripción"
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.sa_request_page
+msgid "Reason or reference"
+msgstr "Motivo o referencia"
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.sa_request_page
+msgid "Submit"
+msgstr "Enviar"
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.portal_my_home
+msgid "Salary Advances"
+msgstr "Anticipos de salario"
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.portal_my_home
+msgid "Submit and monitor your salary advance requests"
+msgstr "Envía y controla tus solicitudes de anticipo de salario"
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.portal_my_salary_advances
+msgid "My account"
+msgstr "Mi cuenta"
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.portal_my_salary_advances
+msgid "My Salary Advances"
+msgstr "Mis anticipos de salario"
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.portal_my_salary_advances
+msgid "New Request"
+msgstr "Nueva solicitud"
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.portal_my_salary_advances
+msgid "Description"
+msgstr "Descripción"
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.portal_my_salary_advances
+msgid "Status"
+msgstr "Estado"
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.portal_my_salary_advances
+msgid "Created"
+msgstr "Creado"
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.portal_my_salary_advances
+msgid "Start Date"
+msgstr "Fecha de inicio"
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.portal_my_salary_advances
+msgid "Amount"
+msgstr "Monto"
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.portal_my_salary_advances
+msgid "You do not have any salary advances yet."
+msgstr "Aún no tienes anticipos de salario."
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.portal_my_salary_advances
+msgid "Salary advance"
+msgstr "Anticipo de salario"
+
+#. module: website_salary_attachment_request
+#: code:addons/website_salary_attachment_request/static/src/js/sa_form.js:0
+#, python-format
+msgid "Requested Amount (%s) *"
+msgstr "Monto solicitado (%s) *"
+
+#. module: website_salary_attachment_request
+#: code:addons/website_salary_attachment_request/static/src/js/sa_form.js:0
+msgid "Unable to load employee data."
+msgstr "No se pudieron cargar los datos del empleado."
+
+#. module: website_salary_attachment_request
+#: code:addons/website_salary_attachment_request/static/src/js/sa_form.js:0
+msgid "Network error while loading employee information."
+msgstr "Error de red al cargar la información del empleado."
+
+#. module: website_salary_attachment_request
+#: code:addons/website_salary_attachment_request/static/src/js/sa_form.js:0
+msgid "Submitting..."
+msgstr "Enviando..."
+
+#. module: website_salary_attachment_request
+#: code:addons/website_salary_attachment_request/static/src/js/sa_form.js:0
+#, python-format
+msgid "Request submitted. ID: %s"
+msgstr "Solicitud registrada. ID: %s"
+
+#. module: website_salary_attachment_request
+#: code:addons/website_salary_attachment_request/static/src/js/sa_form.js:0
+msgid "The request could not be submitted."
+msgstr "No se pudo registrar la solicitud."
+
+#. module: website_salary_attachment_request
+#: code:addons/website_salary_attachment_request/static/src/js/sa_form.js:0
+msgid "Network or server error."
+msgstr "Error de red o servidor."
+
+#. module: website_salary_attachment_request
+#: code:addons/website_salary_attachment_request/controllers/main.py:0
+msgid "No employee is linked to the current user."
+msgstr "No se encontró empleado asociado al usuario actual."
+
+#. module: website_salary_attachment_request
+#: code:addons/website_salary_attachment_request/controllers/main.py:0
+msgid "The amount must be greater than zero."
+msgstr "El monto debe ser mayor a 0."
+
+#. module: website_salary_attachment_request
+#: code:addons/website_salary_attachment_request/controllers/main.py:0
+msgid "Please select a frequency."
+msgstr "Debe seleccionar la frecuencia."
+
+#. module: website_salary_attachment_request
+#: code:addons/website_salary_attachment_request/controllers/main.py:0
+#, python-format
+msgid "Salary advance request created on %s"
+msgstr "Solicitud de anticipo creada el %s"
+
+#. module: website_salary_attachment_request
+#: code:addons/website_salary_attachment_request/controllers/main.py:0
+msgid "No valid attachment type was found."
+msgstr "No se encontró un tipo de adjunto válido."
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.hr_salary_attachment_view_form_inherit_to_check
+msgid "Mark as Running"
+msgstr "Marcar como en ejecución"
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.hr_salary_attachment_view_search_inherit_to_check
+#: code:addons/website_salary_attachment_request/models/hr_salary_attachment.py:0
+msgid "To Check"
+msgstr "Por revisar"
+
+#. module: website_salary_attachment_request
+#: model:ir.module.module,summary:website_salary_attachment_request
+msgid "Website form to request salary attachments with employee defaults"
+msgstr "Formulario web para crear descuentos de nómina con datos del empleado"
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.sa_request_page
+msgid "Salary advances may be requested by any employee who has passed the probationary period."
+msgstr "Los anticipos salariales pueden ser solicitados por cualquier empleado que haya superado el período de prueba."
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.sa_request_page
+msgid "Advances will be credited on the 15th of the month or if the 15th falls on a weekend or holiday, the credit will be made on the previous business day."
+msgstr "Los anticipos se acreditarán el día 15 del mes o, si cae en fin de semana o feriado, el abono se realizará el día hábil anterior."
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.sa_request_page
+msgid "No requests for salary credits will be received other than through this form."
+msgstr "No se recibirán solicitudes de anticipo salarial fuera de este formulario."
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.sa_request_page
+msgid "The amount requested will only be credited to the bank account authorized for the payment of salaries, any other method requested will be authorized by the Head of People & Culture."
+msgstr "El monto solicitado se acreditará únicamente en la cuenta bancaria autorizada para el pago de salarios; cualquier otro medio deberá ser autorizado por la Gerencia de Personas y Cultura."
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.sa_request_page
+msgid "Advances requested in the month will be deducted in the period in which they were requested, and cannot be divided."
+msgstr "Los anticipos solicitados en el mes se descontarán en el mismo período en que fueron solicitados y no pueden dividirse."
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.portal_my_home
+msgid "Salary Attachments"
+msgstr "Embargos salariales"
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.portal_my_home
+msgid "Submit and monitor your salary attachments"
+msgstr "Presenta y monitorea tus embargos salariales"
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.portal_my_salary_attachments
+msgid "My Salary Attachments"
+msgstr "Mis embargos salariales"
+
+#. module: website_salary_attachment_request
+#: model_terms:ir.ui.view,arch_db:website_salary_attachment_request.portal_my_salary_attachments
+msgid "You do not have any salary attachments yet."
+msgstr "Aún no tienes embargos salariales."
+
+#. module: website_salary_attachment_request
+#: code:addons/website_salary_attachment_request/controllers/portal.py:0
+#, python-format
+msgid "Submit and monitor your salary attachment requests"
+msgstr "Presenta y monitorea tus solicitudes de embargo salarial"
+

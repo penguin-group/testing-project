@@ -60,7 +60,7 @@ class Project(models.Model):
         string='Repository',
         domain="[('company_id', '=', company_id)]"
     )
-    openai_api_key = fields.Char(string="OpenAI API Key", groups="base.group_system")
+    openai_api_key = fields.Char(string="OpenAI API Key")
 
     def _get_openai_prompt_template(self):
         prompt = (
@@ -75,8 +75,7 @@ class Project(models.Model):
 
     openai_prompt_template = fields.Text(
         string="OpenAI Prompt Template",
-        default=_get_openai_prompt_template,
-        groups="base.group_system"
+        default=_get_openai_prompt_template
     )
 
     def _sync_github_branches(self):

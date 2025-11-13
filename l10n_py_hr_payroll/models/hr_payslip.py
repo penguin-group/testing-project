@@ -166,9 +166,14 @@ class HrPayslip(models.Model):
 
     def _get_payslip_lines(self):
         line_vals = super()._get_payslip_lines()
+        currency_by_slip = {payslip.id: payslip.currency_id for payslip in self}
         for line in line_vals:
-            line['amount'] = round(line['amount'], 0 if self.currency_id.name == 'PYG' else 2)
-            line['total'] = round(line['total'], 0 if self.currency_id.name == 'PYG' else 2)
+            slip_currency = currency_by_slip.get(line.get('slip_id'))
+            if not slip_currency:
+                continue
+            rounding_digits = 0 if slip_currency.name == 'PYG' else 2
+            line['amount'] = round(line['amount'], rounding_digits)
+            line['total'] = round(line['total'], rounding_digits)
         return line_vals
     
     def _prepare_adjust_line(self, line_ids, adjust_type, debit_sum, credit_sum, date):
