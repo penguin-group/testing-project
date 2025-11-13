@@ -7,3 +7,4 @@ from . import res_partner
 from . import hr_department
 from . import stock_rule
 from . import purchase_cancel_wizard
+from . import purchase_requisition

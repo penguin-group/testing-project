@@ -24,8 +24,12 @@
         'views/purchase_views.xml',
         'views/purchase_request_views.xml',
         'views/purchase_cancel_wizard.xml',
+        'views/purchase_requisition_views.xml',
         'views/menu_override.xml',
         'wizard/purchase_currency_wizard_view.xml',
+        'wizard/purchase_requisition_cancel_wizard.xml',
+        'wizard/purchase_request_reset_wizard.xml',
+        'wizard/purchase_request_reject_wizard.xml',
         'wizard/create_bill_with_attachment.xml',
     ],
 }

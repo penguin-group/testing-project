@@ -1,0 +1,13 @@
+<odoo>
+    <record id="view_purchase_requisition_form_inherit" model="ir.ui.view">
+        <field name="name">purchase.requisition.form.inherit</field>
+        <field name="model">purchase.requisition</field>
+        <field name="inherit_id" ref="purchase_requisition.view_purchase_requisition_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_cancel']" position="attributes">
+                <attribute name="name">action_cancel_with_confirmation</attribute>
+                <attribute name="type">object</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>
