@@ -14,8 +14,8 @@
                     <field name="has_similar_attachment_warning"/>
                     <field name="has_similar_attachment" invisible="1"/>
                 </div> -->
-                <xpath expr="//header" position="inside">
-                    <div class="alert alert-info" role="alert" invisible="not is_multi_currency">
+                <xpath expr="//div[@role='alert' and contains(@class, 'alert-warning')]" position="after">
+                    <div class="alert alert-info mt-2" role="alert" invisible="not is_multi_currency">
                         <div>
                             <strong>Multi-Currency Attachment:</strong>
                             This attachment uses <field name="attachment_currency_id" nolabel="1" readonly="1" class="d-inline"/> 

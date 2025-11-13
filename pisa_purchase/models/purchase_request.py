@@ -1,4 +1,4 @@
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 
 
 class PurchaseRequest(models.Model):
@@ -75,3 +75,25 @@ class PurchaseRequest(models.Model):
                             record.company_id,
                             record.date_start or fields.Date.today(),
                         )
+
+    def action_cancel_with_confirmation(self):
+        """Wizard to double-check before cancelling a Purchase Request."""
+        self.ensure_one()
+
+        modal_title = _('Double-check before resetting') \
+            if 'cancelling_from_reset_button' in self._context \
+            else _('Double-check before rejecting')
+
+        view_id = self.env.ref('pisa_purchase.view_purchase_request_reset_wizard_form').id \
+            if 'cancelling_from_reset_button' in self._context \
+            else self.env.ref('pisa_purchase.view_purchase_request_reject_wizard_form').id
+
+        return {
+            'name':modal_title,
+            'type': 'ir.actions.act_window',
+            'res_model': 'purchase.request.cancel.wizard',
+            'view_mode': 'form',
+            'view_id': view_id,
+            'target': 'new',
+            'context': {'default_purchase_request_id': self.id},
+        }

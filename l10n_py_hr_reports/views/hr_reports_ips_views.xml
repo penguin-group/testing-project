@@ -1,0 +1,32 @@
+<odoo>
+    <!-- List View -->
+    <record id="view_hr_reports_ips_list" model="ir.ui.view">
+        <field name="name">hr.reports.ips.list</field>
+        <field name="model">hr.reports.ips</field>
+        <field name="arch" type="xml">
+            <list create="false">
+                <field name="year"/>
+                <field name="month"/>
+                <field name="txt_filename" invisible="1" column_invisible="1"/>
+                <field name="txt_output" string="TXT File" widget="binary" filename="txt_filename"/>
+                <button name="action_generate" type="object" string="Generate" class="oe_highlight"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_hr_reports_ips" model="ir.actions.act_window">
+        <field name="name">IPS Reports</field>
+        <field name="res_model">hr.reports.ips</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_hr_reports_ips_list"/>
+        <field name="context">{'group_by': ['year']}</field>
+    </record>
+
+    <!-- Menu Item -->
+    <menuitem id="menu_hr_reports_ips"
+              name="IPS Reports"
+              parent="hr_payroll.menu_hr_payroll_report"
+              action="action_hr_reports_ips"
+              sequence="100"/>
+</odoo>

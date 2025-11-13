@@ -29,19 +29,20 @@ class ResCompany(models.Model):
         string="Show Account Details", default=True
     )
 
-    def in_paraguay(self):
-        py_menu_ext_ids = [
-            "l10n_py.book_registration_report_menu",
-            "l10n_py.book_registration_menu",
-            "l10n_py.invoice_authorization_menu",
-            "l10n_py.report_res90_menu",
-            "l10n_py.report_vat_purchase_wizard_menu",
-            "l10n_py.report_vat_sale_wizard_menu",
+    def get_menu_ext_ids(self):
+        return [
+            'l10n_py.book_registration_report_menu',
+            'l10n_py.book_registration_menu',
+            'l10n_py.invoice_authorization_menu',
+            'l10n_py.report_res90_menu',
+            'l10n_py.report_vat_purchase_wizard_menu',
+            'l10n_py.report_vat_sale_wizard_menu',
         ]
-        py_menu_ids = self.env["ir.ui.menu"].browse(
-            [self.env.ref(py_menu_ext_id).id for py_menu_ext_id in py_menu_ext_ids]
-        )
-        in_paraguay = self.env.company.country_code == "PY"
+
+    def in_paraguay(self):
+        py_menu_ext_ids = self.get_menu_ext_ids()
+        py_menu_ids = self.env['ir.ui.menu'].browse([self.env.ref(py_menu_ext_id).id for py_menu_ext_id in py_menu_ext_ids])
+        in_paraguay = self.env.company.country_code == 'PY'
         if in_paraguay:
             py_menu_ids.sudo().write(
                 {
