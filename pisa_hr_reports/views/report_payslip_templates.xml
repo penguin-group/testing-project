@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="hr_payroll_report_paraguay">
+        <t t-foreach="[1, 2]" t-as="copy_number">
+            <t t-call="web.basic_layout">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="o" t-value="o.with_context(lang=o.employee_id.lang or o.env.lang)"/>
+                    <t t-call="pisa_hr_reports.report_payslip_paraguay_document" t-lang="o.env.lang"/>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_payslip_paraguay_document">
+            <!-- Header -->
+             <div class="header">
+                <div class="row">
+                    <div class="col-6">
+                        <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 60px;" alt="Logo"/>
+                    </div>
+                    <div class="col-6 text-left">
+                        <h2><span t-field="o.struct_id.payslip_name"/></h2>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-6">
+                        <strong>Employer:</strong> <span t-field="o.company_id.name"/> <br/>
+                        <t t-set="ips_patronal_number" t-value="o.contract_id.branch_id.ips_patronal_number if o.company_id.all_child_ids else o.company_id.ips_patronal_number"/>
+                        <strong>IPS Patronal Number:</strong><span t-out="ips_patronal_number"/><br/>
+                        <t t-set="mtess_patronal_number" t-value="o.contract_id.branch_id.mtess_patronal_number if o.company_id.all_child_ids else o.company_id.mtess_patronal_number"/>
+                        <strong>MTESS Patronal Number:</strong><span t-out="mtess_patronal_number"/><br/>
+                    </div>
+                    <div class="col-6 text-left">
+                        In accordance with Articles 235-236<br/>
+                        Labor Code<br/>
+                        <t t-if="copy_number == 1">
+                            <strong>ORIGINAL</strong>
+                        </t>
+                        <t t-if="copy_number == 2">
+                            <strong>DUPLICATE</strong>
+                        </t>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page">
+                <div class="row">
+                    <div class="col-4">
+                        <strong>PAYMENT PERIOD</strong>
+                    </div>
+                    <div class="col-4">
+                        <span t-out="o.date_from" t-options='{"widget": "date"}'/> - <span t-out="o.date_to" t-options='{"widget": "date"}'/>
+                    </div>
+                </div>
+                <div id="employee_info" class="mt-2">
+                    <div class="row">
+                        <div class="col-4">
+                            <strong>Name and Lastname</strong>
+                        </div>
+                        <div class="col-6">
+                            <span t-field="o.employee_id.name"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <strong>Department</strong>
+                        </div>
+                        <div class="col-6">
+                            <span t-field="o.contract_id.department_id.name"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <strong>Basic Salary</strong>
+                        </div>
+                        <div class="col-6">
+                            <span t-field="o.contract_id.wage"
+                                t-options='{"widget": "monetary", "display_currency": o.contract_id.contract_currency_id}'/>
+                        </div>
+                    </div>
+                </div>
+                <div id="payslip_lines_table">
+                    <table class="table table-sm table-borderless">
+                        <thead>
+                            <tr>
+                                <th><strong>CONCEPTS</strong></th>
+                                <th></th>
+                                <th class="text-end">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="payslip_lines">
+                            <span id="earnings" t-foreach="o.line_ids.filtered(lambda line: line.appears_on_payslip and line.total &gt; 0 and line.salary_rule_id.code != 'NET')" t-as="line">
+                                <t t-set="is_total" t-value="line.salary_rule_id.code == 'GROSS'"/>
+                                <tr t-att-class="'fw-bold' if is_total else ''">
+                                    <td><span t-field="line.name"/></td>
+                                    <td><span t-out="'=' if is_total else '+'"/></td>
+                                    <td class="text-end">
+                                        <span t-out="line.total"
+                                            t-options='{"widget": "monetary", "display_currency": o.contract_id.contract_currency_id}'/>
+                                    </td>
+                                </tr>
+                            </span>
+
+                            <span id="discounts" class="mt-1" t-foreach="o.line_ids.filtered(lambda line: line.appears_on_payslip and line.total &lt; 0 and line.salary_rule_id.code != 'NET')" t-as="line">
+                                <t t-set="is_total" t-value="line.salary_rule_id.code == 'TOTAL_DED_PY'"/>
+                                <tr t-att-class="'fw-bold' if is_total else ''">
+                                    <td><span t-field="line.name"/></td>
+                                    <td><span t-out="'=' if is_total else '-'"/></td>
+                                    <td class="text-end">
+                                        <span t-out="line.total"
+                                            t-options='{"widget": "monetary", "display_currency": o.contract_id.contract_currency_id}'/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                </tr>
+                            </span>
+
+                            <tr class="fw-bold">
+                                <td>NET SALARY</td>
+                                <td>=</td>
+                                <td class="text-end">
+                                    <span t-out="o.line_ids.filtered(lambda line: line.salary_rule_id.code == 'NET').total"
+                                        t-options='{"widget": "monetary", "display_currency": o.contract_id.contract_currency_id}'/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div id="signatures" class="mt-5">
+                        <div class="row align-items-end" style="min-height: 150px;">
+                            <div class="col-1"></div>
+                            <div class="col-3 text-center">
+                                <span t-field="o.paid_date"/>
+                            </div>
+                            <div class="col-1"></div>
+                            <div class="col-3">
+                                <div></div>
+                            </div>
+                            <div class="col-1"></div>
+                            <div class="col-3">
+                                <div></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-1"></div>
+                            <div class="col-3 border-top text-center">
+                                <span>Date of Payment</span>
+                            </div>
+                            <div class="col-1"></div>
+                            <div class="col-3 border-top text-center">
+                                <div>Employer Signature</div>
+                            </div>
+                            <div class="col-1"></div>
+                            <div class="col-3 border-top text-center">
+                                <div>Employee Signature</div>
+                                <div><span t-field="o.employee_id.identification_id"/></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </template>
+</odoo>
