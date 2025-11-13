@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-13 17:27+0000\n"
+"POT-Creation-Date: 2025-09-24 17:28+0000\n"
 "PO-Revision-Date: 2025-10-13 17:27+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -53,6 +53,7 @@ msgid "Attachment added to payment: %s"
 msgstr "Adjunto añadido al pago: %s"
 
 #. module: pisa_purchase
+#: model_terms:ir.ui.view,arch_db:pisa_purchase.create_bill_with_attachment_wizard
 #: model_terms:ir.ui.view,arch_db:pisa_purchase.view_purchase_currency_wizard_form
 msgid "Cancel"
 msgstr "Cancelar"
@@ -81,6 +82,19 @@ msgid "Contact"
 msgstr "Contacto"
 
 #. module: pisa_purchase
+#: model_terms:ir.ui.view,arch_db:pisa_purchase.view_purchase_order_form_inherit
+msgid "Create Bill and Attach File"
+msgstr "Crear factura y adjuntar archivo"
+
+#. module: pisa_purchase
+#. odoo-python
+#: code:addons/pisa_purchase/models/purchase_order.py:0
+#: model_terms:ir.ui.view,arch_db:pisa_purchase.create_bill_with_attachment_wizard
+msgid "Create Bill with File Attachment"
+msgstr "Crear factura con archivo adjunto"
+
+#. module: pisa_purchase
+#: model:ir.model.fields,field_description:pisa_purchase.field_bill_with_file_attachment_wizard__create_uid
 #: model:ir.model.fields,field_description:pisa_purchase.field_purchase_cancel_wizard__create_uid
 #: model:ir.model.fields,field_description:pisa_purchase.field_purchase_currency_wizard__create_uid
 #: model:ir.model.fields,field_description:pisa_purchase.field_purchase_request_cancel_wizard__create_uid
@@ -89,6 +103,7 @@ msgid "Created by"
 msgstr "Creado por"
 
 #. module: pisa_purchase
+#: model:ir.model.fields,field_description:pisa_purchase.field_bill_with_file_attachment_wizard__create_date
 #: model:ir.model.fields,field_description:pisa_purchase.field_purchase_cancel_wizard__create_date
 #: model:ir.model.fields,field_description:pisa_purchase.field_purchase_currency_wizard__create_date
 #: model:ir.model.fields,field_description:pisa_purchase.field_purchase_request_cancel_wizard__create_date
@@ -114,6 +129,7 @@ msgid "Department"
 msgstr "Departamento"
 
 #. module: pisa_purchase
+#: model:ir.model.fields,field_description:pisa_purchase.field_bill_with_file_attachment_wizard__display_name
 #: model:ir.model.fields,field_description:pisa_purchase.field_purchase_cancel_wizard__display_name
 #: model:ir.model.fields,field_description:pisa_purchase.field_purchase_currency_wizard__display_name
 #: model:ir.model.fields,field_description:pisa_purchase.field_purchase_request_cancel_wizard__display_name
@@ -146,6 +162,7 @@ msgid "Extra Cost POs"
 msgstr "Pedidos de costo extra"
 
 #. module: pisa_purchase
+#: model:ir.model.fields,field_description:pisa_purchase.field_bill_with_file_attachment_wizard__id
 #: model:ir.model.fields,field_description:pisa_purchase.field_purchase_cancel_wizard__id
 #: model:ir.model.fields,field_description:pisa_purchase.field_purchase_currency_wizard__id
 #: model:ir.model.fields,field_description:pisa_purchase.field_purchase_request_cancel_wizard__id
@@ -166,6 +183,7 @@ msgid "Keep PO"
 msgstr "Mantener pedido de compra"
 
 #. module: pisa_purchase
+#: model:ir.model.fields,field_description:pisa_purchase.field_bill_with_file_attachment_wizard__write_uid
 #: model:ir.model.fields,field_description:pisa_purchase.field_purchase_cancel_wizard__write_uid
 #: model:ir.model.fields,field_description:pisa_purchase.field_purchase_currency_wizard__write_uid
 #: model:ir.model.fields,field_description:pisa_purchase.field_purchase_request_cancel_wizard__write_uid
@@ -174,6 +192,7 @@ msgid "Last Updated by"
 msgstr "Última actualización por"
 
 #. module: pisa_purchase
+#: model:ir.model.fields,field_description:pisa_purchase.field_bill_with_file_attachment_wizard__write_date
 #: model:ir.model.fields,field_description:pisa_purchase.field_purchase_cancel_wizard__write_date
 #: model:ir.model.fields,field_description:pisa_purchase.field_purchase_currency_wizard__write_date
 #: model:ir.model.fields,field_description:pisa_purchase.field_purchase_request_cancel_wizard__write_date
@@ -213,6 +232,12 @@ msgstr "Pagos"
 #: model:ir.model.fields,field_description:pisa_purchase.field_purchase_request__project_id
 msgid "Project"
 msgstr "Proyecto"
+
+#. module: pisa_purchase
+#. odoo-python
+#: code:addons/pisa_purchase/models/account_payment.py:0
+msgid "Proof of payment for %s"
+msgstr "Prueba de pago para %s"
 
 #. module: pisa_purchase
 #: model:ir.model,name:pisa_purchase.model_purchase_order
@@ -321,6 +346,16 @@ msgid "This document is already validated."
 msgstr "Este documento ya está validado."
 
 #. module: pisa_purchase
+#: model_terms:ir.ui.view,arch_db:pisa_purchase.create_bill_with_attachment_wizard
+msgid "Upload"
+msgstr "Subir"
+
+#. module: pisa_purchase
+#: model:ir.model.fields,field_description:pisa_purchase.field_bill_with_file_attachment_wizard__attached_invoice_file
+msgid "Upload Invoice"
+msgstr "Subir factura"
+
+#. module: pisa_purchase
 #: model:ir.model.fields,help:pisa_purchase.field_purchase_order__assignee_id
 msgid "User responsible for this RFQ"
 msgstr "Usuario responsable de esta solicitud de cotización"
@@ -334,3 +369,16 @@ msgstr "Asistente pare presentar valores para un pedido de compra alternativo"
 #: model_terms:ir.ui.view,arch_db:pisa_purchase.view_purchase_cancel_wizard_form
 msgid "Your Purchase Order is already validated."
 msgstr "Su pedido de compra ya está validado."
+
+#. module: pisa_purchase
+#. odoo-python
+#: code:addons/pisa_purchase/models/purchase_order.py:0
+msgid ""
+"%s has been confirmed. Create the bill and attach the relevant documents."
+msgstr "%s ha sido confirmada. Cree la factura y adjunte los documentos relevantes."
+
+#. module: pisa_purchase
+#. odoo-python
+#: code:addons/pisa_purchase/models/purchase_order.py:0
+msgid "[Action Required] Create Bill for Validated %s"
+msgstr "[Acción Requerida] Cree la factura para la %s validada"

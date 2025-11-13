@@ -16,7 +16,7 @@
     'version': '18.0.1.3.0',
     'license': "OPL-1",
 
-    'depends': ['base', 'purchase_requisition', 'purchase_tier_validation', 'purchase_request_tier_validation', 'stock', 'completion_certificates', 'project', 'account', 'purchase_request', 'base_tier_validation'],
+    'depends': ['base', 'purchase_requisition', 'purchase_tier_validation', 'purchase_request_tier_validation', 'stock', 'completion_certificates', 'project', 'account', 'purchase_request', 'base_tier_validation', 'mail'],
 
     'data': [
         'security/ir.model.access.csv',
@@ -30,5 +30,6 @@
         'wizard/purchase_requisition_cancel_wizard.xml',
         'wizard/purchase_request_reset_wizard.xml',
         'wizard/purchase_request_reject_wizard.xml',
+        'wizard/create_bill_with_attachment.xml',
     ],
 }

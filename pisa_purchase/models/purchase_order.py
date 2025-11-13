@@ -1,6 +1,7 @@
 from odoo import models, fields, api, _
-from odoo.exceptions import ValidationError
-
+from odoo.exceptions import ValidationError, UserError
+from odoo.tools import groupby
+from odoo.tools.float_utils import float_is_zero
 
 class PurchaseOrder(models.Model):
     _name = "purchase.order"
@@ -121,3 +122,28 @@ class PurchaseOrder(models.Model):
         if all(r.status == 'approved' for r in self.review_ids):
             self.state = 'purchase'
 
+    def _prepare_invoice(self):
+        invoice_vals = super(PurchaseOrder, self)._prepare_invoice()
+
+        # Attach invoice, if any
+        if 'uploaded_invoice' in self._context:
+            ir_attachment = self.env['ir.attachment'].create({
+                'type': 'binary',
+                'res_model': "account.move",
+                'name': f"Invoice",
+                'datas': self._context['uploaded_invoice']
+            })
+            invoice_vals['attachment_ids'] = [(4, ir_attachment.id)]
+
+        return invoice_vals
+
+    def open_wizard_to_create_bill_with_attachment(self):
+        return {
+            'name': _('Create Bill with File Attachment'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'bill.with.file.attachment.wizard',
+            'view_mode': 'form',
+            'view_id': self.env.ref('pisa_purchase.create_bill_with_attachment_wizard').id,
+            'target': 'new',
+            'context': {'default_purchase_order_id': self.id},
+        }

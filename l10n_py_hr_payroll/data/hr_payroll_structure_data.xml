@@ -8,6 +8,7 @@
             <field name="code">PY_MONTHLY</field>
             <field name="country_id" ref="base.py"/>
             <field name="type_id" ref="structure_type_employee_py"/>
+            <field name="report_id" ref="l10n_py_hr_payroll.action_report_payslip_paraguay"/>
             <field name="payslip_name">Recibo de Salario</field>
             <field name="use_worked_day_lines" eval="True"/>
             <field name="journal_id" ref="account_journal_payroll_py"/>

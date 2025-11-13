@@ -1,0 +1,14 @@
+<odoo>
+    <record id="view_hr_job_form_inherit_manager" model="ir.ui.view">
+        <field name="name">hr.job.form.inherit.manager</field>
+        <field name="model">hr.job</field>
+        <field name="inherit_id" ref="hr.view_hr_job_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="before">
+                <group>
+                    <field name="is_manager"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

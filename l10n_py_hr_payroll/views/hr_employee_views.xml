@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_employee_form_paraguay" model="ir.ui.view">
+        <field name="name">hr.employee.form.paraguay</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <!-- Add the new group "Paraguay" inside the existing notebook -->
+            <xpath expr="//sheet/notebook/page[@name='personal_information']/group" position="inside">
+                <group string="Paraguay">
+                    <field name="profession"/>
+                    <field name="minor_employee_school_status"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
