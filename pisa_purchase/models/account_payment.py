@@ -20,4 +20,11 @@ class AccountPayment(models.Model):
     def _on_attachment_added(self, record):
         purchase_orders = record.reconciled_bill_ids.line_ids.purchase_line_id.order_id    
         for order in purchase_orders:
-            order.message_post(body=_("Attachment added to payment: %s") % record.name, attachment_ids=record.attachment_ids.ids)
+            order.message_post(
+                body=_("Attachment added to payment: %s") % record.name,
+                attachment_ids=record.attachment_ids.ids,
+                subject=_("Proof of payment for %s", order.name),
+                message_type="notification",
+                subtype_xmlid="mail.mt_comment",
+                email_layout_xmlid="mail.mail_notification_light"
+            )
