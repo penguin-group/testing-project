@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <template id="portal_breadcrumbs_salary_attachments" inherit_id="portal.portal_breadcrumbs" name="Portal Breadcrumb - Salary Attachments">
+      <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+        <li t-if="page_name == 'salary_attachments'" class="breadcrumb-item active" aria-current="page">
+          <t t-esc="request.env._('Salary Attachments')"/>
+        </li>
+      </xpath>
+    </template>
+
+    <template id="portal_my_home" inherit_id="portal.portal_my_home" name="Portal Home - Salary Attachment">
+      <xpath expr="//div[hasclass('o_portal_docs')]" position="before">
+        <t t-set="portal_client_category_enable" t-value="request.env.user.has_group('base.group_user')"/>
+      </xpath>
+      <xpath expr="//div[@id='portal_client_category']" position="inside">
+        <t t-call="portal.portal_docs_entry"
+           t-if="request.env.user.has_group('base.group_user')">
+          <t t-set="icon" t-value="'/sale_subscription/static/src/img/subscription.svg'"/>
+          <t t-set="title" t-value="request.env._('Salary Attachments')"/>
+          <t t-set="text" t-value="request.env._('Submit and monitor your salary attachments')"/>
+          <t t-set="url" t-value="'/my/salary-attachments'"/>
+          <t t-set="placeholder_count" t-value="'my_salary_attachments_count'"/>
+        </t>
+      </xpath>
+    </template>
+
+    <template id="portal_my_salary_attachments" name="Portal Salary Attachments">
+      <t t-call="portal.portal_layout">
+        <div id="o_portal_my_salary_attachments" class="o_portal_container">
+          <div class="row align-items-center mb-3">
+            <div class="col">
+              <h2 class="fw-bold">
+                <t t-esc="request.env._('My Salary Attachments')"/>
+              </h2>
+            </div>
+            <div class="col-auto">
+              <a href="/salary-attachment/request" class="btn btn-primary">
+                <i class="fa fa-plus me-1"></i>
+                <t t-esc="request.env._('New Request')"/>
+              </a>
+            </div>
+          </div>
+
+          <div class="card shadow-sm">
+            <div class="table-responsive">
+              <table class="table table-hover mb-0">
+                <thead>
+                  <tr>
+                    <th>
+                      <a t-attf-href="/my/salary-attachments?sortby=name">
+                        <t t-esc="request.env._('Description')"/>
+                      </a>
+                    </th>
+                    <th>
+                      <a t-attf-href="/my/salary-attachments?sortby=state">
+                        <t t-esc="request.env._('Status')"/>
+                      </a>
+                    </th>
+                    <th>
+                      <a t-attf-href="/my/salary-attachments?sortby=date">
+                        <t t-esc="request.env._('Start Date')"/>
+                      </a>
+                    </th>
+                    <th class="text-end">
+                      <t t-esc="request.env._('Amount')"/>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr t-if="not attachments">
+                    <td colspan="4" class="text-center py-5 text-muted">
+                      <t t-esc="request.env._('You do not have any salary attachments yet.')"/>
+                    </td>
+                  </tr>
+                  <tr t-foreach="attachments" t-as="line">
+                    <td>
+                      <t t-esc="line['description']"/>
+                    </td>
+                    <td>
+                      <span t-attf-class="badge rounded-pill #{line['state_class']}">
+                        <t t-esc="line['state_label']"/>
+                      </span>
+                    </td>
+                    <td>
+                      <span t-esc="line['start_display']"/>
+                    </td>
+                    <td class="text-end">
+                      <span t-esc="line['amount_display']"/>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div t-if="pager" class="o_portal_pager d-flex justify-content-center my-3">
+            <t t-call="portal.pager">
+              <t t-set="pager" t-value="pager"/>
+            </t>
+          </div>
+        </div>
+      </t>
+    </template>
+  </data>
+</odoo>
+
