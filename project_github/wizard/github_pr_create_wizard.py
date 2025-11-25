@@ -1,5 +1,5 @@
 from odoo import models, fields, api, _
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, RedirectWarning
 from github import Auth, Github, GithubException
 from openai import OpenAI
 
@@ -9,6 +9,16 @@ class GithubPRCreateWizard(models.TransientModel):
     _description = "GitHub Pull Request Creation Wizard"
 
     task_id = fields.Many2one("project.task", required=True, readonly=True)
+
+    def _handle_github_auth_error(self):
+        """Helper method to raise RedirectWarning for GitHub authentication errors."""
+        action = self.env.ref('base.action_res_users_my').read()[0]
+        action['res_id'] = self.env.user.id
+        raise RedirectWarning(
+            _("GitHub authentication failed. Please check your GitHub token in your profile."),
+            action,
+            _('Edit My Profile')
+        )
     
     def _get_head_branch_domain(self):
         if self.task_id:
@@ -55,9 +65,18 @@ class GithubPRCreateWizard(models.TransientModel):
         """Generate PR title and description using OpenAI based on the diff."""
         self.ensure_one()
 
+        if not self.env.user.github_token:
+            action = self.env.ref('base.action_res_users_my').read()[0]
+            action['res_id'] = self.env.user.id
+            raise RedirectWarning(
+                _("GitHub token is not configured for the current user."),
+                action,
+                _('Edit My Profile')
+            )
+
         try:
             project = self.task_id.project_id
-            auth = Auth.Token(self.task_id.project_id.company_id.github_token)
+            auth = Auth.Token(self.env.user.github_token)
             g = Github(auth=auth)
             repo = g.get_repo(self.task_id.project_id.repo.full_name)
 
@@ -111,6 +130,8 @@ class GithubPRCreateWizard(models.TransientModel):
             }
         
         except GithubException as e:
+            if e.status == 401:
+                self._handle_github_auth_error()
             raise UserError(self._format_github_error(e))
         except Exception as e:
             raise UserError(_("An error occurred: %s") % e)
@@ -120,9 +141,17 @@ class GithubPRCreateWizard(models.TransientModel):
         self.ensure_one()
         if not self.title or not self.description:
             raise UserError(_("PR title and description must be provided."))
+        if not self.env.user.github_token:
+            action = self.env.ref('base.action_res_users_my').read()[0]
+            action['res_id'] = self.env.user.id
+            raise RedirectWarning(
+                _("GitHub token is not configured for the current user."),
+                action,
+                _('Edit My Profile')
+            )
         
         try:
-            auth = Auth.Token(self.task_id.project_id.company_id.github_token)
+            auth = Auth.Token(self.env.user.github_token)
             g = Github(auth=auth)
             repo = g.get_repo(self.task_id.project_id.repo.full_name)
 
@@ -145,6 +174,8 @@ class GithubPRCreateWizard(models.TransientModel):
             return self.task_id.action_view_pull_requests()
         
         except GithubException as e:
+            if e.status == 401:
+                self._handle_github_auth_error()
             raise UserError(self._format_github_error(e))
         except Exception as e:
             raise UserError(_("An error occurred: %s") % e)

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_users_form_simple_modif_github" model="ir.ui.view">
+        <field name="name">res.users.view.form.inherit.github</field>
+        <field name="model">res.users</field>
+        <field name="priority" eval="50"/>
+        <field name="inherit_id" ref="base.view_users_form_simple_modif" />
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='preferences_page']" position="inside">
+            <separator name="github" position="inside"/>
+                <setting id="email_servers_setting" title="Github Token for API access" 
+                    documentation="https://github.com/settings/tokens" help="Configure your own Github Token">
+                        <field name="github_token" password="True"/>
+                </setting>
+            </xpath>
+        </field>
+    </record>
+</odoo>

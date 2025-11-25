@@ -9,7 +9,7 @@
     """,
 
     'author': "Penguin Infrastructure S.A.",
-    'mantainers': ['José González'],
+    'mantainers': ['José González', 'William Eckerleben'],
     'website': "https://penguin.digital",
 
     'category': 'Project',
@@ -22,6 +22,7 @@
         'security/ir.model.access.csv',
         'data/ir_cron_data.xml',
         'views/res_config_settings_views.xml',
+        'views/res_users_views.xml',
         'views/project_project_views.xml',
         'views/project_task_views.xml',
         'views/github_branch_views.xml',

@@ -1,6 +1,6 @@
 from odoo import api, fields, models, _
 from github import Auth, Github, GithubException
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, RedirectWarning
 import re
 
 
@@ -13,6 +13,16 @@ def sanitize_string(s):
 class GithubBranchCreateWizard(models.TransientModel):
     _name = 'github.branch.create.wizard'
     _description = 'Create a new branch from a task'
+
+    def _handle_github_auth_error(self):
+        """Helper method to raise RedirectWarning for GitHub authentication errors."""
+        action = self.env.ref('base.action_res_users_my').read()[0]
+        action['res_id'] = self.env.user.id
+        raise RedirectWarning(
+            _("GitHub authentication failed. Please check your GitHub token in your profile."),
+            action,
+            _('Edit My Profile')
+        )
 
     def _get_default_source_branch(self):
         master_branch = self.env['github.branch'].search([('name', 'in', ['main', 'master'])], limit=1)        
@@ -41,9 +51,17 @@ class GithubBranchCreateWizard(models.TransientModel):
         
         if not self.new_branch_name:
             raise UserError(_("The branch contains an invalid character."))
+        if not self.env.user.github_token:
+            action = self.env.ref('base.action_res_users_my').read()[0]
+            action['res_id'] = self.env.user.id
+            raise RedirectWarning(
+                _("GitHub token is not configured for the current user."),
+                action,
+                _('Edit My Profile')
+            )
 
         try:
-            auth = Auth.Token(self.task_id.project_id.company_id.github_token)
+            auth = Auth.Token(self.env.user.github_token)
             g = Github(auth=auth)
             repo = g.get_repo(self.task_id.project_id.repo.full_name)
             
@@ -55,7 +73,9 @@ class GithubBranchCreateWizard(models.TransientModel):
             )
             
         except GithubException as e:
-            if e.status == 422:
+            if e.status == 401:
+                self._handle_github_auth_error()
+            elif e.status == 422:
                 error_message = e.data.get('message', 'Invalid branch name')
                 raise UserError(_("Failed to create branch: %s") % error_message)
             else:
