@@ -17,6 +17,7 @@
                         <field name="head_branch_id"/>
                         <field name="title"/>
                         <field name="description"/>
+                        <field name="reviewer_ids" widget="many2many_tags" options="{'no_create': True}"/>
                     </group>
                 </sheet>
                 <footer>

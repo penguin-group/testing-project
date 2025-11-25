@@ -2,6 +2,9 @@ from odoo import models, fields, api, _
 from odoo.exceptions import UserError, RedirectWarning
 from github import Auth, Github, GithubException
 from openai import OpenAI
+import logging
+
+_logger = logging.getLogger(__name__)
 
 
 class GithubPRCreateWizard(models.TransientModel):
@@ -26,6 +29,13 @@ class GithubPRCreateWizard(models.TransientModel):
             return [("id", "in", branch_ids)]
         return [("id", "=", False)]
 
+    def _get_reviewer_domain(self):
+        """Return domain for reviewers field: users with GitHub token, excluding current user."""
+        return [
+            ('github_token', '!=', False),
+            ('id', '!=', self.env.user.id),
+        ]
+
     base_branch_id = fields.Many2one("github.branch", string="Base Branch", required=True)
     head_branch_id = fields.Many2one(
         "github.branch",
@@ -35,6 +45,12 @@ class GithubPRCreateWizard(models.TransientModel):
     )
     title = fields.Char(string="PR Title")
     description = fields.Text(string="PR Description")
+    reviewer_ids = fields.Many2many(
+        "res.users",
+        string="Reviewers",
+        domain=_get_reviewer_domain,
+        help="Select reviewers for this pull request. Only users with GitHub token configured are shown."
+    )
 
     @api.model
     def default_get(self, fields_list):
@@ -161,6 +177,37 @@ class GithubPRCreateWizard(models.TransientModel):
                 base=self.base_branch_id.name,
                 head=self.head_branch_id.name,
             )
+
+            # Assign the PR creator as assignee
+            try:
+                current_user = g.get_user()
+                pr.add_to_assignees(current_user.login)
+            except Exception as e:
+                # If assigning fails, log but don't fail the PR creation
+                _logger.warning(f"Failed to assign PR creator as assignee: {e}")
+
+            # Request reviewers
+            if self.reviewer_ids:
+                try:
+                    reviewers = []
+                    for reviewer in self.reviewer_ids:
+                        if reviewer.github_username:
+                            reviewers.append(reviewer.github_username)
+                        else:
+                            # Try to get username from token if not computed
+                            try:
+                                auth = Auth.Token(reviewer.github_token)
+                                g_reviewer = Github(auth=auth)
+                                github_user = g_reviewer.get_user()
+                                reviewers.append(github_user.login)
+                            except Exception as e:
+                                _logger.warning(f"Failed to get GitHub username for reviewer {reviewer.name}: {e}")
+                    
+                    if reviewers:
+                        pr.create_review_request(reviewers=reviewers)
+                except Exception as e:
+                    # If requesting reviewers fails, log but don't fail the PR creation
+                    _logger.warning(f"Failed to request reviewers: {e}")
 
             # Link the PR to the task
             self.env['github.pull.request'].create({
