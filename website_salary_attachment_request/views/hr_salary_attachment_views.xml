@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data noupdate="0">
+    <record id="hr_salary_attachment_view_form_inherit_to_check" model="ir.ui.view">
+      <field name="name">hr.salary.attachment.form.to_check</field>
+      <field name="model">hr.salary.attachment</field>
+      <field name="inherit_id" ref="hr_payroll.hr_salary_attachment_view_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//header" position="inside">
+          <button name="action_open"
+                  type="object"
+                  string="Mark as Running"
+                  class="oe_highlight"
+                  invisible="state != 'to_check' or employee_count &gt; 1"/>
+        </xpath>
+        <xpath expr="//field[@name='state']" position="replace">
+          <field name="state"
+                 widget="statusbar"
+                 statusbar_visible="to_check,open,close,cancel"
+                 invisible="state != 'to_check'"
+                 statusbar_colors="{&quot;to_check&quot;: &quot;warning&quot;}"/>
+          <field name="state"
+                 widget="statusbar"
+                 invisible="state == 'to_check'"
+                 statusbar_visible="open,close,cancel"/>
+        </xpath>
+      </field>
+    </record>
+
+    <record id="hr_salary_attachment_view_tree_inherit_to_check" model="ir.ui.view">
+      <field name="name">hr.salary.attachment.tree.to_check</field>
+      <field name="model">hr.salary.attachment</field>
+      <field name="inherit_id" ref="hr_payroll.hr_salary_attachment_view_tree"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='state']" position="attributes">
+          <attribute name="decoration-warning">state == 'to_check'</attribute>
+        </xpath>
+      </field>
+    </record>
+
+    <record id="hr_salary_attachment_view_search_inherit_to_check" model="ir.ui.view">
+      <field name="name">hr.salary.attachment.search.to_check</field>
+      <field name="model">hr.salary.attachment</field>
+      <field name="inherit_id" ref="hr_payroll.hr_salary_attachment_view_search"/>
+      <field name="arch" type="xml">
+        <xpath expr="//filter[@name='search_is_refund']" position="after">
+          <filter string="To Check" name="filter_to_check"
+                  domain="[('state', '=', 'to_check')]"/>
+        </xpath>
+      </field>
+    </record>
+  </data>
+</odoo>
+

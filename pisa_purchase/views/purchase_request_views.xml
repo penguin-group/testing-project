@@ -18,6 +18,17 @@
                 <xpath expr="//group[hasclass('oe_subtotal_footer')]/field" position="replace">
                     <field name="currency_id" invisible="1" />
                 </xpath>
+
+                <xpath expr="//header/button[@name='button_draft']" position="attributes">
+                    <attribute name="name">action_cancel_with_confirmation</attribute>
+                    <attribute name="type">object</attribute>
+                    <attribute name="context">{'cancelling_from_reset_button': True}</attribute>
+                </xpath>
+
+                <xpath expr="//header/button[@name='button_rejected']" position="attributes">
+                    <attribute name="name">action_cancel_with_confirmation</attribute>
+                    <attribute name="type">object</attribute>
+                </xpath>
             </field>
         </record>
     </data>

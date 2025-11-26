@@ -14,7 +14,7 @@ class HrPayrollPaymentReportWizard(models.TransientModel):
     def generate_payment_report(self):
         super().generate_payment_report()
 
-        salary_payment_bank = self.env['ir.config_parameter'].get_param("res_config_settings.salary_payment_bank")
+        salary_payment_bank = self.env['ir.config_parameter'].sudo().get_param("res_config_settings.salary_payment_bank")
 
         if self.export_format == 'xlsx' and salary_payment_bank == 'interfisa':
             output = io.BytesIO()
