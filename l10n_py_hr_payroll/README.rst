@@ -21,7 +21,7 @@ Key Features
 * Proportional vacation pay
 
 **Allowances and Benefits**
-
+ 
 * Family allowance (children under 17 years old)
 * Childcare subsidy (children under 3 years old)
 * Other sporadic income
