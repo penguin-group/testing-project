@@ -20,7 +20,7 @@ Custom Currency Rate management module that provides enhanced currency rate edit
 
 .. contents::
    :local:
-
+ 
 Features
 ========
 
