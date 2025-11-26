@@ -18,7 +18,7 @@ It provides:
   - Generates a `.txt` file compatible with the **REI** web application for data import.
 
 Key Features
-============
+============ 
 * Two new menu entries under *Payroll > Reporting*:
   - **MTESS Reports**
   - **IPS Report**
