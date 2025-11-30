@@ -21,7 +21,7 @@ Paraguay - Accounting
     :alt: penguin-group/pisa-addons
 
 |badge1| |badge2| |badge3|
-
+sd
 This module adds comprehensive accounting features to the Paraguayan localization for Odoo.
 s
 **Table of contents**
