@@ -23,7 +23,7 @@ Custom Currency Rate management module that provides enhanced currency rate edit
  
 Features
 ========
-
+ 
 * **Custom Currency Rate Editing**: Advanced interface for editing currency rates on invoices
 * **Invoice Rate Management**: Ability to modify currency rates directly on account moves
 * **User-friendly Wizard**: Intuitive wizard for currency rate adjustments
