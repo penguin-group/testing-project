@@ -23,7 +23,7 @@ Paraguay - Accounting
 |badge1| |badge2| |badge3|
 
 This module adds comprehensive accounting features to the Paraguayan localization for Odoo.
-
+s
 **Table of contents**
 
 .. contents::
